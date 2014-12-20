@@ -31,7 +31,7 @@ describe("tokenize", function () {
         );
     });
     it("should split on all white space", function () {
-        expect(tokenize(".token\tA value and more.\r\nAnd another line.")).toEqual(
+        expect(tokenize(".token\tA value and more.\r\nAnd another line.\f")).toEqual(
             [
                 {token:"token", value:"A value and more.  And another line."}
             ]
