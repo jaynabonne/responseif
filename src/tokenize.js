@@ -9,6 +9,17 @@ function extractTokenPair(parts, index, last_index) {
     return createTokenPair(token.slice(1), value);
 }
 
+function findNextToken(index, parts) {
+    var parts_length = parts.length;
+    while (index < parts_length) {
+        if (parts[index].charAt(0) === ".") {
+            break;
+        }
+        ++index;
+    }
+    return index;
+}
+
 function tokenize(input) {
     if (input === "") {
         return [];
@@ -17,9 +28,13 @@ function tokenize(input) {
     var result = [];
     
     var index = 0;
-    var last_index = parts.length;
-    
-    result.push(extractTokenPair(parts, index, last_index));
+    var parts_length = parts.length;
+    while (index < parts_length) {
+        var last_index = findNextToken(index+1, parts);
+
+        result.push(extractTokenPair(parts, index, last_index));
+        index = last_index;
+    }
     
     return result;
 }
