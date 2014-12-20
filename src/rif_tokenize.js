@@ -1,4 +1,4 @@
-var tokenize = (function() {
+var rifTokenize = (function() {
     "use strict";
     
     function isAToken(part) {
@@ -28,9 +28,6 @@ var tokenize = (function() {
     }
 
     return function(input) {
-        if (input === "") {
-            return [];
-        }
         var parts = input.split(/[\s,]/);
         var result = [];
 

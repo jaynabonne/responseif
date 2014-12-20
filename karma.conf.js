@@ -16,7 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'lib/*.js',
-      'src/tokenize.js',
+      'src/rif_tokenize.js',
       'test/*.js'
     ],
 
