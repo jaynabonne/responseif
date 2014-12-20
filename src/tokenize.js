@@ -1,24 +1,27 @@
+//var tokenize = (function() {
+//})();
+
 function isAToken(part) {
     return part.charAt(0) === ".";
 }
 
-function createTokenPair(token, value) {
-    return { token: token, value: value.trim()};
+function extractToken(parts, index) {
+    return parts[index].slice(1);
+}
+
+function extractValue(parts, index, last_index) {
+    return parts.slice(index, last_index).join(" ").trim();
 }
 
 function extractTokenPair(parts, index, last_index) {
-    var token = parts[index];
-    var values = parts.slice(index+1, last_index);
-    var value = values.join(" ");
-    return createTokenPair(token.slice(1), value);
+    return {
+        token: extractToken(parts, index),
+        value: extractValue(parts, index+1, last_index)
+    };
 }
 
 function findNextToken(index, parts) {
-    var parts_length = parts.length;
-    while (index < parts_length) {
-        if (isAToken(parts[index])) {
-            break;
-        }
+    while (index < parts.length && !isAToken(parts[index])) {
         ++index;
     }
     return index;
@@ -32,8 +35,7 @@ function tokenize(input) {
     var result = [];
 
     var index = findNextToken(0, parts);
-    var parts_length = parts.length;
-    while (index < parts_length) {
+    while (index < parts.length) {
         var last_index = findNextToken(index+1, parts);
 
         result.push(extractTokenPair(parts, index, last_index));
