@@ -9,10 +9,24 @@ describe("tokenize", function () {
             ]
         );
     });
-    it("should return token and value", function () {
-        expect(tokenize(".token1 value ")).toEqual(
+    it("should return token and simple value", function () {
+        expect(tokenize(".token1 value")).toEqual(
             [
                 {token:"token1", value:"value"}
+            ]
+        );
+    });
+    it("should return token and value with spaces", function () {
+        expect(tokenize(".token1 value and more")).toEqual(
+            [
+                {token:"token1", value:"value and more"}
+            ]
+        );
+    });
+    it("should trim the value", function () {
+        expect(tokenize(".token1  value and more ")).toEqual(
+            [
+                {token:"token1", value:"value and more"}
             ]
         );
     });
