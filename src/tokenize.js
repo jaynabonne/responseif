@@ -2,13 +2,10 @@ function tokenize(input) {
     if (input === "") {
         return [];
     }
-    var tokens = input.split(" ");
+    var parts = input.split(" ");
     var result = [];
-    for (var i = 0; i < tokens.length; ++i) {
-        var token = tokens[i];
-        if (token) {
-            result.push({ token: token.slice(1), value: ""});
-        }
-    }
-    return result;
+    var token = parts[0];
+    var value = parts.length > 1 ? parts[1] : "";
+    
+    return [{ token: token.slice(1), value: value}];
 }

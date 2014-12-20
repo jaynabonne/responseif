@@ -9,11 +9,10 @@ describe("tokenize", function () {
             ]
         );
     });
-    it("should return multiple tokens", function () {
-        expect(tokenize(".token1 .token2 ")).toEqual(
+    it("should return token and value", function () {
+        expect(tokenize(".token1 value ")).toEqual(
             [
-                {token:"token1", value:""},
-                {token:"token2", value:""}
+                {token:"token1", value:"value"}
             ]
         );
     });
