@@ -10,30 +10,30 @@ describe("tokenize", function () {
         );
     });
     it("should return token and simple value", function () {
-        expect(tokenize(".token1 value")).toEqual(
+        expect(tokenize(".token value")).toEqual(
             [
-                {token:"token1", value:"value"}
+                {token:"token", value:"value"}
             ]
         );
     });
     it("should return token and value with spaces", function () {
-        expect(tokenize(".token1 value and more")).toEqual(
+        expect(tokenize(".token value and more")).toEqual(
             [
-                {token:"token1", value:"value and more"}
+                {token:"token", value:"value and more"}
             ]
         );
     });
     it("should trim the value", function () {
-        expect(tokenize(".token1  value and more ")).toEqual(
+        expect(tokenize(".token  value and more ")).toEqual(
             [
-                {token:"token1", value:"value and more"}
+                {token:"token", value:"value and more"}
             ]
         );
     });
     it("should split on all white space", function () {
-        expect(tokenize(".token1\tA value and more.\r\nAnd another line.")).toEqual(
+        expect(tokenize(".token\tA value and more.\r\nAnd another line.")).toEqual(
             [
-                {token:"token1", value:"A value and more.  And another line."}
+                {token:"token", value:"A value and more.  And another line."}
             ]
         );
     });
@@ -44,5 +44,8 @@ describe("tokenize", function () {
                 {token:"token2", value:"and another one"}
             ]
         );
+    });
+    it("should ignore non-tokenized value", function () {
+        expect(tokenize("this is a value")).toEqual([]);
     });
 });

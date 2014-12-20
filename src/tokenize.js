@@ -1,3 +1,7 @@
+function isAToken(part) {
+    return part.charAt(0) === ".";
+}
+
 function createTokenPair(token, value) {
     return { token: token, value: value.trim()};
 }
@@ -12,7 +16,7 @@ function extractTokenPair(parts, index, last_index) {
 function findNextToken(index, parts) {
     var parts_length = parts.length;
     while (index < parts_length) {
-        if (parts[index].charAt(0) === ".") {
+        if (isAToken(parts[index])) {
             break;
         }
         ++index;
@@ -26,8 +30,8 @@ function tokenize(input) {
     }
     var parts = input.split(/[\s,]/);
     var result = [];
-    
-    var index = 0;
+
+    var index = findNextToken(0, parts);
     var parts_length = parts.length;
     while (index < parts_length) {
         var last_index = findNextToken(index+1, parts);
@@ -35,6 +39,5 @@ function tokenize(input) {
         result.push(extractTokenPair(parts, index, last_index));
         index = last_index;
     }
-    
     return result;
 }
