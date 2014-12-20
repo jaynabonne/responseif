@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Game Frame</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="src/testbed.js"></script>
+    <script type="text/javascript" src="src/Util.js"></script>
+    <script type="text/javascript" src="src/HTMLFormatter.js"></script>
+    <script type="text/javascript" src="src/StoryText.js"></script>
+    <script type="text/javascript" src="src/Interact.js"></script>
+    <script type="text/javascript" src="src/GameEngine.js"></script>
+    <script type="text/javascript" src="src/ResponseLib.js"></script>
+    <script type="text/javascript" src="src/World.js"></script>
+    <script type="text/javascript" src="src/GameResponses.js"></script>
+    <script type="text/javascript" src="src/GameWorld.js"></script>
+    
+    <script type="text/javascript">
+        var gameEngine = new GameEngine();
+        var storyText = new StoryText();
+        function init() {
+            var interactFactory = function(gameEngine) {
+                return new Interact(gameEngine, storyText, $('#output'));
+            };
+            gameEngine.init(ResponseLib, World, interactFactory);
+            
+            createWorld(gameEngine.world, gameEngine.responseLib);
+        }
+    </script>
+</head>
+<body onLoad="init()">
+    <div id="header">This is the header</div>
+    <div id="holder">
+        <div id="spacer"></div>
+        <div id="output"></div>
+    </div>
+</body>
+</html>
