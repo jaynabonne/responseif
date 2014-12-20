@@ -37,4 +37,12 @@ describe("tokenize", function () {
             ]
         );
     });
+    xit("should stop the value at the next token", function () {
+        expect(tokenize(".token1 this is a value .token2 and another one")).toEqual(
+            [
+                {token:"token1", value:"this is a value"},
+                {token:"token2", value:"and another one"}
+            ]
+        );
+    });
 });
