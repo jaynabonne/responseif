@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'lib/*.js',
       'src/rif_tokenize.js',
+      'src/rif_parse.js',
       'test/*.js'
     ],
 
