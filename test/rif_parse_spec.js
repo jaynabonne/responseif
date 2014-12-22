@@ -73,4 +73,15 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{text: "some text to display for this response"}] } );
     });
+    it("should parse response maxusecount", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "anObject"},
+                {token: "response", value: ""},
+                {token: "maxusecount", value: "42"},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{maxusecount: 42}] } );
+    });
 });

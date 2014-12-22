@@ -16,6 +16,9 @@ rifParse = (function () {
             if (token === "text") {
                 response.text = entry.value;
                 this.index++;
+            } else if (token === "maxusecount") {
+                response.maxusecount = parseInt(entry.value);
+                this.index++;
             } else {
                 break;
             }
