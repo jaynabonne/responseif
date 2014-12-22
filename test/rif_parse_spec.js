@@ -41,7 +41,7 @@ describe("rifParse", function () {
                 anotherObject: []
             } );
     });
-    xit("should parse a responses set with one response", function () {
+    it("should parse a responses set with one response", function () {
         var rif = rifParse(
             [
                 {token: "responses", value: "someObject"},

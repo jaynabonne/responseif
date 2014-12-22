@@ -18,8 +18,15 @@ rifParse = (function () {
         var value = this.tokens[this.index].value;
         var rif = this.rif;
         rif.responses = rif.responses || {};
-        rif.responses[value] = [];
-        this.index += 2;
+        var responses = [];
+        this.index++;
+        var token = this.tokens[this.index].token;
+        if (token === "response") {
+            responses.push({});
+            this.index++;
+        }
+        rif.responses[value] = responses;
+        this.index++;
     };
 
     Parser.prototype.parse = function() {
