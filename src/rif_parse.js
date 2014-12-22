@@ -13,13 +13,18 @@ rifParse = (function () {
         while (this.index < this.tokens.length) {
             var entry = this.tokens[this.index];
             var token = entry.token;
-            if (token === "text") {
-                response.text = entry.value;
+            if (token === "text" || token === "prompt") {
+                response[token] = entry.value;
                 this.index++;
             } else if (token === "maxusecount") {
                 response.maxusecount = parseInt(entry.value);
                 this.index++;
-            } else if (token === "topics" || token === "subtopics" || token === "needs") {
+            } else if (token === "topics"
+                    || token === "subtopics"
+                    || token === "needs"
+                    || token === "sets"
+                    || token === "calls"
+                    || token === "suggests") {
                 response[token] = entry.value.split(" ");
                 this.index++;
             } else {
