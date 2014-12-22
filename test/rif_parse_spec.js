@@ -51,4 +51,15 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { someObject: [{}] } );
     });
+    it("should parse a responses set with two responses", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "someObject"},
+                {token: "response", value: ""},
+                {token: "response", value: ""},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { someObject: [{}, {}] } );
+    });
 });
