@@ -1,14 +1,14 @@
 var rifParse = (function() {
     return function(tokens) {
         var rif = {};
-        if (tokens.length > 0) {
-            var token = tokens[0];
+        for (var index = 0; index < tokens.length; ++index) {
+            var token = tokens[index];
             if (token.token === "object") {
-                rif.objects = {};
-                rif.objects[tokens[0].value] = {};
+                rif.objects = rif.objects || {};
+                rif.objects[token.value] = {};
             } else if (token.token === "responses") {
                 rif.responses = {};
-                rif.responses[tokens[0].value] = {};
+                rif.responses[token.value] = {};
             }
         }
         return rif;
