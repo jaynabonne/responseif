@@ -13,7 +13,7 @@ describe("rifParse", function () {
                 {token: "end", value: ""}
             ]
         );
-        expect(rif.responses).toEqual( { someObject: {} } );
+        expect(rif.responses).toEqual( { someObject: [] } );
     });
     it("should parse multiple objects", function () {
         var rif = rifParse(
@@ -37,8 +37,8 @@ describe("rifParse", function () {
             ] );
         expect(rif.responses).toEqual(
             {
-                anObject: {},
-                anotherObject: {}
+                anObject: [],
+                anotherObject: []
             } );
     });
 });

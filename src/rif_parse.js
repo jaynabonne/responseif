@@ -10,7 +10,7 @@ rifParse = (function () {
         responses: function (tokens, index, rif) {
             var value = tokens[index].value;
             rif.responses = rif.responses || {};
-            rif.responses[value] = {};
+            rif.responses[value] = [];
             return index + 2;
         }
     };
