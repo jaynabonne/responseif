@@ -95,4 +95,26 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{topics: ["topicA", "topicB", "topicC"]}] } );
     });
+    it("should parse response subtopics", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "anObject"},
+                {token: "response", value: ""},
+                {token: "subtopics", value: "subtopicA subtopicB subtopicC"},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{subtopics: ["subtopicA", "subtopicB", "subtopicC"]}] } );
+    });
+    it("should parse response needs", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "anObject"},
+                {token: "response", value: ""},
+                {token: "needs", value: "need1 need2"},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{needs: ["need1", "need2"]}] } );
+    });
 });

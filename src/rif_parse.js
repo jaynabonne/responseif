@@ -22,6 +22,12 @@ rifParse = (function () {
             } else if (token === "topics") {
                 response.topics = entry.value.split(" ");
                 this.index++;
+            } else if (token === "subtopics") {
+                response.subtopics = entry.value.split(" ");
+                this.index++;
+            } else if (token === "needs") {
+                response.needs = entry.value.split(" ");
+                this.index++;
             } else {
                 break;
             }
