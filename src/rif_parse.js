@@ -19,6 +19,9 @@ rifParse = (function () {
             } else if (token === "maxusecount") {
                 response.maxusecount = parseInt(entry.value);
                 this.index++;
+            } else if (token === "topics") {
+                response.topics = entry.value.split(" ");
+                this.index++;
             } else {
                 break;
             }
