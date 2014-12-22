@@ -1,6 +1,13 @@
 var rifParse;
 rifParse = (function () {
-    var handlers = {
+
+    var Parser = function(tokens) {
+        this.tokens = tokens;
+        this.rif = {};
+        this.index = 0;
+    };
+
+    Parser.prototype.handlers = {
         object: function (context) {
             var value = context.tokens[context.index].value;
             var rif = context.rif;
@@ -18,15 +25,11 @@ rifParse = (function () {
     };
 
     return function (tokens) {
-        var context = {
-            tokens: tokens,
-            rif:  {},
-            index: 0
-        };
+        var context = new Parser(tokens);
         while (context.index < context.tokens.length) {
             var token = context.tokens[context.index].token;
-            if (handlers[token]) {
-                (handlers[token])(context);
+            if (context.handlers[token]) {
+                (context.handlers[token])(context);
             } else {
                 console.log("no handler for token " + token);
                 break;
