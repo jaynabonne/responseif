@@ -62,4 +62,15 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { someObject: [{}, {}] } );
     });
+    it("should parse response text", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "anObject"},
+                {token: "response", value: ""},
+                {token: "text", value: "some text to display for this response"},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{text: "some text to display for this response"}] } );
+    });
 });

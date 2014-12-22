@@ -9,7 +9,18 @@ rifParse = (function () {
 
     Parser.prototype.parse_response = function() {
         this.index++;
-        return {};
+        var response = {};
+        while (this.index < this.tokens.length) {
+            var entry = this.tokens[this.index];
+            var token = entry.token;
+            if (token === "text") {
+                response.text = entry.value;
+                this.index++;
+            } else {
+                break;
+            }
+        }
+        return response;
     }
 
     Parser.prototype.parse_object = function () {
@@ -32,6 +43,9 @@ rifParse = (function () {
             } else if (token === "end") {
                 this.index++;
                 break;
+            } else {
+                console.log("parse_responses: Unknown token " + token);
+                break;
             }
         }
         rif.responses[value] = responses;
@@ -44,7 +58,7 @@ rifParse = (function () {
             if (this[attribute]) {
                 this[attribute]();
             } else {
-                console.log("no handler for token " + token);
+                console.log("parse: no handler for token " + token);
                 break;
             }
         }
