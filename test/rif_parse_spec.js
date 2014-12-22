@@ -6,7 +6,7 @@ describe("rifParse", function () {
         var rif = rifParse( [ {token: "object", value: "anObject"} ] );
         expect(rif.objects).toEqual( { anObject: {} } );
     });
-    it("should parse an empty responses list", function () {
+    it("should parse an empty responses set", function () {
         var rif = rifParse(
             [
                 {token: "responses", value: "someObject"},
@@ -27,7 +27,7 @@ describe("rifParse", function () {
                 anotherObject: {}
             } );
     });
-    it("should parse multiple responses", function () {
+    it("should parse multiple responses sets", function () {
         var rif = rifParse(
             [
                 {token: "responses", value: "anObject"},
@@ -40,5 +40,15 @@ describe("rifParse", function () {
                 anObject: [],
                 anotherObject: []
             } );
+    });
+    xit("should parse a responses set with one response", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "someObject"},
+                {token: "response", value: ""},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { someObject: [{}] } );
     });
 });
