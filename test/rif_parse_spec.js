@@ -161,4 +161,15 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{prompt: "A response prompt"}] } );
     });
+    it("should parse response display class", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "anObject"},
+                {token: "response", value: ""},
+                {token: "display_class", value: "someclass"},
+                {token: "end", value: ""}
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{display_class: "someclass"}] } );
+    });
 });

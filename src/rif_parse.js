@@ -13,7 +13,7 @@ rifParse = (function () {
         while (this.index < this.tokens.length) {
             var entry = this.tokens[this.index];
             var token = entry.token;
-            if (token === "text" || token === "prompt") {
+            if (token === "text" || token === "prompt" || token === "display_class") {
                 response[token] = entry.value;
                 this.index++;
             } else if (token === "maxusecount") {
