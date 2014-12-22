@@ -1,14 +1,27 @@
 var rifParse = (function() {
+    var tokenHandlers = {
+        object : function(tokens, index, rif) {
+            var value = tokens[index].value;
+            rif.objects = rif.objects || {};
+            rif.objects[value] = {};
+            return index+1;
+        },
+        responses : function(tokens, index, rif) {
+            var value = tokens[index].value;
+            rif.responses = {};
+            rif.responses[value] = {};
+            return index + 2;
+        }
+    }
     return function(tokens) {
         var rif = {};
-        for (var index = 0; index < tokens.length; ++index) {
-            var token = tokens[index];
-            if (token.token === "object") {
-                rif.objects = rif.objects || {};
-                rif.objects[token.value] = {};
-            } else if (token.token === "responses") {
-                rif.responses = {};
-                rif.responses[token.value] = {};
+        for (var index = 0; index < tokens.length;) {
+            var token = tokens[index].token;
+            if (tokenHandlers[token]) {
+                index = (tokenHandlers[token])(tokens, index, rif);
+            } else {
+                console.log("no handler for token " + token);
+                break;
             }
         }
         return rif;
