@@ -27,4 +27,18 @@ describe("rifParse", function () {
                 anotherObject: {}
             } );
     });
+    it("should parse multiple responses", function () {
+        var rif = rifParse(
+            [
+                {token: "responses", value: "anObject"},
+                {token: "end", value: ""},
+                {token: "responses", value: "anotherObject"},
+                {token: "end", value: ""}
+            ] );
+        expect(rif.responses).toEqual(
+            {
+                anObject: {},
+                anotherObject: {}
+            } );
+    });
 });
