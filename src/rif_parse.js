@@ -7,14 +7,19 @@ rifParse = (function () {
         this.index = 0;
     };
 
-    Parser.prototype.object = function () {
+    Parser.prototype.responseParse = function() {
+        this.index++;
+        return {};
+    }
+
+    Parser.prototype.objectParse = function () {
         var value = this.tokens[this.index].value;
         var rif = this.rif;
         rif.objects = rif.objects || {};
         rif.objects[value] = {};
         this.index++;
     };
-    Parser.prototype.responses = function () {
+    Parser.prototype.responsesParse = function () {
         var value = this.tokens[this.index].value;
         var rif = this.rif;
         rif.responses = rif.responses || {};
@@ -22,8 +27,7 @@ rifParse = (function () {
         this.index++;
         var token = this.tokens[this.index].token;
         if (token === "response") {
-            responses.push({});
-            this.index++;
+            responses.push(this.responseParse());
         }
         rif.responses[value] = responses;
         this.index++;
@@ -32,8 +36,9 @@ rifParse = (function () {
     Parser.prototype.parse = function() {
         while (this.index < this.tokens.length) {
             var token = this.tokens[this.index].token;
-            if (this[token]) {
-                this[token]();
+            var attribute = token+"Parse";
+            if (this[attribute]) {
+                this[attribute]();
             } else {
                 console.log("no handler for token " + token);
                 break;
