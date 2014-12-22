@@ -8,33 +8,38 @@ rifParse = (function () {
     };
 
     Parser.prototype.handlers = {
-        object: function (context) {
-            var value = context.tokens[context.index].value;
-            var rif = context.rif;
+        object: function () {
+            var value = this.tokens[this.index].value;
+            var rif = this.rif;
             rif.objects = rif.objects || {};
             rif.objects[value] = {};
-            context.index++;
+            this.index++;
         },
-        responses: function (context) {
-            var value = context.tokens[context.index].value;
-            var rif = context.rif;
+        responses: function () {
+            var value = this.tokens[this.index].value;
+            var rif = this.rif;
             rif.responses = rif.responses || {};
             rif.responses[value] = [];
-            context.index += 2;
+            this.index += 2;
         }
     };
 
-    return function (tokens) {
-        var context = new Parser(tokens);
-        while (context.index < context.tokens.length) {
-            var token = context.tokens[context.index].token;
-            if (context.handlers[token]) {
-                (context.handlers[token])(context);
+    Parser.prototype.parse = function() {
+        while (this.index < this.tokens.length) {
+            var token = this.tokens[this.index].token;
+            if (this.handlers[token]) {
+                var func = (this.handlers[token]).bind(this);
+                func();
             } else {
                 console.log("no handler for token " + token);
                 break;
             }
         }
-        return context.rif;
+        return this.rif;
+    };
+
+    return function (tokens) {
+        var parser = new Parser(tokens);
+        return parser.parse();
     };
 })();
