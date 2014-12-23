@@ -1,4 +1,17 @@
 describe("rifParse", function () {
+    function token_pair(token, value) {
+        return {token: token, value: value};
+    }
+    function responses(name) {
+        return token_pair("responses", name);
+    }
+    function response(name) {
+        return token_pair("response", "");
+    }
+    function end() {
+        return token_pair("end", "");
+    }
+
     it("should return an empty result for an empty input", function () {
         expect(rifParse([])).toEqual({});
     });
@@ -9,8 +22,8 @@ describe("rifParse", function () {
     it("should parse an empty responses set", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "someObject"},
-                {token: "end", value: ""}
+                responses("someObject"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { someObject: [] } );
@@ -30,10 +43,10 @@ describe("rifParse", function () {
     it("should parse multiple responses sets", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "end", value: ""},
-                {token: "responses", value: "anotherObject"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                end(),
+                responses("anotherObject"),
+                end()
             ] );
         expect(rif.responses).toEqual(
             {
@@ -44,9 +57,9 @@ describe("rifParse", function () {
     it("should parse a responses set with one response", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "someObject"},
-                {token: "response", value: ""},
-                {token: "end", value: ""}
+                responses("someObject"),
+                    response(),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { someObject: [{}] } );
@@ -54,10 +67,10 @@ describe("rifParse", function () {
     it("should parse a responses set with two responses", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "someObject"},
-                {token: "response", value: ""},
-                {token: "response", value: ""},
-                {token: "end", value: ""}
+                responses("someObject"),
+                    response(),
+                    response(),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { someObject: [{}, {}] } );
@@ -65,10 +78,10 @@ describe("rifParse", function () {
     it("should parse response text", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "text", value: "some text to display for this response"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("text","some text to display for this response"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{text: "some text to display for this response"}] } );
@@ -76,10 +89,10 @@ describe("rifParse", function () {
     it("should parse response maxusecount", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "maxusecount", value: "42"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("maxusecount","42"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{maxusecount: 42}] } );
@@ -87,10 +100,10 @@ describe("rifParse", function () {
     it("should parse response topics", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "topics", value: "topicA topicB topicC"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("topics","topicA topicB topicC"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{topics: ["topicA", "topicB", "topicC"]}] } );
@@ -98,10 +111,10 @@ describe("rifParse", function () {
     it("should parse response subtopics", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "subtopics", value: "subtopicA subtopicB subtopicC"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("subtopics","subtopicA subtopicB subtopicC"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{subtopics: ["subtopicA", "subtopicB", "subtopicC"]}] } );
@@ -109,10 +122,10 @@ describe("rifParse", function () {
     it("should parse response needs", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "needs", value: "need1 need2"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("needs","need1 need2"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{needs: ["need1", "need2"]}] } );
@@ -120,10 +133,10 @@ describe("rifParse", function () {
     it("should parse response sets", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "sets", value: "value1 value2 value3"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("sets","value1 value2 value3"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{sets: ["value1", "value2", "value3"]}] } );
@@ -131,10 +144,10 @@ describe("rifParse", function () {
     it("should parse response calls", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "calls", value: "call1 call2 call3"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("calls","call1 call2 call3"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{calls: ["call1", "call2", "call3"]}] } );
@@ -142,10 +155,10 @@ describe("rifParse", function () {
     it("should parse response suggests", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "suggests", value: "topic1 topic2 topic3"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("suggests","topic1 topic2 topic3"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{suggests: ["topic1", "topic2", "topic3"]}] } );
@@ -153,21 +166,20 @@ describe("rifParse", function () {
     it("should parse response prompt", function () {
         var rif = rifParse(
             [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "prompt", value: "A response prompt"},
-                {token: "end", value: ""}
+                responses("anObject"),
+                    response(),
+                        token_pair("prompt","A response prompt"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{prompt: "A response prompt"}] } );
     });
     it("should parse response display class", function () {
-        var rif = rifParse(
-            [
-                {token: "responses", value: "anObject"},
-                {token: "response", value: ""},
-                {token: "display_class", value: "someclass"},
-                {token: "end", value: ""}
+        var rif = rifParse([
+                responses("anObject"),
+                    response(),
+                        token_pair("display_class","someclass"),
+                end()
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{display_class: "someclass"}] } );
