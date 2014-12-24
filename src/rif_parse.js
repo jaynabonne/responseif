@@ -7,6 +7,25 @@ rifParse = (function () {
         this.index = 0;
     };
 
+    Parser.prototype.parse_does = function(slot) {
+        this.index++;
+        while (this.index < this.tokens.length) {
+            var entry = this.tokens[this.index];
+            var token = entry.token;
+            if (token === "says") {
+                slot[token] = entry.value;
+                this.index++;
+            } else if (token === "sets"
+                    || token === "calls"
+                    || token === "suggests") {
+                slot[token] = entry.value.split(" ");
+                this.index++;
+            } else {
+                break;
+            }
+        }
+    };
+
     Parser.prototype.parse_response = function() {
         this.index++;
         var response = {};
@@ -20,12 +39,14 @@ rifParse = (function () {
                 response.runs = parseInt(entry.value);
                 this.index++;
             } else if (token === "matches"
-                    || token === "needs"
-                    || token === "sets"
-                    || token === "calls"
-                    || token === "suggests") {
+                    || token === "needs") {
                 response[token] = entry.value.split(" ");
                 this.index++;
+            } else if (token === "does") {
+                response.does = response.does || {};
+                var slot = "common";
+                response.does[slot] = response.does[slot] || {};
+                this.parse_does(response.does[slot]);
             } else {
                 break;
             }

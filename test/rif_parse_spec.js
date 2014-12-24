@@ -8,6 +8,9 @@ describe("rifParse", function () {
     function response(name) {
         return token_pair("response", "");
     }
+    function does() {
+        return token_pair("does", "");
+    }
     function end() {
         return token_pair("end", "");
     }
@@ -75,17 +78,6 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { someObject: [{}, {}] } );
     });
-    it("should parse response text", function () {
-        var rif = rifParse(
-            [
-                responses("anObject"),
-                    response(),
-                        token_pair("text","some text to display for this response"),
-                end()
-            ]
-        );
-        expect(rif.responses).toEqual( { anObject: [{text: "some text to display for this response"}] } );
-    });
     it("should parse response runs", function () {
         var rif = rifParse(
             [
@@ -119,38 +111,93 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{needs: ["need1", "need2"]}] } );
     });
+    it("should parse response does says", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("says","some text to display for this response"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: { says: "some text to display for this response" }
+                        }
+                    }
+                ]
+            }
+        );
+    });
     it("should parse response sets", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
-                        token_pair("sets","value1 value2 value3"),
+                        does(),
+                            token_pair("sets","value1 value2 value3"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{sets: ["value1", "value2", "value3"]}] } );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: { sets: ["value1", "value2", "value3"] }
+                        }
+                    }
+                ]
+            }
+        );
     });
     it("should parse response calls", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
-                        token_pair("calls","call1 call2 call3"),
+                        does(),
+                            token_pair("calls","call1 call2 call3"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{calls: ["call1", "call2", "call3"]}] } );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: { calls: ["call1", "call2", "call3"] }
+                        }
+                    }
+                ]
+            }
+        );
     });
     it("should parse response suggests", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
-                        token_pair("suggests","topic1 topic2 topic3"),
+                        does(),
+                            token_pair("suggests","topic1 topic2 topic3"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{suggests: ["topic1", "topic2", "topic3"]}] } );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: { suggests: ["topic1", "topic2", "topic3"] }
+                        }
+                    }
+                ]
+            }
+        );
     });
     it("should parse response prompts", function () {
         var rif = rifParse(
