@@ -1,18 +1,18 @@
 describe("rifParse", function () {
     function token_pair(token, value) {
-        return {token: token, value: value};
+        return {token: token, value: value || ""};
     }
     function responses(name) {
         return token_pair("responses", name);
     }
     function response(name) {
-        return token_pair("response", "");
+        return token_pair("response");
     }
     function does(slot) {
         return token_pair("does", slot || "");
     }
     function end() {
-        return token_pair("end", "");
+        return token_pair("end");
     }
 
     it("should return an empty result for an empty input", function () {
@@ -34,8 +34,8 @@ describe("rifParse", function () {
     it("should parse multiple objects", function () {
         var rif = rifParse(
             [
-                {token: "object", value: "anObject"},
-                {token: "object", value: "anotherObject"}
+                token_pair("object", "anObject"),
+                token_pair("object", "anotherObject")
             ] );
         expect(rif.objects).toEqual(
             {
@@ -248,4 +248,12 @@ describe("rifParse", function () {
             }
         );
     });
-});
+    xit("should parse response does for other slots", function () {
+        var rif = rifParse(
+            [
+                token_pair("define","somedef"),
+                token_pair("enddef")
+            ]
+        );
+    });
+1});
