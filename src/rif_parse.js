@@ -44,7 +44,7 @@ rifParse = (function () {
                 this.index++;
             } else if (token === "does") {
                 response.does = response.does || {};
-                var slot = "common";
+                var slot = entry.value || "common";
                 response.does[slot] = response.does[slot] || {};
                 this.parse_does(response.does[slot]);
             } else {

@@ -8,8 +8,8 @@ describe("rifParse", function () {
     function response(name) {
         return token_pair("response", "");
     }
-    function does() {
-        return token_pair("does", "");
+    function does(slot) {
+        return token_pair("does", slot || "");
     }
     function end() {
         return token_pair("end", "");
@@ -111,6 +111,27 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{needs: ["need1", "need2"]}] } );
     });
+    it("should parse response prompts", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                response(),
+                token_pair("prompts","A response prompt"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{prompts: "A response prompt"}] } );
+    });
+    it("should parse response is", function () {
+        var rif = rifParse([
+                responses("anObject"),
+                response(),
+                token_pair("is","something"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{is: "something"}] } );
+    });
     it("should parse response does says", function () {
         var rif = rifParse(
             [
@@ -199,25 +220,32 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse response prompts", function () {
+    it("should parse response does for other slots", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
-                    response(),
-                        token_pair("prompts","A response prompt"),
+                response(),
+                    does("2"),
+                        token_pair("says","some text to display for this response"),
+                    does("6"),
+                        token_pair("says","some text to display for response 6"),
+                    does(),
+                        token_pair("says","some text in the common case"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{prompts: "A response prompt"}] } );
-    });
-    it("should parse response is", function () {
-        var rif = rifParse([
-                responses("anObject"),
-                    response(),
-                        token_pair("is","something"),
-                end()
-            ]
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: { says: "some text in the common case"},
+                            2: { says: "some text to display for this response" },
+                            6: { says: "some text to display for response 6" }
+                        }
+                    }
+                ]
+            }
         );
-        expect(rif.responses).toEqual( { anObject: [{is: "something"}] } );
     });
 });
