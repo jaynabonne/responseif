@@ -224,13 +224,13 @@ describe("rifParse", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
-                response(),
-                    does("2"),
-                        token_pair("says","some text to display for this response"),
-                    does("6"),
-                        token_pair("says","some text to display for response 6"),
-                    does(),
-                        token_pair("says","some text in the common case"),
+                    response(),
+                        does("2"),
+                            token_pair("says","some text to display for this response"),
+                        does("6"),
+                            token_pair("says","some text to display for response 6"),
+                        does(),
+                            token_pair("says","some text in the common case"),
                 end()
             ]
         );
