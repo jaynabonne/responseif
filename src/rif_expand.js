@@ -25,14 +25,13 @@ var rifExpand = (function () {
 
     Expander.prototype.createDefinition = function(id) {
         var definition = [];
-        while (!this.iterator.done() && this.iterator.get().token != "enddef") {
+        for (; !this.iterator.done() && this.iterator.get().token != "enddef"; this.iterator.next()) {
             definition.push(this.iterator.get());
-            this.iterator.next();
         }
         this.definitions[id] = definition;
     };
 
-    Expander.prototype.useDefinition = function(token) {
+    Expander.prototype.applyDefinition = function(token) {
         var iterator = this.iterator;
         var new_tokens = this.new_tokens;
         var expanded_tokens = this.expand(new Iterator(this.definitions[token]));
@@ -47,7 +46,7 @@ var rifExpand = (function () {
             this.iterator.next();
             this.createDefinition(token_pair.value);
         } else if (this.definitions[token]) {
-            this.useDefinition(token);
+            this.applyDefinition(token);
         } else {
             this.new_tokens.push(token_pair);
         }
