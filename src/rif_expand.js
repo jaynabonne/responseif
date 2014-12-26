@@ -35,8 +35,13 @@ var rifExpand = (function () {
     };
 
     Expander.prototype.useDefinition = function(token) {
-        var expanded_tokens = this.definitions[token];
-        this.new_tokens = this.new_tokens.concat(expanded_tokens);
+        var iterator = this.iterator;
+        var new_tokens = this.new_tokens;
+        this.new_tokens = [];
+        this.iterator = new Iterator(this.definitions[token]);
+        var expanded_tokens = this.expand();
+        this.iterator = iterator;
+        this.new_tokens = new_tokens.concat(expanded_tokens);
     };
 
     Expander.prototype.expandNext = function() {
