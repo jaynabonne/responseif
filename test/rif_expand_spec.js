@@ -28,11 +28,30 @@ describe("rifExpand", function () {
             ]
         );
     });
-    it("should remove empty definitions in the result", function() {
+    it("should remove empty definitions from the result", function() {
         var tokens = rifExpand(
             [
                 token_pair("tokenA", "valueA"),
                 define("somedef"),
+                enddef(),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+        expect(tokens).toEqual(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+    });
+    it("should remove non-empty definitions from the result", function() {
+        var tokens = rifExpand(
+            [
+                token_pair("tokenA", "valueA"),
+                define("somedef"),
+                token_pair("tokenNew", "valueNew"),
                 enddef(),
                 token_pair("tokenB", "valueB"),
                 token_pair("tokenC", "valueC")
