@@ -248,12 +248,4 @@ describe("rifParse", function () {
             }
         );
     });
-    xit("should parse response does for other slots", function () {
-        var rif = rifParse(
-            [
-                token_pair("define","somedef"),
-                token_pair("enddef")
-            ]
-        );
-    });
 1});
