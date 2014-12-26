@@ -12,6 +12,40 @@ describe("rifExpand", function () {
         var tokens = rifExpand([]);
         expect(tokens).toEqual([]);
     });
+    it("should return the same tokens when there are no definitions", function() {
+        var tokens = rifExpand(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+        expect(tokens).toEqual(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+    });
+    it("should remove empty definitions in the result", function() {
+        var tokens = rifExpand(
+            [
+                token_pair("tokenA", "valueA"),
+                define("somedef"),
+                enddef(),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+        expect(tokens).toEqual(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+    });
     xit("should replace a definition", function () {
         var tokens = rifExpand(
             [
