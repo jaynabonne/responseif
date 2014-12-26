@@ -1,5 +1,6 @@
 var rifParse;
 rifParse = (function () {
+    "use strict";
 
     var Parser = function(tokens) {
         this.tokens = tokens;
