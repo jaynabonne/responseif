@@ -19,9 +19,7 @@ var rifExpand = (function () {
         return this.tokens[this.index];
     };
 
-    var Expander = function(tokens) {
-        this.iterator = new Iterator(tokens);
-        this.new_tokens = [];
+    var Expander = function() {
         this.definitions = {};
     };
 
@@ -37,9 +35,7 @@ var rifExpand = (function () {
     Expander.prototype.useDefinition = function(token) {
         var iterator = this.iterator;
         var new_tokens = this.new_tokens;
-        this.new_tokens = [];
-        this.iterator = new Iterator(this.definitions[token]);
-        var expanded_tokens = this.expand();
+        var expanded_tokens = this.expand(new Iterator(this.definitions[token]));
         this.iterator = iterator;
         this.new_tokens = new_tokens.concat(expanded_tokens);
     };
@@ -57,7 +53,9 @@ var rifExpand = (function () {
         }
     };
 
-    Expander.prototype.expand = function() {
+    Expander.prototype.expand = function(iterator) {
+        this.new_tokens = [];
+        this.iterator = iterator;
         while(!this.iterator.done()) {
             this.expandNext();
             this.iterator.next();
@@ -65,7 +63,7 @@ var rifExpand = (function () {
         return this.new_tokens;
     };
     return function(tokens) {
-        var expander = new Expander(tokens);
-        return expander.expand();
+        var expander = new Expander();
+        return expander.expand(new Iterator(tokens));
     };
 })();
