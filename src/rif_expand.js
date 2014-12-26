@@ -1,24 +1,24 @@
 var rifExpand = (function () {
     "use strict";
     return function(tokens) {
-        var newtokens = [];
+        var new_tokens = [];
         var definitions = {};
         for (var i = 0; i < tokens.length; ++i) {
             var token_pair = tokens[i];
             var token = token_pair.token;
             if (token === "define") {
-                var id = token_pair.value;
                 var definition = [];
-                for (++i; i < tokens.length && tokens[i].token != "enddef"; ++i)
-                    definition.push(tokens[i]);
-                definitions[id] = definition;
+                var start = ++i;
+                while (i < tokens.length && tokens[i].token != "enddef")
+                    ++i;
+                definitions[token_pair.value] = tokens.slice(start, i);
                 continue;
             } else if (definitions[token]) {
-                newtokens = newtokens.concat(definitions[token]);
+                new_tokens = new_tokens.concat(definitions[token]);
                 continue;
             }
-            newtokens.push(token_pair);
+            new_tokens.push(token_pair);
         }
-        return newtokens;
+        return new_tokens;
     };
 })();
