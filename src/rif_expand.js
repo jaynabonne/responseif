@@ -1,24 +1,33 @@
 var rifExpand = (function () {
     "use strict";
-    return function(tokens) {
-        var new_tokens = [];
-        var definitions = {};
-        for (var i = 0; i < tokens.length; ++i) {
-            var token_pair = tokens[i];
+    var Expander = function(tokens) {
+        this.tokens = tokens;
+        this.new_tokens = [];
+        this.definitions = {};
+        this.index = 0;
+    };
+    Expander.prototype.expand = function() {
+        var tokens = this.tokens;
+        for (this.index = 0; this.index < tokens.length; ++this.index) {
+            var token_pair = tokens[this.index];
             var token = token_pair.token;
             if (token === "define") {
                 var definition = [];
-                var start = ++i;
-                while (i < tokens.length && tokens[i].token != "enddef")
-                    ++i;
-                definitions[token_pair.value] = tokens.slice(start, i);
+                var start = ++this.index;
+                while (this.index < this.tokens.length && this.tokens[this.index].token != "enddef")
+                    ++this.index;
+                this.definitions[token_pair.value] = this.tokens.slice(start, this.index);
                 continue;
-            } else if (definitions[token]) {
-                new_tokens = new_tokens.concat(definitions[token]);
+            } else if (this.definitions[token]) {
+                this.new_tokens = this.new_tokens.concat(this.definitions[token]);
                 continue;
             }
-            new_tokens.push(token_pair);
+            this.new_tokens.push(token_pair);
         }
-        return new_tokens;
+        return this.new_tokens;
+    };
+    return function(tokens) {
+        var expander = new Expander(tokens);
+        return expander.expand();
     };
 })();
