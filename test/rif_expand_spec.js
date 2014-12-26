@@ -65,18 +65,25 @@ describe("rifExpand", function () {
             ]
         );
     });
-    xit("should replace a definition", function () {
+    it("should replace a definition in the result", function() {
         var tokens = rifExpand(
             [
+                token_pair("tokenA", "valueA"),
                 define("somedef"),
-                token_pair("sometoken", "somevalue"),
-                token_pair("anothertoken", "anothervalue"),
+                token_pair("tokenNew", "valueNew"),
                 enddef(),
-                token_pair("firsttoken", "firstvalue"),
+                token_pair("tokenB", "valueB"),
                 token_pair("somedef"),
-                token_pair("secondtoken", "secondvalue"),
+                token_pair("tokenC", "valueC")
             ]
         );
-        expect(rif).toEqual( { responses: {} });
+        expect(tokens).toEqual(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenNew", "valueNew"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
     });
 });
