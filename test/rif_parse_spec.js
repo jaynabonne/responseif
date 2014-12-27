@@ -8,6 +8,9 @@ describe("rifParse", function () {
     function response(name) {
         return token_pair("response");
     }
+    function says(text) {
+        return token_pair("says", text);
+    }
     function does(slot) {
         return token_pair("does", slot || "");
     }
@@ -266,6 +269,35 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         groups: []
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse a response groups", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        groups(),
+                            response(),
+                                does(),
+                                    says("some text"),
+                            response(),
+                                does(),
+                                    says("some more text"),
+                        end(),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        groups: [
+                            { does: { common: {says: "some text"} } },
+                            { does: { common: {says: "some more text"} } }
+                        ]
                     }
                 ]
             }
