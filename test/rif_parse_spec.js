@@ -11,6 +11,9 @@ describe("rifParse", function () {
     function does(slot) {
         return token_pair("does", slot || "");
     }
+    function groups() {
+        return token_pair("groups");
+    }
     function end() {
         return token_pair("end");
     }
@@ -248,4 +251,25 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse an empty response groups", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        groups(),
+                        end(),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        groups: []
+                    }
+                ]
+            }
+        );
+    });
+
 1});

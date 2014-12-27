@@ -48,6 +48,9 @@ rifParse = (function () {
                 var slot = entry.value || "common";
                 response.does[slot] = response.does[slot] || {};
                 this.parse_does(response.does[slot]);
+            } else if (token === "groups") {
+                response.groups = [];
+                this.index += 2;
             } else {
                 break;
             }
