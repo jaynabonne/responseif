@@ -65,12 +65,8 @@ rifParse = (function () {
         rif.objects[value] = {};
         this.index++;
     };
-    Parser.prototype.parse_responses = function () {
-        var value = this.tokens[this.index].value;
-        var rif = this.rif;
-        rif.responses = rif.responses || {};
+    Parser.prototype.parseResponseGroup = function() {
         var responses = [];
-        this.index++;
         while (this.index < this.tokens.length) {
             var token = this.tokens[this.index].token;
             if (token === "response") {
@@ -83,7 +79,14 @@ rifParse = (function () {
                 break;
             }
         }
-        rif.responses[value] = responses;
+        return responses;
+    }
+    Parser.prototype.parse_responses = function () {
+        var value = this.tokens[this.index].value;
+        var rif = this.rif;
+        rif.responses = rif.responses || {};
+        this.index++;
+        rif.responses[value] = this.parseResponseGroup();
     };
 
     Parser.prototype.parse = function() {
