@@ -144,7 +144,7 @@ describe("rifParse", function () {
                 responses("anObject"),
                     response(),
                         does(),
-                            token_pair("says","some text to display for this response"),
+                            says("some text to display for this response"),
                 end()
             ]
         );
@@ -232,11 +232,11 @@ describe("rifParse", function () {
                 responses("anObject"),
                     response(),
                         does("2"),
-                            token_pair("says","some text to display for this response"),
+                            says("some text to display for this response"),
                         does("6"),
-                            token_pair("says","some text to display for response 6"),
+                            says("some text to display for response 6"),
                         does(),
-                            token_pair("says","some text in the common case"),
+                            says("some text in the common case"),
                 end()
             ]
         );
