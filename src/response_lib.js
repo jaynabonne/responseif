@@ -10,10 +10,18 @@ var ResponseLib = (function () {
 
     var proto = type.prototype;
 
+    proto.stateNeedIsMet = function(id) {
+        if (id[0] === '!') {
+            return !this.interact.getState(id.substr(1));
+        } else {
+            return this.interact.getState(id);
+        }
+    };
+
     proto.responseNeedsAreMet = function(response) {
         if (response.needs) {
             for (var i = 0; i < response.needs.length; ++i) {
-                if (!this.interact.getState(response.needs[i])) {
+                if (!this.stateNeedIsMet(response.needs[i])) {
                     return false;
                 }
             }

@@ -20,5 +20,10 @@ describe("ResponseLib", function () {
             var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
+        it("returns false if disallowed state is set", function () {
+            interact.getState = function(id) { return false; };
+            var response = { needs: ["!somestate"] };
+            expect(responseLib.responseIsEligible(response)).toEqual(true);
+        });
     });
 });
