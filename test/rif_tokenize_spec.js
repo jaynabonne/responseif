@@ -1,4 +1,5 @@
 describe("rifTokenize", function () {
+    "use strict";
     it("should return an empty array for empty input", function () {
         expect(rifTokenize("")).toEqual([]);
     });

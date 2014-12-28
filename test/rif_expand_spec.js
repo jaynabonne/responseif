@@ -1,4 +1,5 @@
 describe("rifExpand", function () {
+    "use strict";
     function token_pair(token, value) {
         return {token: token, value: value || ""};
     }
