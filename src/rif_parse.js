@@ -10,14 +10,17 @@ rifParse = (function () {
 
     Parser.prototype.addString = function(target, entry) {
         target[entry.token] = entry.value;
+        this.index++;
     };
 
     Parser.prototype.addList = function(target, entry) {
         target[entry.token] = entry.value.split(" ");
+        this.index++;
     };
 
     Parser.prototype.addInt = function(target, entry) {
         target[entry.token] = parseInt(entry.value);
+        this.index++;
     };
 
     Parser.prototype.parse_does_says = Parser.prototype.addString;
@@ -33,7 +36,6 @@ rifParse = (function () {
             var handler = this["parse_does_" + token];
             if (handler) {
                 handler.call(this, slot, entry);
-                this.index++;
             } else {
                 break;
             }
@@ -48,14 +50,11 @@ rifParse = (function () {
             var token = entry.token;
             if (token === "text" || token === "prompts" || token === "is") {
                 this.addString(response, entry);
-                this.index++;
             } else if (token === "runs") {
                 this.addInt(response, entry);
-                this.index++;
             } else if (token === "matches"
                     || token === "needs") {
                 this.addList(response, entry);
-                this.index++;
             } else if (token === "does") {
                 response.does = response.does || {};
                 var slot = entry.value || "common";
