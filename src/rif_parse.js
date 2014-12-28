@@ -8,6 +8,18 @@ rifParse = (function () {
         this.index = 0;
     };
 
+    Parser.prototype.parseEntries = function(target, prefix) {
+        while (this.index < this.tokens.length) {
+            var entry = this.tokens[this.index];
+            var handler = this[prefix + entry.token];
+            if (handler) {
+                handler.call(this, target, entry);
+            } else {
+                break;
+            }
+        }
+    };
+
     Parser.prototype.addString = function(target, entry) {
         target[entry.token] = entry.value;
         this.index++;
@@ -23,37 +35,27 @@ rifParse = (function () {
         this.index++;
     };
 
-    Parser.prototype.parse_response_prompts = Parser.prototype.addString;
-    Parser.prototype.parse_response_is = Parser.prototype.addString;
-    Parser.prototype.parse_response_runs = Parser.prototype.addInt;
-    Parser.prototype.parse_response_matches = Parser.prototype.addList;
-    Parser.prototype.parse_response_needs = Parser.prototype.addList;
-
     Parser.prototype.parse_does_says = Parser.prototype.addString;
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
 
-    Parser.prototype.parseEntries = function(target, prefix) {
-        while (this.index < this.tokens.length) {
-            var entry = this.tokens[this.index];
-            var handler = this[prefix + entry.token];
-            if (handler) {
-                handler.call(this, target, entry);
-            } else {
-                break;
-            }
-        }
+    var createDoesSlot = function(response, name) {
+        response.does = response.does || {};
+        var slotname = name || "common";
+        return (response.does[slotname] = response.does[slotname] || {});
     };
 
     Parser.prototype.parse_response_does = function(response, entry) {
-        response.does = response.does || {};
-        var slotname = entry.value || "common";
-        response.does[slotname] = response.does[slotname] || {};
-        var slot = response.does[slotname];
         this.index++;
-        this.parseEntries(slot, "parse_does_");
+        this.parseEntries(createDoesSlot(response, entry.value), "parse_does_");
     };
+
+    Parser.prototype.parse_response_prompts = Parser.prototype.addString;
+    Parser.prototype.parse_response_is = Parser.prototype.addString;
+    Parser.prototype.parse_response_runs = Parser.prototype.addInt;
+    Parser.prototype.parse_response_matches = Parser.prototype.addList;
+    Parser.prototype.parse_response_needs = Parser.prototype.addList;
 
     Parser.prototype.parse_response_groups = function(response, entry) {
         this.index++;
