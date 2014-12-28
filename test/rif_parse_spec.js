@@ -254,7 +254,7 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse an empty response groups", function() {
+    it("should parse an empty response 'groups'", function() {
         var rif = rifParse(
             [
                 responses("anObject"),
@@ -274,7 +274,7 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse a response groups", function() {
+    it("should parse a response 'groups'", function() {
         var rif = rifParse(
             [
                 responses("anObject"),
@@ -304,4 +304,4 @@ describe("rifParse", function () {
         );
     });
 
-1});
+});
