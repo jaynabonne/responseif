@@ -1,0 +1,39 @@
+.responses room
+	.response
+		.matches LOOK
+		.runs 1
+		.does
+			.says
+				<div class="gameheader">
+				  {game.gameinfo}
+				  {break}
+				  For help, click "{!help!}".<br>
+				  For game information, click "{!about!}".<br>
+				  {break}
+				  {game.separator}
+				  {break}
+				</div>
+	.response
+		.matches LOOK room look=90 cell
+		.matches EXAMINE
+		.is reflection
+		.prompts Examine room
+		.does 1
+			.calls INYOUGO
+			.says
+			.suggests
+		.does 2
+			.says
+				{!Stone walls|walls!}. {!Metal bars|bars!}. Light flickering chaotically from somewhere, as if oil lamps are burning just
+				out of sight. It strikes of cliché. Do they make prisons like this anymore? Or have you been thrust
+				into an anachronism, a relic of a distant past that someone took and hid and preserved just for those like you?
+				{break}
+				{+BEDS+}
+		.does
+			.says
+				{!Stone walls|walls!}. {!Metal bars|bars!}. {!Light flickering chaotically from somewhere|light!}, as if oil lamps are burning just
+				out of sight.
+				{break}
+				{+BEDS+}
+			.suggests walls bars
+.end

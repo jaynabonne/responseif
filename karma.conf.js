@@ -19,7 +19,11 @@ module.exports = function(config) {
       'src/rif_tokenize.js',
       'src/rif_expand.js',
       'src/rif_parse.js',
-      'test/*.js'
+      'test/*.js',
+      { pattern:  'data/*.txt',
+        watched:  true,
+        served:   true,
+        included: false }
     ],
 
 

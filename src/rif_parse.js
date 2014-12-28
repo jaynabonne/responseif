@@ -75,7 +75,7 @@ rifParse = (function () {
         var response = {};
         this.parseEntries(response, "parse_response_");
         return response;
-    }
+    };
 
     Parser.prototype.parse_object = function () {
         var value = this.tokens[this.index].value;
@@ -84,6 +84,7 @@ rifParse = (function () {
         rif.objects[value] = {};
         this.index++;
     };
+
     Parser.prototype.parseResponseGroup = function() {
         var responses = [];
         while (this.index < this.tokens.length) {
