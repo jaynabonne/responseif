@@ -23,12 +23,18 @@ rifParse = (function () {
         this.index++;
     };
 
+    Parser.prototype.parse_response_prompts = Parser.prototype.addString;
+    Parser.prototype.parse_response_is = Parser.prototype.addString;
+    Parser.prototype.parse_response_runs = Parser.prototype.addInt;
+    Parser.prototype.parse_response_matches = Parser.prototype.addList;
+    Parser.prototype.parse_response_needs = Parser.prototype.addList;
+
     Parser.prototype.parse_does_says = Parser.prototype.addString;
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
 
-    Parser.prototype.parse_does = function(response, entry) {
+    Parser.prototype.parse_response_does = function(response, entry) {
         response.does = response.does || {};
         var slotname = entry.value || "common";
         response.does[slotname] = response.does[slotname] || {};
@@ -51,15 +57,9 @@ rifParse = (function () {
         while (this.index < this.tokens.length) {
             var entry = this.tokens[this.index];
             var token = entry.token;
-            if (token === "text" || token === "prompts" || token === "is") {
-                this.addString(response, entry);
-            } else if (token === "runs") {
-                this.addInt(response, entry);
-            } else if (token === "matches"
-                    || token === "needs") {
-                this.addList(response, entry);
-            } else if (token === "does") {
-                this.parse_does(response, entry);
+            var handler = this["parse_response_" + token];
+            if (handler) {
+                handler.call(this, response, entry);
             } else if (token === "groups") {
                 this.index++;
                 response.groups = this.parseResponseGroup();
