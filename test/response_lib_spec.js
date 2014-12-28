@@ -25,5 +25,10 @@ describe("ResponseLib", function () {
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
+        it("returns correct value for multiple state", function () {
+            interact.getState = function(id) { return id === "somestate"; };
+            var response = { needs: ["somestate", "!someotherstate"] };
+            expect(responseLib.responseIsEligible(response)).toEqual(true);
+        });
     });
 });
