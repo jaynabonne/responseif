@@ -34,45 +34,44 @@ rifParse = (function () {
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
 
+    Parser.prototype.parseEntries = function(target, prefix) {
+        while (this.index < this.tokens.length) {
+            var entry = this.tokens[this.index];
+            var handler = this[prefix + entry.token];
+            if (handler) {
+                handler.call(this, target, entry);
+            } else {
+                break;
+            }
+        }
+    };
+
     Parser.prototype.parse_response_does = function(response, entry) {
         response.does = response.does || {};
         var slotname = entry.value || "common";
         response.does[slotname] = response.does[slotname] || {};
         var slot = response.does[slotname];
         this.index++;
-        while (this.index < this.tokens.length) {
-            var entry = this.tokens[this.index];
-            var handler = this["parse_does_" + entry.token];
-            if (handler) {
-                handler.call(this, slot, entry);
-            } else {
-                break;
-            }
-       }
+        this.parseEntries(slot, "parse_does_");
+    };
+
+    Parser.prototype.parse_response_groups = function(response, entry) {
+        this.index++;
+        response.groups = this.parseResponseGroup();
+    };
+
+    Parser.prototype.parse_response_uses = function(response, entry) {
+        this.index++;
+        var responses = this.parseResponseGroup();
+        if (entry.value === "first" || entry.value === "random") {
+            response[entry.value] = responses;
+        }
     };
 
     Parser.prototype.parse_response = function() {
         this.index++;
         var response = {};
-        while (this.index < this.tokens.length) {
-            var entry = this.tokens[this.index];
-            var token = entry.token;
-            var handler = this["parse_response_" + token];
-            if (handler) {
-                handler.call(this, response, entry);
-            } else if (token === "groups") {
-                this.index++;
-                response.groups = this.parseResponseGroup();
-            } else if (token === "uses") {
-                this.index++;
-                var responses = this.parseResponseGroup();
-                if (entry.value === "first" || entry.value === "random") {
-                    response[entry.value] = responses;
-                }
-            } else {
-                break;
-            }
-        }
+        this.parseEntries(response, "parse_response_");
         return response;
     }
 
