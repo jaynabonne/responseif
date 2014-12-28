@@ -1,8 +1,10 @@
 describe("ResponseLib", function () {
     "use strict";
     var responseLib;
+    var interact;
     beforeEach(function () {
-        responseLib = new ResponseLib();
+        interact = {};
+        responseLib = new ResponseLib(interact);
     });
 
     describe("responseIsEligible", function () {
@@ -11,6 +13,11 @@ describe("ResponseLib", function () {
         });
         it("returns false if the run equals or exceeds its runs", function () {
             var response = { run: 5, runs: 5 };
+            expect(responseLib.responseIsEligible(response)).toEqual(false);
+        });
+        it("returns false if required state is not set", function () {
+            interact.getState = function(id) { return false; };
+            var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
     });
