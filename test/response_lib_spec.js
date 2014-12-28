@@ -30,5 +30,9 @@ describe("ResponseLib", function () {
             var response = { needs: ["somestate", "!someotherstate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
+        it("returns false if required topics are not present", function () {
+            var response = { topics: ["*atopic"] };
+            expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
+        });
     });
 });
