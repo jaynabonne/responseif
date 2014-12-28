@@ -8,23 +8,36 @@ rifParse = (function () {
         this.index = 0;
     };
 
+    Parser.prototype.addString = function(target, entry) {
+        target[entry.token] = entry.value;
+    };
+
+    Parser.prototype.addList = function(target, entry) {
+        target[entry.token] = entry.value.split(" ");
+    };
+
+    Parser.prototype.addInt = function(target, entry) {
+        target[entry.token] = parseInt(entry.value);
+    };
+
+    Parser.prototype.parse_does_says = Parser.prototype.addString;
+    Parser.prototype.parse_does_sets = Parser.prototype.addList;
+    Parser.prototype.parse_does_calls = Parser.prototype.addList;
+    Parser.prototype.parse_does_suggests = Parser.prototype.addList;
+
     Parser.prototype.parse_does = function(slot) {
         this.index++;
         while (this.index < this.tokens.length) {
             var entry = this.tokens[this.index];
             var token = entry.token;
-            if (token === "says") {
-                slot[token] = entry.value;
-                this.index++;
-            } else if (token === "sets"
-                    || token === "calls"
-                    || token === "suggests") {
-                slot[token] = entry.value.split(" ");
+            var handler = this["parse_does_" + token];
+            if (handler) {
+                handler.call(this, slot, entry);
                 this.index++;
             } else {
                 break;
             }
-        }
+       }
     };
 
     Parser.prototype.parse_response = function() {
@@ -34,14 +47,14 @@ rifParse = (function () {
             var entry = this.tokens[this.index];
             var token = entry.token;
             if (token === "text" || token === "prompts" || token === "is") {
-                response[token] = entry.value;
+                this.addString(response, entry);
                 this.index++;
             } else if (token === "runs") {
-                response.runs = parseInt(entry.value);
+                this.addInt(response, entry);
                 this.index++;
             } else if (token === "matches"
                     || token === "needs") {
-                response[token] = entry.value.split(" ");
+                this.addList(response, entry);
                 this.index++;
             } else if (token === "does") {
                 response.does = response.does || {};
