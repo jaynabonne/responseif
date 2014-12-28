@@ -17,6 +17,9 @@ describe("rifParse", function () {
     function groups() {
         return token_pair("groups");
     }
+    function uses(type) {
+        return token_pair("uses", type);
+    }
     function end() {
         return token_pair("end");
     }
@@ -304,4 +307,62 @@ describe("rifParse", function () {
         );
     });
 
+    it("should parse a response 'uses first'", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        uses("first"),
+                            response(),
+                                does(),
+                                    says("some text"),
+                            response(),
+                                does(),
+                                    says("some more text"),
+                        end(),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        first: [
+                            { does: { common: {says: "some text"} } },
+                            { does: { common: {says: "some more text"} } }
+                        ]
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse a response 'uses first'", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        uses("random"),
+                            response(),
+                                does(),
+                                    says("some text"),
+                            response(),
+                                does(),
+                                    says("some more text"),
+                        end(),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        random: [
+                            { does: { common: {says: "some text"} } },
+                            { does: { common: {says: "some more text"} } }
+                        ]
+                    }
+                ]
+            }
+        );
+    });
 });

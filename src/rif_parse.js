@@ -51,6 +51,12 @@ rifParse = (function () {
             } else if (token === "groups") {
                 this.index++;
                 response.groups = this.parseResponseGroup();
+            } else if (token === "uses") {
+                this.index++;
+                var responses = this.parseResponseGroup();
+                if (entry.value === "first" || entry.value === "random") {
+                    response[entry.value] = responses;
+                }
             } else {
                 break;
             }
