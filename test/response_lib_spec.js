@@ -37,10 +37,34 @@ describe("ResponseLib", function () {
     });
     describe("computeScore", function () {
         it("returns 10000 if response topics is empty", function () {
-            var response_topics = "",
+            var response_topics = [],
                 topics = [],
                 score = responseLib.computeScore(response_topics, topics);
             expect(score).toEqual(10000);
+        });
+        it("returns 0 if response topic doesn't match any topics", function () {
+            var response_topics = ["atopic"],
+                topics = ["btopic"],
+                score = responseLib.computeScore(response_topics, topics);
+            expect(score).toEqual(0);
+        });
+        it("returns 10000 if response topic matches any topic", function () {
+            var response_topics = ["atopic"],
+                topics = ["atopic"],
+                score = responseLib.computeScore(response_topics, topics);
+            expect(score).toEqual(10000);
+        });
+        it("returns higher score for multiple matching topics", function() {
+            var response_topics = ["atopic", "btopic"],
+                topics = ["atopic", "btopic", "ctopic"],
+                score = responseLib.computeScore(response_topics, topics);
+            expect(score).toEqual(20000);
+        });
+        it("returns the right score for required topics", function () {
+            var response_topics = ["*atopic", "btopic"],
+                topics = ["atopic", "btopic"],
+                score = responseLib.computeScore(response_topics, topics);
+            expect(score).toEqual(20000);
         });
     });
 });

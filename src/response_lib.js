@@ -28,6 +28,23 @@ var ResponseLib = (function () {
 
     function responseRequiredTopicsAreDefined(response, topics) { return !hasTopics(response) || hasRequiredTopics(response, topics); }
 
+    function computeTopicScore(topic, topics) {
+        for (var i = 0; i < topics.length; ++i) {
+            if (topic === topics[i]) {
+                return 10000;
+            }
+        }
+        return 0;
+    }
+
+    function doComputeScore(response_topics, topics) {
+        var score = 0;
+        for (var i = 0; i < response_topics.length; ++i) {
+            score += computeTopicScore(extractTopic(response_topics[i]), topics);
+        }
+        return score;
+    }
+
     var proto = type.prototype;
 
     proto.stateNeedIsMet = function(id) {
@@ -55,7 +72,7 @@ var ResponseLib = (function () {
     };
 
     proto.computeScore = function(response_topics, topics) {
-        return 10000;
+        return response_topics.length === 0 ? 10000 : doComputeScore(response_topics, topics);
     };
     return type;
 })();
