@@ -152,11 +152,22 @@ var ResponseLib = (function () {
         response.run = (response.run || 0) + 1;
     }
 
-    proto.processSays = function (response) {
-        if (response.does) {
-            if (response.does.common.says) {
-                this.interact.say(response.does.common.says, response);
+    function getCurrentSection(response) {
+        var section = undefined;
+        var does = response.does;
+        if (does) {
+            var section = does[response.run.toString()];
+            if (!section) {
+                section = does.common;
             }
+        }
+        return section;
+    };
+
+    proto.processSays = function (response) {
+        var section = getCurrentSection(response);
+        if (section && section.says) {
+            this.interact.say(section.says, response);
         }
     };
 

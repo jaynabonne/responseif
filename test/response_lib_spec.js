@@ -215,7 +215,7 @@ describe("ResponseLib", function () {
                 expect(interact.say.callCount).toEqual(1);
                 expect(interact.say.argsForCall[0]).toEqual(["See ya later!", candidate2.response]);
             });
-            xit("outputs text in proper sequence", function() {
+            it("outputs text in proper sequence", function() {
                 interact.say = jasmine.createSpy("say");
                 var candidate = {
                     response: {
