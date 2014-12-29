@@ -84,8 +84,8 @@ var ResponseLib = (function () {
 
     proto.addResponse = function (response, topics, candidates) {
         if (this.responseIsEligible(response, topics)) {
-            if (response.responses !== undefined) {
-                this.addResponses(response.responses, topics, candidates);
+            if (response.groups !== undefined) {
+                this.addResponses(response.groups, topics, candidates);
             } else {
                 this.addIfHasScore(response, topics, candidates);
             }

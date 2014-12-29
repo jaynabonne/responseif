@@ -121,11 +121,30 @@ describe("ResponseLib", function () {
             expect(candidates).toEqual([{response: response1, score: 10000}, {response: response3, score: 10000}, {response: response4, score: 10000}]);
         });
         it("returns the right score for a required topic", function () {
-            var response1 = {a: 1, topics: ["*atopic"]},
+            var response1 = {a: 1, matches: ["*atopic"]},
                 responses = [response1],
                 topics = ["atopic"],
                 candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: response1, score: 10000}]);
+        });
+        it("returns eligible child responses", function () {
+            var response1 = {a: 1, matches: ["atopic"]},
+                response2 = {b: 2, matches: ["btopic"]},
+                response3 = {c: 3},
+                response4 = {d: 4, run: 4, runs: 4 },
+                parentresponse = { groups: [response1, response2, response3, response4] },
+                responses = [parentresponse],
+                topics = ["atopic"],
+                candidates = responseLib.selectResponses(responses, topics);
+            expect(candidates).toEqual([{response: response1, score: 10000}, {response: response3, score: 10000}]);
+        });
+        it("does not return eligible child responses if the parent is ineligible", function () {
+            var response1 = {a: 1},
+                parentresponse = { matches:["*atopic"], groups: [response1] },
+                responses = [parentresponse],
+                topics = [],
+                candidates = responseLib.selectResponses(responses, topics);
+            expect(candidates).toEqual([]);
         });
     });
 });
