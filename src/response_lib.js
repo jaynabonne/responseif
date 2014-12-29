@@ -53,5 +53,9 @@ var ResponseLib = (function () {
                 this.responseNeedsAreMet(response) &&
                 responseRequiredTopicsAreDefined(response, topics);
     };
+
+    proto.computeScore = function(response_topics, topics) {
+        return 10000;
+    };
     return type;
 })();

@@ -35,4 +35,12 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
         });
     });
+    describe("computeScore", function () {
+        it("returns 10000 if response topics is empty", function () {
+            var response_topics = "",
+                topics = [],
+                score = responseLib.computeScore(response_topics, topics);
+            expect(score).toEqual(10000);
+        });
+    });
 });
