@@ -4,6 +4,47 @@ var ResponseLib = (function () {
         this.interact = interact;
     };
 
+    var PriorityResponseGetter = (function () {
+        var type = function (candidates) {
+            this.reset(-1);
+            this.addPriorityResponses(candidates);
+        };
+
+        var proto = type.prototype;
+
+        proto.reset = function (score) {
+            this.results = [];
+            this.score = score;
+        };
+
+        proto.updateScore = function (score) {
+            if (score > this.score) {
+                this.reset(score);
+            }
+        };
+
+        proto.addResponse = function (response) {
+            if (response.score === this.score) {
+                this.results.push(response);
+            }
+        };
+
+        proto.addPriorityResponse = function (response) {
+            this.updateScore(response.score);
+            this.addResponse(response);
+        };
+
+        proto.addPriorityResponses = function (candidates) {
+            var self = this;
+            var bound = function(response) {
+                self.addPriorityResponse.call(self, response)
+            }
+            candidates.forEach(bound);
+        };
+
+        return type;
+    }());
+
     function hasRunAndRuns(response) { return response.runs !== undefined && response.run !== undefined; }
 
     function responseCountValid(response) { return !hasRunAndRuns(response) || response.run < response.runs; }
@@ -101,6 +142,10 @@ var ResponseLib = (function () {
 
     proto.selectResponses = function(responses, topics) {
         return this.addResponses(responses, topics, []);
+    };
+
+    proto.getPriorityResponses = function (candidates) {
+        return new PriorityResponseGetter(candidates).results;
     };
     return type;
 })();
