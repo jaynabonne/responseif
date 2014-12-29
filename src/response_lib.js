@@ -8,7 +8,7 @@ var ResponseLib = (function () {
 
     function responseCountValid(response) { return !hasRunAndRuns(response) || response.run < response.runs; }
 
-    function hasTopics(response) { return response.topics !== undefined; }
+    function hasTopics(response) { return response.matches !== undefined; }
 
     function topicInTopics(topic, topics) { return topics.indexOf(topic) !== -1; }
 
@@ -17,8 +17,8 @@ var ResponseLib = (function () {
     function extractTopic(topic) { return isRequiredTopic(topic) ? topic.substring(1) : topic; }
 
     function hasRequiredTopics(response, topics) {
-        for (var i = 0; i < response.topics.length; ++i) {
-            var topic = response.topics[i];
+        for (var i = 0; i < response.matches.length; ++i) {
+            var topic = response.matches[i];
             if (isRequiredTopic(topic) && !topicInTopics(extractTopic(topic), topics)) {
                 return false;
             }
@@ -72,7 +72,35 @@ var ResponseLib = (function () {
     };
 
     proto.computeScore = function(response_topics, topics) {
-        return response_topics.length === 0 ? 10000 : doComputeScore(response_topics, topics);
+        return (!response_topics || response_topics.length === 0) ? 10000 : doComputeScore(response_topics, topics);
+    };
+
+    proto.addIfHasScore = function (response, topics, candidates) {
+        var score = this.computeScore(response.matches, topics);
+        if (score > 0) {
+            candidates.push({response: response, score: score});
+        }
+    };
+
+    proto.addResponse = function (response, topics, candidates) {
+        if (this.responseIsEligible(response, topics)) {
+            if (response.responses !== undefined) {
+                this.addResponses(response.responses, topics, candidates);
+            } else {
+                this.addIfHasScore(response, topics, candidates);
+            }
+        }
+    };
+
+    proto.addResponses = function (responses, topics, candidates) {
+        var self = this;
+        var boundAdd = function (response) { self.addResponse.call(self, response, topics, candidates); };
+        responses.forEach(boundAdd);
+        return candidates;
+    };
+
+    proto.selectResponses = function(responses, topics) {
+        return this.addResponses(responses, topics, []);
     };
     return type;
 })();
