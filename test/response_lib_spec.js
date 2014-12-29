@@ -295,6 +295,27 @@ describe("ResponseLib", function () {
                 callback(-1);
                 expect(interact.say).not.toHaveBeenCalled();
             });
+            it ("combines multiple responses with the same prompt under one menu choice", function () {
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = { response: { prompts: "prompt1" }, score: 10000 };
+                var candidate2 = { response: { prompts: "prompt1" }, score: 10000 };
+                var candidate3 = { response: { prompts: "prompt2" }, score: 10000 };
+                responseLib.processResponses([candidate1, candidate2, candidate3]);
+                expect(interact.choose).toHaveBeenCalledWith(["prompt1", "prompt2"], jasmine.any(Function));
+            });
+            it ("executes multiple responses with the same prompt when chosen", function () {
+                interact.choose = jasmine.createSpy("choose");
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = {response: {prompts: "prompt1", does: {common: {says: "North"}}}, score: 10000};
+                var candidate2 = {response: {prompts: "prompt1", does: {common: {says: "North2"}}}, score: 10000};
+                var candidate3 = {response: {prompts: "prompt2", does: {common: {says: "South"}}}, score: 10000};
+                responseLib.processResponses([candidate1, candidate2, candidate3]);
+                var callback = interact.choose.mostRecentCall.args[1];
+                callback(0);
+                expect(interact.say.callCount).toEqual(2);
+                expect(interact.say.argsForCall[0]).toEqual(["North", candidate1.response]);
+                expect(interact.say.argsForCall[1]).toEqual(["North2", candidate2.response]);
+            });
         });
     });
 });
