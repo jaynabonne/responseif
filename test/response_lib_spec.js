@@ -172,4 +172,15 @@ describe("ResponseLib", function () {
             expect(responses).toEqual([response2, response3]);
         });
     });
+    describe("processResponses", function () {
+        describe("general", function () {
+            it("increments the response run count by one", function () {
+                var response1 = { response: { }, score: 10000 };
+                responseLib.processResponses([response1]);
+                expect(response1.response.run).toBe(1);
+                responseLib.processResponses([response1]);
+                expect(response1.response.run).toBe(2);
+            });
+        });
+    });
 });

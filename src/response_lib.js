@@ -147,5 +147,20 @@ var ResponseLib = (function () {
     proto.getPriorityResponses = function (candidates) {
         return new PriorityResponseGetter(candidates).results;
     };
+
+    function incrementResponseRunCount(response) {
+        response.run = (response.run || 0) + 1;
+    }
+
+    proto.processResponse = function (candidate, caller) {
+        incrementResponseRunCount(candidate.response);
+    };
+
+    proto.processResponses = function (candidates, caller) {
+        var self = this;
+        var bound = function (candidate) { self.processResponse.call(self, candidate); };
+        candidates.forEach(bound);
+    };
+
     return type;
 })();
