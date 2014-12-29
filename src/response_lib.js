@@ -37,7 +37,7 @@ var ResponseLib = (function () {
         proto.addPriorityResponses = function (candidates) {
             var self = this;
             var bound = function(response) {
-                self.addPriorityResponse.call(self, response)
+                self.addPriorityResponse(response)
             }
             candidates.forEach(bound);
         };
@@ -135,7 +135,7 @@ var ResponseLib = (function () {
 
     proto.addResponses = function (responses, topics, candidates) {
         var self = this;
-        var boundAdd = function (response) { self.addResponse.call(self, response, topics, candidates); };
+        var boundAdd = function (response) { self.addResponse(response, topics, candidates); };
         responses.forEach(boundAdd);
         return candidates;
     };
@@ -152,13 +152,22 @@ var ResponseLib = (function () {
         response.run = (response.run || 0) + 1;
     }
 
+    proto.processSays = function (response) {
+        if (response.does) {
+            if (response.does.common.says) {
+                this.interact.say(response.does.common.says, response);
+            }
+        }
+    };
+
     proto.processResponse = function (candidate, caller) {
         incrementResponseRunCount(candidate.response);
+        this.processSays(candidate.response);
     };
 
     proto.processResponses = function (candidates, caller) {
         var self = this;
-        var bound = function (candidate) { self.processResponse.call(self, candidate); };
+        var bound = function (candidate) { self.processResponse(candidate); };
         candidates.forEach(bound);
     };
 

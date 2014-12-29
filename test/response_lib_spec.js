@@ -175,11 +175,69 @@ describe("ResponseLib", function () {
     describe("processResponses", function () {
         describe("general", function () {
             it("increments the response run count by one", function () {
-                var response1 = { response: { }, score: 10000 };
-                responseLib.processResponses([response1]);
-                expect(response1.response.run).toBe(1);
-                responseLib.processResponses([response1]);
-                expect(response1.response.run).toBe(2);
+                var candidate = { response: { }, score: 10000 };
+                var candidates = [candidate];
+                responseLib.processResponses(candidates);
+                expect(candidate.response.run).toBe(1);
+                responseLib.processResponses(candidates);
+                expect(candidate.response.run).toBe(2);
+            });
+        });
+        describe("says", function () {
+            it("text for a matching response", function() {
+                interact.say = jasmine.createSpy("say");
+                var candidate = {
+                    response: {
+                        does: { common: { says: "Hello world!" } }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.say).toHaveBeenCalledWith("Hello world!", candidate.response);
+            });
+            it("outputs no text for no matching responses", function() {
+                interact.say = jasmine.createSpy("say");
+                responseLib.processResponses([]);
+                expect(interact.say).not.toHaveBeenCalled();
+            });
+            it("outputs text for all matching responses", function() {
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = { response: { does: { common: {says: "Hello world!" }}}, score: 10000 };
+                var candidate2 = { response: { does: { common: {says: "Goodnight moon!" }}}, score: 10000 };
+                responseLib.processResponses([candidate1, candidate2]);
+                expect(interact.say.callCount).toEqual(2);
+                expect(interact.say.argsForCall[0]).toEqual(["Hello world!", candidate1.response]);
+                expect(interact.say.argsForCall[1]).toEqual(["Goodnight moon!", candidate2.response]);
+            });
+            it("outputs text only for matching responses that have text", function() {
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = { response: { }, score: 10000 };
+                var candidate2 = { response: { does: { common: {says: "See ya later!" }}}, score: 10000 };
+                responseLib.processResponses([candidate1, candidate2]);
+                expect(interact.say.callCount).toEqual(1);
+                expect(interact.say.argsForCall[0]).toEqual(["See ya later!", candidate2.response]);
+            });
+            xit("outputs text in proper sequence", function() {
+                interact.say = jasmine.createSpy("say");
+                var candidate = {
+                    response: {
+                        does: {
+                            1: {says: "Hello world!"},
+                            common: {says: "See ya later!"},
+                            3: {says: "I'm going"}
+                        }
+                    },
+                    score: 10000
+                };
+                var candidates = [candidate];
+                responseLib.processResponses(candidates);
+                responseLib.processResponses(candidates);
+                responseLib.processResponses(candidates);
+                responseLib.processResponses(candidates);
+                expect(interact.say.argsForCall).toEqual([
+                    ["Hello world!", candidate.response],
+                    ["See ya later!", candidate.response],
+                    ["I'm going", candidate.response],
+                    ["See ya later!", candidate.response]
+                ]);
             });
         });
     });
