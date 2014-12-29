@@ -180,7 +180,7 @@ var ResponseLib = (function () {
     function groupCandidates(candidates, prompts) {
         var groups = { };
         candidates.forEach(function (candidate) {
-            if (candidate.response.prompt) {
+            if (candidate.response.prompts) {
                 prompts.push(candidate);
             } else {
                 var type = candidate.response.is || "default";
@@ -196,6 +196,37 @@ var ResponseLib = (function () {
     proto.processGroup = function(group, caller) {
         var self = this;
         group.forEach(function(response) { self.processResponse(response, caller); });
+    };
+
+    function addPrompt(items, candidate) {
+        var prompt = candidate.response.prompts;
+        if (items.indexOf(prompt) === -1) {
+            items.push(prompt);
+        }
+    }
+
+    function getMenuItems(prompts) {
+        var items = [];
+        prompts.forEach(function (candidate) { addPrompt(items, candidate); });
+        return items;
+    }
+
+    proto.runMenu = function(prompts, caller) {
+        var self = this;
+        var items = getMenuItems(prompts);
+        this.interact.choose(items, function (which) {
+            if (which !== -1) {
+                self.processMenuResponses(items[which], prompts, caller);
+            }
+        });
+    };
+
+    proto.processPrompts = function (prompts, caller) {
+        if (prompts.length === 1 && !prompts[0].response.forceprompt) {
+            this.processGroup(prompts, caller);
+        } else if (prompts.length > 0) {
+            this.runMenu(prompts, caller);
+        }
     };
 
     proto.processDefinedGroups = function(groups, caller) {
@@ -223,6 +254,7 @@ var ResponseLib = (function () {
 
         this.processDefinedGroups(groups, caller);
         this.processGroups(groups, caller);
+        this.processPrompts(prompts, caller);
     };
 
     proto.setTypes = function(types) {

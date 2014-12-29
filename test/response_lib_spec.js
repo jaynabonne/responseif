@@ -253,5 +253,22 @@ describe("ResponseLib", function () {
                 ]);
             });
         });
+        describe("prompts", function () {
+            it("shows prompts in a menu", function () {
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = {response: {prompts: "Go north"}, score: 10000};
+                var candidate2 = {response: {prompts: "Go south"}, score: 10000};
+                responseLib.processResponses([candidate1, candidate2]);
+                expect(interact.choose).toHaveBeenCalledWith(["Go north", "Go south"], jasmine.any(Function));
+            });
+            it("processes a single prompt as a normal response", function () {
+                interact.say = jasmine.createSpy("say");
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = { response: { prompts: "Go north", does: { common: { says: "something" } } }, score: 10000 };
+                responseLib.processResponses([candidate1]);
+                expect(interact.choose).not.toHaveBeenCalled();
+                expect(interact.say).toHaveBeenCalled();
+            });
+        });
     });
 });
