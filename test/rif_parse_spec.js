@@ -337,7 +337,7 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse a response 'uses first'", function() {
+    it("should parse a response 'uses random'", function() {
         var rif = rifParse(
             [
                 responses("anObject"),

@@ -2,6 +2,7 @@ var ResponseLib = (function () {
     "use strict";
     var type = function (interact) {
         this.interact = interact;
+        this.types = [];
     };
 
     var PriorityResponseGetter = (function () {
@@ -176,10 +177,56 @@ var ResponseLib = (function () {
         this.processSays(candidate.response);
     };
 
+    function groupCandidates(candidates, prompts) {
+        var groups = { };
+        candidates.forEach(function (candidate) {
+            if (candidate.response.prompt) {
+                prompts.push(candidate);
+            } else {
+                var type = candidate.response.is || "default";
+                if (!groups[type]) {
+                    groups[type] = [];
+                }
+                groups[type].push(candidate);
+            }
+        });
+        return groups;
+    }
+
+    proto.processGroup = function(group, caller) {
+        var self = this;
+        group.forEach(function(response) { self.processResponse(response, caller); });
+    };
+
+    proto.processDefinedGroups = function(groups, caller) {
+        var self = this;
+        this.types.forEach(function (type) {
+            if (groups.hasOwnProperty(type)) {
+                self.processGroup(groups[type], caller);
+                groups[type] = undefined;
+            }
+        });
+    };
+
+    proto.processGroups = function(groups, caller) {
+        for (var group in groups) {
+            if (groups.hasOwnProperty(group) && groups[group]) {
+                this.processGroup(groups[group], caller);
+            }
+        }
+    };
+
     proto.processResponses = function (candidates, caller) {
         var self = this;
-        var bound = function (candidate) { self.processResponse(candidate); };
-        candidates.forEach(bound);
+        var prompts = [];
+        var groups = groupCandidates(candidates, prompts);
+
+        this.processDefinedGroups(groups, caller);
+        this.processGroups(groups, caller);
+    };
+
+    proto.setTypes = function(types) {
+        this.types = types;
     };
 
     return type;

@@ -182,6 +182,19 @@ describe("ResponseLib", function () {
                 responseLib.processResponses(candidates);
                 expect(candidate.response.run).toBe(2);
             });
+            it("groups responses by type", function () {
+                var output = "";
+                interact.say = function(text) { output += text; };
+                responseLib.setTypes(["a","b","c"]);
+                var responses = [
+                    { response: { is:"c", does: {common: {says: "C!" }}}, score: 10000 },
+                    { response: { is:"b", does: {common: {says: "B!" }}}, score: 10000 },
+                    { response: { is:"a", does: {common: {says:  "A!" }}}, score: 10000 },
+                    { response: { is:"b", does: {common: {says:  "B again!" }}}, score: 10000 }
+                ];
+                responseLib.processResponses(responses);
+                expect(output).toEqual("A!B!B again!C!");
+            });
         });
         describe("says", function () {
             it("text for a matching response", function() {
