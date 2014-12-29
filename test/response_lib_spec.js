@@ -269,6 +269,32 @@ describe("ResponseLib", function () {
                 expect(interact.choose).not.toHaveBeenCalled();
                 expect(interact.say).toHaveBeenCalled();
             });
+            it("processes a single prompt as a prompt if 'forcesprompt' is set", function () {
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = { response: { prompts: "Go north", forcesprompt: true }, score: 10000 };
+                responseLib.processResponses([candidate1]);
+                expect(interact.choose).toHaveBeenCalledWith(["Go north"], jasmine.any(Function));
+            });
+            it("passes a callback function to be invoked when an item is chosen", function () {
+                interact.choose = jasmine.createSpy("choose");
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = { response: { prompts: "Go north", does: { common: { says: "North" } } }, score: 10000 };
+                var candidate2 = { response: { prompts: "Go south", does: { common: { says: "South" } }  }, score: 10000 };
+                responseLib.processResponses([candidate1, candidate2]);
+                var callback = interact.choose.mostRecentCall.args[1];
+                callback(1);
+                expect(interact.say).toHaveBeenCalledWith("South", candidate2.response);
+            });
+            it("does nothing if the menu callback is called with -1", function () {
+                interact.choose = jasmine.createSpy("choose");
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = { response: { prompts: "Go north", does: { common: { says: "North" } } }, score: 10000 };
+                var candidate2 = { response: { prompts: "Go south", does: { common: { says: "South" } }  }, score: 10000 };
+                responseLib.processResponses([candidate1, candidate2]);
+                var callback = interact.choose.mostRecentCall.args[1];
+                callback(-1);
+                expect(interact.say).not.toHaveBeenCalled();
+            });
         });
     });
 });

@@ -211,6 +211,15 @@ var ResponseLib = (function () {
         return items;
     }
 
+    proto.processMenuResponses = function(prompt, prompts, caller) {
+        var self = this;
+        prompts.forEach(function (candidate) {
+            if (candidate.response.prompts === prompt) {
+                self.processResponse(candidate, caller);
+            }
+        });
+    };
+
     proto.runMenu = function(prompts, caller) {
         var self = this;
         var items = getMenuItems(prompts);
@@ -222,7 +231,7 @@ var ResponseLib = (function () {
     };
 
     proto.processPrompts = function (prompts, caller) {
-        if (prompts.length === 1 && !prompts[0].response.forceprompt) {
+        if (prompts.length === 1 && !prompts[0].response.forcesprompt) {
             this.processGroup(prompts, caller);
         } else if (prompts.length > 0) {
             this.runMenu(prompts, caller);
