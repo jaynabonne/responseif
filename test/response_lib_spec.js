@@ -330,6 +330,14 @@ describe("ResponseLib", function () {
                 responseLib.processResponses([response]);
                 expect(interact.set).toHaveBeenCalledWith("somestate", false);
             });
+            it("sets state for multiple ids with 'sets' attribute", function () {
+                interact.set = jasmine.createSpy("set");
+                var response = { response: { does: { common: { sets: ["somestate", "someotherstate"] } } }, score: 10000 };
+                responseLib.processResponses([response]);
+                expect(interact.set.callCount).toEqual(2);
+                expect(interact.set.argsForCall[0]).toEqual(["somestate", true]);
+                expect(interact.set.argsForCall[1]).toEqual(["someotherstate", true]);
+            });
         });
     });
 });

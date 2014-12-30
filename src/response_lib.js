@@ -172,15 +172,21 @@ var ResponseLib = (function () {
         }
     };
 
+    proto.processSet = function(set) {
+        if (set[0] === "!") {
+            this.interact.set(set.substr(1), false);
+        } else {
+            this.interact.set(set, true);
+        }
+    }
+
     proto.processSets = function (response) {
         var section = getCurrentSection(response);
         if (section && section.sets) {
-            var variable = section.sets[0];
-            if (variable[0] === "!") {
-                this.interact.set(variable.substr(1), false);
-            } else {
-                this.interact.set(variable, true);
-            }
+            var self = this;
+            section.sets.forEach( function(set) {
+                self.processSet(set);
+            })
         }
     };
 
