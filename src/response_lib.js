@@ -172,9 +172,22 @@ var ResponseLib = (function () {
         }
     };
 
+    proto.processSets = function (response) {
+        var section = getCurrentSection(response);
+        if (section && section.sets) {
+            var variable = section.sets[0];
+            if (variable[0] === "!") {
+                this.interact.set(variable.substr(1), false);
+            } else {
+                this.interact.set(variable, true);
+            }
+        }
+    };
+
     proto.processResponse = function (candidate, caller) {
         incrementResponseRunCount(candidate.response);
         this.processSays(candidate.response);
+        this.processSets(candidate.response);
     };
 
     function groupCandidates(candidates, prompts) {

@@ -206,12 +206,12 @@ describe("ResponseLib", function () {
                 responseLib.processResponses([candidate]);
                 expect(interact.say).toHaveBeenCalledWith("Hello world!", candidate.response);
             });
-            it("outputs no text for no matching responses", function() {
+            it("no text for no matching responses", function() {
                 interact.say = jasmine.createSpy("say");
                 responseLib.processResponses([]);
                 expect(interact.say).not.toHaveBeenCalled();
             });
-            it("outputs text for all matching responses", function() {
+            it("text for all matching responses", function() {
                 interact.say = jasmine.createSpy("say");
                 var candidate1 = { response: { does: { common: {says: "Hello world!" }}}, score: 10000 };
                 var candidate2 = { response: { does: { common: {says: "Goodnight moon!" }}}, score: 10000 };
@@ -220,7 +220,7 @@ describe("ResponseLib", function () {
                 expect(interact.say.argsForCall[0]).toEqual(["Hello world!", candidate1.response]);
                 expect(interact.say.argsForCall[1]).toEqual(["Goodnight moon!", candidate2.response]);
             });
-            it("outputs text only for matching responses that have text", function() {
+            it("text only for matching responses that have text", function() {
                 interact.say = jasmine.createSpy("say");
                 var candidate1 = { response: { }, score: 10000 };
                 var candidate2 = { response: { does: { common: {says: "See ya later!" }}}, score: 10000 };
@@ -228,13 +228,13 @@ describe("ResponseLib", function () {
                 expect(interact.say.callCount).toEqual(1);
                 expect(interact.say.argsForCall[0]).toEqual(["See ya later!", candidate2.response]);
             });
-            it("outputs text in proper sequence", function() {
+            it("text in proper sequence", function() {
                 interact.say = jasmine.createSpy("say");
                 var candidate = {
                     response: {
                         does: {
-                            1: {says: "Hello world!"},
                             common: {says: "See ya later!"},
+                            1: {says: "Hello world!"},
                             3: {says: "I'm going"}
                         }
                     },
@@ -315,6 +315,20 @@ describe("ResponseLib", function () {
                 expect(interact.say.callCount).toEqual(2);
                 expect(interact.say.argsForCall[0]).toEqual(["North", candidate1.response]);
                 expect(interact.say.argsForCall[1]).toEqual(["North2", candidate2.response]);
+            });
+        });
+        describe("sets", function() {
+            it("sets state for a single id with 'sets' attribute", function () {
+                interact.set = jasmine.createSpy("set");
+                var response = { response: { does: { common: { sets: ["somestate"] } } }, score: 10000 };
+                responseLib.processResponses([response]);
+                expect(interact.set).toHaveBeenCalledWith("somestate", true);
+            });
+            it("resets state for a single id with 'sets' attribute", function () {
+                interact.set = jasmine.createSpy("set");
+                var response = { response: { does: { common: { sets: ["!somestate"] } } }, score: 10000 };
+                responseLib.processResponses([response]);
+                expect(interact.set).toHaveBeenCalledWith("somestate", false);
             });
         });
     });
