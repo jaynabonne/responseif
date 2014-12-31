@@ -83,6 +83,13 @@ describe("ResponseLib", function () {
             var candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: {a: 1}, score: 10000}, {response: {b: 2}, score: 10000},{response: {c: 3}, score: 10000}]);
         });
+        it("returns the responder in the responses if passed", function () {
+            var response = {a: 1};
+            var responder = { a: 314 };
+            var candidates = responseLib.selectResponses([response], [], responder);
+            expect(candidates).toEqual([{response: response, score: 10000, responder: responder}]);
+        });
+
         it("returns responses that match a topic", function () {
             var response1 = {a: 1, matches: ["atopic"]},
                 response2 = {b: 2, matches: ["btopic"]},

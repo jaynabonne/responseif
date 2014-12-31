@@ -117,32 +117,32 @@ var ResponseLib = (function () {
         return (!response_topics || response_topics.length === 0) ? 10000 : doComputeScore(response_topics, topics);
     };
 
-    proto.addIfHasScore = function (response, topics, candidates) {
+    proto.addIfHasScore = function (response, topics, candidates, responder) {
         var score = this.computeScore(response.matches, topics);
         if (score > 0) {
-            candidates.push({response: response, score: score});
+            candidates.push({response: response, score: score, responder: responder});
         }
     };
 
-    proto.addResponse = function (response, topics, candidates) {
+    proto.addResponse = function (response, topics, candidates, responder) {
         if (this.responseIsEligible(response, topics)) {
             if (response.groups !== undefined) {
-                this.addResponses(response.groups, topics, candidates);
+                this.addResponses(response.groups, topics, candidates, responder);
             } else {
-                this.addIfHasScore(response, topics, candidates);
+                this.addIfHasScore(response, topics, candidates, responder);
             }
         }
     };
 
-    proto.addResponses = function (responses, topics, candidates) {
+    proto.addResponses = function (responses, topics, candidates, responder) {
         var self = this;
-        var boundAdd = function (response) { self.addResponse(response, topics, candidates); };
+        var boundAdd = function (response) { self.addResponse(response, topics, candidates, responder); };
         responses.forEach(boundAdd);
         return candidates;
     };
 
-    proto.selectResponses = function(responses, topics) {
-        return this.addResponses(responses, topics, []);
+    proto.selectResponses = function(responses, topics, responder) {
+        return this.addResponses(responses, topics, [], responder);
     };
 
     proto.getPriorityResponses = function (candidates) {
