@@ -289,5 +289,20 @@ var ResponseLib = (function () {
         this.types = types;
     };
 
+    proto.callTopics = function(responders, topics, caller) {
+        var candidates = [];
+        for (var responder in responders) {
+            if (responders.hasOwnProperty(responder)) {
+                var responses = responders[responder];
+                if (responses) {
+                    candidates = candidates.concat(this.selectResponses(responses, topics, responder));
+                }
+            }
+        }
+        candidates = this.getPriorityResponses(candidates);
+
+        this.processResponses(candidates, caller);
+    };
+
     return type;
 })();

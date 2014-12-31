@@ -340,4 +340,15 @@ describe("ResponseLib", function () {
             });
         });
     });
+    describe("callTopics", function () {
+        it("invokes responses correctly", function () {
+            interact.say = jasmine.createSpy("say");
+            var response1 = { matches: ["atopic"], does: { common: { says: "This is response 1" } } };
+            var response2 = { matches: ["ctopic"], does: { common: { says: "This is response 2" } } };
+            var response3 = { matches: ["btopic"], does: { common: { says: "This is response 3" } } };
+            var responses = [response1, response2, response3];
+            responseLib.callTopics({responder: responses}, ["ctopic"], "caller");
+            expect(interact.say).toHaveBeenCalledWith("This is response 2", response2);
+        });
+    });
 });
