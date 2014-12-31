@@ -191,9 +191,11 @@ var ResponseLib = (function () {
     };
 
     proto.processResponse = function (candidate, caller) {
-        incrementResponseRunCount(candidate.response);
-        this.processSays(candidate.response);
-        this.processSets(candidate.response);
+        var response = candidate.response;
+        //var responder = candidate.responder;
+        incrementResponseRunCount(response);
+        this.processSays(response);
+        this.processSets(response);
     };
 
     function groupCandidates(candidates, prompts) {
