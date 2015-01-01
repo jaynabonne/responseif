@@ -16,17 +16,17 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if required state is not set", function () {
-            interact.get = function(id) { return false; };
+            interact.getState = function(id) { return false; };
             var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if disallowed state is set", function () {
-            interact.get = function(id) { return false; };
+            interact.getState = function(id) { return false; };
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
         it("returns correct value for multiple state", function () {
-            interact.get = function(id) { return id === "somestate"; };
+            interact.getState = function(id) { return id === "somestate"; };
             var response = { needs: ["somestate", "!someotherstate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
@@ -35,12 +35,12 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
         });
         it("passes the responder as state prefix if passed", function () {
-            interact.get = function(id) { return id === "aresponder.somestate"; };
+            interact.getState = function(id) { return id === "aresponder.somestate"; };
             var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
         it("passes the responder as state prefix if passed (negative)", function () {
-            interact.get = function(id) { return id !== "aresponder.somestate"; };
+            interact.getState = function(id) { return id !== "aresponder.somestate"; };
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });

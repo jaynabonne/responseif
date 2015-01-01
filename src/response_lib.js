@@ -96,9 +96,9 @@ var ResponseLib = (function () {
     proto.stateNeedIsMet = function(id, responder) {
         var prefix = getResponderPrefix(responder);
         if (id[0] === '!') {
-            return !this.interact.get(prefix + id.substr(1));
+            return !this.interact.getState(prefix + id.substr(1));
         } else {
-            return this.interact.get(prefix + id);
+            return this.interact.getState(prefix + id);
         }
     };
 
