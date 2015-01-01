@@ -172,30 +172,31 @@ var ResponseLib = (function () {
         }
     };
 
-    proto.processSet = function(set) {
+    proto.processSet = function(set, responder) {
+        var prefix = responder ? (responder + ".") : "";
         if (set[0] === "!") {
-            this.interact.set(set.substr(1), false);
+            this.interact.set(prefix + set.substr(1), false);
         } else {
-            this.interact.set(set, true);
+            this.interact.set(prefix + set, true);
         }
     }
 
-    proto.processSets = function (response) {
+    proto.processSets = function (response, responder) {
         var section = getCurrentSection(response);
         if (section && section.sets) {
             var self = this;
             section.sets.forEach( function(set) {
-                self.processSet(set);
+                self.processSet(set, responder);
             })
         }
     };
 
     proto.processResponse = function (candidate, caller) {
         var response = candidate.response;
-        //var responder = candidate.responder;
+        var responder = candidate.responder;
         incrementResponseRunCount(response);
         this.processSays(response);
-        this.processSets(response);
+        this.processSets(response, responder);
     };
 
     function groupCandidates(candidates, prompts) {

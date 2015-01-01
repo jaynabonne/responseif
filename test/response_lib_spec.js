@@ -345,6 +345,18 @@ describe("ResponseLib", function () {
                 expect(interact.set.argsForCall[0]).toEqual(["somestate", true]);
                 expect(interact.set.argsForCall[1]).toEqual(["someotherstate", true]);
             });
+            it("includes the responder in the attribute if passed", function () {
+                interact.set = jasmine.createSpy("set");
+                var response = { response: { does: { common: { sets: ["somestate"] } } }, score: 10000, responder: "aresponder" };
+                responseLib.processResponses([response]);
+                expect(interact.set).toHaveBeenCalledWith("aresponder.somestate", true);
+            });
+            it("includes the responder in the attribute if passed", function () {
+                interact.set = jasmine.createSpy("set");
+                var response = { response: { does: { common: { sets: ["!somestate"] } } }, score: 10000, responder: "aresponder" };
+                responseLib.processResponses([response]);
+                expect(interact.set).toHaveBeenCalledWith("aresponder.somestate", false);
+            });
         });
     });
     describe("callTopics", function () {
