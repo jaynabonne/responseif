@@ -34,6 +34,16 @@ describe("ResponseLib", function () {
             var response = { matches: ["*atopic"] };
             expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
         });
+        it("passes the responder as state prefix if passed", function () {
+            interact.get = function(id) { return id === "aresponder.somestate"; };
+            var response = { needs: ["somestate"] };
+            expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
+        });
+        it("passes the responder as state prefix if passed (negative)", function () {
+            interact.get = function(id) { return id !== "aresponder.somestate"; };
+            var response = { needs: ["!somestate"] };
+            expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
+        });
     });
     describe("computeScore", function () {
         it("returns 10000 if response topics is undefined", function () {

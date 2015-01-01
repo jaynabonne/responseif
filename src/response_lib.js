@@ -89,27 +89,28 @@ var ResponseLib = (function () {
 
     var proto = type.prototype;
 
-    proto.stateNeedIsMet = function(id) {
+    proto.stateNeedIsMet = function(id, responder) {
+        var prefix = responder ? (responder + ".") : "";
         if (id[0] === '!') {
-            return !this.interact.get(id.substr(1));
+            return !this.interact.get(prefix + id.substr(1));
         } else {
-            return this.interact.get(id);
+            return this.interact.get(prefix + id);
         }
     };
 
-    proto.responseNeedsAreMet = function(response) {
+    proto.responseNeedsAreMet = function(response, responder) {
         if (response.needs) {
             for (var i = 0; i < response.needs.length; ++i) {
-                if (!this.stateNeedIsMet(response.needs[i])) {
+                if (!this.stateNeedIsMet(response.needs[i], responder)) {
                     return false;
                 }
             }
         }
         return true;
     };
-    proto.responseIsEligible = function(response, topics) {
+    proto.responseIsEligible = function(response, topics, responder) {
         return responseCountValid(response) &&
-                this.responseNeedsAreMet(response) &&
+                this.responseNeedsAreMet(response, responder) &&
                 responseRequiredTopicsAreDefined(response, topics);
     };
 
