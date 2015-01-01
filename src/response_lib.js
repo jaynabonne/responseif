@@ -89,8 +89,12 @@ var ResponseLib = (function () {
 
     var proto = type.prototype;
 
+    function getResponderPrefix(responder) {
+        return responder ? (responder + ".") : "";
+    }
+
     proto.stateNeedIsMet = function(id, responder) {
-        var prefix = responder ? (responder + ".") : "";
+        var prefix = getResponderPrefix(responder);
         if (id[0] === '!') {
             return !this.interact.get(prefix + id.substr(1));
         } else {
@@ -174,7 +178,7 @@ var ResponseLib = (function () {
     };
 
     proto.processSet = function(set, responder) {
-        var prefix = responder ? (responder + ".") : "";
+        var prefix = getResponderPrefix(responder);
         if (set[0] === "!") {
             this.interact.set(prefix + set.substr(1), false);
         } else {
