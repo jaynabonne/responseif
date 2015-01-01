@@ -335,20 +335,23 @@ describe("ResponseLib", function () {
             });
         });
         describe("sets", function() {
-            it("sets state for a single id with 'sets' attribute", function () {
+            function spyOnSetState() {
                 interact.set = jasmine.createSpy("set");
+            }
+            it("sets state for a single id with 'sets' attribute", function () {
+                spyOnSetState();
                 var response = { response: { does: { common: { sets: ["somestate"] } } }, score: 10000 };
                 responseLib.processResponses([response]);
                 expect(interact.set).toHaveBeenCalledWith("somestate", true);
             });
             it("resets state for a single id with 'sets' attribute", function () {
-                interact.set = jasmine.createSpy("set");
+                spyOnSetState();
                 var response = { response: { does: { common: { sets: ["!somestate"] } } }, score: 10000 };
                 responseLib.processResponses([response]);
                 expect(interact.set).toHaveBeenCalledWith("somestate", false);
             });
             it("sets state for multiple ids with 'sets' attribute", function () {
-                interact.set = jasmine.createSpy("set");
+                spyOnSetState();
                 var response = { response: { does: { common: { sets: ["somestate", "someotherstate"] } } }, score: 10000 };
                 responseLib.processResponses([response]);
                 expect(interact.set.callCount).toEqual(2);
@@ -356,13 +359,13 @@ describe("ResponseLib", function () {
                 expect(interact.set.argsForCall[1]).toEqual(["someotherstate", true]);
             });
             it("includes the responder in the attribute if passed", function () {
-                interact.set = jasmine.createSpy("set");
+                spyOnSetState();
                 var response = { response: { does: { common: { sets: ["somestate"] } } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response]);
                 expect(interact.set).toHaveBeenCalledWith("aresponder.somestate", true);
             });
             it("includes the responder in the attribute if passed", function () {
-                interact.set = jasmine.createSpy("set");
+                spyOnSetState();
                 var response = { response: { does: { common: { sets: ["!somestate"] } } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response]);
                 expect(interact.set).toHaveBeenCalledWith("aresponder.somestate", false);
