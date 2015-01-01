@@ -91,9 +91,9 @@ var ResponseLib = (function () {
 
     proto.stateNeedIsMet = function(id) {
         if (id[0] === '!') {
-            return !this.interact.getState(id.substr(1));
+            return !this.interact.get(id.substr(1));
         } else {
-            return this.interact.getState(id);
+            return this.interact.get(id);
         }
     };
 

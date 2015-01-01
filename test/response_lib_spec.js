@@ -16,17 +16,17 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if required state is not set", function () {
-            interact.getState = function(id) { return false; };
+            interact.get = function(id) { return false; };
             var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if disallowed state is set", function () {
-            interact.getState = function(id) { return false; };
+            interact.get = function(id) { return false; };
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
         it("returns correct value for multiple state", function () {
-            interact.getState = function(id) { return id === "somestate"; };
+            interact.get = function(id) { return id === "somestate"; };
             var response = { needs: ["somestate", "!someotherstate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
