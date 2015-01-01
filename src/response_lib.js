@@ -180,9 +180,9 @@ var ResponseLib = (function () {
     proto.processSet = function(set, responder) {
         var prefix = getResponderPrefix(responder);
         if (set[0] === "!") {
-            this.interact.set(prefix + set.substr(1), false);
+            this.interact.setState(prefix + set.substr(1), false);
         } else {
-            this.interact.set(prefix + set, true);
+            this.interact.setState(prefix + set, true);
         }
     }
 

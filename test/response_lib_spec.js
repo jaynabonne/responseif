@@ -336,39 +336,39 @@ describe("ResponseLib", function () {
         });
         describe("sets", function() {
             function spyOnSetState() {
-                interact.set = jasmine.createSpy("set");
+                interact.setState = jasmine.createSpy("setState");
             }
             it("sets state for a single id with 'sets' attribute", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: { sets: ["somestate"] } } }, score: 10000 };
                 responseLib.processResponses([response]);
-                expect(interact.set).toHaveBeenCalledWith("somestate", true);
+                expect(interact.setState).toHaveBeenCalledWith("somestate", true);
             });
             it("resets state for a single id with 'sets' attribute", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: { sets: ["!somestate"] } } }, score: 10000 };
                 responseLib.processResponses([response]);
-                expect(interact.set).toHaveBeenCalledWith("somestate", false);
+                expect(interact.setState).toHaveBeenCalledWith("somestate", false);
             });
             it("sets state for multiple ids with 'sets' attribute", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: { sets: ["somestate", "someotherstate"] } } }, score: 10000 };
                 responseLib.processResponses([response]);
-                expect(interact.set.callCount).toEqual(2);
-                expect(interact.set.argsForCall[0]).toEqual(["somestate", true]);
-                expect(interact.set.argsForCall[1]).toEqual(["someotherstate", true]);
+                expect(interact.setState.callCount).toEqual(2);
+                expect(interact.setState.argsForCall[0]).toEqual(["somestate", true]);
+                expect(interact.setState.argsForCall[1]).toEqual(["someotherstate", true]);
             });
             it("includes the responder in the attribute if passed", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: { sets: ["somestate"] } } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response]);
-                expect(interact.set).toHaveBeenCalledWith("aresponder.somestate", true);
+                expect(interact.setState).toHaveBeenCalledWith("aresponder.somestate", true);
             });
             it("includes the responder in the attribute if passed", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: { sets: ["!somestate"] } } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response]);
-                expect(interact.set).toHaveBeenCalledWith("aresponder.somestate", false);
+                expect(interact.setState).toHaveBeenCalledWith("aresponder.somestate", false);
             });
         });
     });
