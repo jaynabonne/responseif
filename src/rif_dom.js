@@ -1,6 +1,7 @@
 var RifDOM = (function(formatter) {
     "use strict";
-    var type = function() {
+    var type = function(output) {
+        this.output = output;
     };
 
     var prototype = type.prototype;
@@ -20,6 +21,14 @@ var RifDOM = (function(formatter) {
             if (scrollTo > maxScrollTop) scrollTo = maxScrollTop;
             $("body,html").stop().animate({ scrollTop: scrollTo }, 100);
         }
+    };
+
+    prototype.append = function(div) {
+        output.append(div);
+    };
+
+    prototype.getElementById = function(id) {
+        return $('#'+id);
     };
 
     return type;
