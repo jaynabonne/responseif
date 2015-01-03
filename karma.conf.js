@@ -21,6 +21,7 @@ module.exports = function(config) {
       'src/rif_expand.js',
       'src/rif_parse.js',
       'src/HTMLFormatter.js',
+      'src/Interact.js',
       'test/*.js',
       { pattern:  'data/*.txt',
         watched:  true,

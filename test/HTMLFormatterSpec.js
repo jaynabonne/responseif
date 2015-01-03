@@ -32,7 +32,6 @@ describe("HTMLFormatter", function () {
         it("sets click handlers for the keyword spans", function () {
             var clickresult;
             var factory = function(keyword) {
-                console.log("In factory for keyword: " + keyword);
                 return function() {
                     clickresult = keyword;
                 };
@@ -70,7 +69,6 @@ describe("HTMLFormatter", function () {
                 };
             };
             var node = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
-            console.info(node);
             var span = node.children("div.menuitem");
             $(span[0]).click();
             expect(clickresult).toBe(0);
