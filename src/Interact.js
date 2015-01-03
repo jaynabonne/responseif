@@ -1,8 +1,7 @@
 var Interact = (function() {
     "use strict";
     
-    var type = function (gameEngine, dom, formatter, output) {
-        this.output = output;
+    var type = function (gameEngine, dom, formatter) {
         this.dom = dom;
         this.formatter = formatter;
         this.keywordClickFactory = function(keyword) {
@@ -19,7 +18,7 @@ var Interact = (function() {
         say: function (text, response) {
             text = text.replace(/{break}/g, breaktext);
             this.currentDiv.append(this.formatter.formatOutput(text, this.keywordClickFactory));
-            this._scrollToEnd();
+            this.dom.scrollToEnd();
         },
         choose: function(options, callback) {
             var id = "test";
@@ -34,7 +33,7 @@ var Interact = (function() {
             this.beginSection(id);
             this.currentDiv.append(this.formatter.formatMenu(options, clickfactory));
             this.endSection();
-            this._scrollToEnd();
+            this.dom.scrollToEnd();
         },
         beginSection: function(id) {
             this._appendNewDiv(id);
@@ -50,23 +49,10 @@ var Interact = (function() {
                 }, 0);
             }
         },
-        
-        _setCurrentDiv: function(div) {
-            this.output.append(div);
-            this.currentDiv = div;
-        },
         _appendNewDiv: function(id) {
-            this._setCurrentDiv(dom.createDiv(id));
-        },
-        
-        _scrollToEnd: function() {
-            var scrollTo = $(document).height();
-            var currentScrollTop = Math.max($("body").scrollTop(), $("html").scrollTop());
-            if (scrollTo > currentScrollTop) {
-                var maxScrollTop = $(document).height() - $(window).height();
-                if (scrollTo > maxScrollTop) scrollTo = maxScrollTop;
-                $("body,html").stop().animate({ scrollTop: scrollTo }, 100);
-            }
+            var div = dom.createDiv(id);
+            this.dom.append(div);
+            this.currentDiv = div;
         }
     };
     return type;

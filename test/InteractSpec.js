@@ -5,12 +5,13 @@ describe("Interact", function () {
     var formatter;
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
-        output = { append: function() {} };
         dom = {
-            createDiv: function() { return { append: appendSpy}; }
+            createDiv: function() { return { append: appendSpy}; },
+            scrollToEnd: function() {},
+            append: function(div) {}
         };
         formatter = { formatOutput: function() { return "formattedText"; }};
-        interact = new Interact({}, dom, formatter, output);
+        interact = new Interact({}, dom, formatter);
         appendSpy.reset();
     });
     describe("say", function () {

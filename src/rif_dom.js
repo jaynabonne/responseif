@@ -12,5 +12,15 @@ var RifDOM = (function(formatter) {
         }
     }
 
+    prototype.scrollToEnd = function() {
+        var scrollTo = $(document).height();
+        var currentScrollTop = Math.max($("body").scrollTop(), $("html").scrollTop());
+        if (scrollTo > currentScrollTop) {
+            var maxScrollTop = $(document).height() - $(window).height();
+            if (scrollTo > maxScrollTop) scrollTo = maxScrollTop;
+            $("body,html").stop().animate({ scrollTop: scrollTo }, 100);
+        }
+    };
+
     return type;
 })();
