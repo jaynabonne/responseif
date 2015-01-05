@@ -36,4 +36,10 @@
 				{break}
 				{+BEDS+}
 			.suggests walls bars
+	.response
+		.matches about
+		.does .says This is the about text.
+	.response
+		.matches help
+		.does .says This is the help text.
 .end

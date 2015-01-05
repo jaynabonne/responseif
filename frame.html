@@ -5,27 +5,41 @@
     <title>Game Frame</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
-    <script type="text/javascript" src="src/testbed.js"></script>
-    <script type="text/javascript" src="src/Util.js"></script>
     <script type="text/javascript" src="src/HTMLFormatter.js"></script>
-    <script type="text/javascript" src="src/StoryText.js"></script>
     <script type="text/javascript" src="src/Interact.js"></script>
-    <script type="text/javascript" src="src/GameEngine.js"></script>
-    <script type="text/javascript" src="src/ResponseLib.js"></script>
-    <script type="text/javascript" src="src/World.js"></script>
-    <script type="text/javascript" src="src/GameResponses.js"></script>
-    <script type="text/javascript" src="src/GameWorld.js"></script>
-    
+    <script type="text/javascript" src="src/response_lib.js"></script>
+    <script type="text/javascript" src="src/rif_dom.js"></script>
+    <script type="text/javascript" src="src/rif_expand.js"></script>
+    <script type="text/javascript" src="src/rif_parse.js"></script>
+    <script type="text/javascript" src="src/rif_tokenize.js"></script>
+
     <script type="text/javascript">
-        var gameEngine = new GameEngine();
-        var storyText = new StoryText();
         function init() {
-            var interactFactory = function(gameEngine) {
-                return new Interact(gameEngine, storyText, $('#output'));
+            var rifSource = $.ajax({
+                url: "data/sample_rif.txt",
+                async: false
+            }).responseText;
+
+            var tokens = rifTokenize(rifSource);
+            tokens = rifExpand(tokens);
+            var rif  = rifParse(tokens);
+
+            var world = {};
+
+            var dom = new RifDOM($('#output'));
+            var formatter = new HTMLFormatter();
+            var clickFactory = function(keyword) {
+                return function () {
+                    world.sendCommand(keyword);
+                };
             };
-            gameEngine.init(ResponseLib, World, interactFactory);
-            
-            createWorld(gameEngine.world, gameEngine.responseLib);
+            var interact = new Interact(dom, formatter, clickFactory);
+
+            var response_lib = new ResponseLib(interact);
+            world.sendCommand = function(keyword) {
+                response_lib.callTopics({general: rif.responses.room}, [keyword], "me");
+            };
+            world.sendCommand("LOOK");
         }
     </script>
 </head>

@@ -24,7 +24,7 @@ var RifDOM = (function(formatter) {
     };
 
     prototype.append = function(div) {
-        output.append(div);
+        this.output.append(div);
     };
 
     prototype.getElementById = function(id) {

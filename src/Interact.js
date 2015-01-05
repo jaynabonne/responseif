@@ -46,7 +46,7 @@ var Interact = (function() {
             }
         },
         _appendNewDiv: function(id) {
-            var div = dom.createDiv(id);
+            var div = this.dom.createDiv(id);
             this.dom.append(div);
             this.currentDiv = div;
         }
