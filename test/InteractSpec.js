@@ -11,7 +11,13 @@ describe("Interact", function () {
             append: function(div) {}
         };
         formatter = { formatOutput: function() { return "formattedText"; }};
-        interact = new Interact({}, dom, formatter);
+        //function(keyword) {
+        //    return function () {
+        //        gameEngine.sendCommand(keyword);
+        //    };
+        //};
+
+        interact = new Interact(dom, formatter, {});
         appendSpy.reset();
     });
     describe("say", function () {

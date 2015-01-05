@@ -1,14 +1,10 @@
 var Interact = (function() {
     "use strict";
     
-    var type = function (gameEngine, dom, formatter) {
+    var type = function (dom, formatter, keywordClickFactory) {
         this.dom = dom;
         this.formatter = formatter;
-        this.keywordClickFactory = function(keyword) {
-            return function () {
-                gameEngine.sendCommand(keyword);
-            };
-        };
+        this.keywordClickFactory = keywordClickFactory;
         this._appendNewDiv();
     };
     
