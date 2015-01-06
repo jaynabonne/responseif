@@ -15,7 +15,13 @@ var HTMLFormatter = (function () {
                 var endIndex = text.indexOf("!}");
                 var keyword = text.substring(index+2, endIndex);
                 span.append(text.substring(0, index));
-                var clickable = createClickable("span", keyword, 'keyword', clickfactory(keyword));
+                var displaytext = keyword;
+                var subindex = keyword.indexOf("|");
+                if (subindex >= 0) {
+                    displaytext = keyword.substring(0, subindex);
+                    keyword = keyword.substring(subindex+1);
+                }
+                var clickable = createClickable('span', displaytext, 'keyword', clickfactory(keyword));
                 span.append(clickable);
                 text = text.substring(endIndex+2);
             }

@@ -29,6 +29,10 @@ describe("HTMLFormatter", function () {
             var node = formatter.formatOutput("This is a {!Keyword!} to click on. This is another {!one!}.", clickfactory);
             expect(node.html()).toBe('This is a <span class="keyword">Keyword</span> to click on. This is another <span class="keyword">one</span>.');
         });
+        it("returns a keyword plus text as a keyword span with the correct text", function () {
+            var node = formatter.formatOutput("{!This is the text|Keyword!}", clickfactory);
+            expect(node.html()).toBe('<span class="keyword">This is the text</span>');
+        });
         it("sets click handlers for the keyword spans", function () {
             var clickresult;
             var factory = function(keyword) {
@@ -36,12 +40,14 @@ describe("HTMLFormatter", function () {
                     clickresult = keyword;
                 };
             };
-            var node = formatter.formatOutput("This is a {!keyword!}. This is another {!one!}.", factory);
+            var node = formatter.formatOutput("This is a {!keyword!}. This is another {!one!}. And {!a final one|lastone!}", factory);
             var span = node.children("span.keyword");
             $(span[0]).click();
             expect(clickresult).toBe("keyword");
             $(span[1]).click();
             expect(clickresult).toBe("one");
+            $(span[2]).click();
+            expect(clickresult).toBe("lastone");
         });
     });
     describe("formatMenu", function () {
