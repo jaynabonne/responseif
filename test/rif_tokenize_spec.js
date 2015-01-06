@@ -24,6 +24,13 @@ describe("rifTokenize", function () {
             ]
         );
     });
+    it("should return token and value with commas", function () {
+        expect(rifTokenize(".token value, and more")).toEqual(
+            [
+                {token:"token", value:"value, and more"}
+            ]
+        );
+    });
     it("should trim the value", function () {
         expect(rifTokenize(".token  value and more ")).toEqual(
             [

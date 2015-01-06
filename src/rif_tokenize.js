@@ -28,7 +28,7 @@ var rifTokenize = (function() {
     }
 
     return function(input) {
-        var parts = input.split(/[\s,]/);
+        var parts = input.split(/[\s]/);
         var result = [];
 
         var index = findNextToken(0, parts);
