@@ -366,4 +366,13 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse a variable being set", function () {
+        var rif = rifParse(
+            [
+                token_pair("set", "setexpression1"),
+                token_pair("set", "setexpression2")
+            ]
+        );
+        expect(rif.sets).toEqual( ["setexpression1", "setexpression2"] );
+    });
 });

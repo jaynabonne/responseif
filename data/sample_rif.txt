@@ -1,3 +1,4 @@
+.set somevar=some value for it to hold
 .responses room
 	.response
 		.matches LOOK
@@ -5,22 +6,21 @@
 		.does
 			.says
 				<div class="gameheader">
-				  {game.gameinfo}
+				  {%game.gameinfo%}
 				  {break}
 				  For help, click "{!help!}".<br>
 				  For game information, click "{!about!}".<br>
-				  {break}
-				  {game.separator}
-				  {break}
+				  {%break%}
+				  {%game.separator%}
+				  {%break%}
+				  {!look!}
 				</div>
 	.response
-		.matches LOOK room look=90 cell
-		.matches EXAMINE
+		.matches LOOK look
 		.is reflection
-		.prompts Examine room
 		.does 1
 			.calls INYOUGO
-			.says
+			.says ok
 			.suggests
 		.does 2
 			.says

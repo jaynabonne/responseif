@@ -109,6 +109,14 @@ rifParse = (function () {
         rif.responses[value] = this.parseResponseGroup();
     };
 
+    Parser.prototype.parse_set = function() {
+        var expression = this.tokens[this.index].value;
+        var rif = this.rif;
+        rif.sets = rif.sets || [];
+        rif.sets.push(expression);
+        this.index++;
+    };
+
     Parser.prototype.parse = function() {
         while (this.index < this.tokens.length) {
             var token = this.tokens[this.index].token;
