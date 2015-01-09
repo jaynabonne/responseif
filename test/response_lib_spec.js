@@ -370,6 +370,12 @@ describe("ResponseLib", function () {
                 responseLib.processResponses([response]);
                 expect(interact.setState).toHaveBeenCalledWith("aresponder.somestate", false);
             });
+            it("treats attribute with period as absolute", function () {
+                spyOnSetState();
+                var response = { response: { does: { common: { sets: ["someone.somestate"] } } }, score: 10000, responder: "aresponder" };
+                responseLib.processResponses([response]);
+                expect(interact.setState).toHaveBeenCalledWith("someone.somestate", true);
+            });
         });
     });
     describe("callTopics", function () {
