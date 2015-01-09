@@ -38,7 +38,7 @@ var Interact = (function() {
             this._appendNewDiv();
         },
         hideSection: function(id) {
-            var section = dom.getElementById(id);
+            var section = this.dom.getElementById(id);
             if (section) {
                 setTimeout(function() {
                     section.hide(250, function () { $(this).remove(); });

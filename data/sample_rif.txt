@@ -1,4 +1,3 @@
-.set somevar=some value for it to hold
 .responses room
 	.response
 		.matches LOOK
@@ -41,5 +40,14 @@
 		.does .says This is the about text.
 	.response
 		.matches help
-		.does .says This is the help text.
+		.prompts Prompt 1
+		.does .says This is the help text 1.
+	.response
+		.matches help
+		.prompts Prompt 2
+		.does .says This is the help text 2.
+	.response
+		.matches help
+		.prompts Prompt 3
+		.does .says This is the help text 3.
 .end
