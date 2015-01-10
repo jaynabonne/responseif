@@ -38,7 +38,7 @@
             var response_lib = new ResponseLib(interact);
             world.sendCommand = function(keyword) {
                 response_lib.callTopics({general: rif.responses.room}, [keyword], "me");
-                interact.say("{break}");
+                interact.say({text: "{break}"});
             };
             world.sendCommand("LOOK");
         }
