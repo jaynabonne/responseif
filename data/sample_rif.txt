@@ -11,9 +11,10 @@
 				</div>
 	.response
 		.matches INTROFIRST
+		.does .says {!The patter of rain...|INTRORAIN!}
 		.uses all
 			.response
-				.does .says {!The patter of rain...|!INTRORAIN} .into #introrain
+				.does .says {!The patter of rain...|INTRORAIN!} .into #introrain
 			.response
 				.does .says {!A caress of wind...|INTROWIND!} .into #introwind
 			.response
@@ -21,12 +22,12 @@
 		.end
 	.response	
 		.matches INTRORAIN
-		.does .says "The patter of rain... but there is no rain." .into #introrain
+		.does .says The patter of rain... but there is no rain. .into #introrain
 	.response	
 		.matches INTROWIND
-		.does .says "A caress of wind... but there is no wind." .into #introwind
+		.does .says A caress of wind... but there is no wind. .into #introwind
 	.response	
 		.matches INTRODREAM
-		.does .says "You dream...<br>but you should not dream." .into #introdream
+		.does .says You dream...<br>but you should not dream. .into #introdream
 		
 .end
