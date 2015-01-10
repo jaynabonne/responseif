@@ -49,6 +49,10 @@ describe("HTMLFormatter", function () {
             $(span[2]).click();
             expect(clickresult).toBe("lastone");
         });
+        it("formats properly inside a div", function() {
+            var node = formatter.formatOutput("<div>{!This is the text|Keyword!}</div>", clickfactory);
+            expect(node.html()).toBe('<div><span class="keyword">This is the text</span></div>');
+        })
     });
     describe("formatMenu", function () {
         var clickFactory;

@@ -9,24 +9,24 @@ var HTMLFormatter = (function () {
     
     type.prototype = {
         formatOutput: function(text, clickfactory) {
-            var span = $("<span>");
-            var index;
-            while ((index = text.indexOf("{!")) >= 0) {
-                var endIndex = text.indexOf("!}");
-                var keyword = text.substring(index+2, endIndex);
-                span.append(text.substring(0, index));
-                var displaytext = keyword;
+
+            text = text
+                    .replace(/\{!/g, "<span class='keyword'>")
+                    .replace(/!\}/g, "</span>");
+
+            var div = $("<div>");
+            div.append(text);
+            var clickspans = div.find(".keyword");
+            clickspans.each( function(id, span) {
+                var keyword = span.innerText;
                 var subindex = keyword.indexOf("|");
                 if (subindex >= 0) {
-                    displaytext = keyword.substring(0, subindex);
+                    span.innerText = keyword.substring(0, subindex);
                     keyword = keyword.substring(subindex+1);
                 }
-                var clickable = createClickable('span', displaytext, 'keyword', clickfactory(keyword));
-                span.append(clickable);
-                text = text.substring(endIndex+2);
-            }
-            span.append(text);
-            return span;
+                $(span).click(clickfactory(keyword));
+            });
+            return div;
         },
 
         formatMenu: function(options, clickfactory) {

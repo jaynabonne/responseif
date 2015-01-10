@@ -299,6 +299,7 @@ var ResponseLib = (function () {
     };
 
     proto.callTopics = function(responders, topics, caller) {
+        console.log("call topics:" + topics);
         var candidates = [];
         for (var responder in responders) {
             if (responders.hasOwnProperty(responder)) {
