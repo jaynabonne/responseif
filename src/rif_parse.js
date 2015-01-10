@@ -35,7 +35,10 @@ rifParse = (function () {
         this.index++;
     };
 
-    Parser.prototype.parse_does_says = Parser.prototype.addString;
+    Parser.prototype.parse_does_says = function(target, entry) {
+        target.says = { text: entry.value };
+        this.index++;
+    };
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
@@ -65,7 +68,7 @@ rifParse = (function () {
     Parser.prototype.parse_response_uses = function(response, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
-        if (entry.value === "first" || entry.value === "random") {
+        if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
             response[entry.value] = responses;
         }
     };

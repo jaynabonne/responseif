@@ -4,50 +4,29 @@
 		.runs 1
 		.does
 			.says
-				<div class="gameheader">
-				  {%game.gameinfo%}
-				  {break}
-				  For help, click "{!help!}".<br>
-				  For game information, click "{!about!}".<br>
-				  {%break%}
-				  {%game.separator%}
-				  {%break%}
-				  {!look!}
+				<div id="intro">
+					<div id="introrain"></div>
+					<div id="introwind"></div>
+					<div id="introdream">{!You dream.|INTROFIRST!}</div>
 				</div>
 	.response
-		.matches LOOK look
-		.is reflection
-		.does 1
-			.calls INYOUGO
-			.says ok
-			.suggests
-		.does 2
-			.says
-				{!Stone walls|walls!}. {!Metal bars|bars!}. Light flickering chaotically from somewhere, as if oil lamps are burning just
-				out of sight. It strikes of cliché. Do they make prisons like this anymore? Or have you been thrust
-				into an anachronism, a relic of a distant past that someone took and hid and preserved just for those like you?
-				{break}
-				{+BEDS+}
-		.does
-			.says
-				{!Stone walls|walls!}. {!Metal bars|bars!}. {!Light flickering chaotically from somewhere|light!}, as if oil lamps are burning just
-				out of sight.
-				{break}
-				{+BEDS+}
-			.suggests walls bars
-	.response
-		.matches about
-		.does .says This is the about text.
-	.response
-		.matches help
-		.prompts Prompt 1
-		.does .says This is the help text 1.
-	.response
-		.matches help
-		.prompts Prompt 2
-		.does .says This is the help text 2.
-	.response
-		.matches help
-		.prompts Prompt 3
-		.does .says This is the help text 3.
+		.matches INTROFIRST
+		.uses all
+			.response
+				.does .says {!The patter of rain...|!INTRORAIN} .into #introrain
+			.response
+				.does .says {!A caress of wind...|INTROWIND!} .into #introwind
+			.response
+				.does .says {!You dream...|INTRODREAM!} .into #introdream
+		.end
+	.response	
+		.matches INTRORAIN
+		.does .says "The patter of rain... but there is no rain." .into #introrain
+	.response	
+		.matches INTROWIND
+		.does .says "A caress of wind... but there is no wind." .into #introwind
+	.response	
+		.matches INTRODREAM
+		.does .says "You dream...<br>but you should not dream." .into #introdream
+		
 .end

@@ -36,3 +36,9 @@ div#header {
 }
 span.keyword {color:#C0C080; cursor:pointer;}
 div.menuitem {color:#C0C080; cursor:pointer;}
+
+div#intro {
+    width:100%;
+    text-align: center;
+    padding-top: 100px;
+}

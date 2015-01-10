@@ -157,7 +157,7 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: { says: "some text to display for this response" }
+                            common: { says: { text: "some text to display for this response" } }
                         }
                     }
                 ]
@@ -249,9 +249,9 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: { says: "some text in the common case"},
-                            2: { says: "some text to display for this response" },
-                            6: { says: "some text to display for response 6" }
+                            common: { says: { text: "some text in the common case"} },
+                            2: { says: { text: "some text to display for this response" } },
+                            6: { says: { text: "some text to display for response 6" } }
                         }
                     }
                 ]
@@ -299,8 +299,8 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         groups: [
-                            { does: { common: {says: "some text"} } },
-                            { does: { common: {says: "some more text"} } }
+                            { does: { common: {says: { text: "some text"} } } },
+                            { does: { common: {says: { text: "some more text"} } } }
                         ]
                     }
                 ]
@@ -329,8 +329,8 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         first: [
-                            { does: { common: {says: "some text"} } },
-                            { does: { common: {says: "some more text"} } }
+                            { does: { common: {says: { text: "some text"} } } },
+                            { does: { common: {says: { text: "some more text"} } } }
                         ]
                     }
                 ]
@@ -358,8 +358,37 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         random: [
-                            { does: { common: {says: "some text"} } },
-                            { does: { common: {says: "some more text"} } }
+                            { does: { common: {says: { text: "some text"} } } },
+                            { does: { common: {says: { text: "some more text"} } } }
+                        ]
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse a response 'uses all'", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        uses("all"),
+                            response(),
+                                does(),
+                                    says("some text"),
+                            response(),
+                                does(),
+                                    says("some more text"),
+                        end(),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        all: [
+                            { does: { common: {says: { text: "some text"} } } },
+                            { does: { common: {says: { text: "some more text"} } } }
                         ]
                     }
                 ]
