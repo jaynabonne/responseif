@@ -27,8 +27,8 @@ var RifDOM = (function(formatter) {
         this.output.append(div);
     };
 
-    prototype.getElementById = function(id) {
-        return $('#'+id);
+    prototype.getElementBySelector = function(selector) {
+        return $(selector);
     };
 
     return type;

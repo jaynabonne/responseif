@@ -14,8 +14,14 @@ var Interact = (function() {
         say: function (says, response) {
             var text = says.text;
             text = text.replace(/{break}/g, breaktext);
-            this.currentDiv.append(this.formatter.formatOutput(text, this.keywordClickFactory));
-            this.dom.scrollToEnd();
+            var formatted = this.formatter.formatOutput(text, this.keywordClickFactory);
+            if (says.into) {
+                var element = this.dom.getElementBySelector(says.into);
+                $(element).html(formatted);
+            } else {
+                this.currentDiv.append(formatted);
+                this.dom.scrollToEnd();
+            }
         },
         choose: function(options, callback) {
             var id = "test";
@@ -39,7 +45,7 @@ var Interact = (function() {
             this._appendNewDiv();
         },
         hideSection: function(id) {
-            var section = this.dom.getElementById(id);
+            var section = this.dom.getElementBySelector('#'+id);
             if (section) {
                 setTimeout(function() {
                     section.hide(250, function () { $(this).remove(); });

@@ -8,7 +8,8 @@ describe("Interact", function () {
         dom = {
             createDiv: function() { return { append: appendSpy}; },
             scrollToEnd: function() {},
-            append: function(div) {}
+            append: function(div) {},
+            getElementBySelector: jasmine.createSpy("getElementBySelector")
         };
         formatter = { formatOutput: function() { return "formattedText"; }};
 
@@ -19,6 +20,10 @@ describe("Interact", function () {
         it("should output the text when called", function() {
             interact.say({ text: "This is some text" });
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
+        });
+        it("should output the text into the specified element", function() {
+            interact.say({ text: "This is some text", into: "someelement" });
+            expect(dom.getElementBySelector).toHaveBeenCalledWith("someelement");
         });
         it("should scroll to the end of the text", function() {
             dom.scrollToEnd = jasmine.createSpy("scrollToEnd");
