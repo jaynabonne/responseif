@@ -201,13 +201,13 @@ describe("ResponseLib", function () {
             });
             it("groups responses by type", function () {
                 var output = "";
-                interact.say = function(text) { output += text; };
+                interact.say = function(says) { output += says.text; };
                 responseLib.setTypes(["a","b","c"]);
                 var responses = [
-                    { response: { is:"c", does: {common: {says: "C!" }}}, score: 10000 },
-                    { response: { is:"b", does: {common: {says: "B!" }}}, score: 10000 },
-                    { response: { is:"a", does: {common: {says:  "A!" }}}, score: 10000 },
-                    { response: { is:"b", does: {common: {says:  "B again!" }}}, score: 10000 }
+                    { response: { is:"c", does: {common: {says: { text: "C!"} }}}, score: 10000 },
+                    { response: { is:"b", does: {common: {says: { text: "B!"} }}}, score: 10000 },
+                    { response: { is:"a", does: {common: {says: { text:  "A!"} }}}, score: 10000 },
+                    { response: { is:"b", does: {common: {says: { text:  "B again!"} }}}, score: 10000 }
                 ];
                 responseLib.processResponses(responses);
                 expect(output).toEqual("A!B!B again!C!");
@@ -218,10 +218,10 @@ describe("ResponseLib", function () {
                 interact.say = jasmine.createSpy("say");
                 var candidate = {
                     response: {
-                        does: { common: { says: "Hello world!" } }
+                        does: { common: { says: { text: "Hello world!" } } }
                     }, score: 10000 };
                 responseLib.processResponses([candidate]);
-                expect(interact.say).toHaveBeenCalledWith("Hello world!", candidate.response);
+                expect(interact.say).toHaveBeenCalledWith({ text: "Hello world!" }, candidate.response);
             });
             it("no text for no matching responses", function() {
                 interact.say = jasmine.createSpy("say");
@@ -230,29 +230,29 @@ describe("ResponseLib", function () {
             });
             it("text for all matching responses", function() {
                 interact.say = jasmine.createSpy("say");
-                var candidate1 = { response: { does: { common: {says: "Hello world!" }}}, score: 10000 };
-                var candidate2 = { response: { does: { common: {says: "Goodnight moon!" }}}, score: 10000 };
+                var candidate1 = { response: { does: { common: {says: { text: "Hello world!"} }}}, score: 10000 };
+                var candidate2 = { response: { does: { common: {says: { text: "Goodnight moon!"} }}}, score: 10000 };
                 responseLib.processResponses([candidate1, candidate2]);
                 expect(interact.say.callCount).toEqual(2);
-                expect(interact.say.argsForCall[0]).toEqual(["Hello world!", candidate1.response]);
-                expect(interact.say.argsForCall[1]).toEqual(["Goodnight moon!", candidate2.response]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Hello world!" }, candidate1.response]);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "Goodnight moon!" }, candidate2.response]);
             });
             it("text only for matching responses that have text", function() {
                 interact.say = jasmine.createSpy("say");
                 var candidate1 = { response: { }, score: 10000 };
-                var candidate2 = { response: { does: { common: {says: "See ya later!" }}}, score: 10000 };
+                var candidate2 = { response: { does: { common: {says: { text: "See ya later!"} }}}, score: 10000 };
                 responseLib.processResponses([candidate1, candidate2]);
                 expect(interact.say.callCount).toEqual(1);
-                expect(interact.say.argsForCall[0]).toEqual(["See ya later!", candidate2.response]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "See ya later!" }, candidate2.response]);
             });
             it("text in proper sequence", function() {
                 interact.say = jasmine.createSpy("say");
                 var candidate = {
                     response: {
                         does: {
-                            common: {says: "See ya later!"},
-                            1: {says: "Hello world!"},
-                            3: {says: "I'm going"}
+                            common: {says: { text: "See ya later!"} },
+                            1: {says: { text: "Hello world!"} },
+                            3: {says: { text: "I'm going"} }
                         }
                     },
                     score: 10000
@@ -263,10 +263,10 @@ describe("ResponseLib", function () {
                 responseLib.processResponses(candidates);
                 responseLib.processResponses(candidates);
                 expect(interact.say.argsForCall).toEqual([
-                    ["Hello world!", candidate.response],
-                    ["See ya later!", candidate.response],
-                    ["I'm going", candidate.response],
-                    ["See ya later!", candidate.response]
+                    [{ text: "Hello world!"}, candidate.response],
+                    [{ text: "See ya later!"}, candidate.response],
+                    [{ text: "I'm going"}, candidate.response],
+                    [{ text: "See ya later!"}, candidate.response]
                 ]);
             });
         });
@@ -295,18 +295,18 @@ describe("ResponseLib", function () {
             it("passes a callback function to be invoked when an item is chosen", function () {
                 interact.choose = jasmine.createSpy("choose");
                 interact.say = jasmine.createSpy("say");
-                var candidate1 = { response: { prompts: "Go north", does: { common: { says: "North" } } }, score: 10000 };
-                var candidate2 = { response: { prompts: "Go south", does: { common: { says: "South" } }  }, score: 10000 };
+                var candidate1 = { response: { prompts: "Go north", does: { common: { says: { text: "North" } } } }, score: 10000 };
+                var candidate2 = { response: { prompts: "Go south", does: { common: { says: { text: "South" } } }  }, score: 10000 };
                 responseLib.processResponses([candidate1, candidate2]);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(1);
-                expect(interact.say).toHaveBeenCalledWith("South", candidate2.response);
+                expect(interact.say).toHaveBeenCalledWith({text: "South"}, candidate2.response);
             });
             it("does nothing if the menu callback is called with -1", function () {
                 interact.choose = jasmine.createSpy("choose");
                 interact.say = jasmine.createSpy("say");
-                var candidate1 = { response: { prompts: "Go north", does: { common: { says: "North" } } }, score: 10000 };
-                var candidate2 = { response: { prompts: "Go south", does: { common: { says: "South" } }  }, score: 10000 };
+                var candidate1 = { response: { prompts: "Go north", does: { common: { says: { text: "North" } } } }, score: 10000 };
+                var candidate2 = { response: { prompts: "Go south", does: { common: { says: { text: "South" } } }  }, score: 10000 };
                 responseLib.processResponses([candidate1, candidate2]);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(-1);
@@ -323,15 +323,15 @@ describe("ResponseLib", function () {
             it ("executes multiple responses with the same prompt when chosen", function () {
                 interact.choose = jasmine.createSpy("choose");
                 interact.say = jasmine.createSpy("say");
-                var candidate1 = {response: {prompts: "prompt1", does: {common: {says: "North"}}}, score: 10000};
-                var candidate2 = {response: {prompts: "prompt1", does: {common: {says: "North2"}}}, score: 10000};
-                var candidate3 = {response: {prompts: "prompt2", does: {common: {says: "South"}}}, score: 10000};
+                var candidate1 = {response: {prompts: "prompt1", does: {common: {says: { text: "North" }}}}, score: 10000};
+                var candidate2 = {response: {prompts: "prompt1", does: {common: {says: { text: "North2" }}}}, score: 10000};
+                var candidate3 = {response: {prompts: "prompt2", does: {common: {says: { text: "South" }}}}, score: 10000};
                 responseLib.processResponses([candidate1, candidate2, candidate3]);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(0);
                 expect(interact.say.callCount).toEqual(2);
-                expect(interact.say.argsForCall[0]).toEqual(["North", candidate1.response]);
-                expect(interact.say.argsForCall[1]).toEqual(["North2", candidate2.response]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "North" }, candidate1.response]);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "North2" }, candidate2.response]);
             });
         });
         describe("sets", function() {
@@ -381,12 +381,12 @@ describe("ResponseLib", function () {
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
             interact.say = jasmine.createSpy("say");
-            var response1 = { matches: ["atopic"], does: { common: { says: "This is response 1" } } };
-            var response2 = { matches: ["ctopic"], does: { common: { says: "This is response 2" } } };
-            var response3 = { matches: ["btopic"], does: { common: { says: "This is response 3" } } };
+            var response1 = { matches: ["atopic"], does: { common: { says: { text: "This is response 1" } } } };
+            var response2 = { matches: ["ctopic"], does: { common: { says: { text: "This is response 2" } } } };
+            var response3 = { matches: ["btopic"], does: { common: { says: { text: "This is response 3" } } } };
             var responses = [response1, response2, response3];
             responseLib.callTopics({responder: responses}, ["ctopic"], "caller");
-            expect(interact.say).toHaveBeenCalledWith("This is response 2", response2);
+            expect(interact.say).toHaveBeenCalledWith({ text: "This is response 2" }, response2);
         });
     });
 });

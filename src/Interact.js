@@ -11,7 +11,8 @@ var Interact = (function() {
     var breaktext = "<div style='font-size:6pt;'><br></div>";
     
     type.prototype = {
-        say: function (text, response) {
+        say: function (says, response) {
+            var text = says.text;
             text = text.replace(/{break}/g, breaktext);
             this.currentDiv.append(this.formatter.formatOutput(text, this.keywordClickFactory));
             this.dom.scrollToEnd();
