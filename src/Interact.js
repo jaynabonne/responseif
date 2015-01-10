@@ -22,6 +22,11 @@ var Interact = (function() {
                 this.currentDiv.append(formatted);
                 this.dom.scrollToEnd();
             }
+            if (says.transition === "fadein") {
+                console.log("fadein");
+                formatted.css("display", "none");
+                formatted.fadeIn(1000);
+            }
         },
         choose: function(options, callback) {
             var id = "test";

@@ -1,3 +1,4 @@
+.define fadein .transition fadein .enddef
 .responses room
 	.response
 		.matches LOOK
@@ -9,24 +10,25 @@
 					<div id="introwind"></div>
 					<div id="introdream">{!You dream.|INTROFIRST!}</div>
 				</div>
+			.fadein
 	.response
 		.matches INTROFIRST
-		.does .says {!The patter of rain...|INTRORAIN!} .into #introrain
+		.does .says {!The patter of rain...|INTRORAIN!} .fadein .into #introrain
 	.response
 		.matches INTROFIRST
-		.does .says {!A caress of wind...|INTROWIND!} .into #introwind
+		.does .says {!A caress of wind...|INTROWIND!} .fadein .into #introwind
 	.response
 		.matches INTROFIRST
-		.does .says {!You dream...|INTRODREAM!} .into #introdream
+		.does .says {!You dream...|INTRODREAM!} .fadein .into #introdream
 
 	.response	
 		.matches INTRORAIN
-		.does .says The patter of rain... but there is no rain. .into #introrain
+		.does .says The patter of rain... but there is no rain. .fadein .into #introrain
 	.response	
 		.matches INTROWIND
-		.does .says A caress of wind... but there is no wind. .into #introwind
+		.does .says A caress of wind... but there is no wind. .fadein .into #introwind
 	.response	
 		.matches INTRODREAM
-		.does .says You dream...<br>but you should not dream. .into #introdream
+		.does .says You dream...<br>but you should not dream. .fadein .into #introdream 
 		
 .end

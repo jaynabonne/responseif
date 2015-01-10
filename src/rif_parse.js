@@ -39,10 +39,12 @@ rifParse = (function () {
         target.says = { text: entry.value };
         this.index++;
     };
-    Parser.prototype.parse_does_into = function(target, entry) {
-        target.says.into = entry.value ;
+    Parser.prototype.parse_says_attribute = function(target, entry) {
+        target.says[entry.token] = entry.value ;
         this.index++;
     };
+    Parser.prototype.parse_does_into = Parser.prototype.parse_says_attribute;
+    Parser.prototype.parse_does_transition = Parser.prototype.parse_says_attribute;
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
