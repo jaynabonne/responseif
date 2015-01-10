@@ -12,6 +12,9 @@ describe("rifParse", function () {
     function says(text) {
         return token_pair("says", text);
     }
+    function into(selector) {
+        return token_pair("into", selector);
+    }
     function does(slot) {
         return token_pair("does", slot || "");
     }
@@ -158,6 +161,29 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: { says: { text: "some text to display for this response" } }
+                        }
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse response does says with into", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            says("some text to display for this response"),
+                            into("someelement"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: { says: { text: "some text to display for this response", into: "someelement" } }
                         }
                     }
                 ]

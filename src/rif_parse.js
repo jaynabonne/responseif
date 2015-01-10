@@ -39,6 +39,10 @@ rifParse = (function () {
         target.says = { text: entry.value };
         this.index++;
     };
+    Parser.prototype.parse_does_into = function(target, entry) {
+        target.says.into = entry.value ;
+        this.index++;
+    };
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
