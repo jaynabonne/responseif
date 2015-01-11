@@ -382,14 +382,14 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: {
+                            common: [ {
                                 uses: {
                                     first: [
                                         {does: {common: [ {says: {text: "some text"} } ] } },
                                         {does: {common: [ {says: {text: "some more text"} } ] } }
                                     ]
                                 }
-                            }
+                            } ]
                         }
                     }
                 ]
@@ -418,14 +418,14 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: {
+                            common: [ {
                                 uses: {
                                     random: [
                                         { does: { common: [ {says: { text: "some text"} } ] } },
                                         { does: { common: [ {says: { text: "some more text"} } ] } }
                                     ]
                                 }
-                            }
+                            } ]
                         }
                     }
                 ]
@@ -454,14 +454,14 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: {
+                            common: [ {
                                 uses: {
                                     all: [
                                         { does: { common: [ {says: { text: "some text"} } ] } },
                                         { does: { common: [ {says: { text: "some more text"} } ] } }
                                     ]
                                 }
-                            }
+                            } ]
                         }
                     }
                 ]

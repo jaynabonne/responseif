@@ -58,12 +58,13 @@ rifParse = (function () {
     Parser.prototype.parse_does_sets = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
-    Parser.prototype.parse_does_uses = function(target, entry) {
+    Parser.prototype.parse_does_uses = function(actions, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
         if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
-            target.uses = target.uses || {};
-            target.uses[entry.value] = responses;
+            var action = { uses: {}}
+            action.uses[entry.value] = responses;
+            actions.push(action);
         }
     };
 

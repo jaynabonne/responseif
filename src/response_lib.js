@@ -184,7 +184,7 @@ var ResponseLib = (function () {
         } else {
             this.interact.setState(prefix + set, true);
         }
-    }
+    };
 
     proto.processSets = function (action, responder) {
         if (action.sets) {
