@@ -8,27 +8,30 @@
 				<div id="intro">
 					<div id="introrain"></div>
 					<div id="introwind"></div>
-					<div id="introdream">{!You dream.|INTROFIRST!}</div>
+					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div><div id="introdream2"></div></div>
 				</div>
 			.fadein
 	.response
-		.matches INTROFIRST
-		.does .says {!The patter of rain...|INTRORAIN!} .fadein .into #introrain
+		.matches INTRODREAM
+		.runs 2
+		.does 1 .says {!The patter of rain...|INTRORAIN!} <div id="introrain2"></div> .fadein .into #introrain
+		.does 2 .says but you should not dream. .fadein .into #introdream2
 	.response
-		.matches INTROFIRST
-		.does .says {!A caress of wind...|INTROWIND!} .fadein .into #introwind
+		.matches INTRODREAM
+		.runs 1
+		.does .says {!A caress of wind...|INTROWIND!} <div id="introwind2"></div> .fadein .into #introwind
 	.response
-		.matches INTROFIRST
-		.does .says {!You dream...|INTRODREAM!} .fadein .into #introdream
+		.matches INTRODREAM
+		.runs 1
+		.does .says {!..|INTRODREAM!} .fadein .into #introdream1
 
 	.response	
 		.matches INTRORAIN
-		.does .says The patter of rain... but there is no rain. .fadein .into #introrain
+		.runs 1
+		.does .says but there is no rain. .fadein .into #introrain2
 	.response	
 		.matches INTROWIND
-		.does .says A caress of wind... but there is no wind. .fadein .into #introwind
-	.response	
-		.matches INTRODREAM
-		.does .says You dream...<br>but you should not dream. .fadein .into #introdream 
+		.runs 1
+		.does .says but there is no wind. .fadein .into #introwind2
 		
 .end

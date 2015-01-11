@@ -34,11 +34,19 @@ div#header {
     top:0px;
     height:25px;
 }
-span.keyword {color:#C0C080; cursor:pointer;}
+span.keyword {color:inherit; cursor:pointer;}
 div.menuitem {color:#C0C080; cursor:pointer;}
 
 div#intro {
     width:100%;
     text-align: center;
     padding-top: 100px;
+}
+
+div#introdream1 {
+    display: inline-block;
+}
+div#introdream2, div#introrain2, div#introwind2 {
+    display: block;
+    font-style: italic;
 }
