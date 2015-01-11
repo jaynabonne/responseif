@@ -41,9 +41,10 @@ div#intro {
     width:100%;
     text-align: center;
     padding-top: 100px;
+    font-size: 20px;
 }
 
-div#introdream1 {
+div#introdream1, div#rainpunc, div#windpunc {
     display: inline-block;
 }
 div#introdream2, div#introrain2, div#introwind2 {

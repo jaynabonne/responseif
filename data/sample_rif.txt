@@ -1,3 +1,4 @@
+.define expandandfadein .transition expand fadein .enddef
 .define fadein .transition fadein .enddef
 .responses room
 	.response
@@ -15,14 +16,22 @@
 		.matches INTRODREAM
 		.runs 2
 		.does 1
-			.uses all
-				.response .does .says {!The patter of rain...|INTRORAIN!} <div id="introrain2"></div> .fadein .into #introrain
-				.response .does .says {!A caress of wind...|INTROWIND!} <div id="introwind2"></div> .fadein .into #introwind
-				.response .does .says {!..|INTRODREAM!} .fadein .into #introdream1
-			.end
-		.does 2 .says but you shouldn't dream. .fadein .into #introdream2
+				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .expandandfadein .into #introrain
+				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .expandandfadein .into #introwind
+				.says {!..|INTRODREAM!} .expandandfadein .into #introdream1
+		.does 2 .says but you should not dream. .fadein .into #introdream2
 
-	.response .matches INTRORAIN .runs 1 .does .says but there is no rain. .fadein .into #introrain2
-	.response .matches INTROWIND .runs 1 .does .says but there is no wind. .fadein .into #introwind2
+	.response
+		.matches INTRORAIN 
+		.runs 1
+		.does
+			.says , .into #rainpunc
+			.says but there is no rain. .expandandfadein .into #introrain2
+	.response
+		.matches INTROWIND
+		.runs 1 
+		.does
+			.says , .into #windpunc
+			.says but there is no wind. .expandandfadein .into #introwind2
 		
 .end

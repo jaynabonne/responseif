@@ -22,9 +22,16 @@ var Interact = (function() {
                 this.currentDiv.append(formatted);
                 this.dom.scrollToEnd();
             }
-            if (says.transition === "fadein") {
-                formatted.css("display", "none");
-                formatted.fadeIn(1000);
+            if (says.transition && says.transition[0].length) {
+                $.each(says.transition, function(index, transition) {
+                    if (transition === "hide") {
+                        formatted.css("opacity", "0");
+                    } else if (transition === "expand") {
+                        formatted.css("font-size", "0%").animate({"font-size": "100%"}, 1000);
+                    } else if (transition === "fadein") {
+                        formatted.css("opacity", "0").animate({"opacity": "1"}, 1000);
+                    }
+                })
             }
         },
         choose: function(options, callback) {

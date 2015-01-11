@@ -193,14 +193,14 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse response does says with transition", function () {
+    it("should parse response does says with transitions", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
                         does(),
                             says("some text to display for this response"),
-                            transition("sometrans"),
+                            transition("sometrans someothertrans"),
                 end()
             ]
         );
@@ -209,7 +209,7 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: [ { says: { text: "some text to display for this response", transition: "sometrans" } } ]
+                            common: [ { says: { text: "some text to display for this response", transition: ["sometrans", "someothertrans"] } } ]
                         }
                     }
                 ]
