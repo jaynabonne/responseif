@@ -22,13 +22,7 @@
 			.end
 		.does 2 .says but you shouldn't dream. .fadein .into #introdream2
 
-	.response	
-		.matches INTRORAIN
-		.runs 1
-		.does .says but there is no rain. .fadein .into #introrain2
-	.response	
-		.matches INTROWIND
-		.runs 1
-		.does .says but there is no wind. .fadein .into #introwind2
+	.response .matches INTRORAIN .runs 1 .does .says but there is no rain. .fadein .into #introrain2
+	.response .matches INTROWIND .runs 1 .does .says but there is no wind. .fadein .into #introwind2
 		
 .end
