@@ -48,11 +48,12 @@ rifParse = (function () {
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
-    Parser.prototype.parse_does_uses = function(response, entry) {
+    Parser.prototype.parse_does_uses = function(target, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
         if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
-            response[entry.value] = responses;
+            target.uses = target.uses || {};
+            target.uses[entry.value] = responses;
         }
     };
 

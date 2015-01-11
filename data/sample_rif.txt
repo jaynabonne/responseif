@@ -14,19 +14,6 @@
 	.response
 		.matches INTRODREAM
 		.runs 2
-		.uses all
-			.response
-				.does 1 .says {!The patter of rain...|INTRORAIN!} <div id="introrain2"></div> .fadein .into #introrain
-				.does 2 .says but you should not dream. .fadein .into #introdream2
-			.response
-				.does 1 .says {!A caress of wind...|INTROWIND!} <div id="introwind2"></div> .fadein .into #introwind
-			.response
-				.does 1 .says {!..|INTRODREAM!} .fadein .into #introdream1
-		.end
-
-	.response
-		.matches INTRODREAM
-		.runs 2
 		.does 1
 			.uses all
 				.response .does .says {!The patter of rain...|INTRORAIN!} <div id="introrain2"></div> .fadein .into #introrain

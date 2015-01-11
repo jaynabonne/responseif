@@ -383,10 +383,12 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: {
-                                first: [
-                                    {does: {common: {says: {text: "some text"}}}},
-                                    {does: {common: {says: {text: "some more text"}}}}
-                                ]
+                                uses: {
+                                    first: [
+                                        {does: {common: {says: {text: "some text"}}}},
+                                        {does: {common: {says: {text: "some more text"}}}}
+                                    ]
+                                }
                             }
                         }
                     }
@@ -417,10 +419,12 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: {
-                                random: [
-                                    { does: { common: {says: { text: "some text"} } } },
-                                    { does: { common: {says: { text: "some more text"} } } }
-                                ]
+                                uses: {
+                                    random: [
+                                        { does: { common: {says: { text: "some text"} } } },
+                                        { does: { common: {says: { text: "some more text"} } } }
+                                    ]
+                                }
                             }
                         }
                     }
@@ -451,10 +455,12 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: {
-                                all: [
-                                    { does: { common: {says: { text: "some text"} } } },
-                                    { does: { common: {says: { text: "some more text"} } } }
-                                ]
+                                uses: {
+                                    all: [
+                                        { does: { common: {says: { text: "some text"} } } },
+                                        { does: { common: {says: { text: "some more text"} } } }
+                                    ]
+                                }
                             }
                         }
                     }
