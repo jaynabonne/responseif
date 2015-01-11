@@ -200,11 +200,19 @@ var ResponseLib = (function () {
     proto.processUses = function (response, responder) {
         var section = getCurrentSection(response);
         if (section && section.uses) {
+            var self = this;
             if (section.uses.all) {
-                var self = this;
-                section.uses.all.forEach(function(child) {
+                $.each(section.uses.all, function(index, child) {
                     if (self.responseIsEligible(child, [], responder)) {
                         self.processResponse({response: child, responder: responder});
+                    }
+                });
+            }
+            if (section.uses.first) {
+                $.each(section.uses.first, function(index, child) {
+                    if (self.responseIsEligible(child, [], responder)) {
+                        self.processResponse({response: child, responder: responder});
+                        return false;
                     }
                 });
             }

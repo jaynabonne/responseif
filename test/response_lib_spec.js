@@ -406,6 +406,34 @@ describe("ResponseLib", function () {
                 expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }, response3]);
             });
         });
+        describe("uses first", function() {
+            it("processes up to the first eligible child responses", function() {
+                interact.say = jasmine.createSpy("say");
+                interact.getState = function(id) { return  false;};
+                var response1 = { needs: "somestate", does: { common: { says: {text: "Text 1"} } } };
+                var response2 = { does: { common: { says: {text: "Text 2"} } } };
+                var response3 = { does: { common: { says: {text: "Text 3"} } } };
+                var response = {
+                    response: {
+                        does: {
+                            common: {
+                                uses: {
+                                    first: [
+                                        response1,
+                                        response2,
+                                        response3
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    score: 10000,
+                    responder: "aresponder" };
+                responseLib.processResponses([response]);
+                expect(interact.say.callCount).toEqual(1);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }, response2]);
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
