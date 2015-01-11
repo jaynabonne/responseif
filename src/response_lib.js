@@ -215,7 +215,6 @@ var ResponseLib = (function () {
         var response = candidate.response;
         var responder = candidate.responder;
         incrementResponseRunCount(response);
-        console.info(candidate);
         this.processSays(response);
         this.processSets(response, responder);
         this.processUses(response);
