@@ -48,6 +48,13 @@ rifParse = (function () {
     Parser.prototype.parse_does_sets = Parser.prototype.addList;
     Parser.prototype.parse_does_calls = Parser.prototype.addList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addList;
+    Parser.prototype.parse_does_uses = function(response, entry) {
+        this.index++;
+        var responses = this.parseResponseGroup();
+        if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
+            response[entry.value] = responses;
+        }
+    };
 
     var createDoesSlot = function(response, name) {
         response.does = response.does || {};
@@ -69,14 +76,6 @@ rifParse = (function () {
     Parser.prototype.parse_response_groups = function(response, entry) {
         this.index++;
         response.groups = this.parseResponseGroup();
-    };
-
-    Parser.prototype.parse_response_uses = function(response, entry) {
-        this.index++;
-        var responses = this.parseResponseGroup();
-        if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
-            response[entry.value] = responses;
-        }
     };
 
     Parser.prototype.parse_response = function() {

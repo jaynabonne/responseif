@@ -365,14 +365,15 @@ describe("rifParse", function () {
             [
                 responses("anObject"),
                     response(),
-                        uses("first"),
-                            response(),
-                                does(),
-                                    says("some text"),
-                            response(),
-                                does(),
-                                    says("some more text"),
-                        end(),
+                        does(),
+                            uses("first"),
+                                response(),
+                                    does(),
+                                        says("some text"),
+                                response(),
+                                    does(),
+                                        says("some more text"),
+                            end(),
                 end()
             ]
         );
@@ -380,10 +381,14 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
-                        first: [
-                            { does: { common: {says: { text: "some text"} } } },
-                            { does: { common: {says: { text: "some more text"} } } }
-                        ]
+                        does: {
+                            common: {
+                                first: [
+                                    {does: {common: {says: {text: "some text"}}}},
+                                    {does: {common: {says: {text: "some more text"}}}}
+                                ]
+                            }
+                        }
                     }
                 ]
             }
@@ -394,14 +399,15 @@ describe("rifParse", function () {
             [
                 responses("anObject"),
                     response(),
-                        uses("random"),
-                            response(),
-                                does(),
-                                    says("some text"),
-                            response(),
-                                does(),
-                                    says("some more text"),
-                        end(),
+                        does(),
+                            uses("random"),
+                                response(),
+                                    does(),
+                                        says("some text"),
+                                response(),
+                                    does(),
+                                        says("some more text"),
+                            end(),
                 end()
             ]
         );
@@ -409,10 +415,14 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
-                        random: [
-                            { does: { common: {says: { text: "some text"} } } },
-                            { does: { common: {says: { text: "some more text"} } } }
-                        ]
+                        does: {
+                            common: {
+                                random: [
+                                    { does: { common: {says: { text: "some text"} } } },
+                                    { does: { common: {says: { text: "some more text"} } } }
+                                ]
+                            }
+                        }
                     }
                 ]
             }
@@ -423,14 +433,15 @@ describe("rifParse", function () {
             [
                 responses("anObject"),
                     response(),
-                        uses("all"),
-                            response(),
-                                does(),
-                                    says("some text"),
-                            response(),
-                                does(),
-                                    says("some more text"),
-                        end(),
+                        does(),
+                            uses("all"),
+                                response(),
+                                    does(),
+                                        says("some text"),
+                                response(),
+                                    does(),
+                                        says("some more text"),
+                            end(),
                 end()
             ]
         );
@@ -438,10 +449,14 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
-                        all: [
-                            { does: { common: {says: { text: "some text"} } } },
-                            { does: { common: {says: { text: "some more text"} } } }
-                        ]
+                        does: {
+                            common: {
+                                all: [
+                                    { does: { common: {says: { text: "some text"} } } },
+                                    { does: { common: {says: { text: "some more text"} } } }
+                                ]
+                            }
+                        }
                     }
                 ]
             }
