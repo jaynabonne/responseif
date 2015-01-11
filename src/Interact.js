@@ -23,7 +23,6 @@ var Interact = (function() {
                 this.dom.scrollToEnd();
             }
             if (says.transition === "fadein") {
-                console.log("fadein");
                 formatted.css("display", "none");
                 formatted.fadeIn(1000);
             }

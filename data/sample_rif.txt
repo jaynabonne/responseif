@@ -20,7 +20,7 @@
 				.response .does .says {!A caress of wind...|INTROWIND!} <div id="introwind2"></div> .fadein .into #introwind
 				.response .does .says {!..|INTRODREAM!} .fadein .into #introdream1
 			.end
-		.does 2 .says but you should not dream. .fadein .into #introdream2
+		.does 2 .says but you shouldn't dream. .fadein .into #introdream2
 
 	.response	
 		.matches INTRORAIN
