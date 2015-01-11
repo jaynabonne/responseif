@@ -171,10 +171,9 @@ var ResponseLib = (function () {
         return section;
     };
 
-    proto.processSays = function (response) {
-        var section = getCurrentSection(response);
-        if (section && section.says) {
-            this.interact.say(section.says, response);
+    proto.processSays = function (action, response) {
+        if (action.says) {
+            this.interact.say(action.says, response);
         }
     };
 
@@ -187,29 +186,27 @@ var ResponseLib = (function () {
         }
     }
 
-    proto.processSets = function (response, responder) {
-        var section = getCurrentSection(response);
-        if (section && section.sets) {
+    proto.processSets = function (action, responder) {
+        if (action.sets) {
             var self = this;
-            section.sets.forEach( function(set) {
+            action.sets.forEach( function(set) {
                 self.processSet(set, responder);
             })
         }
     };
 
-    proto.processUses = function (response, responder) {
-        var section = getCurrentSection(response);
-        if (section && section.uses) {
+    proto.processUses = function (action, responder) {
+        if (action.uses) {
             var self = this;
-            if (section.uses.all) {
-                $.each(section.uses.all, function(index, child) {
+            if (action.uses.all) {
+                $.each(action.uses.all, function(index, child) {
                     if (self.responseIsEligible(child, [], responder)) {
                         self.processResponse({response: child, responder: responder});
                     }
                 });
             }
-            if (section.uses.first) {
-                $.each(section.uses.first, function(index, child) {
+            if (action.uses.first) {
+                $.each(action.uses.first, function(index, child) {
                     if (self.responseIsEligible(child, [], responder)) {
                         self.processResponse({response: child, responder: responder});
                         return false;
@@ -223,9 +220,15 @@ var ResponseLib = (function () {
         var response = candidate.response;
         var responder = candidate.responder;
         incrementResponseRunCount(response);
-        this.processSays(response);
-        this.processSets(response, responder);
-        this.processUses(response);
+        var section = getCurrentSection(response);
+        if (section) {
+            var self = this;
+            $.each(section, function(index, action) {
+                self.processSays(action, response);
+                self.processSets(action, responder);
+                self.processUses(action);
+            });
+        }
     };
 
     function groupCandidates(candidates, prompts) {
