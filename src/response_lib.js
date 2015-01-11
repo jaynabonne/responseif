@@ -197,12 +197,29 @@ var ResponseLib = (function () {
         }
     };
 
+    proto.processUses = function (response, responder) {
+        var section = getCurrentSection(response);
+        if (section && section.uses) {
+            console.info(section.uses);
+            if (section.uses.all) {
+                console.info(section.uses.all);
+                var self = this;
+                section.uses.all.forEach(function(child) {
+                    if (self.responseIsEligible(child, [], responder)) {
+                        self.processResponse({response: child, responder: responder});
+                    }
+                });
+            }
+        }
+    };
+
     proto.processResponse = function (candidate, caller) {
         var response = candidate.response;
         var responder = candidate.responder;
         incrementResponseRunCount(response);
         this.processSays(response);
         this.processSets(response, responder);
+        this.processUses(response);
     };
 
     function groupCandidates(candidates, prompts) {
