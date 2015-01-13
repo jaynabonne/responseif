@@ -1,11 +1,12 @@
 var Interact = (function() {
     "use strict";
     
-    var type = function (dom, formatter, keywordClickFactory) {
+    var type = function (dom, formatter, keywordClickFactory, world) {
         this.dom = dom;
         this.formatter = formatter;
         this.keywordClickFactory = keywordClickFactory;
         this._appendNewDiv();
+        this.world = world;
     };
     
     var breaktext = "<div style='font-size:6pt;'><br></div>";
@@ -74,6 +75,9 @@ var Interact = (function() {
             var div = this.dom.createDiv(id);
             this.dom.append(div);
             this.currentDiv = div;
+        },
+        call: function(topics) {
+            this.world.callTopics(topics);
         }
     };
     return type;

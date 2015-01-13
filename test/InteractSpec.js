@@ -3,6 +3,7 @@ describe("Interact", function () {
     var interact;
     var appendSpy;
     var formatter;
+    var responseLib;
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
         dom = {
@@ -12,8 +13,9 @@ describe("Interact", function () {
             getElementBySelector: jasmine.createSpy("getElementBySelector")
         };
         formatter = { formatOutput: function() { return "formattedText"; }};
+        world = { callTopics: jasmine.createSpy("callTopics")};
 
-        interact = new Interact(dom, formatter, {});
+        interact = new Interact(dom, formatter, {}, world);
         appendSpy.reset();
     });
     describe("say", function () {
@@ -29,6 +31,12 @@ describe("Interact", function () {
             dom.scrollToEnd = jasmine.createSpy("scrollToEnd");
             interact.say({ text: "This is some text" });
             expect(dom.scrollToEnd).toHaveBeenCalled();
+        });
+    });
+    describe("call", function () {
+        it("should call the passed topics", function () {
+            interact.call(["topicA", "topicB", "topicC"]);
+            expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB", "topicC"]);
         });
     });
 });
