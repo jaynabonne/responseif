@@ -9,8 +9,15 @@ var Interact = (function() {
     };
     
     var breaktext = "<div style='font-size:6pt;'><br></div>";
+    var states = {};
     
     type.prototype = {
+        getState: function(id) {
+            return states[id];
+        },
+        setState: function(id, value) {
+            states[id] = value;
+        },
         say: function (says, response) {
             var text = says.text;
             text = text.replace(/{break}/g, breaktext);

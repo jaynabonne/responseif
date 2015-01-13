@@ -20,6 +20,8 @@
 				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .expandandfadein .into #introwind
 				.says {!..|INTRODREAM!} .expandandfadein .into #introdream1
 		.does 2 .says but you should not dream. .fadein .into #introdream2
+				.sets intro_saw_dream
+				.calls INTRODONE
 
 	.response
 		.matches INTRORAIN 
@@ -27,11 +29,19 @@
 		.does
 			.says , .into #rainpunc
 			.says but there is no rain. .expandandfadein .into #introrain2
+			.sets intro_saw_rain
+			.calls INTRODONE
 	.response
 		.matches INTROWIND
 		.runs 1 
 		.does
 			.says , .into #windpunc
 			.says but there is no wind. .expandandfadein .into #introwind2
+			.sets intro_saw_wind
+			.calls INTRODONE
 		
+	.response INTRODONE
+		.needs intro_saw_dream intro_saw_rain intro_saw_wind
+		.does
+			.says Next...
 .end
