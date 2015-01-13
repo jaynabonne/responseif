@@ -434,6 +434,17 @@ describe("ResponseLib", function () {
                 expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }, response2]);
             });
         });
+        describe("calls", function () {
+            it("should call the specified topics", function() {
+                interact.call = jasmine.createSpy("call");
+                var candidate = {
+                    response: {
+                        does: { common: [ { calls: [ "aTopic", "bTopic", "cTopic" ] } ] }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.call).toHaveBeenCalledWith([ "aTopic", "bTopic", "cTopic" ]);
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {

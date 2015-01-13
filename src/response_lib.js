@@ -216,6 +216,12 @@ var ResponseLib = (function () {
         }
     };
 
+    proto.processCalls = function(action) {
+        if (action.calls) {
+            this.interact.call(action.calls);
+        }
+    };
+
     proto.processResponse = function (candidate, caller) {
         var response = candidate.response;
         var responder = candidate.responder;
@@ -227,6 +233,7 @@ var ResponseLib = (function () {
                 self.processSays(action, response);
                 self.processSets(action, responder);
                 self.processUses(action);
+                self.processCalls(action);
             });
         }
     };
@@ -325,7 +332,7 @@ var ResponseLib = (function () {
     };
 
     proto.callTopics = function(responders, topics, caller) {
-        //console.log("call topics:" + topics);
+        console.log("call topics:" + topics);
         var candidates = [];
         for (var responder in responders) {
             if (responders.hasOwnProperty(responder)) {
