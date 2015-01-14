@@ -445,6 +445,17 @@ describe("ResponseLib", function () {
                 expect(interact.call).toHaveBeenCalledWith([ "aTopic", "bTopic", "cTopic" ]);
             });
         });
+        describe("animates", function () {
+            it("should animate", function() {
+                interact.animate = jasmine.createSpy("animate");
+                var candidate = {
+                    response: {
+                        does: { common: [ { animates: {selector: "aselector", to: "options", lasting: 1000} } ] }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.animate).toHaveBeenCalledWith( {selector: "aselector", to: "options", lasting: 1000} );
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
