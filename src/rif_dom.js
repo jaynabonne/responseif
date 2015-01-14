@@ -31,5 +31,23 @@ var RifDOM = (function(formatter) {
         return $(selector);
     };
 
+    prototype.animate = function(selector, options, duration) {
+        if (!options) {
+            console.log("no options specified");
+            return;
+        }
+        var parameters = JSON.parse(options);
+        if (!parameters) {
+            console.log("options: '" + options + "' are invalid JSON");
+            return;
+        }
+        var element = $(selector);
+        if (!element) {
+            console.log("not element for " + selector);
+            return;
+        }
+        element.animate(parameters, duration || 0);
+    };
+
     return type;
 })();
