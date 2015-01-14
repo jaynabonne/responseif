@@ -40,7 +40,8 @@
 			.sets intro_saw_wind
 			.calls INTRODONE
 		
-	.response INTRODONE
+	.response
+		.matches INTRODONE
 		.needs intro_saw_dream intro_saw_rain intro_saw_wind
 		.does
 			.says Next...

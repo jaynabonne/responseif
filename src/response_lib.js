@@ -131,7 +131,7 @@ var ResponseLib = (function () {
     };
 
     proto.addResponse = function (response, topics, candidates, responder) {
-        if (this.responseIsEligible(response, topics)) {
+        if (this.responseIsEligible(response, topics, responder)) {
             if (response.groups !== undefined) {
                 this.addResponses(response.groups, topics, candidates, responder);
             } else {

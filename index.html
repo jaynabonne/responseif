@@ -33,12 +33,15 @@
                     world.sendCommand(keyword);
                 };
             };
-            var interact = new Interact(dom, formatter, clickFactory);
+            var interact = new Interact(dom, formatter, clickFactory, world);
 
             var response_lib = new ResponseLib(interact);
             world.sendCommand = function(keyword) {
-                response_lib.callTopics({general: rif.responses.room}, [keyword], "me");
+                this.callTopics([keyword]);
                 interact.say({text: "{break}"});
+            };
+            world.callTopics = function(topics) {
+                response_lib.callTopics({general: rif.responses.room}, topics, "me");
             };
             world.sendCommand("LOOK");
         }

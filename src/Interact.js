@@ -14,9 +14,11 @@ var Interact = (function() {
     
     type.prototype = {
         getState: function(id) {
+            console.log("get: " + id);
             return states[id];
         },
         setState: function(id, value) {
+            console.log("set: " + id + " to " + value);
             states[id] = value;
         },
         say: function (says, response) {
