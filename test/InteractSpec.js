@@ -39,4 +39,11 @@ describe("Interact", function () {
             expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB", "topicC"]);
         });
     });
+    describe("animate", function () {
+        it("should animate the passed item(s)", function () {
+            dom.animate = jasmine.createSpy("animate");
+            interact.animate({selector: "aselector", to: "options", lasting: 1500});
+            expect(dom.animate).toHaveBeenCalledWith("aselector", "options", 1500);
+        });
+    });
 });

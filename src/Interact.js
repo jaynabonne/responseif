@@ -80,6 +80,9 @@ var Interact = (function() {
         },
         call: function(topics) {
             this.world.callTopics(topics);
+        },
+        animate: function(animates) {
+            this.dom.animate(animates.selector, animates.to, animates.lasting);
         }
     };
     return type;
