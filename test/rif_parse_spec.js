@@ -484,8 +484,8 @@ describe("rifParse", function () {
                     response(),
                         does(),
                             token_pair("animates","aselector"),
-                            //token_pair("to","properties"),
-                            //token_pair("for","1000"),
+                            token_pair("to","properties"),
+                            token_pair("lasting","1000"),
                 end()
             ]
         );
@@ -494,7 +494,7 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: [ { animates: { selector: "aselector" /*, to: "properties", duration: 1000*/}  } ]
+                            common: [ { animates: { selector: "aselector", to: "properties", lasting: 1000}  } ]
                         }
                     }
                 ]

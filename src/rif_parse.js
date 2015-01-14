@@ -69,6 +69,19 @@ rifParse = (function () {
         actions.push({animates: { selector: entry.value } } );
         this.index++;
     };
+    Parser.prototype.parse_animates_attribute = function(actions, token, value) {
+        var last_action = actions[actions.length-1];
+        if (last_action) {
+            last_action.animates[token] = value;
+        }
+        this.index++;
+    };
+    Parser.prototype.parse_does_to = function(actions, entry) {
+        this.parse_animates_attribute(actions, entry.token, entry.value);
+    };
+    Parser.prototype.parse_does_lasting = function(actions, entry) {
+        this.parse_animates_attribute(actions, entry.token, parseInt(entry.value));
+    }
     Parser.prototype.parse_does_uses = function(actions, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
@@ -126,7 +139,7 @@ rifParse = (function () {
                 this.index++;
                 break;
             } else {
-                console.log('parse_responses: Expected ".response" or ".end" but got ".' + token + '"');
+                console.log('parse_responses: Unexpected token ".' + token + '" (expected ".end" or new ".response")');
                 break;
             }
         }
