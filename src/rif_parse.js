@@ -65,6 +65,10 @@ rifParse = (function () {
     Parser.prototype.parse_does_sets = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
+    Parser.prototype.parse_does_animates = function(actions, entry) {
+        actions.push({animates: { selector: entry.value } } );
+        this.index++;
+    };
     Parser.prototype.parse_does_uses = function(actions, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
@@ -122,7 +126,7 @@ rifParse = (function () {
                 this.index++;
                 break;
             } else {
-                console.log("parse_responses: Unknown token " + token);
+                console.log('parse_responses: Expected ".response" or ".end" but got ".' + token + '"');
                 break;
             }
         }

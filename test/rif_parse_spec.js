@@ -477,4 +477,28 @@ describe("rifParse", function () {
         );
         expect(rif.sets).toEqual( ["setexpression1", "setexpression2"] );
     });
+    it("should parse response animates", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("animates","aselector"),
+                            //token_pair("to","properties"),
+                            //token_pair("for","1000"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [ { animates: { selector: "aselector" /*, to: "properties", duration: 1000*/}  } ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
 });

@@ -43,6 +43,7 @@
 	.response
 		.matches INTRODONE
 		.needs intro_saw_dream intro_saw_rain intro_saw_wind
+		.animate #intro .to { opacity: 0.5 } .lasting 4000
 		.does
 			.says Next...
 .end
