@@ -1,4 +1,5 @@
 .define expandandfadein .transition expand fadein .enddef
+.define nexpandandfadein .to {"font-size": "0%", "opacity": "0"} .to {"font-size": "100%"} .lasting 1000 .to {"opacity": "1"} .lasting 1000 .enddef
 .define fadein .transition fadein .enddef
 .responses room
 	.response

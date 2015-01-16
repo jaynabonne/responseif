@@ -494,7 +494,7 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: [ { animates: { selector: "aselector", to: "properties", lasting: 1000}  } ]
+                            common: [ { animates: { selector: "aselector", transitions: [{to: "properties", lasting: 1000}] }  } ]
                         }
                     }
                 ]
