@@ -450,10 +450,10 @@ describe("ResponseLib", function () {
                 interact.animate = jasmine.createSpy("animate");
                 var candidate = {
                     response: {
-                        does: { common: [ { animates: {selector: "aselector", to: "options", lasting: 1000} } ] }
+                        does: { common: [ { animates: {selector: "aselector", transitions: [{to: "options", lasting: 1000} ] } } ] }
                     }, score: 10000 };
                 responseLib.processResponses([candidate]);
-                expect(interact.animate).toHaveBeenCalledWith( {selector: "aselector", to: "options", lasting: 1000} );
+                expect(interact.animate).toHaveBeenCalledWith( {selector: "aselector", transitions: [ {to: "options", lasting: 1000} ] } );
             });
         });
     });

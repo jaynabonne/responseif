@@ -82,7 +82,10 @@ var Interact = (function() {
             this.world.callTopics(topics);
         },
         animate: function(animates) {
-            this.dom.animate(animates.selector, animates.to, animates.lasting);
+            var self = this;
+            $.each(animates.transitions, function(index, transition) {
+                self.dom.animate(animates.selector, transition.to, transition.lasting);
+            });
         }
     };
     return type;

@@ -1,6 +1,5 @@
-.define expandandfadein .transition expand fadein .enddef
-.define nexpandandfadein .to {"font-size": "0%", "opacity": "0"} .to {"font-size": "100%"} .lasting 1000 .to {"opacity": "1"} .lasting 1000 .enddef
-.define fadein .transition fadein .enddef
+.define fadein .to {"opacity": 0.0} .to {"opacity": 1.0} .lasting 1000 .enddef
+.define expandandfadein .to {"font-size": "0%", "opacity": "0"} .to {"font-size": "100%"} .lasting 1000 .to {"opacity": "1"} .lasting 1000 .enddef
 .responses room
 	.response
 		.matches LOOK
@@ -14,8 +13,7 @@
 					</div>
 					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div><div id="introdream2"></div></div>
 				</div>
-			.animates #intro .to {"opacity": 0.0}
-			.animates #intro .to {"opacity": 1.0} .lasting 1000
+			.animates #intro .fadein
 	.response
 		.matches INTRODREAM
 		.runs 2
@@ -23,12 +21,9 @@
 				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .into #introrain
 				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .into #introwind
 				.says {!..|INTRODREAM!} .into #introdream1
-				.animates #introrain, #introwind, #introdream1 .to {"font-size": "0%", "opacity": "0"}
-				.animates #introrain, #introwind, #introdream1 .to {"font-size": "100%"} .lasting 1000
-				.animates #introrain, #introwind, #introdream1 .to {"opacity": "1"} .lasting 1000
+				.animates #introrain, #introwind, #introdream1 .expandandfadein
 		.does 2 .says but you should not dream. .into #introdream2
-				.animates #introdream2 .to {"opacity": 0.0}
-				.animates #introdream2 .to {"opacity": 1.0} .lasting 1000
+				.animates #introdream2 .fadein	
 				.sets intro_saw_dream
 				.calls INTRODONE
 
@@ -37,7 +32,8 @@
 		.runs 1
 		.does
 			.says , .into #rainpunc
-			.says but there is no rain. .expandandfadein .into #introrain2
+			.says but there is no rain. .into #introrain2
+			.animates #introrain2 .expandandfadein
 			.sets intro_saw_rain
 			.calls INTRODONE
 	.response
@@ -45,7 +41,8 @@
 		.runs 1 
 		.does
 			.says , .into #windpunc
-			.says but there is no wind. .expandandfadein .into #introwind2
+			.says but there is no wind. .into #introwind2
+			.animates #introwind2 .expandandfadein
 			.sets intro_saw_wind
 			.calls INTRODONE
 		

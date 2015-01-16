@@ -42,8 +42,10 @@ describe("Interact", function () {
     describe("animate", function () {
         it("should animate the passed item(s)", function () {
             dom.animate = jasmine.createSpy("animate");
-            interact.animate({selector: "aselector", to: "options", lasting: 1500});
-            expect(dom.animate).toHaveBeenCalledWith("aselector", "options", 1500);
+            interact.animate( { selector: "aselector", transitions: [ {to: "optionsA", lasting: 1500}, {to: "optionsB", lasting: 1000} ] } );
+            expect(dom.animate.callCount).toBe(2);
+            expect(dom.animate.argsForCall[0]).toEqual(["aselector", "optionsA", 1500]);
+            expect(dom.animate.argsForCall[1]).toEqual(["aselector", "optionsB", 1000]);
         });
     });
 });
