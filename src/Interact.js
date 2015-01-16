@@ -32,7 +32,7 @@ var Interact = (function() {
                 this.currentDiv.append(formatted);
                 this.dom.scrollToEnd();
             }
-            if (says.transition && says.transition[0].length) {
+            if (says.transition && says.transition.length) {
                 $.each(says.transition, function(index, transition) {
                     if (transition === "hide") {
                         formatted.css("opacity", "0");
