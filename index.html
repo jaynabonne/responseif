@@ -5,6 +5,7 @@
     <title>Meek</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript" src="src/HTMLFormatter.js"></script>
     <script type="text/javascript" src="src/Interact.js"></script>
     <script type="text/javascript" src="src/response_lib.js"></script>
@@ -29,7 +30,10 @@
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
             var clickFactory = function(keyword) {
-                return function () {
+                return function (e) {
+                    var target = $(e.target);
+                    var original_color = target.css("color");
+                    target.animate({color: "#c0c000"},250).animate({color: original_color}, 300);
                     world.sendCommand(keyword);
                 };
             };
