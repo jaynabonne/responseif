@@ -1,5 +1,20 @@
-.define fadein .to {"opacity": 0.0} .to {"opacity": 1.0} .lasting 1000 .enddef
-.define expandandfadein .to {"font-size": "0%", "opacity": "0"} .to {"font-size": "100%"} .lasting 1000 .to {"opacity": "1"} .lasting 1000 .enddef
+.define fade-in
+	.to {"opacity": 0.0}
+	.to {"opacity": 1.0}
+.enddef
+
+.define expand-and-fade-in
+	.to {"font-size": "0%", "opacity": "0"}
+	.to {"font-size": "100%"} .lasting 1000
+	.to {"opacity": "1"} .lasting 1000
+.enddef
+
+.define fades-out-intro
+	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 2000
+	.animates #introdream .to { "opacity": 1 } .lasting 2000
+	.animates #introdream .to { "opacity": 0.2 } .lasting 4000
+.enddef
+
 .responses room
 	.response
 		.matches LOOK
@@ -13,7 +28,7 @@
 					</div>
 					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div><div id="introdream2"></div></div>
 				</div>
-			.animates #intro .fadein
+			.animates #intro .fade-in .lasting 1000
 	.response
 		.matches INTRODREAM
 		.runs 2
@@ -21,9 +36,9 @@
 				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .into #introrain
 				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .into #introwind
 				.says {!..|INTRODREAM!} .into #introdream1
-				.animates #introrain, #introwind, #introdream1 .expandandfadein
+				.animates #introrain, #introwind, #introdream1 .expand-and-fade-in
 		.does 2 .says but you should not dream. .into #introdream2
-				.animates #introdream2 .fadein	
+				.animates #introdream2 .fade-in .lasting 1000	
 				.sets intro_saw_dream
 				.calls INTRODONE
 
@@ -33,7 +48,7 @@
 		.does
 			.says , .into #rainpunc
 			.says but there is no rain. .into #introrain2
-			.animates #introrain2 .expandandfadein
+			.animates #introrain2 .expand-and-fade-in
 			.sets intro_saw_rain
 			.calls INTRODONE
 	.response
@@ -42,7 +57,7 @@
 		.does
 			.says , .into #windpunc
 			.says but there is no wind. .into #introwind2
-			.animates #introwind2 .expandandfadein
+			.animates #introwind2 .expand-and-fade-in
 			.sets intro_saw_wind
 			.calls INTRODONE
 		
@@ -50,8 +65,25 @@
 		.matches INTRODONE
 		.needs intro_saw_dream intro_saw_rain intro_saw_wind
 		.does
-			.says Next...
-			.animates #introfadefirst .to { "opacity": 0.2 } .lasting 2000
-			.animates #introdream .to { "opacity": 1 } .lasting 2000
-			.animates #introdream .to { "opacity": 0.2 } .lasting 4000
+			.says
+				{:break:}
+				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are a jumble, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
+			.fades-out-intro
+			.animates #wakeup .fade-in .lasting 3000
+
+	.response
+		.matches message
+		.does
+			.says
+				The message is terse and to the point:<br>
+				<span>Directive, status immediate<br>
+				C-47F communication disconnect. {!EAR!}.<br>
+				-end-</span>
+	
+	.response
+		.matches theothers
+		.does
+			.says 
+		
+	.response .matches EAR .does .says "Evaluate and repair." 
 .end
