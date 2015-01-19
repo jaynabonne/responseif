@@ -171,9 +171,29 @@ var ResponseLib = (function () {
         return section;
     };
 
-    proto.processSays = function (action, response) {
+    proto.replaceMarkup = function(says, responder) {
+        var newsays = jQuery.extend({}, says);
+        var index;
+        var text = newsays.text;
+        while ((index = text.indexOf("{:")) != -1) {
+            var endindex = text.indexOf(":}", index+2);
+            console.log("index: " + index + ", end: " + endindex);
+            if (endindex === -1) {
+                break;
+            }
+            var id = text.substring(index+2, endindex);
+            console.log("id = " + id);
+            var prefix = getResponderPrefix(responder, id);
+            var value = this.interact.getState(prefix+id);
+            text = text.substring(0, index) + value + text.substring(endindex+2);
+        }
+        newsays.text = text;
+        return newsays;
+    };
+
+    proto.processSays = function (action, response, responder) {
         if (action.says) {
-            this.interact.say(action.says, response);
+            this.interact.say(this.replaceMarkup(action.says, responder), response);
         }
     };
 
@@ -236,7 +256,7 @@ var ResponseLib = (function () {
         if (section) {
             var self = this;
             $.each(section, function(index, action) {
-                self.processSays(action, response);
+                self.processSays(action, response, responder);
                 self.processSets(action, responder);
                 self.processUses(action);
                 self.processCalls(action);

@@ -269,6 +269,22 @@ describe("ResponseLib", function () {
                     [{ text: "See ya later!"}, candidate.response]
                 ]);
             });
+            it("replaces in-line markup with state values", function() {
+                interact.say = jasmine.createSpy("say");
+                interact.getState = function(id) {
+                    if (id === "name") {
+                        return "Ishmael";
+                    } else {
+                        return false;
+                    }
+                };
+                var candidate = {
+                    response: {
+                        does: { common: [ { says: { text: "My name is {:name:}." } } ] }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael." }, candidate.response);
+            });
         });
         describe("prompts", function () {
             it("shows prompts in a menu", function () {
@@ -281,7 +297,7 @@ describe("ResponseLib", function () {
             it("processes a single prompt as a normal response", function () {
                 interact.say = jasmine.createSpy("say");
                 interact.choose = jasmine.createSpy("choose");
-                var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: "something" } ] } }, score: 10000 };
+                var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: { text: "something" } } ] } }, score: 10000 };
                 responseLib.processResponses([candidate1]);
                 expect(interact.choose).not.toHaveBeenCalled();
                 expect(interact.say).toHaveBeenCalled();
