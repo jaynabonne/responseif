@@ -15,9 +15,6 @@ describe("rifParse", function () {
     function into(selector) {
         return token_pair("into", selector);
     }
-    function transition(selector) {
-        return token_pair("transition", selector);
-    }
     function does(slot) {
         return token_pair("does", slot || "");
     }
@@ -187,29 +184,6 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: [ { says: { text: "some text to display for this response", into: "someelement" } } ]
-                        }
-                    }
-                ]
-            }
-        );
-    });
-    it("should parse response does says with transitions", function () {
-        var rif = rifParse(
-            [
-                responses("anObject"),
-                    response(),
-                        does(),
-                            says("some text to display for this response"),
-                            transition("sometrans someothertrans"),
-                end()
-            ]
-        );
-        expect(rif.responses).toEqual(
-            {
-                anObject: [
-                    {
-                        does: {
-                            common: [ { says: { text: "some text to display for this response", transition: ["sometrans", "someothertrans"] } } ]
                         }
                     }
                 ]

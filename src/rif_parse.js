@@ -61,7 +61,6 @@ rifParse = (function () {
         this.index++;
     };
     Parser.prototype.parse_does_into = Parser.prototype.parse_says_attribute;
-    Parser.prototype.parse_does_transition = Parser.prototype.parse_says_attribute_list;
     Parser.prototype.parse_does_sets = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
