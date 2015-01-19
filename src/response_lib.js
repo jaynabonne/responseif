@@ -190,7 +190,7 @@ var ResponseLib = (function () {
                 break;
             }
             var id = text.substring(index+2, endindex);
-            var value = this.getState(id, responder);
+            var value = this.getState(id.trim(" "), responder);
             text = text.substring(0, index) + value + text.substring(endindex+2);
         }
         newsays.text = text;

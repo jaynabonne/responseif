@@ -274,16 +274,18 @@ describe("ResponseLib", function () {
                 interact.getState = function(id) {
                     if (id === "name") {
                         return "Ishmael";
+                    } else if (id === "yourname") {
+                        return "mud";
                     } else {
                         return false;
                     }
                 };
                 var candidate = {
                     response: {
-                        does: { common: [ { says: { text: "My name is {=name=}." } } ] }
+                        does: { common: [ { says: { text: "My name is {=name=}. Your name is {= yourname  =}." } } ] }
                     }, score: 10000 };
                 responseLib.processResponses([candidate]);
-                expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael." }, candidate.response);
+                expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael. Your name is mud." }, candidate.response);
             });
         });
         describe("prompts", function () {
