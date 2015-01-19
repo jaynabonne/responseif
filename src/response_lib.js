@@ -94,12 +94,16 @@ var ResponseLib = (function () {
         return !absolute && responder ? (responder + ".") : "";
     }
 
-    proto.stateNeedIsMet = function(id, responder) {
+    proto.getState = function(id, responder) {
         var prefix = getResponderPrefix(responder, id);
+        return this.interact.getState(prefix + id);
+    };
+
+    proto.stateNeedIsMet = function(id, responder) {
         if (id[0] === '!') {
-            return !this.interact.getState(prefix + id.substr(1));
+            return !this.getState(id.substr(1), responder);
         } else {
-            return this.interact.getState(prefix + id);
+            return this.getState(id, responder);
         }
     };
 
@@ -177,14 +181,11 @@ var ResponseLib = (function () {
         var text = newsays.text;
         while ((index = text.indexOf("{:")) != -1) {
             var endindex = text.indexOf(":}", index+2);
-            console.log("index: " + index + ", end: " + endindex);
             if (endindex === -1) {
                 break;
             }
             var id = text.substring(index+2, endindex);
-            console.log("id = " + id);
-            var prefix = getResponderPrefix(responder, id);
-            var value = this.interact.getState(prefix+id);
+            var value = this.getState(id, responder);
             text = text.substring(0, index) + value + text.substring(endindex+2);
         }
         newsays.text = text;
