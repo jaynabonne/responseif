@@ -280,7 +280,7 @@ describe("ResponseLib", function () {
                 };
                 var candidate = {
                     response: {
-                        does: { common: [ { says: { text: "My name is {:name:}." } } ] }
+                        does: { common: [ { says: { text: "My name is {=name=}." } } ] }
                     }, score: 10000 };
                 responseLib.processResponses([candidate]);
                 expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael." }, candidate.response);

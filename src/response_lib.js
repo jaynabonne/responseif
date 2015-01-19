@@ -179,8 +179,8 @@ var ResponseLib = (function () {
         var newsays = jQuery.extend({}, says);
         var index;
         var text = newsays.text;
-        while ((index = text.indexOf("{:")) != -1) {
-            var endindex = text.indexOf(":}", index+2);
+        while ((index = text.indexOf("{=")) != -1) {
+            var endindex = text.indexOf("=}", index+2);
             if (endindex === -1) {
                 break;
             }
