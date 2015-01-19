@@ -67,7 +67,7 @@
 		.does
 			.says
 				{:break:}
-				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are a jumble, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
+				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
 			.fades-out-intro
 			.animates #wakeup .fade-in .lasting 3000
 
@@ -77,7 +77,7 @@
 			.says
 				The message is terse and to the point:<br>
 				<span>Directive, status immediate<br>
-				C-47F communication disconnect. {!EAR!}.<br>
+				F47C communication disconnect. {!EAR!}.<br>
 				-end-</span>
 	
 	.response
