@@ -90,13 +90,18 @@ var ResponseLib = (function () {
     var proto = type.prototype;
 
     function getResponderPrefix(responder, attribute) {
-        var absolute = attribute.indexOf(".") != -1;
-        return !absolute && responder ? (responder + ".") : "";
+        var absolute = attribute.indexOf(":") !== 0;
+        return !absolute && responder ? responder : "";
     }
 
     proto.getState = function(id, responder) {
         var prefix = getResponderPrefix(responder, id);
         return this.interact.getState(prefix + id);
+    };
+
+    proto.setState = function(id, value, responder) {
+        var prefix = getResponderPrefix(responder, id);
+        return this.interact.setState(prefix + id, value);
     };
 
     proto.stateNeedIsMet = function(id, responder) {
@@ -199,11 +204,10 @@ var ResponseLib = (function () {
     };
 
     proto.processSet = function(set, responder) {
-        var prefix = getResponderPrefix(responder, set);
         if (set[0] === "!") {
-            this.interact.setState(prefix + set.substr(1), false);
+            this.setState(set.substr(1), false, responder);
         } else {
-            this.interact.setState(prefix + set, true);
+            this.setState(set, true, responder);
         }
     };
 
