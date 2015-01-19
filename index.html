@@ -39,6 +39,8 @@
             };
             var interact = new Interact(dom, formatter, clickFactory, world);
 
+            interact.setState("break", "<span style='font-size:6pt;'>&nbsp;</span>");
+
             var response_lib = new ResponseLib(interact);
             world.sendCommand = function(keyword) {
                 this.callTopics([keyword]);
