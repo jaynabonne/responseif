@@ -13,7 +13,11 @@ describe("Interact", function () {
             getElementBySelector: jasmine.createSpy("getElementBySelector")
         };
         formatter = { formatOutput: function() { return "formattedText"; }};
-        world = { callTopics: jasmine.createSpy("callTopics")};
+        world = {
+            callTopics: jasmine.createSpy("callTopics"),
+            getState: jasmine.createSpy("getState"),
+            setState: jasmine.createSpy("setState")
+        };
 
         interact = new Interact(dom, formatter, {}, world);
         appendSpy.reset();
@@ -46,6 +50,19 @@ describe("Interact", function () {
             expect(dom.animate.callCount).toBe(2);
             expect(dom.animate.argsForCall[0]).toEqual(["aselector", "optionsA", 1500]);
             expect(dom.animate.argsForCall[1]).toEqual(["aselector", "optionsB", 1000]);
+        });
+    });
+    describe("getState", function () {
+        it("should invoke the world's getState for a bare id", function() {
+            world.getState.andReturn(true);
+            expect(interact.getState("somestate")).toBe(true);
+            expect(world.getState).toHaveBeenCalledWith("somestate");
+        });
+    });
+    describe("setState", function () {
+        it("should invoke the world's setState with true for a bare id", function() {
+            interact.setState("somestate");
+            expect(world.setState).toHaveBeenCalledWith("somestate", true);
         });
     });
 });

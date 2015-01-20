@@ -25,7 +25,15 @@
             tokens = rifExpand(tokens);
             var rif  = rifParse(tokens);
 
-            var world = {};
+            var world = {
+                states: {},
+                getState: function(id) {
+                    return states[id];
+                },
+                setState: function(id, value) {
+                    states[id] = value;
+                }
+            };
 
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
@@ -39,7 +47,7 @@
             };
             var interact = new Interact(dom, formatter, clickFactory, world);
 
-            interact.setState("break", "<span style='font-size:6pt;'>&nbsp;</span>");
+            interact.setState("break=<span style='font-size:6pt;'>&nbsp;</span>");
 
             var response_lib = new ResponseLib(interact);
             world.sendCommand = function(keyword) {

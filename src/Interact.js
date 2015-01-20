@@ -13,13 +13,13 @@ var Interact = (function() {
     var states = {};
     
     type.prototype = {
-        getState: function(id) {
+        getState: function(id, responder) {
             //console.log("get: " + id);
-            return states[id];
+            return this.world.getState(id);
         },
-        setState: function(id, value) {
+        setState: function(id, responder) {
             //console.log("set: " + id + " to " + value);
-            states[id] = value;
+            this.world.setState(id, true);
         },
         say: function (says, response) {
             var text = says.text;
