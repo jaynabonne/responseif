@@ -15,11 +15,19 @@ var Interact = (function() {
     type.prototype = {
         getState: function(id, responder) {
             //console.log("get: " + id);
-            return this.world.getState(id);
+            if (id[0] === "!") {
+                return !this.world.getState(id.substr(1));
+            } else {
+                return this.world.getState(id);
+            }
         },
         setState: function(id, responder) {
             //console.log("set: " + id + " to " + value);
-            this.world.setState(id, true);
+            if (id[0] === "!") {
+                this.world.setState(id.substr(1), false);
+            } else {
+                this.world.setState(id, true);
+            }
         },
         say: function (says, response) {
             var text = says.text;

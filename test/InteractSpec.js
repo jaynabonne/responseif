@@ -58,11 +58,20 @@ describe("Interact", function () {
             expect(interact.getState("somestate")).toBe(true);
             expect(world.getState).toHaveBeenCalledWith("somestate");
         });
+        it("should invert the world's getState value for !id", function() {
+            world.getState.andReturn(true);
+            expect(interact.getState("!somestate")).toBe(false);
+            expect(world.getState).toHaveBeenCalledWith("somestate");
+        });
     });
     describe("setState", function () {
         it("should invoke the world's setState with true for a bare id", function() {
             interact.setState("somestate");
             expect(world.setState).toHaveBeenCalledWith("somestate", true);
+        });
+        it("should invoke the world's setState with false for a negated id", function() {
+            interact.setState("!somestate");
+            expect(world.setState).toHaveBeenCalledWith("somestate", false);
         });
     });
 });
