@@ -89,27 +89,16 @@ var ResponseLib = (function () {
 
     var proto = type.prototype;
 
-    function getResponderPrefix(responder, attribute) {
-        var absolute = attribute.indexOf(":") !== 0;
-        return !absolute && responder ? responder : "";
-    }
-
     proto.getState = function(id, responder) {
-        var prefix = getResponderPrefix(responder, id);
-        return this.interact.getState(prefix + id);
+        return this.interact.getState(id, responder || "");
     };
 
-    proto.setState = function(id, value, responder) {
-        var prefix = getResponderPrefix(responder, id);
-        return this.interact.setState(prefix + id, value);
+    proto.setState = function(id, responder) {
+        return this.interact.setState(id, responder || "");
     };
 
     proto.stateNeedIsMet = function(id, responder) {
-        if (id[0] === '!') {
-            return !this.getState(id.substr(1), responder);
-        } else {
-            return this.getState(id, responder);
-        }
+        return this.getState(id, responder);
     };
 
     proto.responseNeedsAreMet = function(response, responder) {
@@ -203,19 +192,11 @@ var ResponseLib = (function () {
         }
     };
 
-    proto.processSet = function(set, responder) {
-        if (set[0] === "!") {
-            this.setState(set.substr(1), false, responder);
-        } else {
-            this.setState(set, true, responder);
-        }
-    };
-
     proto.processSets = function (action, responder) {
         if (action.sets) {
             var self = this;
             action.sets.forEach( function(set) {
-                self.processSet(set, responder);
+                self.setState(set, responder);
             })
         }
     };

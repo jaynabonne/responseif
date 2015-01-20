@@ -21,12 +21,12 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if disallowed state is set", function () {
-            interact.getState = function(id) { return false; };
+            interact.getState = function(id) { return true; };
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
-        it("returns correct value for multiple state", function () {
-            interact.getState = function(id) { return id === "somestate"; };
+        it("returns correct value for multiple states", function () {
+            interact.getState = function(id) { return true; };
             var response = { needs: ["somestate", "!someotherstate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
@@ -35,12 +35,12 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
         });
         it("passes the responder as state prefix if passed", function () {
-            interact.getState = function(id) { return id === "aresponder:somestate"; };
+            interact.getState = function(id, responder) { return id === ":somestate" && responder === "aresponder"; };
             var response = { needs: [":somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
         it("passes the responder as state prefix if passed (negative)", function () {
-            interact.getState = function(id) { return id !== "aresponder:somestate"; };
+            interact.getState = function(id, responder) { return id === "!:somestate" && responder === "aresponder"; };
             var response = { needs: ["!:somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
@@ -360,39 +360,21 @@ describe("ResponseLib", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: [ { sets: ["somestate"] } ] } }, score: 10000 };
                 responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith("somestate", true);
-            });
-            it("resets state for a single id with 'sets' attribute", function () {
-                spyOnSetState();
-                var response = { response: { does: { common: [ { sets: ["!somestate"] } ] } }, score: 10000 };
-                responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith("somestate", false);
+                expect(interact.setState).toHaveBeenCalledWith("somestate", "");
             });
             it("sets state for multiple ids with 'sets' attribute", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: [ { sets: ["somestate", "someotherstate"] } ] } }, score: 10000 };
                 responseLib.processResponses([response]);
                 expect(interact.setState.callCount).toEqual(2);
-                expect(interact.setState.argsForCall[0]).toEqual(["somestate", true]);
-                expect(interact.setState.argsForCall[1]).toEqual(["someotherstate", true]);
+                expect(interact.setState.argsForCall[0]).toEqual(["somestate", ""]);
+                expect(interact.setState.argsForCall[1]).toEqual(["someotherstate", ""]);
             });
-            it("includes the responder in a relative attribute if passed", function () {
+            it("includes the responder if passed", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: [ { sets: [":somestate"] } ] } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith("aresponder:somestate", true);
-            });
-            it("includes the responder in a relative attribute if passed", function () {
-                spyOnSetState();
-                var response = { response: { does: { common: [ { sets: ["!:somestate"] } ] } }, score: 10000, responder: "aresponder" };
-                responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith("aresponder:somestate", false);
-            });
-            it("treats attribute without leading colon as absolute", function () {
-                spyOnSetState();
-                var response = { response: { does: { common: [ { sets: ["somestate"] } ] } }, score: 10000, responder: "aresponder" };
-                responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith("somestate", true);
+                expect(interact.setState).toHaveBeenCalledWith(":somestate", "aresponder");
             });
         });
         describe("uses all", function() {
