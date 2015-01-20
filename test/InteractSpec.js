@@ -73,5 +73,9 @@ describe("Interact", function () {
             interact.setState("!somestate");
             expect(world.setState).toHaveBeenCalledWith("somestate", false);
         });
+        it("should set an explicit value", function() {
+            interact.setState("somestate=somevalue");
+            expect(world.setState).toHaveBeenCalledWith("somestate", "somevalue");
+        });
     });
 });

@@ -28,10 +28,10 @@
             var world = {
                 states: {},
                 getState: function(id) {
-                    return states[id];
+                    return this.states[id];
                 },
                 setState: function(id, value) {
-                    states[id] = value;
+                    this.states[id] = value;
                 }
             };
 

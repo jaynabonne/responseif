@@ -14,7 +14,6 @@ var Interact = (function() {
     
     type.prototype = {
         getState: function(id, responder) {
-            //console.log("get: " + id);
             if (id[0] === "!") {
                 return !this.world.getState(id.substr(1));
             } else {
@@ -22,8 +21,12 @@ var Interact = (function() {
             }
         },
         setState: function(id, responder) {
-            //console.log("set: " + id + " to " + value);
-            if (id[0] === "!") {
+            var index = id.indexOf("=");
+            if (index != -1) {
+                var value = id.substring(index+1);
+                id = id.substring(0, index);
+                this.world.setState(id, value);
+            } else if (id[0] === "!") {
                 this.world.setState(id.substr(1), false);
             } else {
                 this.world.setState(id, true);
