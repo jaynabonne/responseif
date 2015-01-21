@@ -5,12 +5,12 @@ var RifWorld = (function() {
     };
 
     var proto = RifWorld.prototype;
-    proto.getState = function(id) {
+    proto.getValue = function(id) {
         return this.values[id];
     };
-    proto.setState = function(id, value) {
+    proto.setValue = function(id, value) {
         this.values[id] = value;
     };
-    
+
     return RifWorld;
 })();
