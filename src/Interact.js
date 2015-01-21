@@ -14,23 +14,10 @@ var Interact = (function() {
     
     type.prototype = {
         getState: function(id, responder) {
-            if (id[0] === "!") {
-                return !this.world.getState(id.substr(1));
-            } else {
-                return this.world.getState(id);
-            }
+            return this.world.getState(id);
         },
         setState: function(id, responder) {
-            var index = id.indexOf("=");
-            if (index != -1) {
-                var value = id.substring(index+1);
-                id = id.substring(0, index);
-                this.world.setState(id, value);
-            } else if (id[0] === "!") {
-                this.world.setState(id.substr(1), false);
-            } else {
-                this.world.setState(id, true);
-            }
+            this.world.setState(id);
         },
         say: function (says, response) {
             var formatted = this.formatter.formatOutput(says.text, this.keywordClickFactory);
