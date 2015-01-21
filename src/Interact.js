@@ -33,9 +33,7 @@ var Interact = (function() {
             }
         },
         say: function (says, response) {
-            var text = says.text;
-            text = text.replace(/{break}/g, breaktext);
-            var formatted = this.formatter.formatOutput(text, this.keywordClickFactory);
+            var formatted = this.formatter.formatOutput(says.text, this.keywordClickFactory);
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);
                 $(element).html(formatted);
