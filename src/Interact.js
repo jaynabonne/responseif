@@ -8,10 +8,7 @@ var Interact = (function() {
         this._appendNewDiv();
         this.world = world;
     };
-    
-    var breaktext = "<div style='font-size:6pt;'><br></div>";
-    var states = {};
-    
+
     type.prototype = {
         getState: function(id, responder) {
             return this.world.getState(id);
