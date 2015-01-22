@@ -16,19 +16,22 @@
     <script type="text/javascript" src="src/rif_world.js"></script>
 
     <script type="text/javascript">
-        function init() {
-            var world = new RifWorld();
-
+        function loadRif(file) {
             var rifSource = $.ajax({
-                url: "data/sample_rif.txt",
+                url: "data/" + file,
                 async: false
             }).responseText;
 
             var tokens = rifTokenize(rifSource);
             tokens = rifExpand(tokens);
-            var rif  = rifParse(tokens);
-
+            rif = rifParse(tokens);
             world.addRif(rif);
+            return rif;
+        }
+        function init() {
+            var world = new RifWorld();
+
+            var rif = loadRif("sample_rif.txt", world);
 
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
