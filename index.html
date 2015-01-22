@@ -16,7 +16,7 @@
     <script type="text/javascript" src="src/rif_world.js"></script>
 
     <script type="text/javascript">
-        function loadRif(file) {
+        function loadRif(file, world) {
             var rifSource = $.ajax({
                 url: "data/" + file,
                 async: false
@@ -28,24 +28,27 @@
             world.addRif(rif);
             return rif;
         }
-        function init() {
-            var world = new RifWorld();
-
-            var rif = loadRif("sample_rif.txt", world);
-
+        function createInteract(world) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
-            var clickFactory = function(keyword) {
+            var clickFactory = function (keyword) {
                 return function (e) {
                     var target = $(e.target);
                     var original_color = target.css("color");
-                    target.animate({color: "#c0c000"},250).animate({color: original_color}, 300);
+                    target.animate({color: "#c0c000"}, 250).animate({color: original_color}, 300);
                     world.sendCommand(keyword);
                 };
             };
             var interact = new Interact(dom, formatter, clickFactory, world);
+            return interact;
+        }
+        function init() {
+            var world = new RifWorld();
 
+            var rif = loadRif("sample_rif.txt", world);
+            var interact = createInteract(world);
             var response_lib = new ResponseLib(interact);
+
             world.sendCommand = function(keyword) {
                 this.callTopics([keyword]);
             };
