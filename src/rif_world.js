@@ -31,5 +31,14 @@ var RifWorld = (function() {
         }
     };
 
+    proto.addRif = function(rif) {
+        if (rif.sets) {
+            var self = this;
+            $.each(rif.sets, function(index, value) {
+                self.setState(value);
+            });
+        }
+    };
+
     return RifWorld;
 })();

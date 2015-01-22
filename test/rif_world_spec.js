@@ -51,5 +51,14 @@ describe("RifWorld", function () {
             expect(world.setValue).toHaveBeenCalledWith("somestate", "somevalue");
         });
     });
+    describe("addRif", function() {
+        it("sets variables from the 'sets' array", function() {
+            var rif = { sets: ["somestate", "somevar=314", "!visited"]};
+            world.addRif(rif);
+            expect(world.getValue("somestate")).toBe(true);
+            expect(world.getValue("somevar")).toBe("314");
+            expect(world.getValue("visited")).toBe(false);
+        });
+    });
 });
 
