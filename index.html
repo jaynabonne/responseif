@@ -13,9 +13,12 @@
     <script type="text/javascript" src="src/rif_expand.js"></script>
     <script type="text/javascript" src="src/rif_parse.js"></script>
     <script type="text/javascript" src="src/rif_tokenize.js"></script>
+    <script type="text/javascript" src="src/rif_world.js"></script>
 
     <script type="text/javascript">
         function init() {
+            var world = new RifWorld();
+
             var rifSource = $.ajax({
                 url: "data/sample_rif.txt",
                 async: false
@@ -25,15 +28,7 @@
             tokens = rifExpand(tokens);
             var rif  = rifParse(tokens);
 
-            var world = {
-                states: {},
-                getState: function(id) {
-                    return this.states[id];
-                },
-                setState: function(id, value) {
-                    this.states[id] = value;
-                }
-            };
+            world.addRif(rif);
 
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
@@ -47,12 +42,9 @@
             };
             var interact = new Interact(dom, formatter, clickFactory, world);
 
-            interact.setState("break=<span style='font-size:6pt;'>&nbsp;</span>");
-
             var response_lib = new ResponseLib(interact);
             world.sendCommand = function(keyword) {
                 this.callTopics([keyword]);
-                interact.say({text: "{break}"});
             };
             world.callTopics = function(topics) {
                 response_lib.callTopics({general: rif.responses.room}, topics, "me");
