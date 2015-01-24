@@ -35,13 +35,13 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
         });
         it("passes the responder as state prefix if passed", function () {
-            interact.getState = function(id, responder) { return id === ":somestate" && responder === "aresponder"; };
-            var response = { needs: [":somestate"] };
+            interact.getState = function(id, responder) { return id === "somestate" && responder === "aresponder"; };
+            var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
         it("passes the responder as state prefix if passed (negative)", function () {
-            interact.getState = function(id, responder) { return id === "!:somestate" && responder === "aresponder"; };
-            var response = { needs: ["!:somestate"] };
+            interact.getState = function(id, responder) { return id === "!somestate" && responder === "aresponder"; };
+            var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
     });
