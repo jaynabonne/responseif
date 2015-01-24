@@ -287,6 +287,28 @@ describe("ResponseLib", function () {
                 responseLib.processResponses([candidate]);
                 expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael. Your name is mud." }, candidate.response);
             });
+            describe("says with 'call' markup", function() {
+                it("should invoke 'call' on the interact for a topic", function() {
+                    interact.say = jasmine.createSpy("say");
+                    interact.call = jasmine.createSpy("call");
+                    var candidate = {
+                        response: {
+                            does: { common: [ { says: { text: "My name is {+NAME+}." } } ] }
+                        }, score: 10000 };
+                    responseLib.processResponses([candidate]);
+                    expect(interact.call).toHaveBeenCalledWith(["NAME"]);
+                });
+                it("should invoke 'call' on the interact for multiple topic", function() {
+                    interact.say = jasmine.createSpy("say");
+                    interact.call = jasmine.createSpy("call");
+                    var candidate = {
+                        response: {
+                            does: { common: [ { says: { text: "My name is {+FIRST NAME+}." } } ] }
+                        }, score: 10000 };
+                    responseLib.processResponses([candidate]);
+                    expect(interact.call).toHaveBeenCalledWith(["FIRST", "NAME"]);
+                });
+            });
         });
         describe("prompts", function () {
             it("shows prompts in a menu", function () {

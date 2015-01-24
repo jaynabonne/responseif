@@ -188,6 +188,13 @@ var ResponseLib = (function () {
 
     proto.processSays = function (action, response, responder) {
         if (action.says) {
+            var text = action.says.text;
+            var index = text.indexOf("{+");
+            if (index >= 0) {
+                var end_index = text.indexOf("+}", index+2);
+                var topics = text.substring(index+2, end_index);
+                this.interact.call(topics.split(" "));
+            }
             this.interact.say(this.replaceMarkup(action.says, responder), response);
         }
     };
