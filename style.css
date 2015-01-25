@@ -5,23 +5,25 @@ body {
     background-color: #101010;
     color: #c0c0c0;
     overflow-y: scroll;
+    padding-left:20px;
+    padding-right:20px;
 }
 div#holder {
-    width:100%;
+    width:90%;
+    height:90%;
+    margin-left:5%;
 }
 div#spacer {
     width:100%;
     height:40px;
     display:block;
 }
+
 div#output { 
     width:95%; 
     font-size:14pt; 
-    padding-left:20px; 
-    padding-right:20px; 
     padding-top:0px;
     padding-bottom:0px;
-    margin:auto;
     display:block;
     font-family:'Cantarell', Georgia, serif;
 }
@@ -34,6 +36,29 @@ div#header {
     position:fixed;
     top:0px;
     height:25px;
+}
+div#bar {
+    width:100%;
+    height:auto;
+    background-color:#404040;
+    padding: 2px;
+    font-size:10pt;
+}
+div#barLeftHolder {
+    width:80%;
+    text-align:left;
+    height:auto;
+    display:inline-block;
+}
+div#barRightHolder {
+    width:20%;
+    text-align:right;
+    height:auto;
+    display:inline-block;
+}
+div#barspacer {
+    width:100%;
+    height:10px;
 }
 span.keyword {color:inherit; cursor:pointer;}
 div.menuitem {color:#C0C080; cursor:pointer;}
@@ -52,3 +77,4 @@ div#introdream2, div#introrain2, div#introwind2 {
     display: block;
     font-style: italic;
 }
+
