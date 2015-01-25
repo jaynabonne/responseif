@@ -308,6 +308,23 @@ describe("ResponseLib", function () {
                     responseLib.processResponses([candidate]);
                     expect(interact.call).toHaveBeenCalledWith(["FIRST", "NAME"]);
                 });
+                function fakeCall(topics) {
+                    interact.say({ text: "Ishmael" });
+                };
+                it("should 'say' the individual pieces of text in the correct order", function() {
+                    interact.say = jasmine.createSpy("say");
+                    interact.call = jasmine.createSpy("call");
+                    interact.call.andCallFake(fakeCall);
+                    var candidate = {
+                        response: {
+                            does: { common: [ { says: { text: "My name is {+NAME+}." } } ] }
+                        }, score: 10000 };
+                    responseLib.processResponses([candidate]);
+                    expect(interact.say.callCount).toBe(3);
+                    expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is " }, candidate.response]);
+                    expect(interact.say.argsForCall[1]).toEqual([{ text: "Ishmael" }]);
+                    expect(interact.say.argsForCall[2]).toEqual([{ text: "." }, candidate.response]);
+                });
             });
         });
         describe("prompts", function () {

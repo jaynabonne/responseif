@@ -190,12 +190,17 @@ var ResponseLib = (function () {
         if (action.says) {
             var text = action.says.text;
             var index = text.indexOf("{+");
+            var newsays;
             if (index >= 0) {
                 var end_index = text.indexOf("+}", index+2);
                 var topics = text.substring(index+2, end_index);
+                var newsays = $.extend(action.says, {text: text.substring(0, index)});
+                this.interact.say(this.replaceMarkup(newsays, responder), response);
                 this.interact.call(topics.split(" "));
+                text = text.substring(end_index+2);
             }
-            this.interact.say(this.replaceMarkup(action.says, responder), response);
+            newsays = $.extend(action.says, {text: text});
+            this.interact.say(this.replaceMarkup(newsays, responder), response);
         }
     };
 
