@@ -10,11 +10,14 @@
 .enddef
 
 .define fades-out-intro
-	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 2000
-	.animates #introfadefirst .to { "opacity": 0 } .lasting 20000
+	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 3000
+	.animates #introfadefirst .to { "opacity": 0 } .lasting 15000
 	.animates #introdream .to { "opacity": 1 } .lasting 2000
+	.animates #introdream2 .to { "opacity": 1 } .lasting 2000
 	.animates #introdream .to { "opacity": 0.2 } .lasting 4000
+	.animates #introdream2 .to { "opacity": 0.2 } .lasting 4000
 	.animates #introdream .to { "opacity": 0 } .lasting 30000
+	.animates #introdream2 .to { "opacity": 0 } .lasting 20000
 .enddef
 
 .define hides-bar
@@ -38,7 +41,7 @@
 						<div id="introrain"></div>
 						<div id="introwind"></div>
 					</div>
-					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div><div id="introdream2"></div></div>
+					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div></div><div id="introdream2"></div>
 				</div>
 			.animates #intro .fade-in .lasting 1000
 	.response
@@ -50,7 +53,8 @@
 				.says {!..|INTRODREAM!} .into #introdream1
 				.animates #introrain, #introwind, #introdream1 .expand-and-fade-in
 		.does 2 .says but you should not dream. .into #introdream2
-				.animates #introdream2 .fade-in .lasting 1000	
+				.animates #introdream2 .fade-in .lasting 1000
+				.animates #introdream .to { "opacity": 1 } .lasting 1000
 				.sets intro_saw_dream
 				.calls INTRODONE
 
