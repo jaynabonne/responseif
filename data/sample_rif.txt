@@ -10,14 +10,9 @@
 .enddef
 
 .define fades-out-intro
-	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 3000
-	.animates #introfadefirst .to { "opacity": 0 } .lasting 15000
-	.animates #introdream .to { "opacity": 1 } .lasting 2000
-	.animates #introdream2 .to { "opacity": 1 } .lasting 2000
-	.animates #introdream .to { "opacity": 0.2 } .lasting 4000
-	.animates #introdream2 .to { "opacity": 0.2 } .lasting 4000
-	.animates #introdream .to { "opacity": 0 } .lasting 30000
-	.animates #introdream2 .to { "opacity": 0 } .lasting 20000
+	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 3000 .to { "opacity": 0 } .lasting 15000
+	.animates #introdream .to { "opacity": 1 } .lasting 2000 .to { "opacity": 0.2 } .lasting 4000 .to { "opacity": 0 } .lasting 30000
+	.animates #introdream2 .to { "opacity": 1 } .lasting 2000 .to { "opacity": 0.2 } .lasting 4000 .to { "opacity": 0 } .lasting 20000
 .enddef
 
 .define hides-bar
@@ -85,6 +80,7 @@
 				{=break=}
 				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
 			.fades-out-intro
+			.says Look&nbsp;&nbsp;Use&nbsp;&nbsp;Move .into #commandPanes
 			.shows-bar
 			.animates #wakeup .fade-in .lasting 3000
 
