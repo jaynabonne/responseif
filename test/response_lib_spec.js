@@ -515,6 +515,17 @@ describe("ResponseLib", function () {
                 expect(interact.animate).toHaveBeenCalledWith( {selector: "aselector", transitions: [ {to: "options", lasting: 1000} ] } );
             });
         });
+        describe("invokes", function () {
+            it("should invoke the specified function", function() {
+                interact.invoke = jasmine.createSpy("invoke");
+                var candidate = {
+                    response: {
+                        does: { common: [ { invokes: "some function body" } ] }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.invoke).toHaveBeenCalledWith("some function body");
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
