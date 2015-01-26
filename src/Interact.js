@@ -79,6 +79,10 @@ var Interact = (function() {
             $.each(animates.transitions, function(index, transition) {
                 self.dom.animate(animates.selector, transition.to, transition.lasting);
             });
+        },
+        invoke: function(body) {
+            var f = new Function(body);
+            f();
         }
     };
     return type;

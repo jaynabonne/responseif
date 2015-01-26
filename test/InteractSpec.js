@@ -64,4 +64,12 @@ describe("Interact", function () {
             expect(world.setState).toHaveBeenCalledWith("somestate");
         });
     });
+    describe("invoke", function () {
+        it("should invoke the function", function() {
+            global_variable = 0;
+            interact.invoke("global_variable=10");
+            expect(global_variable).toBe(10);
+            delete global_variable;
+        });
+    });
 });
