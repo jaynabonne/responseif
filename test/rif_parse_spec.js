@@ -18,6 +18,9 @@ describe("rifParse", function () {
     function does(slot) {
         return token_pair("does", slot || "");
     }
+    function invokes(text) {
+        return token_pair("invokes", text);
+    }
     function groups() {
         return token_pair("groups");
     }
@@ -469,6 +472,27 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: [ { animates: { selector: "aselector", transitions: [{to: "properties", lasting: 1000}] }  } ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse invokes", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            invokes("a function body")
+            ]
+        )
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [ { invokes: "a function body"  } ]
                         }
                     }
                 ]
