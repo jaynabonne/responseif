@@ -45,10 +45,11 @@ div#bar {
     font-size:10pt;
 }
 div#barLeftHolder {
-    width:80%;
+    width:79%;
     text-align:left;
     height:auto;
     display:inline-block;
+    padding-left:6px;
 }
 div#barRightHolder {
     width:20%;

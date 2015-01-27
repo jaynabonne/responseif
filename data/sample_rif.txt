@@ -61,6 +61,8 @@
 			.says but there is no rain. .into #introrain2
 			.animates #introrain2 .expand-and-fade-in
 			.sets intro_saw_rain
+			.invokes
+				$("#introrain span").css("cursor", "inherit")
 			.calls INTRODONE
 	.response
 		.matches INTROWIND
@@ -80,7 +82,11 @@
 				{=break=}
 				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
 			.fades-out-intro
-			.says Look&nbsp;&nbsp;Use&nbsp;&nbsp;Move .into #commandPanes
+			.says <span><img src="image/look.png"></span>
+					<span><img src="image/move.png"></span>
+					<span><img src="image/use.png"></span>
+					<span style="margin-left:8px"><img src="image/talk.png"></span>
+				.into #commandPane
 			.shows-bar
 			.animates #wakeup .fade-in .lasting 3000
 
