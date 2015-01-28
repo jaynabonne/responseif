@@ -22,6 +22,14 @@
 	.animates #bar .to { "opacity": 1 } .lasting 2000
 .enddef
 
+.define populates-icons
+			.says <div class="baricon lookicon"></div>
+					<div class="baricon moveicon"></div>
+					<div class="baricon useicon"></div>
+					<div class="baricon talkicon"></div>
+				.into #commandPane
+.enddef
+
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
 
 .responses room
@@ -82,11 +90,7 @@
 				{=break=}
 				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
 			.fades-out-intro
-			.says <span><img src="image/look.png"></span>
-					<span><img src="image/move.png"></span>
-					<span><img src="image/use.png"></span>
-					<span style="margin-left:8px"><img src="image/talk.png"></span>
-				.into #commandPane
+			.populates-icons
 			.shows-bar
 			.animates #wakeup .fade-in .lasting 3000
 
