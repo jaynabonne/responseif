@@ -87,15 +87,3 @@ div.baricon {
     background-position: center;
     display: inline-block;
 }
-div.lookicon {
-    background-image: url("image/look.png");
-}
-div.moveicon {
-    background-image: url("image/move.png");
-}
-div.useicon {
-    background-image: url("image/use.png");
-}
-div.talkicon {
-    background-image: url("image/talk.png");
-}

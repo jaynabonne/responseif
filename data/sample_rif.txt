@@ -23,10 +23,10 @@
 .enddef
 
 .define populates-icons
-			.says <div class="baricon lookicon"></div>
-					<div class="baricon moveicon"></div>
-					<div class="baricon useicon"></div>
-					<div class="baricon talkicon"></div>
+			.says <div class="baricon">{!<img src="image/look.png">|LOOK!}</div>
+					<div class="baricon">{!<img src="image/move.png">|MOVE!}</div>
+					<div class="baricon">{!<img src="image/use.png">|USE!}</div>
+					<div class="baricon">{!<img src="image/talk.png">|TALK!}</div>
 				.into #commandPane
 .enddef
 
@@ -88,7 +88,7 @@
 		.does
 			.says
 				{=break=}
-				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}.</div>
+				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}</div>
 			.fades-out-intro
 			.populates-icons
 			.shows-bar
@@ -99,9 +99,8 @@
 		.does
 			.says
 				The message is terse and to the point:<br>
-				<span>Directive, status immediate<br>
-				F47C communication disconnect. {!EAR!}.<br>
-				-end-</span>
+				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
+				F47C communication disconnect. {!EAR!}.</span>
 	
 	.response
 		.matches theothers
@@ -109,4 +108,17 @@
 			.says 
 		
 	.response .matches EAR .does .says "Evaluate and repair." 
+	.response
+		.matches LOOK
+		.does 1
+		.does .says Look!
+	.response
+		.matches MOVE
+		.does .says Move!
+	.response
+		.matches USE
+		.does .says Use!
+	.response
+		.matches TALK
+		.does .says Talk!
 .end
