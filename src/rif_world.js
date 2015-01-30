@@ -2,6 +2,7 @@ var RifWorld = (function() {
     "use strict";
     var RifWorld = function() {
         this.values = {};
+        this.children = {};
     };
 
     var proto = RifWorld.prototype;
@@ -42,10 +43,16 @@ var RifWorld = (function() {
 
     proto.setParent = function(o, parent) {
         this.setValue(o + ":parent", parent);
+        this.children[parent] = this.getChildren(parent);
+        this.children[parent].push(o);
     };
 
     proto.getParent = function(o) {
         return this.getState(o + ":parent");
+    };
+
+    proto.getChildren = function(parent) {
+        return this.children[parent] || [];
     };
 
     return RifWorld;

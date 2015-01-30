@@ -61,15 +61,30 @@ describe("RifWorld", function () {
         });
     });
     describe("setParent", function() {
-        it("sets the parent state for the object", function() {
-            world.setParent("object", "parent_object");
-            expect(world.getValue("object:parent")).toBe("parent_object");
+        it("sets the parent state for the child", function() {
+            world.setParent("child_object", "parent_object");
+            expect(world.getValue("child_object:parent")).toBe("parent_object");
+        });
+    });
+    describe("getChildren", function() {
+        it("returns an empty array by default", function() {
+            expect(world.getChildren("someobject")).toEqual([]);
+        });
+        it("returns a set child", function() {
+            world.setParent("child_object", "parent_object");
+            expect(world.getChildren("parent_object")).toEqual(["child_object"]);
+        });
+        it("returns a set child for multiple parents", function() {
+            world.setParent("child_object1", "parent_object1");
+            world.setParent("child_object2", "parent_object2");
+            expect(world.getChildren("parent_object1")).toEqual(["child_object1"]);
+            expect(world.getChildren("parent_object2")).toEqual(["child_object2"]);
         });
     });
     describe("getParent", function() {
-        it("gets the parent state for the object", function() {
-            world.setParent("object", "parent_object");
-            expect(world.getParent("object")).toBe("parent_object");
+        it("gets the parent state for the child", function() {
+            world.setParent("child_object", "parent_object");
+            expect(world.getParent("child_object")).toBe("parent_object");
         });
     });
 });
