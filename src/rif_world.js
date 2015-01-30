@@ -40,5 +40,13 @@ var RifWorld = (function() {
         }
     };
 
+    proto.setParent = function(o, parent) {
+        this.setValue(o + ":parent", parent);
+    };
+
+    proto.getParent = function(o) {
+        return this.getState(o + ":parent");
+    };
+
     return RifWorld;
 })();

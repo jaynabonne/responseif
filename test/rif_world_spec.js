@@ -60,5 +60,17 @@ describe("RifWorld", function () {
             expect(world.getValue("visited")).toBe(false);
         });
     });
+    describe("setParent", function() {
+        it("sets the parent state for the object", function() {
+            world.setParent("object", "parent_object");
+            expect(world.getValue("object:parent")).toBe("parent_object");
+        });
+    });
+    describe("getParent", function() {
+        it("gets the parent state for the object", function() {
+            world.setParent("object", "parent_object");
+            expect(world.getParent("object")).toBe("parent_object");
+        });
+    });
 });
 
