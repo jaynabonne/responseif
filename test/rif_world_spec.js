@@ -65,6 +65,11 @@ describe("RifWorld", function () {
             world.setParent("child_object", "parent_object");
             expect(world.getValue("child_object:parent")).toBe("parent_object");
         });
+        it("sets the new parent state for the child", function() {
+            world.setParent("child_object", "parent_object");
+            world.setParent("child_object", "parent_object2");
+            expect(world.getParent("child_object")).toBe("parent_object2");
+        });
     });
     describe("getChildren", function() {
         it("returns an empty array by default", function() {
@@ -79,6 +84,12 @@ describe("RifWorld", function () {
             world.setParent("child_object2", "parent_object2");
             expect(world.getChildren("parent_object1")).toEqual(["child_object1"]);
             expect(world.getChildren("parent_object2")).toEqual(["child_object2"]);
+        });
+        it("returns a set child for successive parents", function() {
+            world.setParent("child_object", "parent_object1");
+            world.setParent("child_object", "parent_object2");
+            expect(world.getChildren("parent_object1")).toEqual([]);
+            expect(world.getChildren("parent_object2")).toEqual(["child_object"]);
         });
     });
     describe("getParent", function() {

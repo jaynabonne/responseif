@@ -42,6 +42,14 @@ var RifWorld = (function() {
     };
 
     proto.setParent = function(o, parent) {
+        var old_parent = this.getParent(o);
+        if (old_parent === parent)
+            return;
+        var old_children = this.getChildren(old_parent);
+        var index = old_children.indexOf(o);
+        if (index !== -1) {
+            old_children.splice(index, 1);
+        }
         this.setValue(o + ":parent", parent);
         this.children[parent] = this.getChildren(parent);
         this.children[parent].push(o);
