@@ -93,6 +93,9 @@ describe("RifWorld", function () {
         });
     });
     describe("getParent", function() {
+        it("returns an empty string for no parent", function() {
+            expect(world.getParent("child_object")).toBe("");
+        });
         it("gets the parent state for the child", function() {
             world.setParent("child_object", "parent_object");
             expect(world.getParent("child_object")).toBe("parent_object");

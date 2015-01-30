@@ -41,22 +41,28 @@ var RifWorld = (function() {
         }
     };
 
-    proto.setParent = function(o, parent) {
-        var old_parent = this.getParent(o);
+    function removeChild(world, child) {
+        var children = world.getChildren(world.getParent(child));
+        var index = children.indexOf(child);
+        if (index !== -1) {
+            children.splice(index, 1);
+        }
+    }
+
+    proto.setParent = function(child, parent) {
+        var old_parent = this.getParent(child);
         if (old_parent === parent)
             return;
-        var old_children = this.getChildren(old_parent);
-        var index = old_children.indexOf(o);
-        if (index !== -1) {
-            old_children.splice(index, 1);
+        removeChild(this, child);
+        this.setValue(child + ":parent", parent);
+        if (parent) {
+            this.children[parent] = this.getChildren(parent);
+            this.children[parent].push(child);
         }
-        this.setValue(o + ":parent", parent);
-        this.children[parent] = this.getChildren(parent);
-        this.children[parent].push(o);
     };
 
     proto.getParent = function(o) {
-        return this.getState(o + ":parent");
+        return this.getState(o + ":parent") || "";
     };
 
     proto.getChildren = function(parent) {
