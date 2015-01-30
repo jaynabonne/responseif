@@ -18,10 +18,10 @@ var HTMLFormatter = (function () {
             div.append(text);
             var clickspans = div.find(".keyword");
             clickspans.each( function(id, span) {
-                var keyword = span.innerText;
+                var keyword = span.innerHTML;
                 var subindex = keyword.indexOf("|");
                 if (subindex >= 0) {
-                    span.innerText = keyword.substring(0, subindex);
+                    span.innerHTML = keyword.substring(0, subindex);
                     keyword = keyword.substring(subindex+1);
                 }
                 $(span).click(clickfactory(keyword));
