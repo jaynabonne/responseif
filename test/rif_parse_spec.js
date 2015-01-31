@@ -138,6 +138,17 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{prompts: "A response prompt"}] } );
     });
+    it("should parse response prompts", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        token_pair("forcesprompt"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{forcesprompt: true}] } );
+    });
     it("should parse response is", function () {
         var rif = rifParse([
                 responses("anObject"),

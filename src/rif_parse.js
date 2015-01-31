@@ -20,6 +20,11 @@ rifParse = (function () {
         }
     };
 
+    Parser.prototype.setFlag = function(target, entry) {
+        target[entry.token] = true;
+        this.index++;
+    };
+
     Parser.prototype.addString = function(target, entry) {
         target[entry.token] = entry.value;
         this.index++;
@@ -117,6 +122,7 @@ rifParse = (function () {
     Parser.prototype.parse_response_runs = Parser.prototype.addInt;
     Parser.prototype.parse_response_matches = Parser.prototype.addList;
     Parser.prototype.parse_response_needs = Parser.prototype.addList;
+    Parser.prototype.parse_response_forcesprompt = Parser.prototype.setFlag;
 
     Parser.prototype.parse_response_groups = function(response, entry) {
         this.index++;
