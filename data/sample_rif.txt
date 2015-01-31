@@ -26,7 +26,7 @@
 			.says <div class="baricon">{!<img src="image/look.png">|LOOK!}</div>
 					<div class="baricon">{!<img src="image/move.png">|MOVE!}</div>
 					<div class="baricon">{!<img src="image/use.png">|USE!}</div>
-					<div class="baricon">{!<img src="image/talk.png">|TALK!}</div>
+					<div class="baricon" style="margin-left:8px">{!<img src="image/talk.png">|TALK!}</div>
 				.into #commandPane
 .enddef
 
@@ -114,7 +114,28 @@
 		.does .says Look!
 	.response
 		.matches MOVE
-		.does .says Move!
+		.does
+			.uses first
+				.response
+					.needs door-open
+					.does .says The door is open, but you can't move.
+				.response
+					.does .says {!The door to your alcove is closed|door!}.
+			.end
+	.response
+		.matches door
+		.needs !door-open
+		.prompts Open the alcove door
+		.does
+			.sets door-open
+			.says The alcove door slides open.
+	.response
+		.matches door
+		.needs door-open
+		.prompts Close the alcove door
+		.does
+			.sets !door-open
+			.says The alcove door slides shut.
 	.response
 		.matches USE
 		.does .says Use!
