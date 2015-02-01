@@ -4,7 +4,7 @@ var HTMLFormatter = (function () {
     };
 
     function createClickable(type, text, cssClass, click) {
-        return $("<" + type + ">", {class: cssClass}).text(text).click(click);
+        return $("<" + type + ">", {class: cssClass}).html(text).click(click);
     }
     
     type.prototype = {
@@ -32,7 +32,7 @@ var HTMLFormatter = (function () {
         formatMenu: function(options, clickfactory) {
             var span = $("<div>");
             for (var i = 0; i < options.length; ++i) {
-                span.append(createClickable("div", options[i], 'menuitem', clickfactory(i)));
+                span.append(createClickable("div", "&nbsp;&gt; " + options[i], 'menuitem', clickfactory(i)));
             }
             return span;
         }

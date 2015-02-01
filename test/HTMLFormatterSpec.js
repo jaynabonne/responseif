@@ -65,11 +65,11 @@ describe("HTMLFormatter", function () {
         });
         it("formats a menu node properly", function () {
             var node = formatter.formatMenu(["A menu entry"], clickFactory);
-            expect(node.html()).toBe('<div class="menuitem">A menu entry</div>');
+            expect(node.html()).toBe('<div class="menuitem">&nbsp;&gt; A menu entry</div>');
         });
         it("formats multiple menu nodes properly", function () {
             var node = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
-            expect(node.html()).toBe('<div class="menuitem">A menu entry</div><div class="menuitem">Another menu entry</div>');
+            expect(node.html()).toBe('<div class="menuitem">&nbsp;&gt; A menu entry</div><div class="menuitem">&nbsp;&gt; Another menu entry</div>');
         });
         it("sets click handlers for the menu item spans", function () {
             var clickresult;
