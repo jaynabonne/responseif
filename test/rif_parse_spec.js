@@ -204,6 +204,29 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse response does says with autohides", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            says("this text should autohide"),
+                            token_pair("autohides"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [ { says: { text: "this text should autohide", autohides: true } } ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
     it("should parse response sets", function () {
         var rif = rifParse(
             [

@@ -72,7 +72,15 @@ rifParse = (function () {
         }
         this.index++;
     };
+    Parser.prototype.set_says_attribute_flag = function(actions, entry) {
+        var last_action = actions[actions.length-1];
+        if (last_action) {
+            last_action.says[entry.token] = true;
+        }
+        this.index++;
+    };
     Parser.prototype.parse_does_into = Parser.prototype.parse_says_attribute;
+    Parser.prototype.parse_does_autohides = Parser.prototype.set_says_attribute_flag;
     Parser.prototype.parse_does_sets = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
