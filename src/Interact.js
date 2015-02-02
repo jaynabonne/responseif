@@ -38,6 +38,8 @@ var Interact = (function() {
                 if (says.autohides) {
                     var id = this.getNextId();
                     this.beginSection(id);
+                    this.currentDiv.append(formatted);
+                    this.endSection();
                     this.sectionsToHide.push(id);
                 } else {
                     this.currentDiv.append(formatted);
