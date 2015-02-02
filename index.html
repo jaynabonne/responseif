@@ -31,15 +31,7 @@
         function createInteract(world) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
-            var clickFactory = function (keyword) {
-                return function (e) {
-                    var target = $(e.target);
-                    var original_color = target.css("color");
-                    target.animate({color: "#c0c000"}, 250).animate({color: original_color}, 300);
-                    world.sendCommand(keyword);
-                };
-            };
-            var interact = new Interact(dom, formatter, clickFactory, world);
+            var interact = new Interact(dom, formatter, world);
             return interact;
         }
         function init() {
@@ -49,13 +41,10 @@
             var interact = createInteract(world);
             var response_lib = new ResponseLib(interact);
 
-            world.sendCommand = function(keyword) {
-                this.callTopics([keyword]);
-            };
             world.callTopics = function(topics) {
                 response_lib.callTopics({general: rif.responses.room}, topics, "me");
             };
-            world.sendCommand("LOOK");
+            interact.sendCommand(["LOOK"]);
         }
     </script>
 </head>

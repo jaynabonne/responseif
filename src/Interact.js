@@ -1,12 +1,20 @@
 var Interact = (function() {
     "use strict";
     
-    var type = function (dom, formatter, keywordClickFactory, world) {
+    var type = function (dom, formatter, world) {
         this.dom = dom;
         this.formatter = formatter;
-        this.keywordClickFactory = keywordClickFactory;
         this._appendNewDiv();
         this.world = world;
+        var self = this;
+        this.clickFactory = function (keywords) {
+            return function (e) {
+                var target = $(e.target);
+                var original_color = target.css("color");
+                target.animate({color: "#c0c000"}, 250).animate({color: original_color}, 300);
+                self.sendCommand(keywords.split(" "));
+            };
+        };
     };
 
     type.prototype = {
@@ -17,7 +25,7 @@ var Interact = (function() {
             this.world.setState(id);
         },
         say: function (says, response) {
-            var formatted = this.formatter.formatOutput(says.text, this.keywordClickFactory);
+            var formatted = this.formatter.formatOutput(says.text, this.clickFactory);
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);
                 $(element).html(formatted);
@@ -83,6 +91,9 @@ var Interact = (function() {
         invoke: function(body) {
             var f = new Function(body);
             f();
+        },
+        sendCommand: function(topics) {
+            this.world.callTopics(topics);
         }
     };
     return type;

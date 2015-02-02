@@ -4,6 +4,7 @@ describe("Interact", function () {
     var appendSpy;
     var formatter;
     var responseLib;
+    var world;
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
         dom = {
@@ -19,7 +20,7 @@ describe("Interact", function () {
             setState: jasmine.createSpy("setState")
         };
 
-        interact = new Interact(dom, formatter, {}, world);
+        interact = new Interact(dom, formatter, world);
         appendSpy.reset();
     });
     describe("say", function () {
@@ -70,6 +71,12 @@ describe("Interact", function () {
             interact.invoke("global_variable=10");
             expect(global_variable).toBe(10);
             delete global_variable;
+        });
+    });
+    describe("sendCommand", function() {
+        it("should invoke the world's callTopics", function() {
+            interact.sendCommand(["topicA", "topicB"]);
+            expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB"]);
         });
     });
 });
