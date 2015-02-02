@@ -111,7 +111,7 @@
 	.response
 		.matches LOOK
 		.does 1
-		.does .says Look!
+		.does .says Look! .autohides
 	.response
 		.matches MOVE
 		.does
@@ -140,8 +140,8 @@
 			.says The alcove door slides shut.
 	.response
 		.matches USE
-		.does .says Use!
+		.does .says Use! .autohides
 	.response
 		.matches TALK
-		.does .says Talk!
+		.does .says Talk! .autohides
 .end

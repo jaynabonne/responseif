@@ -59,7 +59,7 @@ var Interact = (function() {
             }
         },
         choose: function(options, callback) {
-            var id = "test";
+            var id = this.getNextId();
             var self = this;
             var clickfactory = function(i) {
                 return function() {
@@ -71,6 +71,7 @@ var Interact = (function() {
             this.beginSection(id);
             this.currentDiv.append(this.formatter.formatMenu(options, clickfactory));
             this.endSection();
+            this.sectionsToHide.push(id);
             this.dom.scrollToEnd();
         },
         beginSection: function(id) {

@@ -13,7 +13,10 @@ describe("Interact", function () {
             append: function(div) {},
             getElementBySelector: jasmine.createSpy("getElementBySelector")
         };
-        formatter = { formatOutput: function() { return "formattedText"; }};
+        formatter = {
+            formatOutput: function() { return "formattedText"; },
+            formatMenu: function() { return "formattedText"; }
+        };
         world = {
             callTopics: jasmine.createSpy("callTopics"),
             getState: jasmine.createSpy("getState"),
@@ -85,6 +88,14 @@ describe("Interact", function () {
         it("should invoke the world's callTopics", function() {
             interact.sendCommand(["topicA", "topicB"]);
             expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB"]);
+        });
+    });
+    describe("choose", function() {
+        it("should auto-hide the menu on next command", function() {
+            dom.hideElement = jasmine.createSpy("hideElement");
+            interact.choose(["one", "two", "three"]);
+            interact.sendCommand([]);
+            expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv1", 250);
         });
     });
 });
