@@ -52,8 +52,10 @@ var Interact = (function() {
             this.dom.scrollToEnd();
         },
         choose: function(options, callback) {
+            var self = this;
             var clickfactory = function(i) {
                 return function() {
+                    self.hideSections();
                     callback(i);
                 };
             };
@@ -87,14 +89,17 @@ var Interact = (function() {
             var f = new Function(body);
             f();
         },
-        sendCommand: function(topics) {
+        hideSections: function () {
             if (this.sectionsToHide.length != 0) {
                 var self = this;
-                $.each(this.sectionsToHide, function(index, value) {
+                $.each(this.sectionsToHide, function (index, value) {
                     self.hideSection(value);
                 });
                 this.sectionsToHide = [];
             }
+        },
+        sendCommand: function(topics) {
+            this.hideSections();
             this.world.callTopics(topics);
         }
     };
