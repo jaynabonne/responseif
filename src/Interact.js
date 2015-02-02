@@ -42,17 +42,6 @@ var Interact = (function() {
                     this.dom.scrollToEnd();
                 }
             }
-            if (says.transition && says.transition.length) {
-                $.each(says.transition, function(index, transition) {
-                    if (transition === "hide") {
-                        formatted.css("opacity", "0");
-                    } else if (transition === "expand") {
-                        formatted.css("font-size", "0%").animate({"font-size": "100%"}, 1000);
-                    } else if (transition === "fadein") {
-                        formatted.css("opacity", "0").animate({"opacity": "1"}, 1000);
-                    }
-                })
-            }
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();
