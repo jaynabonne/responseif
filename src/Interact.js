@@ -67,12 +67,7 @@ var Interact = (function() {
             this._appendNewDiv();
         },
         hideSection: function(id) {
-            var section = this.dom.getElementBySelector('#'+id);
-            if (section) {
-                setTimeout(function() {
-                    section.hide(250, function () { $(this).remove(); });
-                }, 0);
-            }
+            this.dom.hideElement('#'+id, 250);
         },
         _appendNewDiv: function(id) {
             var div = this.dom.createDiv(id);

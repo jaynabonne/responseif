@@ -31,6 +31,13 @@ var RifDOM = (function(formatter) {
         return $(selector);
     };
 
+    prototype.hideElement = function(selector, timeout) {
+        var section = this.getElementBySelector(selector);
+        if (section) {
+            section.hide(timeout, function () { $(this).remove(); });
+        }
+    };
+
     prototype.animate = function(selector, options, duration) {
         if (!options) {
             console.log("no options specified");
