@@ -36,15 +36,11 @@ var Interact = (function() {
                 $(element).html(formatted);
             } else {
                 if (says.autohides) {
-                    var id = this.getNextId();
-                    this.beginSection(id);
-                    this.currentDiv.append(formatted);
-                    this.endSection();
-                    this.sectionsToHide.push(id);
+                    this.showAutoHideText(formatted);
                 } else {
                     this.currentDiv.append(formatted);
+                    this.dom.scrollToEnd();
                 }
-                this.dom.scrollToEnd();
             }
             if (says.transition && says.transition.length) {
                 $.each(says.transition, function(index, transition) {
@@ -58,21 +54,22 @@ var Interact = (function() {
                 })
             }
         },
-        choose: function(options, callback) {
+        showAutoHideText: function (formatted) {
             var id = this.getNextId();
-            var self = this;
+            this.beginSection(id);
+            this.currentDiv.append(formatted);
+            this.endSection();
+            this.sectionsToHide.push(id);
+            this.dom.scrollToEnd();
+        },
+        choose: function(options, callback) {
             var clickfactory = function(i) {
                 return function() {
-                    self.hideSection(id);
                     callback(i);
                 };
             };
 
-            this.beginSection(id);
-            this.currentDiv.append(this.formatter.formatMenu(options, clickfactory));
-            this.endSection();
-            this.sectionsToHide.push(id);
-            this.dom.scrollToEnd();
+            this.showAutoHideText(this.formatter.formatMenu(options, clickfactory));
         },
         beginSection: function(id) {
             this._appendNewDiv(id);
