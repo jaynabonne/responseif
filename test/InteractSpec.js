@@ -37,6 +37,14 @@ describe("Interact", function () {
             interact.say({ text: "This is some text" });
             expect(dom.scrollToEnd).toHaveBeenCalled();
         });
+        it("should hide autohides text after the next command", function() {
+            dom.hideElement = jasmine.createSpy("hideElement");
+            interact.say({ text: "This is some text", autohides: true });
+            interact.say({ text: "This is some more text", autohides: true });
+            interact.sendCommand([]);
+            expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv1", 250);
+            expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv2", 250);
+        });
     });
     describe("call", function () {
         it("should call the passed topics", function () {

@@ -2,10 +2,12 @@ var Interact = (function() {
     "use strict";
     
     var type = function (dom, formatter, world) {
+        this.id = 1;
         this.dom = dom;
         this.formatter = formatter;
         this._appendNewDiv();
         this.world = world;
+        this.sectionsToHide = [];
         var self = this;
         this.clickFactory = function (keywords) {
             return function (e) {
@@ -18,6 +20,9 @@ var Interact = (function() {
     };
 
     type.prototype = {
+        getNextId: function() {
+            return "outputdiv" + this.id++;
+        },
         getState: function(id, responder) {
             return this.world.getState(id);
         },
@@ -30,7 +35,13 @@ var Interact = (function() {
                 var element = this.dom.getElementBySelector(says.into);
                 $(element).html(formatted);
             } else {
-                this.currentDiv.append(formatted);
+                if (says.autohides) {
+                    var id = this.getNextId();
+                    this.beginSection(id);
+                    this.sectionsToHide.push(id);
+                } else {
+                    this.currentDiv.append(formatted);
+                }
                 this.dom.scrollToEnd();
             }
             if (says.transition && says.transition.length) {
@@ -88,6 +99,13 @@ var Interact = (function() {
             f();
         },
         sendCommand: function(topics) {
+            if (this.sectionsToHide.length != 0) {
+                var self = this;
+                $.each(this.sectionsToHide, function(index, value) {
+                    self.hideSection(value);
+                });
+                this.sectionsToHide = [];
+            }
             this.world.callTopics(topics);
         }
     };
