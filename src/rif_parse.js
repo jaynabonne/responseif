@@ -76,22 +76,19 @@ rifParse = (function () {
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_animates = function(actions, entry) {
-        actions.push({animates: { selector: entry.value, transitions: [] } } );
+        var action = {animates: { selector: entry.value, transitions: [] } };
         this.index++;
+        this.parseEntries(action.animates, "parse_animates_");
+        actions.push(action );
     };
-    Parser.prototype.parse_does_to = function(actions, entry) {
-        var last_action = actions[actions.length-1];
-        if (last_action) {
-            last_action.animates.transitions.push({to: entry.value});
-        }
+    Parser.prototype.parse_animates_to = function(animates, entry) {
+        var transition = {to: entry.value};
         this.index++;
+        this.parseEntries(transition, "parse_transition_");
+        animates.transitions.push(transition);
     };
-    Parser.prototype.parse_does_lasting = function(actions, entry) {
-        var last_action = actions[actions.length-1];
-        if (last_action) {
-            var transitions = last_action.animates.transitions;
-            transitions[transitions.length-1].lasting = parseInt(entry.value);
-        }
+    Parser.prototype.parse_transition_lasting = function(transition, entry) {
+        transition.lasting = parseInt(entry.value);
         this.index++;
     }
     Parser.prototype.parse_does_uses = function(actions, entry) {
