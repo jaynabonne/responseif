@@ -55,32 +55,22 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_does_says = function(actions, entry) {
-        actions.push({says: { text: entry.value } } );
+        this.index++;
+        var action = {says: { text: entry.value } };
+        this.parseEntries(action.says, "parse_says_");
+        actions.push( action );
+    };
+    Parser.prototype.parse_says_attribute = function(says, entry) {
+        says[entry.token] = entry.value ;
         this.index++;
     };
-    Parser.prototype.parse_says_attribute = function(actions, entry) {
-        var last_action = actions[actions.length-1];
-        if (last_action) {
-            last_action.says[entry.token] = entry.value ;
-        }
+    Parser.prototype.set_says_attribute_flag = function(says, entry) {
+        says[entry.token] = true;
         this.index++;
     };
-    Parser.prototype.parse_says_attribute_list = function(actions, entry) {
-        var last_action = actions[actions.length-1];
-        if (last_action) {
-            last_action.says[entry.token] = entry.value.split(" ");
-        }
-        this.index++;
-    };
-    Parser.prototype.set_says_attribute_flag = function(actions, entry) {
-        var last_action = actions[actions.length-1];
-        if (last_action) {
-            last_action.says[entry.token] = true;
-        }
-        this.index++;
-    };
-    Parser.prototype.parse_does_into = Parser.prototype.parse_says_attribute;
-    Parser.prototype.parse_does_autohides = Parser.prototype.set_says_attribute_flag;
+    Parser.prototype.parse_says_into = Parser.prototype.parse_says_attribute;
+    Parser.prototype.parse_says_autohides = Parser.prototype.set_says_attribute_flag;
+
     Parser.prototype.parse_does_sets = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
