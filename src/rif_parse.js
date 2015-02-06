@@ -125,6 +125,19 @@ rifParse = (function () {
         this.parseEntries(createDoesSlot(response, entry.value), "parse_does_");
     };
 
+    Parser.prototype.parse_does_moves = function(actions, entry) {
+        this.index++;
+        var action = { moves: {}}
+        action.moves.target = entry.value;
+        this.parseEntries(action, "parse_moves_");
+        actions.push(action);
+    };
+    Parser.prototype.parse_moves_to = function(action, entry) {
+        this.index++;
+        action.moves.to = entry.value;
+    };
+
+
     Parser.prototype.parse_response_prompts = Parser.prototype.addString;
     Parser.prototype.parse_response_is = Parser.prototype.addString;
     Parser.prototype.parse_response_runs = Parser.prototype.addInt;
