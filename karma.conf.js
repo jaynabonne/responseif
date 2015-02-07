@@ -22,7 +22,7 @@ module.exports = function(config) {
       'src/rif_parse.js',
       'src/rif_world.js',
       'src/HTMLFormatter.js',
-      'src/Interact.js',
+      'src/rif_interact.js',
       'test/*.js',
       { pattern:  'data/*.txt',
         watched:  true,

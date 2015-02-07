@@ -1,4 +1,4 @@
-var Interact = (function() {
+var RifInteract = (function() {
     "use strict";
     
     var type = function (dom, formatter, world) {

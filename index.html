@@ -7,7 +7,7 @@
     <script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript" src="src/HTMLFormatter.js"></script>
-    <script type="text/javascript" src="src/Interact.js"></script>
+    <script type="text/javascript" src="src/rif_interact.js"></script>
     <script type="text/javascript" src="src/response_lib.js"></script>
     <script type="text/javascript" src="src/rif_dom.js"></script>
     <script type="text/javascript" src="src/rif_expand.js"></script>
@@ -31,7 +31,7 @@
         function createInteract(world) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
-            var interact = new Interact(dom, formatter, world);
+            var interact = new RifInteract(dom, formatter, world);
             return interact;
         }
         function init() {

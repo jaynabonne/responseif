@@ -1,4 +1,4 @@
-describe("Interact", function () {
+describe("RifInteract", function () {
     var output;
     var interact;
     var appendSpy;
@@ -23,7 +23,7 @@ describe("Interact", function () {
             setState: jasmine.createSpy("setState")
         };
 
-        interact = new Interact(dom, formatter, world);
+        interact = new RifInteract(dom, formatter, world);
         appendSpy.reset();
     });
     describe("say", function () {
