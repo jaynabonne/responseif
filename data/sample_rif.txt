@@ -1,3 +1,7 @@
+.///////////////
+.// Definitions
+.///////////////
+
 .define fade-in
 	.to {"opacity": 0.0}
 	.to {"opacity": 1.0}
@@ -29,6 +33,10 @@
 					<div class="baricon" style="margin-left:8px">{!<img src="image/talk.png">|TALK!}</div>
 				.into #commandPane
 .enddef
+
+.////////////////
+.// World set up
+.////////////////
 
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
 .move player .to titlescreen
