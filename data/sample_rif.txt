@@ -1,6 +1,6 @@
-.///////////////
-.// Definitions
-.///////////////
+.--------------
+.- Definitions
+.--------------
 
 .define fade-in
 	.to {"opacity": 0.0}
@@ -34,16 +34,16 @@
 				.into #commandPane
 .enddef
 
-.////////////////
-.// World set up
-.////////////////
+.---------------
+.- World set up
+.---------------
 
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
 .move player .to titlescreen
 
-.//////////////////////////
-.// Title screen responses
-.//////////////////////////
+.-------------------------
+.- Title screen responses
+.-------------------------
 
 .responses titlescreen
 	.response
@@ -106,9 +106,9 @@
 			.calls ENTER
 .end
 
-./////////////////////
-.// Alcove responses
-./////////////////////
+.-------------------
+.- Alcove responses
+.-------------------
 
 .responses alcove
 	.response
@@ -161,9 +161,9 @@
 			.says The alcove door slides shut.
 .end
 
-./////////////////////
-.// Player responses
-./////////////////////
+.-------------------
+.- Player responses
+.--------------------
 
 .responses player
 	.response

@@ -119,9 +119,9 @@ describe("rifExpand", function () {
                 token_pair("tokenA", "valueA"),
                 token_pair("/", "some long value"),
                 token_pair("tokenB", "valueB"),
-                token_pair("//", "some long value"),
+                token_pair("-", "some long value"),
                 token_pair("tokenC", "valueC"),
-                token_pair("//otherrandomtext", "some really long value")
+                token_pair("#otherrandomtext", "some really long value")
             ]
         );
         expect(tokens).toEqual(

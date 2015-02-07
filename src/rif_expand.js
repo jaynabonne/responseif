@@ -39,11 +39,13 @@ var rifExpand = (function () {
         this.new_tokens = new_tokens.concat(expanded_tokens);
     };
 
+    var comment_chars = "/-#";
+
     Expander.prototype.expandNext = function() {
         var token_pair = this.iterator.get();
         var token = token_pair.token;
 
-        if (token[0] === "/") {
+        if (comment_chars.indexOf(token[0]) >= 0) {
             return;
         }
 
