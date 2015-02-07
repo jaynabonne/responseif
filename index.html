@@ -42,8 +42,10 @@
             var response_lib = new ResponseLib(interact);
 
             world.callTopics = function(topics) {
-                var parent = world.getParent("player");
                 var responders = {};
+                var pov = "player";
+                responders[pov] = rif.responses[pov];
+                var parent = world.getParent(pov);
                 responders[parent] = rif.responses[parent];
                 response_lib.callTopics(responders, topics, "me");
             };

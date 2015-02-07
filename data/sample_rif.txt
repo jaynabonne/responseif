@@ -117,9 +117,6 @@
 		
 	.response .matches EAR .does .says "Evaluate and repair." 
 	.response
-		.matches LOOK
-		.does .says Look! .autohides
-	.response
 		.matches MOVE
 		.does
 			.uses first
@@ -145,10 +142,16 @@
 		.does
 			.sets !door-open
 			.says The alcove door slides shut.
+
+.responses player
+	.response
+		.matches LOOK
+		.does .says Look! .autohides
 	.response
 		.matches USE
 		.does .says Use! .autohides
 	.response
 		.matches TALK
 		.does .says Talk! .autohides
+
 .end
