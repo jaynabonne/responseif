@@ -31,11 +31,11 @@
 .enddef
 
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
-.move player .to alcove
+.move player .to titlescreen
 
-.responses alcove
+.responses titlescreen
 	.response
-		.matches LOOK
+		.matches START
 		.runs 1
 		.does
 			.hides-bar
@@ -87,12 +87,19 @@
 		.matches INTRODONE
 		.needs intro_saw_dream intro_saw_rain intro_saw_wind
 		.does
-			.says
-				{=break=}
-				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}</div>
 			.fades-out-intro
 			.populates-icons
 			.shows-bar
+			.moves player .to alcove
+			.calls ENTER
+
+.responses alcove
+	.response
+		.matches ENTER
+		.does
+			.says
+				{=break=}
+				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}</div>
 			.animates #wakeup .fade-in .lasting 3000
 
 	.response
@@ -111,7 +118,6 @@
 	.response .matches EAR .does .says "Evaluate and repair." 
 	.response
 		.matches LOOK
-		.does 1
 		.does .says Look! .autohides
 	.response
 		.matches MOVE
