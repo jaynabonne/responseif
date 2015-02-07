@@ -42,7 +42,10 @@
             var response_lib = new ResponseLib(interact);
 
             world.callTopics = function(topics) {
-                response_lib.callTopics({general: rif.responses.room}, topics, "me");
+                var parent = world.getParent("player");
+                var responders = {};
+                responders[parent] = rif.responses[parent];
+                response_lib.callTopics(responders, topics, "me");
             };
             interact.sendCommand(["LOOK"]);
         }

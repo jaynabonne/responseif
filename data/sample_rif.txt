@@ -31,8 +31,9 @@
 .enddef
 
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
+.move player .to alcove
 
-.responses room
+.responses alcove
 	.response
 		.matches LOOK
 		.runs 1
