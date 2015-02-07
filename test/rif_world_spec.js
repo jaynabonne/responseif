@@ -59,6 +59,12 @@ describe("RifWorld", function () {
             expect(world.getValue("somevar")).toBe("314");
             expect(world.getValue("visited")).toBe(false);
         });
+        it("set parents of objects in the 'moves' array", function() {
+            var rif = {moves: [{target: "object1", to: "parent1"}, {target: "object2", to: "parent2"}]};
+            world.addRif(rif);
+            expect(world.getParent("object1")).toBe("parent1");
+            expect(world.getParent("object2")).toBe("parent2");
+        });
     });
     describe("setParent", function() {
         it("sets the parent state for the child", function() {

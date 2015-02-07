@@ -39,6 +39,12 @@ var RifWorld = (function() {
                 self.setState(value);
             });
         }
+        if (rif.moves) {
+            var self = this;
+            $.each(rif.moves, function(index, value) {
+                self.setParent(value.target, value.to);
+            });
+        }
     };
 
     function removeChild(world, child) {
