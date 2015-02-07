@@ -526,6 +526,17 @@ describe("ResponseLib", function () {
                 expect(interact.invoke).toHaveBeenCalledWith("some function body");
             });
         });
+        describe("moves", function () {
+            it("should set the specified object parent", function() {
+                interact.setParent = jasmine.createSpy("setParent");
+                var candidate = {
+                    response: {
+                        does: { common: [ { moves: { target: "thing", to: "room"} } ] }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.setParent).toHaveBeenCalledWith("thing", "room");
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {

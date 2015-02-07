@@ -255,6 +255,12 @@ var ResponseLib = (function () {
         }
     };
 
+    proto.processMoves = function(action) {
+        if (action.moves) {
+            this.interact.setParent(action.moves.target, action.moves.to);
+        }
+    };
+
     proto.processResponse = function (candidate, caller) {
         var response = candidate.response;
         var responder = candidate.responder;
@@ -269,6 +275,7 @@ var ResponseLib = (function () {
                 self.processCalls(action);
                 self.processAnimates(action);
                 self.processInvokes(action);
+                self.processMoves(action);
             });
         }
     };
