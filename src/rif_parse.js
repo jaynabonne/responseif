@@ -112,18 +112,22 @@ rifParse = (function () {
         this.parseEntries(createDoesSlot(response, entry.value), "parse_does_");
     };
 
+    Parser.prototype.parseMoveAttributes = function(moves) {
+        this.parseEntries(moves, "parse_moves_");
+    };
+
     Parser.prototype.parse_does_moves = function(actions, entry) {
         this.index++;
         var action = { moves: {}}
         action.moves.target = entry.value;
-        this.parseEntries(action, "parse_moves_");
+        this.parseMoveAttributes(action.moves);
         actions.push(action);
     };
-    Parser.prototype.parse_moves_to = function(action, entry) {
-        this.index++;
-        action.moves.to = entry.value;
-    };
 
+    Parser.prototype.parse_moves_to = function(moves, entry) {
+        this.index++;
+        moves.to = entry.value;
+    };
 
     Parser.prototype.parse_response_prompts = Parser.prototype.addString;
     Parser.prototype.parse_response_is = Parser.prototype.addString;
@@ -167,7 +171,8 @@ rifParse = (function () {
             }
         }
         return responses;
-    }
+    };
+
     Parser.prototype.parse_responses = function () {
         var value = this.tokens[this.index].value;
         var rif = this.rif;
@@ -182,6 +187,15 @@ rifParse = (function () {
         rif.sets = rif.sets || [];
         rif.sets.push(expression);
         this.index++;
+    };
+
+    Parser.prototype.parse_move = function() {
+        var move = { target: this.tokens[this.index].value };
+        this.index++;
+        this.parseMoveAttributes(move);
+        var rif = this.rif;
+        rif.moves = rif.moves || [];
+        rif.moves.push(move);
     };
 
     Parser.prototype.parse = function() {
