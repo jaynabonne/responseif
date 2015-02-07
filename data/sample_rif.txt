@@ -151,22 +151,24 @@
 			.end
 
 	.response
-		.matches door
-		.needs !door-open
-		.prompts Open the alcove door
-		.forcesprompt
-		.does
-			.sets door-open
-			.says The alcove door slides open.
+		.matches *door
+		.groups
+			.response
+				.needs !door-open
+				.prompts Open the alcove door
+				.forcesprompt
+				.does
+					.sets door-open
+					.says The alcove door slides open.
+			.response
+				.needs door-open
+				.prompts Close the alcove door
+				.forcesprompt
+				.does
+					.sets !door-open
+					.says The alcove door slides shut.
+		.end
 
-	.response
-		.matches door
-		.needs door-open
-		.prompts Close the alcove door
-		.forcesprompt
-		.does
-			.sets !door-open
-			.says The alcove door slides shut.
 .end
 
 .-------------------
