@@ -20,7 +20,8 @@ describe("RifInteract", function () {
         world = {
             callTopics: jasmine.createSpy("callTopics"),
             getState: jasmine.createSpy("getState"),
-            setState: jasmine.createSpy("setState")
+            setState: jasmine.createSpy("setState"),
+            setParent: jasmine.createSpy("setParent")
         };
 
         interact = new RifInteract(dom, formatter, world);
@@ -96,6 +97,12 @@ describe("RifInteract", function () {
             interact.choose(["one", "two", "three"]);
             interact.sendCommand([]);
             expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv1", 250);
+        });
+    });
+    describe("setParent", function() {
+        it("should invoke the world's setParent", function() {
+            interact.setParent("target", "parent");
+            expect(world.setParent).toHaveBeenCalledWith("target", "parent");
         });
     });
 });

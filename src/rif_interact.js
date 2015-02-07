@@ -29,6 +29,9 @@ var RifInteract = (function() {
         setState: function(id, responder) {
             this.world.setState(id);
         },
+        setParent: function(object, parent) {
+            this.world.setParent(object, parent);
+        },
         say: function (says, response) {
             var formatted = this.formatter.formatOutput(says.text, this.clickFactory);
             if (says.into) {
