@@ -104,6 +104,7 @@
 			.shows-bar
 			.moves player .to alcove
 			.calls ENTER
+.end
 
 ./////////////////////
 .// Alcove responses
@@ -158,6 +159,7 @@
 		.does
 			.sets !door-open
 			.says The alcove door slides shut.
+.end
 
 ./////////////////////
 .// Player responses
