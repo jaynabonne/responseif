@@ -33,6 +33,10 @@
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
 .move player .to titlescreen
 
+.//////////////////////////
+.// Title screen responses
+.//////////////////////////
+
 .responses titlescreen
 	.response
 		.matches START
@@ -93,6 +97,10 @@
 			.moves player .to alcove
 			.calls ENTER
 
+./////////////////////
+.// Alcove responses
+./////////////////////
+
 .responses alcove
 	.response
 		.matches ENTER
@@ -142,6 +150,10 @@
 		.does
 			.sets !door-open
 			.says The alcove door slides shut.
+
+./////////////////////
+.// Player responses
+./////////////////////
 
 .responses player
 	.response

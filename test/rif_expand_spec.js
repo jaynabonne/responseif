@@ -113,4 +113,23 @@ describe("rifExpand", function () {
             ]
         );
     });
+    it("should strip out comments", function() {
+        var tokens = rifExpand(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("/", "some long value"),
+                token_pair("tokenB", "valueB"),
+                token_pair("//", "some long value"),
+                token_pair("tokenC", "valueC"),
+                token_pair("//otherrandomtext", "some really long value")
+            ]
+        );
+        expect(tokens).toEqual(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+    });
 });

@@ -42,6 +42,11 @@ var rifExpand = (function () {
     Expander.prototype.expandNext = function() {
         var token_pair = this.iterator.get();
         var token = token_pair.token;
+
+        if (token[0] === "/") {
+            return;
+        }
+
         if (token === "define") {
             this.iterator.next();
             this.createDefinition(token_pair.value);
