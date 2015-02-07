@@ -113,6 +113,7 @@
 .responses alcove
 	.response
 		.matches ENTER
+		.runs 1
 		.does
 			.says
 				{=break=}
@@ -126,23 +127,29 @@
 				The message is terse and to the point:<br>
 				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
 				F47C communication disconnect. {!EAR!}.</span>
-	
+
 	.response
 		.matches theothers
 		.does
 			.says 
-		
+
 	.response .matches EAR .does .says "Evaluate and repair." 
+
 	.response
 		.matches MOVE
+		.prompts Exit your alcove
+		.forcesprompt
 		.does
 			.uses first
 				.response
 					.needs door-open
-					.does .says The door is open, but you can't move.
+					.does 
+						.says You slowly roll out of your alcove into the hallway.
+						.moves player .to hallway
 				.response
 					.does .says {!The door to your alcove is closed|door!}.
 			.end
+
 	.response
 		.matches door
 		.needs !door-open
@@ -151,6 +158,7 @@
 		.does
 			.sets door-open
 			.says The alcove door slides open.
+
 	.response
 		.matches door
 		.needs door-open
@@ -167,13 +175,20 @@
 
 .responses player
 	.response
-		.matches LOOK
-		.does .says Look! .autohides
-	.response
 		.matches USE
 		.does .says Use! .autohides
 	.response
 		.matches TALK
 		.does .says Talk! .autohides
 
+.end
+
+
+.-------------------
+.- Hallway responses
+.--------------------
+.responses hallway
+	.response
+		.matches LOOK
+		.does .says You're in the hallway.
 .end
