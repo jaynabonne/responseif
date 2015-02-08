@@ -537,6 +537,17 @@ describe("ResponseLib", function () {
                 expect(interact.setParent).toHaveBeenCalledWith("thing", "room");
             });
         });
+        describe("suggests", function () {
+            it("should suggest the topics", function() {
+                interact.suggest = jasmine.createSpy("suggest");
+                var candidate = {
+                    response: {
+                        does: { common: [ { suggests: ["topicA", "topicB", "topicC"] } ] }
+                    }, score: 10000 };
+                responseLib.processResponses([candidate]);
+                expect(interact.suggest).toHaveBeenCalledWith(["topicA", "topicB", "topicC"]);
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
