@@ -34,6 +34,9 @@
             var interact = new RifInteract(dom, formatter, world);
             return interact;
         }
+        function convertTopics(topics) {
+            return topics.map(function(value) { return {keyword: value} });
+        }
         function init() {
             var world = new RifWorld();
 
@@ -42,6 +45,7 @@
             var response_lib = new ResponseLib(interact);
 
             world.callTopics = function(topics) {
+                topics = convertTopics(topics);
                 var responders = {};
                 var pov = "player";
                 responders[pov] = rif.responses[pov];
