@@ -57,8 +57,8 @@ var ResponseLib = (function () {
         $.each(topics, function(index, value) {
             if (value.keyword === keyword) {
                 found = true;
-                return true;
             }
+            return !found;
         });
         return found;
     }
