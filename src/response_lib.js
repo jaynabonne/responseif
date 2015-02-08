@@ -70,10 +70,16 @@ var ResponseLib = (function () {
 
     function responseRequiredTopicsAreDefined(response, topics) { return !hasTopics(response) || hasRequiredTopics(response, topics); }
 
+    function splitTopic(topic) {
+        return {topic: topic, weight: 100};
+    }
+
     function computeTopicScore(topic, topics) {
+        var split_topic = splitTopic(topic);
         for (var i = 0; i < topics.length; ++i) {
-            if (topic === topics[i]) {
-                return 10000;
+            var split_topic_match = splitTopic(topics[i]);
+            if (split_topic.topic === split_topic_match.topic) {
+                return split_topic.weight * split_topic_match.weight;
             }
         }
         return 0;
