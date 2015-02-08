@@ -132,9 +132,19 @@ rifParse = (function () {
     Parser.prototype.parse_response_prompts = Parser.prototype.addString;
     Parser.prototype.parse_response_is = Parser.prototype.addString;
     Parser.prototype.parse_response_runs = Parser.prototype.addInt;
-    Parser.prototype.parse_response_matches = Parser.prototype.addList;
     Parser.prototype.parse_response_needs = Parser.prototype.addList;
     Parser.prototype.parse_response_forcesprompt = Parser.prototype.setFlag;
+
+    Parser.prototype.parse_response_matches = function(target, entry) {
+        var values = entry.value.split(" ");
+        var matches = [];
+        $.each(values, function(index, value) {
+            matches.push({keyword: value });
+        });
+
+        target[entry.token] = matches;
+        this.index++;
+    };
 
     Parser.prototype.parse_response_groups = function(response, entry) {
         this.index++;

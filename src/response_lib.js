@@ -52,16 +52,25 @@ var ResponseLib = (function () {
 
     function hasTopics(response) { return response.matches !== undefined; }
 
-    function topicInTopics(topic, topics) { return topics.indexOf(topic) !== -1; }
+    function keywordInTopics(keyword, topics) {
+        var found = false;
+        $.each(topics, function(index, value) {
+            if (value.keyword === keyword) {
+                found = true;
+                return true;
+            }
+        });
+        return found;
+    }
 
-    function isRequiredTopic(topic) { return topic[0] === "*"; }
+    function isRequiredTopic(topic) { return topic.keyword[0] === "*"; }
 
-    function extractTopic(topic) { return isRequiredTopic(topic) ? topic.substring(1) : topic; }
+    function extractTopic(topic) { return isRequiredTopic(topic) ? { keyword: topic.keyword.substring(1), weight: topic.weight} : topic; }
 
     function hasRequiredTopics(response, topics) {
         for (var i = 0; i < response.matches.length; ++i) {
             var topic = response.matches[i];
-            if (isRequiredTopic(topic) && !topicInTopics(extractTopic(topic), topics)) {
+            if (isRequiredTopic(topic) && !keywordInTopics(extractTopic(topic).keyword, topics)) {
                 return false;
             }
         }
@@ -70,16 +79,14 @@ var ResponseLib = (function () {
 
     function responseRequiredTopicsAreDefined(response, topics) { return !hasTopics(response) || hasRequiredTopics(response, topics); }
 
-    function splitTopic(topic) {
-        return {keyword: topic, weight: 100};
+    function getTopicWeight(topic) {
+        return topic.weight || 100;
     }
 
     function computeTopicScore(topic, topics) {
-        var split_topic = splitTopic(topic);
         for (var i = 0; i < topics.length; ++i) {
-            var split_topic_match = splitTopic(topics[i]);
-            if (split_topic.keyword === split_topic_match.keyword) {
-                return split_topic.weight * split_topic_match.weight;
+            if (topic.keyword === topics[i].keyword) {
+                return getTopicWeight(topic) * getTopicWeight(topics[i]);
             }
         }
         return 0;

@@ -31,8 +31,8 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
         it("returns false if required topics are not present", function () {
-            var response = { matches: ["*atopic"] };
-            expect(responseLib.responseIsEligible(response, ["btopics"])).toEqual(false);
+            var response = { matches: [{keyword: "*atopic"}] };
+            expect(responseLib.responseIsEligible(response, [{keyword: "btopics"}])).toEqual(false);
         });
         it("passes the responder as state prefix if passed", function () {
             interact.getState = function(id, responder) { return id === "somestate" && responder === "aresponder"; };
@@ -58,26 +58,26 @@ describe("ResponseLib", function () {
             expect(score).toEqual(10000);
         });
         it("returns 0 if response topic doesn't match any topics", function () {
-            var response_topics = ["atopic"],
-                topics = ["btopic"],
+            var response_topics = [{keyword:"atopic"}],
+                topics = [{keyword:"btopic"}],
                 score = responseLib.computeScore(response_topics, topics);
             expect(score).toEqual(0);
         });
         it("returns 10000 if response topic matches any topic", function () {
-            var response_topics = ["atopic"],
-                topics = ["atopic"],
+            var response_topics = [{keyword:"atopic"}],
+                topics = [{keyword:"atopic"}],
                 score = responseLib.computeScore(response_topics, topics);
             expect(score).toEqual(10000);
         });
         it("returns higher score for multiple matching topics", function() {
-            var response_topics = ["atopic", "btopic"],
-                topics = ["atopic", "btopic", "ctopic"],
+            var response_topics = [{keyword:"atopic"}, {keyword:"btopic"}],
+                topics = [{keyword:"atopic"}, {keyword:"btopic"}, {keyword:"ctopic"}],
                 score = responseLib.computeScore(response_topics, topics);
             expect(score).toEqual(20000);
         });
         it("returns the right score for required topics", function () {
-            var response_topics = ["*atopic", "btopic"],
-                topics = ["atopic", "btopic"],
+            var response_topics = [{keyword:"*atopic"}, {keyword:"btopic"}],
+                topics = [{keyword:"atopic"}, {keyword:"btopic"}],
                 score = responseLib.computeScore(response_topics, topics);
             expect(score).toEqual(20000);
         });
@@ -101,29 +101,29 @@ describe("ResponseLib", function () {
         });
 
         it("returns responses that match a topic", function () {
-            var response1 = {a: 1, matches: ["atopic"]},
-                response2 = {b: 2, matches: ["btopic"]},
-                response3 = {c: 3, matches: ["atopic"]},
+            var response1 = {a: 1, matches: [{keyword: "atopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
+                response3 = {c: 3, matches: [{keyword: "atopic"}]},
                 responses = [response1, response2, response3],
-                topics = ["atopic"],
+                topics = [{keyword: "atopic"}],
                 candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: response1, score: 10000}, {response: response3, score: 10000}]);
         });
         it("returns responses that match one of multiple topics", function () {
-            var response1 = {a: 1, matches: ["atopic"]},
-                response2 = {b: 2, matches: ["btopic"]},
-                response3 = {c: 3, matches: ["atopic"]},
-                response4 = {d: 4, matches: ["ctopic"]},
+            var response1 = {a: 1, matches: [{keyword: "atopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
+                response3 = {c: 3, matches: [{keyword: "atopic"}]},
+                response4 = {d: 4, matches: [{keyword: "ctopic"}]},
                 responses = [response1, response2, response3, response4],
-                topics = ["btopic", "ctopic"],
+                topics = [{keyword: "btopic"}, {keyword: "ctopic"}],
                 candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: response2, score: 10000}, {response: response4, score: 10000}]);
         });
         it("returns a higher score for more matched topics", function () {
-            var response1 = {a: 1, matches: ["atopic", "btopic"]},
-                response2 = {b: 2, matches: ["btopic"]},
+            var response1 = {a: 1, matches: [{keyword: "atopic"}, {keyword: "btopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
                 responses = [response1, response2],
-                topics = ["atopic", "btopic"],
+                topics = [{keyword: "atopic"}, {keyword: "btopic"}],
                 candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: response1, score: 20000}, {response: response2, score: 10000}]);
         });
@@ -138,26 +138,26 @@ describe("ResponseLib", function () {
             expect(candidates).toEqual([{response: response1, score: 10000}, {response: response3, score: 10000}, {response: response4, score: 10000}]);
         });
         it("returns the right score for a required topic", function () {
-            var response1 = {a: 1, matches: ["*atopic"]},
+            var response1 = {a: 1, matches: [{keyword: "*atopic"}]},
                 responses = [response1],
-                topics = ["atopic"],
+                topics = [{keyword: "atopic"}],
                 candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: response1, score: 10000}]);
         });
         it("returns eligible child responses", function () {
-            var response1 = {a: 1, matches: ["atopic"]},
-                response2 = {b: 2, matches: ["btopic"]},
+            var response1 = {a: 1, matches: [{keyword: "atopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
                 response3 = {c: 3},
                 response4 = {d: 4, run: 4, runs: 4 },
                 parentresponse = { groups: [response1, response2, response3, response4] },
                 responses = [parentresponse],
-                topics = ["atopic"],
+                topics = [{keyword: "atopic"}],
                 candidates = responseLib.selectResponses(responses, topics);
             expect(candidates).toEqual([{response: response1, score: 10000}, {response: response3, score: 10000}]);
         });
         it("does not return eligible child responses if the parent is ineligible", function () {
             var response1 = {a: 1},
-                parentresponse = { matches:["*atopic"], groups: [response1] },
+                parentresponse = { matches:[{keyword: "*atopic"}], groups: [response1] },
                 responses = [parentresponse],
                 topics = [],
                 candidates = responseLib.selectResponses(responses, topics);
@@ -552,11 +552,11 @@ describe("ResponseLib", function () {
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
             interact.say = jasmine.createSpy("say");
-            var response1 = { matches: ["atopic"], does: { common: [ { says: { text: "This is response 1" } } ] } };
-            var response2 = { matches: ["ctopic"], does: { common: [ { says: { text: "This is response 2" } } ] } };
-            var response3 = { matches: ["btopic"], does: { common: [ { says: { text: "This is response 3" } } ] } };
+            var response1 = { matches: [{keyword: "atopic"}], does: { common: [ { says: { text: "This is response 1" } } ] } };
+            var response2 = { matches: [{keyword: "ctopic"}], does: { common: [ { says: { text: "This is response 2" } } ] } };
+            var response3 = { matches: [{keyword: "btopic"}], does: { common: [ { says: { text: "This is response 3" } } ] } };
             var responses = [response1, response2, response3];
-            responseLib.callTopics({responder: responses}, ["ctopic"], "caller");
+            responseLib.callTopics({responder: responses}, [{keyword: "ctopic"}], "caller");
             expect(interact.say).toHaveBeenCalledWith({ text: "This is response 2" }, response2);
         });
     });

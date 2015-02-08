@@ -114,7 +114,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{matches: ["topicA", "topicB", "topicC"]}] } );
+        expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
     });
     it("should parse response needs", function () {
         var rif = rifParse(
