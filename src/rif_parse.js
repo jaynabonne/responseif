@@ -139,7 +139,12 @@ rifParse = (function () {
         var values = entry.value.split(" ");
         var matches = [];
         $.each(values, function(index, value) {
-            matches.push({keyword: value });
+            var fields = value.split("=");
+            if (fields.length === 1) {
+                matches.push({keyword: fields[0]});
+            } else {
+                matches.push({keyword: fields[0], weight: parseInt(fields[1])});
+            }
         });
 
         target[entry.token] = matches;

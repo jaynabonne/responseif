@@ -116,6 +116,17 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
     });
+    it("should parse response matches with weights", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        token_pair("matches","topicA=50 topicB topicC=75"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA", weight: 50}, {keyword: "topicB"}, {keyword: "topicC", weight: 75}] }] });
+    });
     it("should parse response needs", function () {
         var rif = rifParse(
             [
