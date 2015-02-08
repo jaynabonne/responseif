@@ -121,14 +121,6 @@
 			.animates #wakeup .fade-in .lasting 3000
 
 	.response
-		.matches message
-		.does
-			.says
-				The message is terse and to the point:<br>
-				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
-				F47C communication disconnect. {!EAR!}.</span>
-
-	.response
 		.matches theothers
 		.does
 			.says 
@@ -144,7 +136,7 @@
 				.response
 					.needs door-open
 					.does 
-						.says You slowly roll out of your alcove into the hallway.
+						.says Motors engage, wheels turn, and you slowly roll out of your alcove into the hallway.
 						.moves player .to hallway
 				.response
 					.does .says {!The door to your alcove is closed|door!}.
@@ -159,14 +151,14 @@
 				.forcesprompt
 				.does
 					.sets door-open
-					.says The alcove door slides open.
+					.says {!The alcove door slides open.|door!}
 			.response
 				.needs door-open
 				.prompts Close the alcove door
 				.forcesprompt
 				.does
 					.sets !door-open
-					.says The alcove door slides shut.
+					.says {!The alcove door slides shut.|door!}
 		.end
 
 .end
@@ -177,14 +169,22 @@
 
 .responses player
 	.response
+		.matches message
+		.does
+			.says
+				The message is terse and to the point:<br>
+				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
+				F47C communication disconnect. {!EAR!}.</span>
+
+	.response
 		.matches USE
 		.does .says Use! .autohides
+
 	.response
 		.matches TALK
 		.does .says Talk! .autohides
 
 .end
-
 
 .-------------------
 .- Hallway responses
