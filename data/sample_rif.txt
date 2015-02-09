@@ -39,6 +39,9 @@
 .---------------
 
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
+
+.move door .to alcove
+
 .move player .to titlescreen
 
 .-------------------------
@@ -106,6 +109,30 @@
 			.calls ENTER
 .end
 
+.-----------------
+.- Door responses
+.-----------------
+
+.responses door
+	.response
+		.matches *door
+		.groups
+			.response
+				.needs !door-open
+				.prompts Open the alcove door
+				.forcesprompt
+				.does
+					.sets door-open
+					.says {!The alcove door slides open.|door!}
+			.response
+				.needs door-open
+				.prompts Close the alcove door
+				.forcesprompt
+				.does
+					.sets !door-open
+					.says {!The alcove door slides shut.|door!}
+		.end
+
 .-------------------
 .- Alcove responses
 .-------------------
@@ -142,25 +169,6 @@
 					.does .says {!The door to your alcove is closed|door!}.
 			.end
 
-	.response
-		.matches *door
-		.groups
-			.response
-				.needs !door-open
-				.prompts Open the alcove door
-				.forcesprompt
-				.does
-					.sets door-open
-					.says {!The alcove door slides open.|door!}
-			.response
-				.needs door-open
-				.prompts Close the alcove door
-				.forcesprompt
-				.does
-					.sets !door-open
-					.says {!The alcove door slides shut.|door!}
-		.end
-
 .end
 
 .-------------------
@@ -174,7 +182,7 @@
 			.says
 				The message is terse and to the point:<br>
 				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
-				F47C communication disconnect. {!EAR!}.</span>
+				M47-C communication disconnect. {!EAR!}.</span>
 
 	.response
 		.matches USE
@@ -184,6 +192,11 @@
 		.matches TALK
 		.does .says Talk! .autohides
 
+	.response
+		.matches door=50
+		.does
+			.says The door is a distant memory now.
+		
 .end
 
 .-------------------
