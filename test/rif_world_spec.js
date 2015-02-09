@@ -124,5 +124,11 @@ describe("RifWorld", function () {
             var responders = world.getCurrentResponders();
             expect(responders.indexOf("thepov")).not.toBe(-1);
         });
+        it("returns the current pov's parent", function() {
+            world.setPOV("thepov")
+            world.setParent("thepov", "theparent");
+            var responders = world.getCurrentResponders();
+            expect(responders.indexOf("theparent")).not.toBe(-1);
+        });
     });
 });
