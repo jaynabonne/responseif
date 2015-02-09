@@ -84,5 +84,9 @@ var RifWorld = (function() {
         this.pov = pov;
     };
 
+    proto.getCurrentResponders = function() {
+        return [this.getPOV()];
+    };
+
     return RifWorld;
 })();

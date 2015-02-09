@@ -118,5 +118,11 @@ describe("RifWorld", function () {
             expect(world.getPOV()).toBe("newplayer");
         });
     });
+    describe("getCurrentResponders", function() {
+        it("returns the current pov", function() {
+            world.setPOV("thepov")
+            var responders = world.getCurrentResponders();
+            expect(responders.indexOf("thepov")).not.toBe(-1);
+        });
+    });
 });
-
