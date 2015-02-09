@@ -3,6 +3,7 @@ var RifWorld = (function() {
     var RifWorld = function() {
         this.values = {};
         this.children = {};
+        this.pov = "player";
     };
 
     var proto = RifWorld.prototype;
@@ -73,6 +74,14 @@ var RifWorld = (function() {
 
     proto.getChildren = function(parent) {
         return this.children[parent] || [];
+    };
+
+    proto.getPOV = function() {
+        return this.pov;
+    };
+
+    proto.setPOV = function(pov) {
+        this.pov = pov;
     };
 
     return RifWorld;

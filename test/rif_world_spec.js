@@ -107,5 +107,16 @@ describe("RifWorld", function () {
             expect(world.getParent("child_object")).toBe("parent_object");
         });
     });
+    describe("getPOV", function() {
+        it("returns 'player' by default", function() {
+            expect(world.getPOV()).toBe("player");
+        });
+    });
+    describe("setPOV", function() {
+        it("sets the POV returned by getPOV", function() {
+            world.setPOV("newplayer");
+            expect(world.getPOV()).toBe("newplayer");
+        });
+    });
 });
 
