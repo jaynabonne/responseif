@@ -46,12 +46,11 @@
 
             world.callTopics = function(topics) {
                 topics = convertTopics(topics);
-                var responders = {};
-                var pov = "player";
-                responders[pov] = rif.responses[pov];
-                var parent = world.getParent(pov);
-                responders[parent] = rif.responses[parent];
-                response_lib.callTopics(responders, topics, "me");
+                var responses = {};
+                $.each(world.getCurrentResponders(), function(index, value) {
+                    responses[value] = rif.responses[value];
+                });
+                response_lib.callTopics(responses, topics, "me");
             };
             interact.sendCommand(["START"]);
         }
