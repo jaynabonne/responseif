@@ -130,5 +130,14 @@ describe("RifWorld", function () {
             var responders = world.getCurrentResponders();
             expect(responders.indexOf("theparent")).not.toBe(-1);
         });
+        it("returns the current pov's siblings", function() {
+            world.setPOV("thepov")
+            world.setParent("thepov", "theparent");
+            world.setParent("sibling1", "theparent");
+            world.setParent("sibling2", "theparent");
+            var responders = world.getCurrentResponders();
+            expect(responders.indexOf("sibling1")).not.toBe(-1);
+            expect(responders.indexOf("sibling2")).not.toBe(-1);
+        });
     });
 });

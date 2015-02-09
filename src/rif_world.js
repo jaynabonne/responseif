@@ -86,12 +86,13 @@ var RifWorld = (function() {
 
     proto.getCurrentResponders = function() {
         var pov = this.getPOV();
-        var responders = [pov];
         var parent = this.getParent(pov);
         if (parent) {
-            responders.push(parent);
+            var responders = [parent];
+            return responders.concat(this.getChildren(parent));
+        } else {
+            return [pov];
         }
-        return responders;
     };
 
     return RifWorld;
