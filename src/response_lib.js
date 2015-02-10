@@ -316,7 +316,19 @@ var ResponseLib = (function () {
         return groups;
     }
 
+    function orderCompare(a, b) {
+        var orderA = a.response.orders || 1;
+        var orderB = b.response.orders || 1;
+        return orderA < orderB
+                ? -1
+                : orderA === orderB
+                    ? 0
+                    : 1;
+    }
+
     proto.processGroup = function(group, caller) {
+        group.sort(orderCompare);
+
         var self = this;
         group.forEach(function(response) { self.processResponse(response, caller); });
     };

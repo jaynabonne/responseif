@@ -212,6 +212,19 @@ describe("ResponseLib", function () {
                 responseLib.processResponses(responses);
                 expect(output).toEqual("A!B!B again!C!");
             });
+            it("orders responses", function () {
+                var output = "";
+                interact.say = function(says) { output += says.text; };
+                responseLib.setTypes(["a","b","c"]);
+                var responses = [
+                    { response: { orders:99, does: { common: [ {says: { text: "C!"} } ] } }, score: 10000 },
+                    { response: { does: { common: [ {says: { text: "B!"} } ] } }, score: 10000 },
+                    { response: { orders:10, does: { common: [ {says: { text:  "A!"} } ] } }, score: 10000 },
+                    { response: { does: {common: [ {says: { text:  "B again!"} } ] } }, score: 10000 }
+                ];
+                responseLib.processResponses(responses);
+                expect(output).toEqual("B!B again!A!C!");
+            });
         });
         describe("says", function () {
             it("text for a matching response", function() {
