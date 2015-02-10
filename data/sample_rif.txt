@@ -34,13 +34,33 @@
 				.into #commandPane
 .enddef
 
+.define door-responses
+	.response
+		.matches *door
+		.groups
+			.response
+				.needs !door-open
+				.does .says The alcove door is closed. .autohides
+			.response
+				.needs door-open
+				.does .says The alcove door is open. .autohides
+		.end
+	.response
+		.matches ALCOVE-DOOR-OPENS
+		.does .says {!You trigger the door, and it slides open.|door!}
+	.response
+		.matches ALCOVE-DOOR-CLOSES
+		.does .says {!You trigger the door, and it slides shut.|door!}
+.enddef
+
 .---------------
 .- World set up
 .---------------
 
 .set break=<span style='font-size:6pt;'>&nbsp;</span>
 
-.move door .to alcove
+.move inner-door .to alcove
+.move outer-door .to hallway
 
 .move player .to titlescreen
 
@@ -113,25 +133,13 @@
 .- Door responses
 .-----------------
 
-.responses door
-	.response
-		.matches *door
-		.groups
-			.response
-				.needs !door-open
-				.prompts Open the alcove door
-				.forcesprompt
-				.does
-					.sets door-open
-					.says {!The alcove door slides open.|door!}
-			.response
-				.needs door-open
-				.prompts Close the alcove door
-				.forcesprompt
-				.does
-					.sets !door-open
-					.says {!The alcove door slides shut.|door!}
-		.end
+.responses inner-door
+	.door-responses
+.end
+
+.responses outer-door
+	.door-responses
+.end
 
 .-------------------
 .- Alcove responses
@@ -166,7 +174,7 @@
 						.says Motors engage, wheels turn, and you slowly roll out of your alcove into the hallway.
 						.moves player .to hallway
 				.response
-					.does .says {!The door to your alcove is closed|door!}.
+					.does .says {!You can't move while your alcove door is closed.|door!} .autohides
 			.end
 
 .end
@@ -197,6 +205,33 @@
 		.does
 			.says The door is a distant memory now.
 		
+	.response
+		.matches ALCOVE-DOOR-OPENS=10
+		.does .says {!You trigger the door to your alcove. You can't see it, but you know it's sliding open.|door!}
+
+	.response
+		.matches ALCOVE-DOOR-CLOSES=10
+		.does .says {!You trigger the door to your alcove. You can't see it, but you know it's sliding closed.|door!}
+
+	.response
+		.matches *door
+		.groups
+			.response
+				.needs !door-open
+				.prompts Open the alcove door
+				.forcesprompt
+				.does
+					.sets door-open
+					.calls ALCOVE-DOOR-OPENS
+			.response
+				.needs door-open
+				.prompts Close the alcove door
+				.forcesprompt
+				.does
+					.sets !door-open
+					.calls ALCOVE-DOOR-CLOSES
+		.end
+
 .end
 
 .-------------------
