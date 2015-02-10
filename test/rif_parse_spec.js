@@ -149,7 +149,7 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual( { anObject: [{prompts: "A response prompt"}] } );
     });
-    it("should parse response prompts", function () {
+    it("should parse response forceprompts", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
@@ -169,6 +169,16 @@ describe("rifParse", function () {
             ]
         );
         expect(rif.responses).toEqual( { anObject: [{is: "something"}] } );
+    });
+    it("should parse response orders", function () {
+        var rif = rifParse([
+                responses("anObject"),
+                    response(),
+                        token_pair("orders","99"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{orders: 99}] } );
     });
     it("should parse response does says", function () {
         var rif = rifParse(

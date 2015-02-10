@@ -34,25 +34,6 @@
 				.into #commandPane
 .enddef
 
-.define door-responses
-	.response
-		.matches *door
-		.groups
-			.response
-				.needs !door-open
-				.does .says The alcove door is closed. .autohides
-			.response
-				.needs door-open
-				.does .says The alcove door is open. .autohides
-		.end
-	.response
-		.matches ALCOVE-DOOR-OPENS
-		.does .says {!You trigger the door, and it slides open.|door!}
-	.response
-		.matches ALCOVE-DOOR-CLOSES
-		.does .says {!You trigger the door, and it slides shut.|door!}
-.enddef
-
 .---------------
 .- World set up
 .---------------
@@ -133,12 +114,31 @@
 .- Door responses
 .-----------------
 
+.define door-base-responses
+	.response
+		.matches *door
+		.groups
+			.response
+				.needs !door-open
+				.does .says The alcove door is closed. .autohides
+			.response
+				.needs door-open
+				.does .says The alcove door is open. .autohides
+		.end
+	.response
+		.matches ALCOVE-DOOR-OPENS
+		.does .says {!You trigger the door, and it slides open.|door!}
+	.response
+		.matches ALCOVE-DOOR-CLOSES
+		.does .says {!You trigger the door, and it slides shut.|door!}
+.enddef
+
 .responses inner-door
-	.door-responses
+	.door-base-responses
 .end
 
 .responses outer-door
-	.door-responses
+	.door-base-responses
 .end
 
 .-------------------
@@ -176,7 +176,10 @@
 				.response
 					.does .says {!You can't move while your alcove door is closed.|door!} .autohides
 			.end
-
+	.response
+		.matches ALCOVE-DOOR-OPENS
+		.orders 10
+		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines, all of them looking intently at you.
 .end
 
 .-------------------
@@ -207,11 +210,15 @@
 		
 	.response
 		.matches ALCOVE-DOOR-OPENS=10
-		.does .says {!You trigger the door to your alcove. You can't see it, but you know it's sliding open.|door!}
+		.does
+			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now open.|door!}
+			.says {!Your alcove door now registers as being open.|door!}
 
 	.response
 		.matches ALCOVE-DOOR-CLOSES=10
-		.does .says {!You trigger the door to your alcove. You can't see it, but you know it's sliding closed.|door!}
+		.does
+			.says 1 {!You trigger the door to your alcove. You  It registers on your screen that it's now closed.|door!}
+			.says {!Your alcove door now registers as being closed.|door!}
 
 	.response
 		.matches *door
