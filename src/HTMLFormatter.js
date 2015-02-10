@@ -14,9 +14,9 @@ var HTMLFormatter = (function () {
                     .replace(/\{!/g, "<span class='keyword'>")
                     .replace(/!\}/g, "</span>");
 
-            var div = $("<div>");
-            div.append(text);
-            var clickspans = div.find(".keyword");
+            var outerspan = $("<span>");
+            outerspan.append(text);
+            var clickspans = outerspan.find(".keyword");
             clickspans.each( function(id, span) {
                 var keyword = span.innerHTML;
                 var subindex = keyword.indexOf("|");
@@ -26,7 +26,7 @@ var HTMLFormatter = (function () {
                 }
                 $(span).click(clickfactory(keyword));
             });
-            return div;
+            return outerspan;
         },
 
         formatMenu: function(options, clickfactory) {

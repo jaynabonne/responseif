@@ -42,6 +42,7 @@ var RifInteract = (function() {
                     this.showAutoHideText(formatted);
                 } else {
                     this.currentDiv.append(formatted);
+                    this.currentDiv.append(" ");
                     this.dom.scrollToEnd();
                 }
             }

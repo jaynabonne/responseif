@@ -179,7 +179,9 @@
 	.response
 		.matches ALCOVE-DOOR-OPENS
 		.orders 10
-		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines, all of them looking intently at you.
+		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines.
+		Rather than streaming up and down the corridor in their usual work patterns, a large group of them is gathered around your door,
+		watching and waiting intently for you.
 .end
 
 .-------------------
