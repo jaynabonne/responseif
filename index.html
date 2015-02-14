@@ -16,17 +16,17 @@
     <script type="text/javascript" src="src/rif_world.js"></script>
 
     <script type="text/javascript">
-        function loadRif(file, world) {
-            var rifSource = $.ajax({
+        function loadRif(file, world, completion) {
+            $.ajax({
                 url: "data/" + file,
-                async: false
-            }).responseText;
-
-            var tokens = rifTokenize(rifSource);
-            tokens = rifExpand(tokens);
-            rif = rifParse(tokens);
-            world.addRif(rif);
-            return rif;
+            }).done(function (response_text) {
+                    var tokens = rifTokenize(response_text);
+                    tokens = rifExpand(tokens);
+                    rif = rifParse(tokens);
+                    world.addRif(rif);
+                    completion(rif);
+                }
+            );
         }
         function createInteract(world) {
             var dom = new RifDOM($('#output'));
@@ -40,19 +40,22 @@
         function init() {
             var world = new RifWorld();
 
-            var rif = loadRif("sample_rif.txt", world);
-            var interact = createInteract(world);
-            var response_lib = new ResponseLib(interact);
+            loadRif("sample_rif.txt", world, function(rif) {
+                var interact = createInteract(world);
+                var response_lib = new ResponseLib(interact);
 
-            world.callTopics = function(topics) {
-                topics = convertTopics(topics);
-                var responses = {};
-                $.each(world.getCurrentResponders(), function(index, value) {
-                    responses[value] = rif.responses[value];
-                });
-                response_lib.callTopics(responses, topics, "me");
-            };
-            interact.sendCommand(["START"]);
+                world.callTopics = function(topics) {
+                    topics = convertTopics(topics);
+                    var responses = {};
+                    $.each(world.getCurrentResponders(), function(index, value) {
+                        responses[value] = rif.responses[value];
+                    });
+                    response_lib.callTopics(responses, topics, world.getPOV());
+                };
+                world.idleProcessing = function() {
+                };
+                interact.sendCommand(["START"]);
+            });
         }
     </script>
 </head>
