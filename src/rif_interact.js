@@ -105,6 +105,7 @@ var RifInteract = (function() {
         sendCommand: function(topics) {
             this.hideSections();
             this.world.callTopics(topics);
+            this.world.idleProcessing();
         }
     };
     return type;

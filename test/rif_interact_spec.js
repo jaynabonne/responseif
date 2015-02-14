@@ -21,7 +21,8 @@ describe("RifInteract", function () {
             callTopics: jasmine.createSpy("callTopics"),
             getState: jasmine.createSpy("getState"),
             setState: jasmine.createSpy("setState"),
-            setParent: jasmine.createSpy("setParent")
+            setParent: jasmine.createSpy("setParent"),
+            idleProcessing : jasmine.createSpy("idleProcessing")
         };
 
         interact = new RifInteract(dom, formatter, world);
@@ -89,6 +90,10 @@ describe("RifInteract", function () {
         it("should invoke the world's callTopics", function() {
             interact.sendCommand(["topicA", "topicB"]);
             expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB"]);
+        });
+        it("should invoke idle processing", function() {
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(world.idleProcessing).toHaveBeenCalledWith();
         });
     });
     describe("choose", function() {
