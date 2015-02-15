@@ -41,7 +41,7 @@
 
             loadRif("sample_rif.txt", world, function(rif) {
                 var interact = createInteract(world);
-                var response_lib = new ResponseLib(interact, world);
+                var response_lib = new ResponseLib(world);
 
                 world.callTopics = function(topics) {
                     topics = convertTopics(topics);
@@ -49,7 +49,7 @@
                     $.each(world.getCurrentResponders(), function(index, value) {
                         responses[value] = rif.responses[value];
                     });
-                    response_lib.callTopics(responses, topics, world.getPOV());
+                    response_lib.callTopics(responses, topics, world.getPOV(), interact);
                 };
                 interact.sendCommand(["START"]);
             });
