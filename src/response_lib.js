@@ -271,7 +271,7 @@ var ResponseLib = (function () {
 
     proto.processMoves = function(action) {
         if (action.moves) {
-            this.interact.setParent(action.moves.target, action.moves.to);
+            this.world.setParent(action.moves.target, action.moves.to);
         }
     };
 

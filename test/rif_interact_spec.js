@@ -91,10 +91,4 @@ describe("RifInteract", function () {
             expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv1", 250);
         });
     });
-    describe("setParent", function() {
-        it("should invoke the world's setParent", function() {
-            interact.setParent("target", "parent");
-            expect(world.setParent).toHaveBeenCalledWith("target", "parent");
-        });
-    });
 });

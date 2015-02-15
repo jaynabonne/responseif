@@ -41,7 +41,7 @@
 
             loadRif("sample_rif.txt", world, function(rif) {
                 var interact = createInteract(world);
-                var response_lib = new ResponseLib(interact);
+                var response_lib = new ResponseLib(interact, world);
 
                 world.callTopics = function(topics) {
                     topics = convertTopics(topics);

@@ -23,9 +23,6 @@ var RifInteract = (function() {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
-        setParent: function(object, parent) {
-            this.world.setParent(object, parent);
-        },
         say: function (says, response) {
             var formatted = this.formatter.formatOutput(says.text, this.clickFactory);
             if (says.into) {
