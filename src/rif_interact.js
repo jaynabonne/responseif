@@ -23,12 +23,6 @@ var RifInteract = (function() {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
-        getState: function(id, responder) {
-            return this.world.getState(id);
-        },
-        setState: function(id, responder) {
-            this.world.setState(id);
-        },
         setParent: function(object, parent) {
             this.world.setParent(object, parent);
         },

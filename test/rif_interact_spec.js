@@ -23,7 +23,6 @@ describe("RifInteract", function () {
             setState: jasmine.createSpy("setState"),
             setParent: jasmine.createSpy("setParent")
         };
-
         interact = new RifInteract(dom, formatter, world);
         appendSpy.reset();
     });
@@ -63,18 +62,6 @@ describe("RifInteract", function () {
             expect(dom.animate.callCount).toBe(2);
             expect(dom.animate.argsForCall[0]).toEqual(["aselector", "optionsA", 1500]);
             expect(dom.animate.argsForCall[1]).toEqual(["aselector", "optionsB", 1000]);
-        });
-    });
-    describe("getState", function () {
-        it("should invoke the world's getState", function() {
-            world.getState.andReturn(true);
-            expect(interact.getState("somestate")).toBe(true);
-        });
-    });
-    describe("setState", function () {
-        it("should invoke the world's setState", function() {
-            interact.setState("somestate");
-            expect(world.setState).toHaveBeenCalledWith("somestate");
         });
     });
     describe("invoke", function () {

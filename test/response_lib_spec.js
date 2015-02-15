@@ -2,9 +2,11 @@ describe("ResponseLib", function () {
     "use strict";
     var responseLib;
     var interact;
+    var world;
     beforeEach(function () {
         interact = {};
-        responseLib = new ResponseLib(interact);
+        world = {};
+        responseLib = new ResponseLib(interact, world);
     });
 
     describe("responseIsEligible", function () {
@@ -16,17 +18,17 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if required state is not set", function () {
-            interact.getState = function(id) { return false; };
+            world.getState = function(id) { return false; };
             var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if disallowed state is set", function () {
-            interact.getState = function(id) { return true; };
+            world.getState = function(id) { return true; };
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
         it("returns correct value for multiple states", function () {
-            interact.getState = function(id) { return true; };
+            world.getState = function(id) { return true; };
             var response = { needs: ["somestate", "!someotherstate"] };
             expect(responseLib.responseIsEligible(response)).toEqual(true);
         });
@@ -35,12 +37,12 @@ describe("ResponseLib", function () {
             expect(responseLib.responseIsEligible(response, [{keyword: "btopics"}])).toEqual(false);
         });
         it("passes the responder as state prefix if passed", function () {
-            interact.getState = function(id, responder) { return id === "somestate" && responder === "aresponder"; };
+            world.getState = function(id, responder) { return id === "somestate" && responder === "aresponder"; };
             var response = { needs: ["somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
         it("passes the responder as state prefix if passed (negative)", function () {
-            interact.getState = function(id, responder) { return id === "!somestate" && responder === "aresponder"; };
+            world.getState = function(id, responder) { return id === "!somestate" && responder === "aresponder"; };
             var response = { needs: ["!somestate"] };
             expect(responseLib.responseIsEligible(response, [], "aresponder")).toEqual(true);
         });
@@ -284,7 +286,7 @@ describe("ResponseLib", function () {
             });
             it("replaces in-line markup with state values", function() {
                 interact.say = jasmine.createSpy("say");
-                interact.getState = function(id) {
+                world.getState = function(id) {
                     if (id === "name") {
                         return "Ishmael";
                     } else if (id === "yourname") {
@@ -426,33 +428,33 @@ describe("ResponseLib", function () {
         });
         describe("sets", function() {
             function spyOnSetState() {
-                interact.setState = jasmine.createSpy("setState");
+                world.setState = jasmine.createSpy("setState");
             }
             it("sets state for a single id with 'sets' attribute", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: [ { sets: ["somestate"] } ] } }, score: 10000 };
                 responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith("somestate", "");
+                expect(world.setState).toHaveBeenCalledWith("somestate", "");
             });
             it("sets state for multiple ids with 'sets' attribute", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: [ { sets: ["somestate", "someotherstate"] } ] } }, score: 10000 };
                 responseLib.processResponses([response]);
-                expect(interact.setState.callCount).toEqual(2);
-                expect(interact.setState.argsForCall[0]).toEqual(["somestate", ""]);
-                expect(interact.setState.argsForCall[1]).toEqual(["someotherstate", ""]);
+                expect(world.setState.callCount).toEqual(2);
+                expect(world.setState.argsForCall[0]).toEqual(["somestate", ""]);
+                expect(world.setState.argsForCall[1]).toEqual(["someotherstate", ""]);
             });
             it("includes the responder if passed", function () {
                 spyOnSetState();
                 var response = { response: { does: { common: [ { sets: [":somestate"] } ] } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response]);
-                expect(interact.setState).toHaveBeenCalledWith(":somestate", "aresponder");
+                expect(world.setState).toHaveBeenCalledWith(":somestate", "aresponder");
             });
         });
         describe("uses all", function() {
             it("processes all the eligible child responses", function() {
                 interact.say = jasmine.createSpy("say");
-                interact.getState = function(id) { return  false;};
+                world.getState = function(id) { return  false;};
                 var response1 = { does: { common: [ { says: {text: "Text 1"} } ] } };
                 var response2 = { needs: "somestate", does: { common: [ { says: {text: "Text 2"} } ] } };
                 var response3 = { does: { common: [ { says: {text: "Text 3"} } ] } };
@@ -481,7 +483,7 @@ describe("ResponseLib", function () {
         describe("uses first", function() {
             it("processes up to the first eligible child responses", function() {
                 interact.say = jasmine.createSpy("say");
-                interact.getState = function(id) { return  false;};
+                world.getState = function(id) { return  false;};
                 var response1 = { needs: "somestate", does: { common: [ { says: {text: "Text 1"} } ] } };
                 var response2 = { does: { common: [ { says: {text: "Text 2"} } ] } };
                 var response3 = { does: { common: [ { says: {text: "Text 3"} } ] } };

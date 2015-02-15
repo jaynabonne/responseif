@@ -1,7 +1,8 @@
 var ResponseLib = (function () {
     "use strict";
-    var type = function (interact) {
+    var type = function (interact, world) {
         this.interact = interact;
+        this.world = world;
         this.types = [];
     };
 
@@ -103,11 +104,11 @@ var ResponseLib = (function () {
     var proto = type.prototype;
 
     proto.getState = function(id, responder) {
-        return this.interact.getState(id, responder || "");
+        return this.world.getState(id, responder || "");
     };
 
     proto.setState = function(id, responder) {
-        return this.interact.setState(id, responder || "");
+        return this.world.setState(id, responder || "");
     };
 
     proto.stateNeedIsMet = function(id, responder) {
