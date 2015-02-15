@@ -1,7 +1,6 @@
 var ResponseLib = (function () {
     "use strict";
-    var type = function (interact, world) {
-        this.interact = interact;
+    var type = function (world) {
         this.world = world;
         this.types = [];
     };
@@ -200,7 +199,7 @@ var ResponseLib = (function () {
         return newsays;
     };
 
-    proto.processSays = function (action, response, responder) {
+    proto.processSays = function (action, response, responder, interact) {
         if (action.says) {
             var text = action.says.text;
             var newsays;
@@ -212,12 +211,12 @@ var ResponseLib = (function () {
                 var end_index = text.indexOf("+}", index+2);
                 var topics = text.substring(index+2, end_index);
                 newsays = $.extend(action.says, {text: text.substring(0, index)});
-                this.interact.say(this.replaceMarkup(newsays, responder), response);
-                this.interact.call(topics.split(" "));
+                interact.say(this.replaceMarkup(newsays, responder), response);
+                interact.call(topics.split(" "));
                 text = text.substring(end_index+2);
             }
             newsays = $.extend(action.says, {text: text});
-            this.interact.say(this.replaceMarkup(newsays, responder), response);
+            interact.say(this.replaceMarkup(newsays, responder), response);
         }
     };
 
@@ -230,20 +229,20 @@ var ResponseLib = (function () {
         }
     };
 
-    proto.processUses = function (action, responder) {
+    proto.processUses = function (action, caller, responder, interact) {
         if (action.uses) {
             var self = this;
             if (action.uses.all) {
                 $.each(action.uses.all, function(index, child) {
                     if (self.responseIsEligible(child, [], responder)) {
-                        self.processResponse({response: child, responder: responder});
+                        self.processResponse({response: child, responder: responder}, caller, interact);
                     }
                 });
             }
             if (action.uses.first) {
                 $.each(action.uses.first, function(index, child) {
                     if (self.responseIsEligible(child, [], responder)) {
-                        self.processResponse({response: child, responder: responder});
+                        self.processResponse({response: child, responder: responder}, caller, interact);
                         return false;
                     }
                 });
@@ -251,21 +250,21 @@ var ResponseLib = (function () {
         }
     };
 
-    proto.processCalls = function(action) {
+    proto.processCalls = function (action, interact) {
         if (action.calls) {
-            this.interact.call(action.calls);
+            interact.call(action.calls);
         }
     };
 
-    proto.processAnimates = function(action) {
+    proto.processAnimates = function (action, interact) {
         if (action.animates) {
-            this.interact.animate(action.animates);
+            interact.animate(action.animates);
         }
     };
 
-    proto.processInvokes = function(action) {
+    proto.processInvokes = function (action, interact) {
         if (action.invokes) {
-            this.interact.invoke(action.invokes);
+            interact.invoke(action.invokes);
         }
     };
 
@@ -275,13 +274,14 @@ var ResponseLib = (function () {
         }
     };
 
-    proto.processSuggests = function(action) {
+    proto.processSuggests = function (action, interact) {
         if (action.suggests) {
-            this.interact.suggest(action.suggests);
+            interact.suggest(action.suggests);
         }
     };
 
-    proto.processResponse = function (candidate, caller) {
+    proto.processResponse = function (candidate, caller, interact) {
+        interact = interact || interact;
         var response = candidate.response;
         var responder = candidate.responder;
         incrementResponseRunCount(response);
@@ -289,14 +289,14 @@ var ResponseLib = (function () {
         if (section) {
             var self = this;
             $.each(section, function(index, action) {
-                self.processSays(action, response, responder);
+                self.processSays(action, response, responder, interact);
                 self.processSets(action, responder);
-                self.processUses(action);
-                self.processCalls(action);
-                self.processAnimates(action);
-                self.processInvokes(action);
+                self.processUses(action, caller, responder, interact);
+                self.processCalls(action, interact);
+                self.processAnimates(action, interact);
+                self.processInvokes(action, interact);
                 self.processMoves(action);
-                self.processSuggests(action);
+                self.processSuggests(action, interact);
             });
         }
     };
@@ -327,11 +327,11 @@ var ResponseLib = (function () {
                     : 1;
     }
 
-    proto.processGroup = function(group, caller) {
+    proto.processGroup = function(group, caller, interact) {
         group.sort(orderCompare);
 
         var self = this;
-        group.forEach(function(response) { self.processResponse(response, caller); });
+        group.forEach(function(response) { self.processResponse(response, caller, interact); });
     };
 
     function addPrompt(items, candidate) {
@@ -347,66 +347,66 @@ var ResponseLib = (function () {
         return items;
     }
 
-    proto.processMenuResponses = function(prompt, prompts, caller) {
+    proto.processMenuResponses = function(prompt, prompts, caller, interact) {
         var self = this;
         prompts.forEach(function (candidate) {
             if (candidate.response.prompts === prompt) {
-                self.processResponse(candidate, caller);
+                self.processResponse(candidate, caller, interact);
             }
         });
     };
 
-    proto.runMenu = function(prompts, caller) {
+    proto.runMenu = function(prompts, caller, interact) {
         var self = this;
         var items = getMenuItems(prompts);
-        this.interact.choose(items, function (which) {
+        interact.choose(items, function (which) {
             if (which !== -1) {
-                self.processMenuResponses(items[which], prompts, caller);
+                self.processMenuResponses(items[which], prompts, caller, interact);
             }
         });
     };
 
-    proto.processPrompts = function (prompts, caller) {
+    proto.processPrompts = function (prompts, caller, interact) {
         if (prompts.length === 1 && !prompts[0].response.forcesprompt) {
-            this.processGroup(prompts, caller);
+            this.processGroup(prompts, caller, interact);
         } else if (prompts.length > 0) {
-            this.runMenu(prompts, caller);
+            this.runMenu(prompts, caller, interact);
         }
     };
 
-    proto.processDefinedGroups = function(groups, caller) {
+    proto.processDefinedGroups = function(groups, caller, interact) {
         var self = this;
         this.types.forEach(function (type) {
             if (groups.hasOwnProperty(type)) {
-                self.processGroup(groups[type], caller);
+                self.processGroup(groups[type], caller, interact);
                 groups[type] = undefined;
             }
         });
     };
 
-    proto.processGroups = function(groups, caller) {
+    proto.processGroups = function(groups, caller, interact) {
         for (var group in groups) {
             if (groups.hasOwnProperty(group) && groups[group]) {
-                this.processGroup(groups[group], caller);
+                this.processGroup(groups[group], caller, interact);
             }
         }
     };
 
-    proto.processResponses = function (candidates, caller) {
+    proto.processResponses = function (candidates, caller, interact) {
         var self = this;
         var prompts = [];
         var groups = groupCandidates(candidates, prompts);
 
-        this.processDefinedGroups(groups, caller);
-        this.processGroups(groups, caller);
-        this.processPrompts(prompts, caller);
+        this.processDefinedGroups(groups, caller, interact);
+        this.processGroups(groups, caller, interact);
+        this.processPrompts(prompts, caller, interact);
     };
 
     proto.setTypes = function(types) {
         this.types = types;
     };
 
-    proto.callTopics = function(responders, topics, caller) {
+    proto.callTopics = function(responders, topics, caller, interact) {
         console.log("call topics:", topics);
         var candidates = [];
         for (var responder in responders) {
@@ -419,7 +419,7 @@ var ResponseLib = (function () {
         }
         candidates = this.getPriorityResponses(candidates);
 
-        this.processResponses(candidates, caller);
+        this.processResponses(candidates, caller, interact);
     };
 
     return type;
