@@ -28,29 +28,18 @@
                 }
             );
         }
-        function createInteract(world) {
+        function createInteract(world, response_lib) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
-            return new RifInteract(dom, formatter, world);
-        }
-        function convertTopics(topics) {
-            return topics.map(function(value) { return {keyword: value} });
+            return new RifInteract(dom, formatter, world, response_lib);
         }
         function init() {
             var world = new RifWorld();
 
             loadRif("sample_rif.txt", world, function(rif) {
-                var interact = createInteract(world);
                 var response_lib = new ResponseLib(world);
+                var interact = createInteract(world, response_lib);
 
-                world.callTopics = function(topics) {
-                    topics = convertTopics(topics);
-                    var responses = {};
-                    $.each(world.getCurrentResponders(), function(index, value) {
-                        responses[value] = rif.responses[value];
-                    });
-                    response_lib.callTopics(responses, topics, world.getPOV(), interact);
-                };
                 interact.sendCommand(["START"]);
             });
         }

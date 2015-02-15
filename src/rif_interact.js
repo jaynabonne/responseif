@@ -1,12 +1,13 @@
 var RifInteract = (function() {
     "use strict";
     
-    var type = function (dom, formatter, world) {
+    var type = function (dom, formatter, world, response_lib) {
         this.id = 1;
         this.dom = dom;
         this.formatter = formatter;
         this._appendNewDiv();
         this.world = world;
+        this.response_lib = response_lib;
         this.sectionsToHide = [];
         var self = this;
         this.clickFactory = function (keywords) {
@@ -18,6 +19,10 @@ var RifInteract = (function() {
             };
         };
     };
+
+    function convertTopics(topics) {
+        return topics.map(function(value) { return {keyword: value} });
+    }
 
     type.prototype = {
         getNextId: function() {
@@ -72,7 +77,15 @@ var RifInteract = (function() {
             this.currentDiv = div;
         },
         call: function(topics) {
-            this.world.callTopics(topics);
+            this.callTopics(topics);
+        },
+        callTopics: function(topics) {
+            topics = convertTopics(topics);
+            var responses = {};
+            $.each(this.world.getCurrentResponders(), function(index, value) {
+                responses[value] = rif.responses[value];
+            });
+            this.response_lib.callTopics(responses, topics, this.world.getPOV(), this);
         },
         animate: function(animates) {
             var self = this;
@@ -95,7 +108,7 @@ var RifInteract = (function() {
         },
         sendCommand: function(topics) {
             this.hideSections();
-            this.world.callTopics(topics);
+            this.callTopics(topics);
             this.idleProcessing();
         },
         idleProcessing: function() {

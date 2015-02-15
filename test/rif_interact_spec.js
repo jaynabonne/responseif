@@ -18,12 +18,20 @@ describe("RifInteract", function () {
             formatMenu: function() { return "formattedText"; }
         };
         world = {
-            callTopics: jasmine.createSpy("callTopics"),
             getState: jasmine.createSpy("getState"),
             setState: jasmine.createSpy("setState"),
-            setParent: jasmine.createSpy("setParent")
+            setParent: jasmine.createSpy("setParent"),
+            getCurrentResponders : function() {
+                return [];
+            },
+            getPOV: function() {
+                return "player";
+            }
         };
-        interact = new RifInteract(dom, formatter, world);
+        response_lib = {
+            callTopics: jasmine.createSpy("callTopics")
+        };
+        interact = new RifInteract(dom, formatter, world, response_lib);
         appendSpy.reset();
     });
     describe("say", function () {
@@ -52,7 +60,7 @@ describe("RifInteract", function () {
     describe("call", function () {
         it("should call the passed topics", function () {
             interact.call(["topicA", "topicB", "topicC"]);
-            expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB", "topicC"]);
+            expect(response_lib.callTopics).toHaveBeenCalled();
         });
     });
     describe("animate", function () {
@@ -73,9 +81,9 @@ describe("RifInteract", function () {
         });
     });
     describe("sendCommand", function() {
-        it("should invoke the world's callTopics", function() {
+        it("should invoke the response library's callTopics", function() {
             interact.sendCommand(["topicA", "topicB"]);
-            expect(world.callTopics).toHaveBeenCalledWith(["topicA", "topicB"]);
+            expect(response_lib.callTopics).toHaveBeenCalled();
         });
         it("should invoke idle processing", function() {
             interact.idleProcessing = jasmine.createSpy("idleProcessing");
