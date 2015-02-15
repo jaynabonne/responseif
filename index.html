@@ -31,8 +31,7 @@
         function createInteract(world) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
-            var interact = new RifInteract(dom, formatter, world);
-            return interact;
+            return new RifInteract(dom, formatter, world);
         }
         function convertTopics(topics) {
             return topics.map(function(value) { return {keyword: value} });
