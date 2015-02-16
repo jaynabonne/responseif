@@ -28,17 +28,17 @@
                 }
             );
         }
-        function createInteract(world, response_lib) {
+        function createInteract(world) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
+            var response_lib = new ResponseLib(world);
             return new RifInteract(dom, formatter, world, response_lib);
         }
         function init() {
             var world = new RifWorld();
 
             loadRif("sample_rif.txt", world, function(rif) {
-                var response_lib = new ResponseLib(world);
-                var interact = createInteract(world, response_lib);
+                var interact = createInteract(world);
 
                 interact.sendCommand(["START"]);
             });
