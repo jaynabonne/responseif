@@ -22,23 +22,23 @@
             }).done(function (response_text) {
                     var tokens = rifTokenize(response_text);
                     tokens = rifExpand(tokens);
-                    rif = rifParse(tokens);
+                    var rif = rifParse(tokens);
                     world.addRif(rif);
                     completion(rif);
                 }
             );
         }
-        function createInteract(world) {
+        function createInteract(world, rif) {
             var dom = new RifDOM($('#output'));
             var formatter = new HTMLFormatter();
             var response_lib = new ResponseLib(world);
-            return new RifInteract(dom, formatter, world, response_lib);
+            return new RifInteract(dom, formatter, world, response_lib, rif);
         }
         function init() {
             var world = new RifWorld();
 
             loadRif("sample_rif.txt", world, function(rif) {
-                var interact = createInteract(world);
+                var interact = createInteract(world, rif);
 
                 interact.sendCommand(["START"]);
             });

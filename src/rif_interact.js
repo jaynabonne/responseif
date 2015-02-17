@@ -1,7 +1,7 @@
 var RifInteract = (function() {
     "use strict";
     
-    var type = function (dom, formatter, world, response_lib) {
+    var type = function (dom, formatter, world, response_lib, rif) {
         this.id = 1;
         this.dom = dom;
         this.formatter = formatter;
@@ -9,6 +9,7 @@ var RifInteract = (function() {
         this.world = world;
         this.response_lib = response_lib;
         this.sectionsToHide = [];
+        this.rif = rif;
         var self = this;
         this.clickFactory = function (keywords) {
             return function (e) {
@@ -83,10 +84,22 @@ var RifInteract = (function() {
             topics = convertTopics(topics);
             var responses = {};
             var caller = this.world.getPOV();
+            var self = this;
             $.each(this.world.getCurrentResponders(caller), function(index, value) {
-                responses[value] = rif.responses[value];
+                responses[value] = self.rif.responses[value];
             });
             this.response_lib.callTopics(responses, topics, caller, this);
+        },
+        callActions: function(topics) {
+            topics = convertTopics(topics);
+            var responses = {};
+            var actions = this.rif.actions;
+            for (var item in actions) {
+                if (actions.hasOwnProperty(item)) {
+                    responses[item] = actions[item];
+                }
+            }
+            this.response_lib.callTopics(responses, topics, "", this);
         },
         animate: function(animates) {
             var self = this;

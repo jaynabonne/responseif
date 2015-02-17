@@ -28,10 +28,11 @@ describe("RifInteract", function () {
                 return "player";
             }
         };
+        rif = {};
         response_lib = {
             callTopics: jasmine.createSpy("callTopics")
         };
-        interact = new RifInteract(dom, formatter, world, response_lib);
+        interact = new RifInteract(dom, formatter, world, response_lib, rif);
         appendSpy.reset();
     });
     describe("say", function () {
@@ -60,7 +61,14 @@ describe("RifInteract", function () {
     describe("call", function () {
         it("should call the passed topics", function () {
             interact.call(["topicA", "topicB", "topicC"]);
-            expect(response_lib.callTopics).toHaveBeenCalled();
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "player", interact);
+        });
+    });
+    describe("callActions", function () {
+        it("should call the passed topics", function () {
+            rif.actions = { actor: "responses"};
+            interact.callActions(["topicA", "topicB", "topicC"]);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "", interact);
         });
     });
     describe("animate", function () {
