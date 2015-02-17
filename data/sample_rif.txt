@@ -259,10 +259,14 @@
 
 .actions mining-bot
 	.response
-		.needs DOOROPEN
+		.needs door-open mining-bot.saw-player
 		.does .says
 .end
 
 .responses mining-bot
+	.response
+		.matches ALCOVE-DOOR-OPENS
+		.runs 1
+		.does .sets mining-bot.saw-player
 .end
 
