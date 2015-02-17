@@ -82,10 +82,11 @@ var RifInteract = (function() {
         callTopics: function(topics) {
             topics = convertTopics(topics);
             var responses = {};
-            $.each(this.world.getCurrentResponders(), function(index, value) {
+            var caller = this.world.getPOV();
+            $.each(this.world.getCurrentResponders(caller), function(index, value) {
                 responses[value] = rif.responses[value];
             });
-            this.response_lib.callTopics(responses, topics, this.world.getPOV(), this);
+            this.response_lib.callTopics(responses, topics, caller, this);
         },
         animate: function(animates) {
             var self = this;

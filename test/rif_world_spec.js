@@ -119,23 +119,20 @@ describe("RifWorld", function () {
         });
     });
     describe("getCurrentResponders", function() {
-        it("returns the current pov", function() {
-            world.setPOV("thepov")
-            var responders = world.getCurrentResponders();
+        it("returns the pov passed", function() {
+            var responders = world.getCurrentResponders("thepov");
             expect(responders.indexOf("thepov")).not.toBe(-1);
         });
         it("returns the current pov's parent", function() {
-            world.setPOV("thepov")
             world.setParent("thepov", "theparent");
-            var responders = world.getCurrentResponders();
+            var responders = world.getCurrentResponders("thepov");
             expect(responders.indexOf("theparent")).not.toBe(-1);
         });
         it("returns the current pov's siblings", function() {
-            world.setPOV("thepov")
             world.setParent("thepov", "theparent");
             world.setParent("sibling1", "theparent");
             world.setParent("sibling2", "theparent");
-            var responders = world.getCurrentResponders();
+            var responders = world.getCurrentResponders("thepov");
             expect(responders.indexOf("sibling1")).not.toBe(-1);
             expect(responders.indexOf("sibling2")).not.toBe(-1);
         });

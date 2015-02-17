@@ -84,8 +84,7 @@ var RifWorld = (function() {
         this.pov = pov;
     };
 
-    proto.getCurrentResponders = function() {
-        var pov = this.getPOV();
+    proto.getCurrentResponders = function(pov) {
         var parent = this.getParent(pov);
         if (parent) {
             var responders = [parent];
