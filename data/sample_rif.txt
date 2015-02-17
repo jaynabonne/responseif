@@ -44,6 +44,7 @@
 .move outer-door .to hallway
 
 .move player .to titlescreen
+.move mining-bot .to hallway
 
 .-------------------------
 .- Title screen responses
@@ -255,6 +256,12 @@
 .-----------------------
 .- Mining bot responses
 .-----------------------
+
+.actions mining-bot
+	.response
+		.needs DOOROPEN
+		.does .says
+.end
 
 .responses mining-bot
 .end

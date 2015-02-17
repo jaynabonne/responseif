@@ -190,12 +190,16 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_responses = function () {
-        var value = this.tokens[this.index].value;
+        var pair = this.tokens[this.index];
+        var token = pair.token;
+        var value = pair.value;
         var rif = this.rif;
-        rif.responses = rif.responses || {};
+        rif[token] = rif[token]|| {};
         this.index++;
-        rif.responses[value] = this.parseResponseGroup();
+        rif[token][value] = this.parseResponseGroup();
     };
+
+    Parser.prototype.parse_actions = Parser.prototype.parse_responses;
 
     Parser.prototype.parse_set = function() {
         var expression = this.tokens[this.index].value;

@@ -6,6 +6,9 @@ describe("rifParse", function () {
     function responses(name) {
         return token_pair("responses", name);
     }
+    function actions(name) {
+        return token_pair("actions", name);
+    }
     function response(name) {
         return token_pair("response");
     }
@@ -93,6 +96,17 @@ describe("rifParse", function () {
             ]
         );
         expect(rif.responses).toEqual( { someObject: [{}, {}] } );
+    });
+    it("should parse actions", function () {
+        var rif = rifParse(
+            [
+                actions("someObject"),
+                    response(),
+                    response(),
+                end()
+            ]
+        );
+        expect(rif.actions).toEqual( { someObject: [{}, {}] } );
     });
     it("should parse response runs", function () {
         var rif = rifParse(
