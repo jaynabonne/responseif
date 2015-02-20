@@ -30,11 +30,12 @@ var HTMLFormatter = (function () {
         },
 
         formatMenu: function(options, clickfactory) {
-            var span = $("<div>");
+            var element = $("<ul>");
+            element.addClass("menu");
             for (var i = 0; i < options.length; ++i) {
-                span.append(createClickable("div", "&nbsp;&gt; " + options[i], 'menuitem', clickfactory(i)));
+                element.append(createClickable("li", options[i], 'menuitem', clickfactory(i)));
             }
-            return span;
+            return element;
         }
     };
     return type;

@@ -62,7 +62,8 @@ div#barspacer {
     height:15px;
 }
 span.keyword {color:inherit; cursor:pointer;}
-div.menuitem {color:#ca8642; cursor:pointer;}
+ul.menu { margin: 4px 0px 4px -12px;}
+li.menuitem {color:#ca8642; cursor:pointer;}
 
 div#intro {
     width:100%;
