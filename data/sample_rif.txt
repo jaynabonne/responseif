@@ -259,14 +259,13 @@
 
 .actions mining-bot
 	.response
-		.needs door-open mining-bot.saw-player
-		.does .says
+		.runs 1
+		.needs door-open
+		.does 
+			.sets mining-bot.saw-player
+			.says Spying you, one of the mining robots slowly slides forward.
 .end
 
 .responses mining-bot
-	.response
-		.matches ALCOVE-DOOR-OPENS
-		.runs 1
-		.does .sets mining-bot.saw-player
 .end
 

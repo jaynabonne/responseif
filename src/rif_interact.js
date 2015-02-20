@@ -91,15 +91,18 @@ var RifInteract = (function() {
             this.response_lib.callTopics(responses, topics, caller, this);
         },
         callActions: function(topics) {
+            console.log("callActions");
             topics = convertTopics(topics);
-            var responses = {};
             var actions = this.rif.actions;
-            for (var item in actions) {
-                if (actions.hasOwnProperty(item)) {
-                    responses[item] = actions[item];
+            for (var actor in actions) {
+                if (actions.hasOwnProperty(actor)) {
+                    var responses = {};
+                    responses[actor] = actions[actor];
+                    console.log("call actions for ", actor);
+                    console.info(responses);
+                    this.response_lib.callTopics(responses, topics, actor, this);
                 }
             }
-            this.response_lib.callTopics(responses, topics, "", this);
         },
         animate: function(animates) {
             var self = this;
@@ -126,7 +129,7 @@ var RifInteract = (function() {
             this.idleProcessing();
         },
         idleProcessing: function() {
-
+            this.callActions(["ACT"]);
         }
     };
     return type;

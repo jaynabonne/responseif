@@ -68,7 +68,7 @@ describe("RifInteract", function () {
         it("should call the passed topics", function () {
             rif.actions = { actor: "responses"};
             interact.callActions(["topicA", "topicB", "topicC"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "actor", interact);
         });
     });
     describe("animate", function () {
