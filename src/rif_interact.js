@@ -142,7 +142,7 @@ var RifInteract = (function() {
         showNewSeparator: function () {
             var separator = "separator" + this.separatorId;
             var div = this.dom.createDiv();
-            div.append("<div class='separatorholder'><div class='separator' id='" + separator + "'></div></div>");
+            div.append("<div class='separatorholder'><div class='separator' style='display:none' id='" + separator + "'></div></div>");
             this.dom.append(div);
             this.separatorShown = separator;
             this.separatorId++;
