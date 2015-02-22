@@ -53,7 +53,7 @@
 .responses titlescreen
 	.response
 		.matches START
-		.runs 1
+		.occurs 1
 		.does
 			.hides-bar
 			.says
@@ -67,7 +67,7 @@
 			.animates #intro .fade-in .lasting 1000
 	.response
 		.matches INTRODREAM
-		.runs 2
+		.occurs 2
 		.does 1
 				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .into #introrain
 				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .into #introwind
@@ -81,7 +81,7 @@
 
 	.response
 		.matches INTRORAIN 
-		.runs 1
+		.occurs 1
 		.does
 			.says , .into #rainpunc
 			.says but there is no rain. .into #introrain2
@@ -92,7 +92,7 @@
 			.calls INTRODONE
 	.response
 		.matches INTROWIND
-		.runs 1 
+		.occurs 1 
 		.does
 			.says , .into #windpunc
 			.says but there is no wind. .into #introwind2
@@ -149,7 +149,7 @@
 .responses alcove
 	.response
 		.matches ENTER
-		.runs 1
+		.occurs 1
 		.does
 			.says
 				{=break=}
@@ -259,7 +259,7 @@
 
 .actions mining-bot
 	.response
-		.runs 1
+		.occurs 1
 		.needs door-open
 		.does 
 			.sets mining-bot.saw-player
