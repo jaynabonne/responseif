@@ -13,8 +13,8 @@ describe("ResponseLib", function () {
         it("returns true for a simple response", function () {
             expect(responseLib.responseIsEligible({})).toEqual(true);
         });
-        it("returns false if the run equals or exceeds its runs", function () {
-            var response = { run: 5, runs: 5 };
+        it("returns false if the run equals or exceeds its occurs count", function () {
+            var response = { run: 5, occurs: 5 };
             expect(responseLib.responseIsEligible(response)).toEqual(false);
         });
         it("returns false if required state is not set", function () {
@@ -130,8 +130,8 @@ describe("ResponseLib", function () {
             expect(candidates).toEqual([{response: response1, score: 20000}, {response: response2, score: 10000}]);
         });
         it("returns responses whose count does not exceed maxcount", function () {
-            var response1 = {a: 1, runs: 10},
-                response2 = {b: 2, run: 4, runs: 4 },
+            var response1 = {a: 1, occurs: 10},
+                response2 = {b: 2, run: 4, occurs: 4 },
                 response3 = {c: 3},
                 response4 = {d: 4, run: 5 },
                 responses = [response1, response2, response3, response4],
@@ -150,7 +150,7 @@ describe("ResponseLib", function () {
             var response1 = {a: 1, matches: [{keyword: "atopic"}]},
                 response2 = {b: 2, matches: [{keyword: "btopic"}]},
                 response3 = {c: 3},
-                response4 = {d: 4, run: 4, runs: 4 },
+                response4 = {d: 4, run: 4, occurs: 4 },
                 parentresponse = { groups: [response1, response2, response3, response4] },
                 responses = [parentresponse],
                 topics = [{keyword: "atopic"}],

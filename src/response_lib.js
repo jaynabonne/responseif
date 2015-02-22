@@ -46,9 +46,9 @@ var ResponseLib = (function () {
         return type;
     }());
 
-    function hasRunAndRuns(response) { return response.runs !== undefined && response.run !== undefined; }
+    function hasRunAndOccurs(response) { return response.occurs !== undefined && response.run !== undefined; }
 
-    function responseCountValid(response) { return !hasRunAndRuns(response) || response.run < response.runs; }
+    function responseCountValid(response) { return !hasRunAndOccurs(response) || response.run < response.occurs; }
 
     function hasTopics(response) { return response.matches !== undefined; }
 

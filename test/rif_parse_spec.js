@@ -108,16 +108,16 @@ describe("rifParse", function () {
         );
         expect(rif.actions).toEqual( { someObject: [{}, {}] } );
     });
-    it("should parse response runs", function () {
+    it("should parse response occurs", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
-                        token_pair("runs","42"),
+                        token_pair("occurs","42"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{runs: 42}] } );
+        expect(rif.responses).toEqual( { anObject: [{occurs: 42}] } );
     });
     it("should parse response matches", function () {
         var rif = rifParse(
