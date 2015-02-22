@@ -11,6 +11,7 @@ var RifInteract = (function() {
         this.sectionsToHide = [];
         this.rif = rif;
         this.needsSeparator = false;
+        this.separatorId = 0;
         var self = this;
         this.clickFactory = function (keywords) {
             return function (e) {
@@ -133,7 +134,9 @@ var RifInteract = (function() {
         },
         beforeCommand: function() {
             if (this.needsSeparator) {
-                var div = this.dom.createDiv("separator0");
+                var div = this.dom.createDiv("separator" + this.separatorId);
+                this.separatorId++;
+                this.needsSeparator = false;
             }
         },
         idleProcessing: function() {

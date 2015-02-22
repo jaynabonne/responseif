@@ -89,15 +89,17 @@ describe("RifInteract", function () {
         });
     });
     describe("sendCommand", function() {
-        it("should invoke the response library's callTopics", function() {
+        it("should invoke the response library's callTopics", function () {
             interact.sendCommand(["topicA", "topicB"]);
             expect(response_lib.callTopics).toHaveBeenCalled();
         });
-        it("should invoke idle processing", function() {
+        it("should invoke idle processing", function () {
             interact.idleProcessing = jasmine.createSpy("idleProcessing");
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(interact.idleProcessing).toHaveBeenCalledWith();
         });
+    });
+    describe("sendCommand separator support", function() {
         it("should add a separator div before the command if text was output previously", function() {
             interact.say({ text: "This is some text" });
             dom.createDiv = jasmine.createSpy("createDiv");
@@ -108,6 +110,21 @@ describe("RifInteract", function () {
             dom.createDiv = jasmine.createSpy("createDiv");
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(dom.createDiv).not.toHaveBeenCalled();
+        });
+        it("should add not create a separator div until text is output again", function() {
+            interact.say({ text: "This is some text" });
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            dom.createDiv = jasmine.createSpy("createDiv");
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(dom.createDiv).not.toHaveBeenCalled();
+        });
+        it("should increment the separator number each time", function() {
+            interact.say({text: "This is some text"});
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            interact.say({text: "This is some text"});
+            dom.createDiv = jasmine.createSpy("createDiv");
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(dom.createDiv).toHaveBeenCalledWith("separator1");
         });
     });
     describe("choose", function() {
