@@ -98,6 +98,17 @@ describe("RifInteract", function () {
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(interact.idleProcessing).toHaveBeenCalledWith();
         });
+        it("should add a separator div before the command if text was output previously", function() {
+            interact.say({ text: "This is some text" });
+            dom.createDiv = jasmine.createSpy("createDiv");
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(dom.createDiv).toHaveBeenCalledWith("separator0");
+        });
+        it("should add not create a separator div before the command if text was not output previously", function() {
+            dom.createDiv = jasmine.createSpy("createDiv");
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(dom.createDiv).not.toHaveBeenCalled();
+        });
     });
     describe("choose", function() {
         it("should auto-hide the menu on next command", function() {

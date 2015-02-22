@@ -10,6 +10,7 @@ var RifInteract = (function() {
         this.response_lib = response_lib;
         this.sectionsToHide = [];
         this.rif = rif;
+        this.needsSeparator = false;
         var self = this;
         this.clickFactory = function (keywords) {
             return function (e) {
@@ -43,6 +44,7 @@ var RifInteract = (function() {
                     this.dom.scrollToEnd();
                 }
             }
+            this.needsSeparator = true;
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();
@@ -125,8 +127,14 @@ var RifInteract = (function() {
         },
         sendCommand: function(topics) {
             this.hideSections();
+            this.beforeCommand();
             this.callTopics(topics);
             this.idleProcessing();
+        },
+        beforeCommand: function() {
+            if (this.needsSeparator) {
+                var div = this.dom.createDiv("separator0");
+            }
         },
         idleProcessing: function() {
             this.callActions(["ACT"]);

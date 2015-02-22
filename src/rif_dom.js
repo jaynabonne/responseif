@@ -50,7 +50,7 @@ var RifDOM = (function(formatter) {
         }
         var element = $(selector);
         if (!element) {
-            console.log("not element for " + selector);
+            console.log("no element for " + selector);
             return;
         }
         element.animate(parameters, duration || 0);
