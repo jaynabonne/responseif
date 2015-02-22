@@ -12,6 +12,7 @@ var RifInteract = (function() {
         this.rif = rif;
         this.needsSeparator = false;
         this.separatorId = 0;
+        this.separatorShown = "";
         var self = this;
         this.clickFactory = function (keywords) {
             return function (e) {
@@ -132,10 +133,22 @@ var RifInteract = (function() {
             this.callTopics(topics);
             this.idleProcessing();
         },
+        hideSeparator: function () {
+            if (this.separatorShown) {
+                this.dom.hideElement(this.separatorShown, 0);
+                this.separatorShown = "";
+            }
+        },
+        showNewSeparator: function () {
+            var separator = "separator" + this.separatorId;
+            var div = this.dom.createDiv(separator);
+            this.separatorShown = separator;
+            this.separatorId++;
+        },
         beforeCommand: function() {
             if (this.needsSeparator) {
-                var div = this.dom.createDiv("separator" + this.separatorId);
-                this.separatorId++;
+                this.hideSeparator();
+                this.showNewSeparator();
                 this.needsSeparator = false;
             }
         },

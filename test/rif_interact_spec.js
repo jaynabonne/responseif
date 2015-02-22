@@ -11,7 +11,8 @@ describe("RifInteract", function () {
             createDiv: function() { return { append: appendSpy}; },
             scrollToEnd: function() {},
             append: function(div) {},
-            getElementBySelector: jasmine.createSpy("getElementBySelector")
+            getElementBySelector: jasmine.createSpy("getElementBySelector"),
+            hideElement: jasmine.createSpy("hideElement")
         };
         formatter = {
             formatOutput: function() { return "formattedText"; },
@@ -121,10 +122,17 @@ describe("RifInteract", function () {
         it("should increment the separator number each time", function() {
             interact.say({text: "This is some text"});
             interact.sendCommand(["topicA", "topicB", "topicC"]);
-            interact.say({text: "This is some text"});
+            interact.say({text: "This is some more text"});
             dom.createDiv = jasmine.createSpy("createDiv");
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(dom.createDiv).toHaveBeenCalledWith("separator1");
+        });
+        it("should hide a previous separator when a new one is created", function(){
+            interact.say({text: "This is some text"});
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            interact.say({text: "This is some more text"});
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(dom.hideElement).toHaveBeenCalledWith("separator0", 0);
         });
     });
     describe("choose", function() {
