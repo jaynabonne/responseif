@@ -31,6 +31,14 @@ var RifDOM = (function(formatter) {
         return $(selector);
     };
 
+    prototype.showElement = function(selector) {
+        $(selector).show();
+    };
+
+    prototype.hideElement = function(selector) {
+        $(selector).hide();
+    };
+
     prototype.removeElement = function(selector, timeout) {
         var section = this.getElementBySelector(selector);
         if (section) {

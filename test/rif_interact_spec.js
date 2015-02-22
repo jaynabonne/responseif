@@ -12,7 +12,8 @@ describe("RifInteract", function () {
             scrollToEnd: function() {},
             append: function(div) {},
             getElementBySelector: jasmine.createSpy("getElementBySelector"),
-            removeElement: jasmine.createSpy("removeElement")
+            removeElement: jasmine.createSpy("removeElement"),
+            showElement: jasmine.createSpy("showElement")
         };
         dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
@@ -110,6 +111,15 @@ describe("RifInteract", function () {
             expect(dom.createDiv).toHaveBeenCalledWith();
             expect(appendSpy).toHaveBeenCalledWith("<div class='separatorholder'><div class='separator' style='display:none' id='separator0'></div></div>");
             expect(dom.append).toHaveBeenCalled();
+            expect(dom.showElement).not.toHaveBeenCalled();
+        });
+        it("should show the separator when new text is output", function() {
+            interact.say({ text: "This is some text" });
+            dom.createDiv.reset();
+            dom.append = jasmine.createSpy("append");
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            interact.say({ text: "This is some more text" });
+            expect(dom.showElement).toHaveBeenCalledWith("#separator0");
         });
     });
     xdescribe("sendCommand separator support", function() {

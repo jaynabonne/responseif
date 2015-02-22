@@ -34,6 +34,7 @@ var RifInteract = (function() {
         },
         say: function (says, response) {
             var formatted = this.formatter.formatOutput(says.text, this.clickFactory);
+            console.log("say...", response);
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);
                 $(element).html(formatted);
@@ -45,6 +46,7 @@ var RifInteract = (function() {
                     this.currentDiv.append(" ");
                     this.dom.scrollToEnd();
                 }
+                this.showSeparator();
                 this.needsSeparator = true;
             }
         },
@@ -135,7 +137,8 @@ var RifInteract = (function() {
         },
         hideSeparator: function () {
             if (this.separatorShown) {
-                this.dom.removeElement('#'+this.separatorShown, 1);
+                console.log("hideSeparator " + this.separatorShown)
+                this.dom.removeElement(this.separatorShown, 1);
                 this.separatorShown = "";
             }
         },
@@ -144,8 +147,15 @@ var RifInteract = (function() {
             var div = this.dom.createDiv();
             div.append("<div class='separatorholder'><div class='separator' style='display:none' id='" + separator + "'></div></div>");
             this.dom.append(div);
-            this.separatorShown = separator;
+            this.separatorShown = '#'+separator;
             this.separatorId++;
+            console.log("show new separator " + this.separatorShown);
+        },
+        showSeparator: function () {
+            if (this.separatorShown) {
+                console.log("show separator " + this.separatorShown);
+                this.dom.showElement(this.separatorShown);
+            }
         },
         beforeCommand: function() {
             if (this.needsSeparator) {
@@ -153,6 +163,7 @@ var RifInteract = (function() {
                 this.showNewSeparator();
                 this.needsSeparator = false;
             }
+            this.beginSection();
         },
         idleProcessing: function() {
             this.callActions(["ACT"]);
