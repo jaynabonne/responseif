@@ -74,7 +74,7 @@ var RifInteract = (function() {
             this._appendNewDiv();
         },
         hideSection: function(id) {
-            this.dom.hideElement('#'+id, 250);
+            this.dom.removeElement('#'+id, 250);
         },
         _appendNewDiv: function(id) {
             var div = this.dom.createDiv(id);
@@ -135,7 +135,7 @@ var RifInteract = (function() {
         },
         hideSeparator: function () {
             if (this.separatorShown) {
-                this.dom.hideElement('#'+this.separatorShown, 1);
+                this.dom.removeElement('#'+this.separatorShown, 1);
                 this.separatorShown = "";
             }
         },

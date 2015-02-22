@@ -31,7 +31,7 @@ var RifDOM = (function(formatter) {
         return $(selector);
     };
 
-    prototype.hideElement = function(selector, timeout) {
+    prototype.removeElement = function(selector, timeout) {
         var section = this.getElementBySelector(selector);
         if (section) {
             section.hide(timeout, function () { $(this).remove(); });

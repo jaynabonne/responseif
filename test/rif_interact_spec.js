@@ -12,7 +12,7 @@ describe("RifInteract", function () {
             scrollToEnd: function() {},
             append: function(div) {},
             getElementBySelector: jasmine.createSpy("getElementBySelector"),
-            hideElement: jasmine.createSpy("hideElement")
+            removeElement: jasmine.createSpy("removeElement")
         };
         dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
@@ -52,12 +52,12 @@ describe("RifInteract", function () {
             expect(dom.scrollToEnd).toHaveBeenCalled();
         });
         it("should hide autohides text after the next command", function() {
-            dom.hideElement = jasmine.createSpy("hideElement");
+            dom.removeElement = jasmine.createSpy("removeElement");
             interact.say({ text: "This is some text", autohides: true });
             interact.say({ text: "This is some more text", autohides: true });
             interact.sendCommand([]);
-            expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv1", 250);
-            expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv2", 250);
+            expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
+            expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv2", 250);
         });
     });
     describe("call", function () {
@@ -145,15 +145,15 @@ describe("RifInteract", function () {
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             interact.say({text: "This is some more text"});
             interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.hideElement).toHaveBeenCalledWith("#separator0", 1);
+            expect(dom.removeElement).toHaveBeenCalledWith("#separator0", 1);
         });
 });
     describe("choose", function() {
         it("should auto-hide the menu on next command", function() {
-            dom.hideElement = jasmine.createSpy("hideElement");
+            dom.removeElement = jasmine.createSpy("removeElement");
             interact.choose(["one", "two", "three"]);
             interact.sendCommand([]);
-            expect(dom.hideElement).toHaveBeenCalledWith("#outputdiv1", 250);
+            expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
         });
     });
 });
