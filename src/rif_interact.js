@@ -45,8 +45,8 @@ var RifInteract = (function() {
                     this.currentDiv.append(" ");
                     this.dom.scrollToEnd();
                 }
+                this.needsSeparator = true;
             }
-            this.needsSeparator = true;
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();
@@ -135,13 +135,15 @@ var RifInteract = (function() {
         },
         hideSeparator: function () {
             if (this.separatorShown) {
-                this.dom.hideElement(this.separatorShown, 0);
+                this.dom.hideElement('#'+this.separatorShown, 1);
                 this.separatorShown = "";
             }
         },
         showNewSeparator: function () {
             var separator = "separator" + this.separatorId;
-            var div = this.dom.createDiv(separator);
+            var div = this.dom.createDiv();
+            div.append("<div class='separatorholder'><div class='separator' id='" + separator + "'></div></div>");
+            this.dom.append(div);
             this.separatorShown = separator;
             this.separatorId++;
         },

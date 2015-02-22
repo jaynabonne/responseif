@@ -8,12 +8,13 @@ describe("RifInteract", function () {
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
         dom = {
-            createDiv: function() { return { append: appendSpy}; },
+            createDiv: jasmine.createSpy("getElementBySelector"),
             scrollToEnd: function() {},
             append: function(div) {},
             getElementBySelector: jasmine.createSpy("getElementBySelector"),
             hideElement: jasmine.createSpy("hideElement")
         };
+        dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
             formatOutput: function() { return "formattedText"; },
             formatMenu: function() { return "formattedText"; }
@@ -103,19 +104,28 @@ describe("RifInteract", function () {
     describe("sendCommand separator support", function() {
         it("should add a separator div before the command if text was output previously", function() {
             interact.say({ text: "This is some text" });
-            dom.createDiv = jasmine.createSpy("createDiv");
+            dom.createDiv.reset();
+            dom.append = jasmine.createSpy("append");
             interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).toHaveBeenCalledWith("separator0");
-        });
+            expect(dom.createDiv).toHaveBeenCalledWith();
+            expect(appendSpy).toHaveBeenCalledWith("<div class='separatorholder'><div class='separator' id='separator0'></div></div>");
+            expect(dom.append).toHaveBeenCalled();
+        })
         it("should add not create a separator div before the command if text was not output previously", function() {
-            dom.createDiv = jasmine.createSpy("createDiv");
+            interact.say({ text: "This is some text", into: "someelement" });
+            dom.createDiv.reset();
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(dom.createDiv).not.toHaveBeenCalled();
+        });
+        it("should add not create a separator div before the command if .into text was output previously", function() {
+            dom.createDiv.reset();
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(dom.createDiv).not.toHaveBeenCalled();
         });
         it("should add not create a separator div until text is output again", function() {
             interact.say({ text: "This is some text" });
             interact.sendCommand(["topicA", "topicB", "topicC"]);
-            dom.createDiv = jasmine.createSpy("createDiv");
+            dom.createDiv.reset();
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(dom.createDiv).not.toHaveBeenCalled();
         });
@@ -123,18 +133,19 @@ describe("RifInteract", function () {
             interact.say({text: "This is some text"});
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             interact.say({text: "This is some more text"});
-            dom.createDiv = jasmine.createSpy("createDiv");
+            dom.createDiv.reset();
             interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).toHaveBeenCalledWith("separator1");
+            expect(dom.createDiv).toHaveBeenCalledWith();
+            expect(appendSpy).toHaveBeenCalledWith("<div class='separatorholder'><div class='separator' id='separator1'></div></div>");
         });
         it("should hide a previous separator when a new one is created", function(){
             interact.say({text: "This is some text"});
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             interact.say({text: "This is some more text"});
             interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.hideElement).toHaveBeenCalledWith("separator0", 0);
+            expect(dom.hideElement).toHaveBeenCalledWith("#separator0", 1);
         });
-    });
+});
     describe("choose", function() {
         it("should auto-hide the menu on next command", function() {
             dom.hideElement = jasmine.createSpy("hideElement");
