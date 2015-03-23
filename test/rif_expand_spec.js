@@ -87,6 +87,28 @@ describe("rifExpand", function () {
             ]
         );
     });
+    it("should replace a value in the definition result", function() {
+        var tokens = rifExpand(
+            [
+                token_pair("tokenA", "valueA"),
+                define("somedef"),
+                token_pair("tokenNew"),
+                token_pair("<value>"),
+                enddef(),
+                token_pair("tokenB", "valueB"),
+                token_pair("somedef", "repvalue"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+        expect(tokens).toEqual(
+            [
+                token_pair("tokenA", "valueA"),
+                token_pair("tokenB", "valueB"),
+                token_pair("tokenNew", "repvalue"),
+                token_pair("tokenC", "valueC")
+            ]
+        );
+    });
     it("should replace a recursive definition in the result", function() {
         var tokens = rifExpand(
             [

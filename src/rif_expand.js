@@ -31,10 +31,21 @@ var rifExpand = (function () {
         this.definitions[id] = definition;
     };
 
-    Expander.prototype.applyDefinition = function(token) {
+    function replaceValues(tokens, value) {
+        for (var i = 1; i < tokens.length; ++i) {
+            var token_pair = tokens[i];
+            if (token_pair.token === "<value>") {
+                tokens[i-1].value = value;
+            }
+        }
+        return tokens;
+    };
+
+    Expander.prototype.applyDefinition = function(token, value) {
         var iterator = this.iterator;
         var new_tokens = this.new_tokens;
-        var expanded_tokens = this.expand(new Iterator(this.definitions[token]));
+        var valued_tokens = replaceValues(this.definitions[token], value);
+        var expanded_tokens = this.expand(new Iterator(valued_tokens));
         this.iterator = iterator;
         this.new_tokens = new_tokens.concat(expanded_tokens);
     };
@@ -53,8 +64,8 @@ var rifExpand = (function () {
             this.iterator.next();
             this.createDefinition(token_pair.value);
         } else if (this.definitions[token]) {
-            this.applyDefinition(token);
-        } else {
+            this.applyDefinition(token, token_pair.value);
+        } else if (token !== "<value>") {
             this.new_tokens.push(token_pair);
         }
     };
