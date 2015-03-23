@@ -14,7 +14,13 @@ var RifWorld = (function() {
         this.values[id] = value;
     };
     proto.getState = function(id, responder) {
-        if (id[0] === "!") {
+        var index = id.indexOf("=");
+        if (index != -1) {
+            var value = id.substring(index + 1);
+            id = id.substring(0, index);
+            var cur_value = this.getValue(id);
+            return cur_value === value;
+        } else if (id[0] === "!") {
             return !this.getValue(id.substr(1));
         } else {
             return this.getValue(id);
@@ -66,6 +72,7 @@ var RifWorld = (function() {
             this.children[parent] = this.getChildren(parent);
             this.children[parent].push(child);
         }
+        console.log("Set parent of " + child + " to " + parent);
     };
 
     proto.getParent = function(o) {

@@ -33,6 +33,11 @@ describe("RifWorld", function () {
             expect(world.getState("!somestate")).toBe(false);
             expect(world.getValue).toHaveBeenCalledWith("somestate");
         });
+        it("should test an explicit value", function() {
+            world.getValue.andReturn("somevalue");
+            expect(world.getState("somestate=somevalue")).toBe(true);
+            expect(world.getValue).toHaveBeenCalledWith("somestate");
+        });
     });
     describe("setState", function() {
         beforeEach(function () {
