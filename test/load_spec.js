@@ -6,8 +6,9 @@ describe("loadTest", function () {
         }).responseText;
 
         var tokens = rifTokenize(rifSource);
-        tokens = rifExpand(tokens);
-        var rif  = rifParse(tokens);
-        console.info(rif);
+        rifExpand(tokens, function(tokens) {
+            var rif  = rifParse(tokens);
+            console.info(rif);
+        });
     });
 });

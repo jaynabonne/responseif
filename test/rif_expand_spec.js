@@ -10,7 +10,10 @@ describe("rifExpand", function () {
         return token_pair("enddef");
     }
     it("should return an empty array for an empty input", function() {
-        var tokens = rifExpand([]);
+        var tokens;
+        rifExpand([], function(parsed_tokens) {
+            tokens = parsed_tokens;
+        });
         expect(tokens).toEqual([]);
     });
     it("should return the same tokens when there are no definitions", function() {
@@ -19,14 +22,16 @@ describe("rifExpand", function () {
                 token_pair("tokenA", "valueA"),
                 token_pair("tokenB", "valueB"),
                 token_pair("tokenC", "valueC")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
     it("should remove empty definitions from the result", function() {
@@ -37,14 +42,16 @@ describe("rifExpand", function () {
                 enddef(),
                 token_pair("tokenB", "valueB"),
                 token_pair("tokenC", "valueC")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
     it("should remove non-empty definitions from the result", function() {
@@ -56,14 +63,16 @@ describe("rifExpand", function () {
                 enddef(),
                 token_pair("tokenB", "valueB"),
                 token_pair("tokenC", "valueC")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
     it("should replace a definition in the result", function() {
@@ -76,15 +85,17 @@ describe("rifExpand", function () {
                 token_pair("tokenB", "valueB"),
                 token_pair("somedef"),
                 token_pair("tokenC", "valueC")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenNew", "valueNew"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenNew", "valueNew"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
     it("should replace a value in the definition result", function() {
@@ -98,15 +109,17 @@ describe("rifExpand", function () {
                 token_pair("tokenB", "valueB"),
                 token_pair("somedef", "repvalue"),
                 token_pair("tokenC", "valueC")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenNew", "repvalue"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenNew", "repvalue"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
     it("should replace a recursive definition in the result", function() {
@@ -124,15 +137,17 @@ describe("rifExpand", function () {
                 token_pair("tokenB", "valueB"),
                 token_pair("someotherdef"),
                 token_pair("tokenC", "valueC")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenNew", "valueNew"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenNew", "valueNew"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
     it("should strip out comments", function() {
@@ -144,14 +159,17 @@ describe("rifExpand", function () {
                 token_pair("-", "some long value"),
                 token_pair("tokenC", "valueC"),
                 token_pair("#otherrandomtext", "some really long value")
-            ]
-        );
-        expect(tokens).toEqual(
-            [
-                token_pair("tokenA", "valueA"),
-                token_pair("tokenB", "valueB"),
-                token_pair("tokenC", "valueC")
-            ]
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenC", "valueC")
+                    ]
+                );
+            }
         );
     });
+
 });

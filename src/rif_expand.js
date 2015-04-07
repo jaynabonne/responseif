@@ -79,8 +79,9 @@ var rifExpand = (function () {
         }
         return this.new_tokens;
     };
-    return function(tokens) {
+    return function(tokens, completion) {
         var expander = new Expander();
-        return expander.expand(new Iterator(tokens));
+        var result = expander.expand(new Iterator(tokens));
+        completion(result);
     };
 })();
