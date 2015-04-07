@@ -21,10 +21,11 @@
                 url: "data/" + file
             }).done(function (response_text) {
                     var tokens = rifTokenize(response_text);
-                    tokens = rifExpand(tokens);
-                    var rif = rifParse(tokens);
-                    world.addRif(rif);
-                    completion(rif);
+                    rifExpand(tokens, function(tokens) {
+                        var rif = rifParse(tokens);
+                        world.addRif(rif);
+                        completion(rif);
+                    });
                 }
             );
         }
