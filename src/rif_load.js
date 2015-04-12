@@ -5,7 +5,7 @@ var rifLoad = (function() {
     };
 
     type.prototype.loadTokens = function(name, completion) {
-        self = this;
+        var self = this;
         self.load_file(name, function (data) {
             var tokens = rifTokenize(data);
             $.each(tokens, function(index, token_pair) {
