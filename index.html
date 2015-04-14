@@ -14,20 +14,23 @@
     <script type="text/javascript" src="src/rif_parse.js"></script>
     <script type="text/javascript" src="src/rif_tokenize.js"></script>
     <script type="text/javascript" src="src/rif_world.js"></script>
+    <script type="text/javascript" src="src/rif_load.js"></script>
 
     <script type="text/javascript">
-        function loadRif(file, world, completion) {
+        function loadFile(name, completion) {
             $.ajax({
-                url: "data/" + file
-            }).done(function (response_text) {
-                    var tokens = rifTokenize(response_text);
-                    rifExpand(tokens, function(tokens) {
-                        var rif = rifParse(tokens);
-                        world.addRif(rif);
-                        completion(rif);
-                    });
-                }
-            );
+                url: "data/" + name
+            }).done(completion);
+        }
+        function loadRif(file, world, completion) {
+            var load = new rifLoad(loadFile);
+            load.loadTokens(file, function (tokens) {
+                rifExpand(tokens, function(tokens) {
+                    var rif = rifParse(tokens);
+                    world.addRif(rif);
+                    completion(rif);
+                });
+            });
         }
         function createInteract(world, rif) {
             var dom = new RifDOM($('#output'));
