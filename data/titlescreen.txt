@@ -2,6 +2,12 @@
 .- Title screen responses
 .-------------------------
 
+.define fades-out-intro
+	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 3000 .to { "opacity": 0 } .lasting 15000
+	.animates #introdream .to { "opacity": 1 } .lasting 2000 .to { "opacity": 0.2 } .lasting 4000 .to { "opacity": 0 } .lasting 30000
+	.animates #introdream2 .to { "opacity": 1 } .lasting 2000 .to { "opacity": 0.2 } .lasting 4000 .to { "opacity": 0 } .lasting 20000
+.enddef
+
 .responses titlescreen
 	.response
 		.matches START

@@ -13,12 +13,6 @@
 	.to {"opacity": "1"} .lasting 1000
 .enddef
 
-.define fades-out-intro
-	.animates #introfadefirst .to { "opacity": 0.2 } .lasting 3000 .to { "opacity": 0 } .lasting 15000
-	.animates #introdream .to { "opacity": 1 } .lasting 2000 .to { "opacity": 0.2 } .lasting 4000 .to { "opacity": 0 } .lasting 30000
-	.animates #introdream2 .to { "opacity": 1 } .lasting 2000 .to { "opacity": 0.2 } .lasting 4000 .to { "opacity": 0 } .lasting 20000
-.enddef
-
 .define hides-bar
 	.animates #bar .to { "opacity": 0 }
 .enddef
@@ -39,7 +33,6 @@
 .define moves-player-south-to .sets last-dir=south .moves player .to .<value> .enddef
 .define moves-player-west-to  .sets last-dir=west  .moves player .to .<value> .enddef
 .define moves-player-east-to  .sets last-dir=east  .moves player .to .<value> .enddef
-
 
 .---------------
 .- World set up
@@ -132,65 +125,7 @@
 		watching and waiting intently for you.
 .end
 
-.-------------------
-.- Player responses
-.--------------------
-
-.responses player
-	.response
-		.matches message
-		.does
-			.says
-				The message is terse and to the point:<br>
-				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
-				M47-C communication disconnect. {!EAR!}.</span>
-
-	.response
-		.matches USE
-		.does .says Use! .autohides
-
-	.response
-		.matches TALK
-		.does .says Talk! .autohides
-
-	.response
-		.matches door=50
-		.does
-			.says The door is a distant memory now.
-		
-	.response
-		.matches ALCOVE-DOOR-OPENS=10
-		.does
-			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now open.|door!}
-			.says {!Your alcove door now registers as being open.|door!}
-
-	.response
-		.matches ALCOVE-DOOR-CLOSES=10
-		.does
-			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now closed.|door!}
-			.says {!Your alcove door now registers as being closed.|door!}
-
-	.response
-		.matches *door
-		.groups
-			.response
-				.needs !door-open
-				.prompts Open the alcove door
-				.forcesprompt
-				.does
-					.sets door-open
-					.calls ALCOVE-DOOR-OPENS
-
-			.response
-				.needs door-open
-				.prompts Close the alcove door
-				.forcesprompt
-				.does
-					.sets !door-open
-					.calls ALCOVE-DOOR-CLOSES
-		.end
-
-.end
+.include player.txt
 
 .--------------------
 .- Hallway responses
@@ -254,19 +189,4 @@
 .responses mining nexus
 .end
 
-.-----------------------
-.- Mining bot responses
-.-----------------------
-
-.actions mining-bot
-	.response
-		.occurs 1
-		.needs door-open
-		.does 
-			.sets mining-bot.saw-player
-			.says Spying you, one of the mining robots slides forward. "Help us." The voice drowns out the low-level chatter of the Others. "It's all stopped. Fix it."
-.end
-
-.responses mining-bot
-.end
-
+.include miningbot.txt
