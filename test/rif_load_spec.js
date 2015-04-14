@@ -28,7 +28,15 @@ describe('rif_load', function(){
         );
     });
     it('should load nested files', function() {
-        load_file.mostRecentCall.args[1](".include otherfile");
+        load_file.mostRecentCall.args[1](".a .include otherfile .c");
         expect(load_file).toHaveBeenCalledWith('otherfile', jasmine.any(Function));
+        load_file.mostRecentCall.args[1](".b");
+        expect(resulting_tokens).toEqual(
+            [
+                {token:"a", value:""},
+                {token:"b", value:""},
+                {token:"c", value:""}
+            ]
+        );
     });
 });
