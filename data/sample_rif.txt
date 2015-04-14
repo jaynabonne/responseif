@@ -35,6 +35,11 @@
 				.into #commandPane
 .enddef
 
+.define moves-player-north-to .sets last-dir=north .moves player .to .<value> .enddef
+.define moves-player-south-to .sets last-dir=south .moves player .to .<value> .enddef
+.define moves-player-west-to  .sets last-dir=west  .moves player .to .<value> .enddef
+.define moves-player-east-to  .sets last-dir=east  .moves player .to .<value> .enddef
+
 
 .---------------
 .- World set up
@@ -238,7 +243,7 @@
 				.prompts Continue along the corridor to the processing center.
 				.does 
 					.says You enter the processing center. 
-					.moves-player-east-to .to processing center
+					.moves-player-east-to processing center
 		.end
 .end
 
