@@ -22,6 +22,7 @@
 .define hides-bar
 	.animates #bar .to { "opacity": 0 }
 .enddef
+
 .define shows-bar
 	.animates #bar .to { "opacity": 1 } .lasting 2000
 .enddef
@@ -33,6 +34,7 @@
 					<div class="baricon" style="margin-left:8px">{!<img src="image/talk.png">|TALK!}</div>
 				.into #commandPane
 .enddef
+
 
 .---------------
 .- World set up
@@ -46,70 +48,10 @@
 .move player .to titlescreen
 .move mining-bot .to hallway
 
-.-------------------------
-.- Title screen responses
-.-------------------------
+.move M47-C .to M47-C-Room
+.move L17-C .to L17-C-Room
 
-.responses titlescreen
-	.response
-		.matches START
-		.occurs 1
-		.does
-			.hides-bar
-			.says
-				<div id="intro">
-					<div id="introfadefirst">
-						<div id="introrain"></div>
-						<div id="introwind"></div>
-					</div>
-					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div></div><div id="introdream2"></div>
-				</div>
-			.animates #intro .fade-in .lasting 1000
-	.response
-		.matches INTRODREAM
-		.occurs 2
-		.does 1
-				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .into #introrain
-				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .into #introwind
-				.says {!..|INTRODREAM!} .into #introdream1
-				.animates #introrain, #introwind, #introdream1 .expand-and-fade-in
-		.does 2 .says but you should not dream. .into #introdream2
-				.animates #introdream2 .fade-in .lasting 1000
-				.animates #introdream .to { "opacity": 1 } .lasting 1000
-				.sets intro_saw_dream
-				.calls INTRODONE
-
-	.response
-		.matches INTRORAIN 
-		.occurs 1
-		.does
-			.says , .into #rainpunc
-			.says but there is no rain. .into #introrain2
-			.animates #introrain2 .expand-and-fade-in
-			.sets intro_saw_rain
-			.invokes
-				$("#introrain span").css("cursor", "inherit")
-			.calls INTRODONE
-	.response
-		.matches INTROWIND
-		.occurs 1 
-		.does
-			.says , .into #windpunc
-			.says but there is no wind. .into #introwind2
-			.animates #introwind2 .expand-and-fade-in
-			.sets intro_saw_wind
-			.calls INTRODONE
-		
-	.response
-		.matches INTRODONE
-		.needs intro_saw_dream intro_saw_rain intro_saw_wind
-		.does
-			.fades-out-intro
-			.populates-icons
-			.shows-bar
-			.moves player .to alcove
-			.calls ENTER
-.end
+.include titlescreen.txt
 
 .-----------------
 .- Door responses
@@ -173,7 +115,7 @@
 					.needs door-open
 					.does 
 						.says Motors engage, wheels turn, and you slowly roll out of your alcove into the hallway.
-						.moves player .to hallway
+						.moves-player-north-to hallway
 				.response
 					.does .says {!You can't move while your alcove door is closed.|door!} .autohides
 			.end
@@ -220,7 +162,7 @@
 	.response
 		.matches ALCOVE-DOOR-CLOSES=10
 		.does
-			.says 1 {!You trigger the door to your alcove. You  It registers on your screen that it's now closed.|door!}
+			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now closed.|door!}
 			.says {!Your alcove door now registers as being closed.|door!}
 
 	.response
@@ -233,6 +175,7 @@
 				.does
 					.sets door-open
 					.calls ALCOVE-DOOR-OPENS
+
 			.response
 				.needs door-open
 				.prompts Close the alcove door
@@ -250,7 +193,60 @@
 .responses hallway
 	.response
 		.matches LOOK
-		.does .says You're in the hallway.
+		.does .says You're in the main corridor. {!One direction leads to the mining nexus|MOVE MINING_NEXUS!}, {!and the other leads toward the processing center and the controller rooms.|MOVE CONTROLLER_CORRIDOR!}
+	.response
+		.groups
+			.response
+				.matches MOVE MINING_NEXUS
+				.forcesprompt
+				.prompts Go down the corridor to the mining nexus
+				.does 
+					.says You move along the passage to the mining nexus.
+					.moves-player-west-to mining nexus
+			.response
+				.matches MOVE CONTROLLER_CORRIDOR
+				.forcesprompt
+				.prompts Go up the corridor toward the processing center.
+				.does 
+					.says You head toward the processing center. The first stop along the corridor is a junction leading off
+					to two rooms, each containing a controller.
+					.moves-player-east-to controller corridor
+		.end
+.end
+
+.--------------------------------
+.- Controller corridor responses
+.--------------------------------
+
+.responses controller corridor
+	.response
+		.matches LOOK
+		.does
+			.says This is a section of corridor outside the controller rooms. 
+	.response
+		.groups
+			.response
+				.matches MOVE HALLWAY
+				.forcesprompt
+				.prompts Go up the corridor toward your alcove and the mining nexus
+				.does 
+					.says You move along the passage to the mining nexus.
+					.moves-player-west-to hallway
+			.response
+				.matches MOVE PROCESSING_CENTER
+				.forcesprompt
+				.prompts Continue along the corridor to the processing center.
+				.does 
+					.says You enter the processing center. 
+					.moves-player-east-to .to processing center
+		.end
+.end
+
+.-------------------------
+.- Mining nexus responses
+.-------------------------
+
+.responses mining nexus
 .end
 
 .-----------------------
@@ -263,7 +259,7 @@
 		.needs door-open
 		.does 
 			.sets mining-bot.saw-player
-			.says Spying you, one of the mining robots slowly slides forward.
+			.says Spying you, one of the mining robots slides forward. "Help us." The voice drowns out the low-level chatter of the Others. "It's all stopped. Fix it."
 .end
 
 .responses mining-bot

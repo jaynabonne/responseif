@@ -1,0 +1,64 @@
+.-------------------------
+.- Title screen responses
+.-------------------------
+
+.responses titlescreen
+	.response
+		.matches START
+		.occurs 1
+		.does
+			.hides-bar
+			.says
+				<div id="intro">
+					<div id="introfadefirst">
+						<div id="introrain"></div>
+						<div id="introwind"></div>
+					</div>
+					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div></div><div id="introdream2"></div>
+				</div>
+			.animates #intro .fade-in .lasting 1000
+	.response
+		.matches INTRODREAM
+		.occurs 2
+		.does 1
+				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .into #introrain
+				.says {!A caress of wind|INTROWIND!}<div id="windpunc">.</div> <div id="introwind2"></div> .into #introwind
+				.says {!..|INTRODREAM!} .into #introdream1
+				.animates #introrain, #introwind, #introdream1 .expand-and-fade-in
+		.does 2 .says but you should not dream. .into #introdream2
+				.animates #introdream2 .fade-in .lasting 1000
+				.animates #introdream .to { "opacity": 1 } .lasting 1000
+				.sets intro_saw_dream
+				.calls INTRODONE
+
+	.response
+		.matches INTRORAIN 
+		.occurs 1
+		.does
+			.says , .into #rainpunc
+			.says but there is no rain. .into #introrain2
+			.animates #introrain2 .expand-and-fade-in
+			.sets intro_saw_rain
+			.invokes
+				$("#introrain span").css("cursor", "inherit")
+			.calls INTRODONE
+	.response
+		.matches INTROWIND
+		.occurs 1 
+		.does
+			.says , .into #windpunc
+			.says but there is no wind. .into #introwind2
+			.animates #introwind2 .expand-and-fade-in
+			.sets intro_saw_wind
+			.calls INTRODONE
+		
+	.response
+		.matches INTRODONE
+		.needs intro_saw_dream intro_saw_rain intro_saw_wind
+		.does
+			.fades-out-intro
+			.populates-icons
+			.shows-bar
+			.moves player .to alcove
+			.calls ENTER
+.end
