@@ -23,11 +23,9 @@ var rifLoad = (function() {
 
     type.prototype.loadTokens = function(name, completion) {
         var self = this;
-        self.load_file(name, function (data) {
-            self.tokens = rifTokenize(data);
-            self.index = 0;
-            addIncludes.call(self, completion);
-        });
+        this.tokens = [{token: 'include', value: name}];
+        this.index = 0;
+        addIncludes.call(this, completion);
     };
 
     return type;
