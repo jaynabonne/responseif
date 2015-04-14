@@ -1,0 +1,57 @@
+
+.responses player
+	.response
+		.matches message
+		.does
+			.says
+				The message is terse and to the point:<br>
+				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
+				M47-C communication disconnect. {!EAR!}.</span>
+
+	.response
+		.matches USE
+		.does .says Use! .autohides
+
+	.response
+		.matches TALK
+		.does .says Talk! .autohides
+
+	.response
+		.matches door=50
+		.does
+			.says The door is a distant memory now.
+		
+	.response
+		.matches ALCOVE-DOOR-OPENS=10
+		.does
+			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now open.|door!}
+			.says {!Your alcove door now registers as being open.|door!}
+
+	.response
+		.matches ALCOVE-DOOR-CLOSES=10
+		.does
+			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now closed.|door!}
+			.says {!Your alcove door now registers as being closed.|door!}
+
+	.response
+		.matches *door
+		.groups
+			.response
+				.needs !door-open
+				.prompts Open the alcove door
+				.forcesprompt
+				.does
+					.sets door-open
+					.calls ALCOVE-DOOR-OPENS
+
+			.response
+				.needs door-open
+				.prompts Close the alcove door
+				.forcesprompt
+				.does
+					.sets !door-open
+					.calls ALCOVE-DOOR-CLOSES
+		.end
+
+.end
+
