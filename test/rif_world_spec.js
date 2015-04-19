@@ -141,5 +141,9 @@ describe("RifWorld", function () {
             expect(responders.indexOf("sibling1")).not.toBe(-1);
             expect(responders.indexOf("sibling2")).not.toBe(-1);
         });
+        it("returns 'everywhere'", function() {
+            var responders = world.getCurrentResponders("thepov");
+            expect(responders.indexOf("everywhere")).not.toBe(-1);
+        });
     });
 });
