@@ -91,13 +91,21 @@ var RifWorld = (function() {
         this.pov = pov;
     };
 
+    function pushAncestorsOf(responders, child) {
+        var parent;
+        while (parent = this.getParent(child)) {
+            responders.push(parent);
+            child  = parent;
+        }
+    }
     proto.getCurrentResponders = function(pov) {
         var parent = this.getParent(pov);
         var responders = ['everywhere', pov];
         if (!parent) {
             return responders;
         }
-        responders.push(parent)
+        responders.push(parent);
+        pushAncestorsOf.call(this, responders, parent);
         return responders.concat(this.getChildren(parent));
     };
 

@@ -145,5 +145,13 @@ describe("RifWorld", function () {
             var responders = world.getCurrentResponders("thepov");
             expect(responders.indexOf("everywhere")).not.toBe(-1);
         });
+        it("returns the parents of the parent, up the chain", function() {
+            world.setParent("thepov", "parent");
+            world.setParent("parent", "grandparent");
+            world.setParent("grandparent", "adam");
+            var responders = world.getCurrentResponders("thepov");
+            expect(responders.indexOf("grandparent")).not.toBe(-1);
+            expect(responders.indexOf("adam")).not.toBe(-1);
+        });
     });
 });
