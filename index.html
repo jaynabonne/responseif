@@ -1,11 +1,11 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Meek</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
-    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script type="text/javascript" src="src/HTMLFormatter.js"></script>
     <script type="text/javascript" src="src/rif_interact.js"></script>
     <script type="text/javascript" src="src/response_lib.js"></script>
@@ -43,6 +43,7 @@
 
             loadRif("sample_rif.txt", world, function(rif) {
                 var interact = createInteract(world, rif);
+                //console.info("rif=", rif)
 
                 interact.sendCommand(["START"]);
             });

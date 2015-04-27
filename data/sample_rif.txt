@@ -55,6 +55,28 @@
 .- Door responses
 .-----------------
 
+.define door-open-close-response
+	.response
+		.matches .<value>
+		.groups
+			.response
+				.needs !door-open
+				.prompts Open the alcove door
+				.forcesprompt
+				.does
+					.sets door-open
+					.calls ALCOVE-DOOR-OPENS
+
+			.response
+				.needs door-open
+				.prompts Close the alcove door
+				.forcesprompt
+				.does
+					.sets !door-open
+					.calls ALCOVE-DOOR-CLOSES
+		.end
+.enddef
+
 .define door-base-responses
 	.response
 		.matches *door
@@ -121,8 +143,10 @@
 		.matches ALCOVE-DOOR-OPENS
 		.orders 10
 		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines.
-		Rather than streaming up and down the corridor in their usual work patterns, a large group of them is gathered around your door,
+		Rather than streaming up and down the corridor in their usual work patterns, a large group of them is gathered around,
 		watching and waiting intently for you.
+
+	.door-open-close-response *USE
 .end
 
 .include player.txt
@@ -133,9 +157,12 @@
 .responses hallway
 	.response
 		.matches LOOK
-		.does .says You're in the main corridor. {!One direction leads to the mining nexus|MOVE MINING_NEXUS!}, {!and the other leads toward the processing center and the controller rooms.|MOVE CONTROLLER_CORRIDOR!}
+		.does .says You're in the main corridor. {!One direction leads to the mining nexus|MINING_NEXUS!}, {!and the other leads toward the controller rooms and the processing center.|CONTROLLER_CORRIDOR!}
 	.response
 		.groups
+			.response
+				.matches MINING_NEXUS
+				.does .says The mining nexus is a large cavern where the mining tunnels originate, leading off to the underground depths. .autohides
 			.response
 				.matches MOVE MINING_NEXUS
 				.forcesprompt
@@ -143,6 +170,7 @@
 				.does 
 					.says You move along the passage to the mining nexus.
 					.moves-player-west-to mining nexus
+				.orders 2
 			.response
 				.matches MOVE CONTROLLER_CORRIDOR
 				.forcesprompt
@@ -151,6 +179,7 @@
 					.says You head toward the processing center. The first stop along the corridor is a junction leading off
 					to two rooms, each containing a controller.
 					.moves-player-east-to controller corridor
+				.orders 2
 		.end
 .end
 

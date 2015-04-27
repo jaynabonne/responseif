@@ -9,18 +9,18 @@
 				M47-C communication disconnect. {!EAR!}.</span>
 
 	.response
-		.matches USE
-		.does .says Use! .autohides
+		.matches USEx
+		.does .says There is nothing to do. .autohides
 
 	.response
-		.matches TALK
+		.matches TALK=1
 		.does .says Talk! .autohides
 
 	.response
 		.matches door=50
 		.does
 			.says The door is a distant memory now.
-		
+		`
 	.response
 		.matches ALCOVE-DOOR-OPENS=10
 		.does
@@ -33,25 +33,6 @@
 			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now closed.|door!}
 			.says {!Your alcove door now registers as being closed.|door!}
 
-	.response
-		.matches *door
-		.groups
-			.response
-				.needs !door-open
-				.prompts Open the alcove door
-				.forcesprompt
-				.does
-					.sets door-open
-					.calls ALCOVE-DOOR-OPENS
-
-			.response
-				.needs door-open
-				.prompts Close the alcove door
-				.forcesprompt
-				.does
-					.sets !door-open
-					.calls ALCOVE-DOOR-CLOSES
-		.end
-
+	.door-open-close-response *door
 .end
 

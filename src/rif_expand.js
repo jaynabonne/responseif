@@ -40,7 +40,7 @@ var rifExpand = (function () {
             }
         }
         return tokens;
-    };
+    }
 
     Expander.prototype.applyDefinition = function(token, value) {
         var iterator = this.iterator;
