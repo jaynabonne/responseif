@@ -108,7 +108,8 @@ describe("rifExpand", function () {
                 enddef(),
                 token_pair("tokenB", "valueB"),
                 token_pair("somedef", "repvalue"),
-                token_pair("tokenC", "valueC")
+                token_pair("tokenC", "valueC"),
+                token_pair("somedef", "repvalue2"),
             ],
             function(tokens) {
                 expect(tokens).toEqual(
@@ -116,7 +117,8 @@ describe("rifExpand", function () {
                         token_pair("tokenA", "valueA"),
                         token_pair("tokenB", "valueB"),
                         token_pair("tokenNew", "repvalue"),
-                        token_pair("tokenC", "valueC")
+                        token_pair("tokenC", "valueC"),
+                        token_pair("tokenNew", "repvalue2"),
                     ]
                 );
             }

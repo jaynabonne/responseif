@@ -35,7 +35,8 @@ var rifExpand = (function () {
         for (var i = 1; i < tokens.length; ++i) {
             var token_pair = tokens[i];
             if (token_pair.token === "<value>") {
-                tokens[i-1].value = value;
+                var last_token = tokens[i-1].token;
+                tokens[i-1] = {token: last_token, value: value};
             }
         }
         return tokens;
