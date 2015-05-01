@@ -175,9 +175,14 @@ rifParse = (function () {
     Parser.prototype.parseResponseGroup = function() {
         var responses = [];
         while (this.index < this.tokens.length) {
-            var token = this.tokens[this.index].token;
+            var pair = this.tokens[this.index]
+            var token = pair.token;
             if (token === "response") {
                 responses.push(this.parse_response());
+            } else if (token === "reference") {
+                responses.push({reference: pair.value});
+                this.index++;
+                break;
             } else if (token === "end") {
                 this.index++;
                 break;

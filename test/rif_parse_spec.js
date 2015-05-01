@@ -601,4 +601,29 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse link", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("moves", "player"),
+                            token_pair("to", "room"),
+                    token_pair("reference", "anotherObject"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [ { moves: { target: "player", to: "room" }  } ]
+                        }
+                    },
+                    { reference: "anotherObject"}
+                ]
+            }
+        );
+    });
 });
