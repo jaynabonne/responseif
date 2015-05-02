@@ -101,6 +101,7 @@ var RifWorld = (function() {
     proto.getCurrentResponders = function(pov) {
         var parent = this.getParent(pov);
         var responders = ['everywhere', pov];
+        responders = responders.concat(this.getChildren('everywhere'));
         if (!parent) {
             return responders;
         }
