@@ -111,7 +111,11 @@ var RifWorld = (function() {
     };
 
     proto.expandResponseReferences = function(responses) {
-        return responses;
+        var new_responses = [];
+        $.each(responses, function(index, value) {
+            new_responses.push(value);
+        })
+        return new_responses;
     };
 
     return RifWorld;
