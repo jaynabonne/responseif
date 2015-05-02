@@ -110,5 +110,9 @@ var RifWorld = (function() {
         return responders.concat(this.getChildren(parent));
     };
 
+    proto.expandResponseReferences = function(responses) {
+        return responses;
+    };
+
     return RifWorld;
 })();

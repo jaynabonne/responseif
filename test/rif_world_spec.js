@@ -159,4 +159,18 @@ describe("RifWorld", function () {
             expect(responders.indexOf("adam")).not.toBe(-1);
         });
     });
+    describe("expandResponseReferences", function() {
+        it('should return the same responses if no references exist', function() {
+            var responses = [
+                {
+                    id: "A"
+                },
+                {
+                    id: "B"
+                }
+            ]
+
+            expect(world.expandResponseReferences(responses)).toEqual(responses);
+        });
+    });
 });
