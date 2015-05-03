@@ -110,13 +110,5 @@ var RifWorld = (function() {
         return responders.concat(this.getChildren(parent));
     };
 
-    proto.expandResponseReferences = function(responses) {
-        var new_responses = [];
-        $.each(responses, function(index, value) {
-            new_responses.push(value);
-        })
-        return new_responses;
-    };
-
     return RifWorld;
 })();

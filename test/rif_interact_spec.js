@@ -166,4 +166,48 @@ describe("RifInteract", function () {
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
         });
     });
+    describe("expandResponseReferences", function() {
+        it('should return the same responses if no references exist', function() {
+            var responses = [
+                {
+                    id: "A"
+                },
+                {
+                    id: "B"
+                }
+            ]
+
+            expect(interact.expandResponseReferences(responses)).toEqual(responses);
+        });
+        it('should return reference responses', function() {
+            rif.responses = {referred: [{id: "C"}, {id: "D"}]};
+            var responses = [
+                {
+                    id: "A"
+                },
+                {
+                    reference: "referred"
+                },
+                {
+                    id: "B"
+                }
+            ];
+
+            var expected = [
+                {
+                    id: "A"
+                },
+                {
+                    id: "C"
+                },
+                {
+                    id: "D"
+                },
+                {
+                    id: "B"
+                }
+            ];
+            expect(interact.expandResponseReferences(responses)).toEqual(expected);
+        });
+    });
 });

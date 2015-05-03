@@ -167,6 +167,24 @@ var RifInteract = (function() {
         },
         idleProcessing: function() {
             this.callActions(["ACT"]);
+        },
+        addResponseReferences : function(responses, new_responses) {
+            var self = this;
+            $.each(responses, function(index, value) {
+                if (value.reference) {
+                    var ref_responses = rif.responses[value.reference];
+                    if (ref_responses) {
+                        self.addResponseReferences(ref_responses, new_responses);
+                    }
+                } else {
+                    new_responses.push(value);
+                }
+            });
+        },
+        expandResponseReferences: function(responses) {
+            var new_responses = [];
+            this.addResponseReferences(responses, new_responses);
+            return new_responses;
         }
     };
     return type;
