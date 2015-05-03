@@ -182,7 +182,6 @@ rifParse = (function () {
             } else if (token === "reference") {
                 responses.push({reference: pair.value});
                 this.index++;
-                break;
             } else if (token === "end") {
                 this.index++;
                 break;

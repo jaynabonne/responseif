@@ -626,4 +626,27 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse just a link", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    token_pair("reference", "someObject"),
+                end(),
+                responses("anotherObject"),
+                    token_pair("reference", "someObject"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    { reference: "someObject"}
+                ],
+                anotherObject: [
+                    { reference: "someObject"}
+                ]
+
+            }
+        );
+    });
 });
