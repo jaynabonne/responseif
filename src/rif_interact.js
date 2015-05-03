@@ -92,7 +92,7 @@ var RifInteract = (function() {
             var caller = this.world.getPOV();
             var self = this;
             $.each(this.world.getCurrentResponders(caller), function(index, value) {
-                responses[value] = self.rif.responses[value];
+                responses[value] = self.expandResponseReferences(self.rif.responses[value]);
             });
             this.response_lib.callTopics(responses, topics, caller, this);
         },
@@ -169,13 +169,13 @@ var RifInteract = (function() {
             this.callActions(["ACT"]);
         },
         addResponseReferences : function(responses, new_responses) {
+            if (!responses) {
+                return;
+            }
             var self = this;
             $.each(responses, function(index, value) {
                 if (value.reference) {
-                    var ref_responses = rif.responses[value.reference];
-                    if (ref_responses) {
-                        self.addResponseReferences(ref_responses, new_responses);
-                    }
+                    self.addResponseReferences(self.rif.responses[value.reference], new_responses);
                 } else {
                     new_responses.push(value);
                 }

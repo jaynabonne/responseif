@@ -77,7 +77,7 @@
 		.end
 .enddef
 
-.define door-base-responses
+.responses door-base
 	.response
 		.matches *door
 		.groups
@@ -94,14 +94,14 @@
 	.response
 		.matches ALCOVE-DOOR-CLOSES
 		.does .says {!You trigger the door, and it slides shut.|door!}
-.enddef
+.end
 
 .responses inner-door
-	.door-base-responses
+	.reference door-base
 .end
 
 .responses outer-door
-	.door-base-responses
+	.reference door-base
 .end
 
 .-------------------
