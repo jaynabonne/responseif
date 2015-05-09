@@ -523,7 +523,16 @@ describe("rifParse", function () {
         );
         expect(rif.sets).toEqual( ["setexpression1", "setexpression2"] );
     });
-    it("should parse an object being move", function () {
+    it("should parse listeners", function () {
+        var rif = rifParse(
+            [
+                token_pair("listener", "someresponder"),
+                token_pair("listener", "otherresponder")
+            ]
+        );
+        expect(rif.listeners).toEqual( {someresponder: {}, otherresponder: {}} );
+    });
+    it("should parse objects being moved", function () {
         var rif = rifParse(
             [
                 token_pair("move", "object1"),

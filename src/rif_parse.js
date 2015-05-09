@@ -213,6 +213,14 @@ rifParse = (function () {
         this.index++;
     };
 
+    Parser.prototype.parse_listener = function() {
+        var listener = this.tokens[this.index].value;
+        var rif = this.rif;
+        rif.listeners = rif.listeners || {};
+        rif.listeners[listener] = {};
+        this.index++;
+    };
+
     Parser.prototype.parse_move = function() {
         var move = { target: this.tokens[this.index].value };
         this.index++;
