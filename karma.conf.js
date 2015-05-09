@@ -16,7 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'lib/*.js',
-      'src/response_lib.js',
+      'src/rif_response.js',
       'src/rif_tokenize.js',
       'src/rif_expand.js',
       'src/rif_load.js',
