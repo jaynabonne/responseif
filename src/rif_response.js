@@ -1,4 +1,4 @@
-var ResponseLib = (function () {
+var RifResponse = (function () {
     "use strict";
     var type = function (world) {
         this.world = world;

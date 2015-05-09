@@ -1,8 +1,8 @@
-describe("HTMLFormatter", function () {
+describe("RifHtmlFormatter", function () {
     "use strict";
     var formatter;
     beforeEach(function () {
-        formatter = new HTMLFormatter();
+        formatter = new RifHtmlFormatter();
     });
     describe("formatOutput", function () {
         var clickfactory;

@@ -1,4 +1,4 @@
-var HTMLFormatter = (function () {
+var RifHtmlFormatter = (function () {
     
     var type = function () {
     };

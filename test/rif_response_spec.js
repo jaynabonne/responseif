@@ -1,4 +1,4 @@
-describe("ResponseLib", function () {
+describe("RifResponse", function () {
     "use strict";
     var responseLib;
     var interact;
@@ -6,7 +6,7 @@ describe("ResponseLib", function () {
     beforeEach(function () {
         interact = {};
         world = {};
-        responseLib = new ResponseLib(world);
+        responseLib = new RifResponse(world);
     });
 
     describe("responseIsEligible", function () {
