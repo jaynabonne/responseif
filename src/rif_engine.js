@@ -14,24 +14,28 @@ var RifEngine = (function() {
             });
         });
     }
-    function createInteract(world, rif) {
-        var dom = new RifDOM($('#output'));
+    function createInteract(world, rif, dom) {
         var formatter = new RifHtmlFormatter();
         var response_lib = new RifResponse(world);
         return new RifInteract(dom, formatter, world, response_lib, rif);
     }
-    function init() {
+    function init(dom) {
+        var self = this;
         this.world = new RifWorld();
 
         loadRif("sample_rif.txt", world, function(rif) {
-            var interact = createInteract(world, rif);
-            //console.info("rif=", rif)
-
-            interact.sendCommand(["START"]);
+            self.interact = createInteract(world, rif, dom);
+            self.interact.sendCommand(["START"]);
         });
     }
-    var type = function() {
-        init();
+    var type = function(dom) {
+        init(dom);
+    };
+    type.prototype.getWorld = function() {
+        return this.world;
+    };
+    type.prototype.getInteract = function() {
+        return this.interact;
     };
     return type;
 })();

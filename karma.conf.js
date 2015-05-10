@@ -24,6 +24,7 @@ module.exports = function(config) {
       'src/rif_world.js',
       'src/rif_html_formatter.js',
       'src/rif_interact.js',
+      'src/rif_engine.js',
       'test/*.js',
       { pattern:  'data/*.txt',
         watched:  true,
