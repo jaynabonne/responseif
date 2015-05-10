@@ -15,38 +15,11 @@
     <script type="text/javascript" src="src/rif_tokenize.js"></script>
     <script type="text/javascript" src="src/rif_world.js"></script>
     <script type="text/javascript" src="src/rif_load.js"></script>
+    <script type="text/javascript" src="src/rif_engine.js"></script>
 
     <script type="text/javascript">
-        function loadFile(name, completion) {
-            $.ajax({
-                url: "data/" + name
-            }).done(completion);
-        }
-        function loadRif(file, world, completion) {
-            var load = new rifLoad(loadFile);
-            load.loadTokens(file, function (tokens) {
-                rifExpand(tokens, function(tokens) {
-                    var rif = rifParse(tokens);
-                    world.addRif(rif);
-                    completion(rif);
-                });
-            });
-        }
-        function createInteract(world, rif) {
-            var dom = new RifDOM($('#output'));
-            var formatter = new RifHtmlFormatter();
-            var response_lib = new RifResponse(world);
-            return new RifInteract(dom, formatter, world, response_lib, rif);
-        }
         function init() {
-            var world = new RifWorld();
-
-            loadRif("sample_rif.txt", world, function(rif) {
-                var interact = createInteract(world, rif);
-                //console.info("rif=", rif)
-
-                interact.sendCommand(["START"]);
-            });
+            new RifEngine();
         }
     </script>
 </head>
