@@ -4,7 +4,7 @@ rifParse = (function () {
 
     var Parser = function(tokens) {
         this.tokens = tokens;
-        this.rif = {};
+        this.rif = {responses:{}};
         this.index = 0;
     };
 

@@ -1,10 +1,5 @@
 var RifEngine = (function() {
-    function loadFile(name, completion) {
-        $.ajax({
-            url: "data/" + name
-        }).done(completion);
-    }
-    function loadRif(file, world, completion) {
+    function loadRif(file, loadFile, world, completion) {
         var load = new rifLoad(loadFile);
         load.loadTokens(file, function (tokens) {
             rifExpand(tokens, function(tokens) {
@@ -19,17 +14,17 @@ var RifEngine = (function() {
         var response_lib = new RifResponse(world);
         return new RifInteract(dom, formatter, world, response_lib, rif);
     }
-    function init(dom) {
+    function init(rif_file, loadFile, dom) {
         var self = this;
         this.world = new RifWorld();
 
-        loadRif("sample_rif.txt", world, function(rif) {
+        loadRif(rif_file, loadFile, world, function(rif) {
             self.interact = createInteract(world, rif, dom);
             self.interact.sendCommand(["START"]);
         });
     }
-    var type = function(dom) {
-        init(dom);
+    var type = function(rif_file, loadFile, dom) {
+        init(rif_file, loadFile, dom);
     };
     type.prototype.getWorld = function() {
         return this.world;

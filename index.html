@@ -18,8 +18,13 @@
     <script type="text/javascript" src="src/rif_engine.js"></script>
 
     <script type="text/javascript">
+        function loadFile(name, completion) {
+            $.ajax({
+                url: "data/" + name
+            }).done(completion);
+        }
         function init() {
-            new RifEngine(new RifDOM($('#output')));
+            new RifEngine("sample_rif.txt", loadFile, new RifDOM($('#output')));
         }
     </script>
 </head>
