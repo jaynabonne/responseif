@@ -1,34 +1,45 @@
 var RifEngine = (function() {
-    function loadRif(params, completion) {
-        params.load.loadTokens(params.rif_file, function (tokens) {
+    function loadRif(completion) {
+        var self = this;
+        this.load.loadTokens(this.rif_file, function (tokens) {
             rifExpand(tokens, function(tokens) {
                 var rif = rifParse(tokens);
-                params.world.addRif(rif);
+                self.world.addRif(rif);
                 completion(rif);
             });
         });
     }
-    function createInteract(params, rif) {
-        return new RifInteract(params.dom, params.formatter, params.world, params.response, rif);
+    function createInteract(rif) {
+        return
     }
-    function expandParams(params) {
-        params.world = params.world || new RifWorld();
-        params.response = params.response || new RifResponse(params.world);
-        params.formatter = params.formatter || new RifHtmlFormatter();
-        params.load = params.load || new rifLoad(params.load_file);
-    }
-    function init(params) {
-        expandParams(params);
+    function initFromParams(params) {
         var self = this;
+        self.data_root = params.data_root || "data/";
 
-        loadRif(params, function(rif) {
-            self.interact = createInteract(params, rif);
+        function loadFile(name, completion) {
+            $.ajax({
+                url: self.data_root + name
+            }).done(completion);
+        }
+
+        self.rif_file = params.rif_file || "rif.txt";
+        self.load_file = params.load_file || loadFile;
+        self.load = params.load || new rifLoad(self.load_file);
+
+        self.world = params.world || new RifWorld();
+        self.response = params.response || new RifResponse(self.world);
+        self.formatter = params.formatter || new RifHtmlFormatter();
+        self.dom = params.dom || new RifDOM(params.element);
+
+        loadRif.call(this, function(rif) {
+            self.interact =  new RifInteract(self.dom, self.formatter, self.world, self.response, rif);
             self.interact.sendCommand(["START"]);
         });
     }
-    var type = function(rif_file, loadFile, dom) {
-        init(rif_file, loadFile, dom);
+    var type = function(params) {
+        initFromParams.call(this, params);
     };
+
     type.prototype.getWorld = function() {
         return this.world;
     };
