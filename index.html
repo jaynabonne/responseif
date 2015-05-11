@@ -24,7 +24,12 @@
             }).done(completion);
         }
         function init() {
-            new RifEngine("sample_rif.txt", loadFile, new RifDOM($('#output')));
+            var params = {
+                rif_file: 'sample_rif.txt',
+                load_file: loadFile,
+                dom: new RifDOM($('#output'))
+            };
+            new RifEngine(params);
         }
     </script>
 </head>

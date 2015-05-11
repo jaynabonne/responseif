@@ -1,14 +1,17 @@
 describe('rif_engine', function() {
    "use strict";
-    var dom;
     var engine;
-    beforeEach(function() {
-        dom = jasmine.createSpyObj('dom', ['append', 'createDiv']);
-        engine = new RifEngine('somefile', loadFile, dom);
-    });
     function loadFile(name, completion) {
         completion('');
     }
+    beforeEach(function() {
+        var params = {
+            rif_file: 'somefile',
+            load_file: loadFile,
+            dom: jasmine.createSpyObj('dom', ['append', 'createDiv'])
+        };
+        engine = new RifEngine(params);
+    });
     it('should create a world', function() {
         expect(engine.getWorld()).not.toBeNull();
     });

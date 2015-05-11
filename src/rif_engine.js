@@ -14,12 +14,12 @@ var RifEngine = (function() {
         var response_lib = new RifResponse(world);
         return new RifInteract(dom, formatter, world, response_lib, rif);
     }
-    function init(rif_file, loadFile, dom) {
+    function init(params) {
         var self = this;
         this.world = new RifWorld();
 
-        loadRif(rif_file, loadFile, world, function(rif) {
-            self.interact = createInteract(world, rif, dom);
+        loadRif(params.rif_file, params.load_file, world, function(rif) {
+            self.interact = createInteract(world, rif, params.dom);
             self.interact.sendCommand(["START"]);
         });
     }
