@@ -1,25 +1,28 @@
 var RifEngine = (function() {
-    function loadRif(file, loadFile, world, completion) {
-        var load = new rifLoad(loadFile);
-        load.loadTokens(file, function (tokens) {
+    function loadRif(params, completion) {
+        params.load.loadTokens(params.rif_file, function (tokens) {
             rifExpand(tokens, function(tokens) {
                 var rif = rifParse(tokens);
-                world.addRif(rif);
+                params.world.addRif(rif);
                 completion(rif);
             });
         });
     }
-    function createInteract(world, rif, dom) {
-        var formatter = new RifHtmlFormatter();
-        var response_lib = new RifResponse(world);
-        return new RifInteract(dom, formatter, world, response_lib, rif);
+    function createInteract(params, rif) {
+        return new RifInteract(params.dom, params.formatter, params.world, params.response, rif);
+    }
+    function expandParams(params) {
+        params.world = params.world || new RifWorld();
+        params.response = params.response || new RifResponse(params.world);
+        params.formatter = params.formatter || new RifHtmlFormatter();
+        params.load = params.load || new rifLoad(params.load_file);
     }
     function init(params) {
+        expandParams(params);
         var self = this;
-        this.world = new RifWorld();
 
-        loadRif(params.rif_file, params.load_file, world, function(rif) {
-            self.interact = createInteract(world, rif, params.dom);
+        loadRif(params, function(rif) {
+            self.interact = createInteract(params, rif);
             self.interact.sendCommand(["START"]);
         });
     }
