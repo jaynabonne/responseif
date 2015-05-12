@@ -31,13 +31,15 @@ var RifEngine = (function() {
         self.formatter = params.formatter || new RifHtmlFormatter();
         self.dom = params.dom || new RifDOM(params.element);
 
+    }
+    var type = function(params, completion) {
+        initFromParams.call(this, params);
+        var self = this;
+
         loadRif.call(this, function(rif) {
             self.interact =  new RifInteract(self.dom, self.formatter, self.world, self.response, rif);
-            self.interact.sendCommand(["START"]);
+            completion();
         });
-    }
-    var type = function(params) {
-        initFromParams.call(this, params);
     };
 
     type.prototype.getWorld = function() {
