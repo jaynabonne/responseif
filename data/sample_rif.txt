@@ -142,6 +142,7 @@
 	.response
 		.matches ALCOVE-DOOR-OPENS
 		.orders 10
+		.occurs 1
 		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines.
 		Rather than streaming up and down the corridor in their usual work patterns, a large group of them is gathered around,
 		watching and waiting intently for you.
@@ -162,7 +163,7 @@
 		.groups
 			.response
 				.matches MINING_NEXUS
-				.does .says The mining nexus is a large cavern where the mining tunnels originate, leading off to the underground depths. .autohides
+				.does .says The mining nexus is a large cavern where the mining tunnels originate, leading off to underground depths. .autohides
 			.response
 				.matches MOVE MINING_NEXUS
 				.forcesprompt
