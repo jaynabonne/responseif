@@ -72,7 +72,7 @@ var RifWorld = (function() {
             this.children[parent] = this.getChildren(parent);
             this.children[parent].push(child);
         }
-        console.log("Set parent of " + child + " to " + parent);
+        //console.log("Set parent of " + child + " to " + parent);
     };
 
     proto.getParent = function(o) {

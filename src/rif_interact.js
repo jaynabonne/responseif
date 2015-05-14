@@ -34,7 +34,7 @@ var RifInteract = (function() {
         },
         say: function (says, response) {
             var formatted = this.formatter.formatOutput(says.text, this.clickFactory);
-            console.log("say...", response);
+            //console.log("say...", response);
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);
                 $(element).html(formatted);
@@ -97,15 +97,15 @@ var RifInteract = (function() {
             this.response_lib.callTopics(responses, topics, caller, this);
         },
         callActions: function(topics) {
-            console.log("callActions");
+            //console.log("callActions");
             topics = convertTopics(topics);
             var actions = this.rif.actions;
             for (var actor in actions) {
                 if (actions.hasOwnProperty(actor)) {
                     var responses = {};
                     responses[actor] = actions[actor];
-                    console.log("call actions for ", actor);
-                    console.info(responses);
+                    //console.log("call actions for ", actor);
+                    //console.info(responses);
                     this.response_lib.callTopics(responses, topics, actor, this);
                 }
             }
@@ -137,7 +137,7 @@ var RifInteract = (function() {
         },
         hideSeparator: function () {
             if (this.separatorShown) {
-                console.log("hideSeparator " + this.separatorShown)
+                //console.log("hideSeparator " + this.separatorShown)
                 this.dom.removeElement(this.separatorShown, 1);
                 this.separatorShown = "";
             }
@@ -149,11 +149,11 @@ var RifInteract = (function() {
             this.dom.append(div);
             this.separatorShown = '#'+separator;
             this.separatorId++;
-            console.log("show new separator " + this.separatorShown);
+            //console.log("show new separator " + this.separatorShown);
         },
         showSeparator: function () {
             if (this.separatorShown) {
-                console.log("show separator " + this.separatorShown);
+                //console.log("show separator " + this.separatorShown);
                 this.dom.showElement(this.separatorShown);
             }
         },
