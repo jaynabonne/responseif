@@ -169,10 +169,18 @@ describe("rifParse", function () {
                 responses("anObject"),
                     response(),
                         token_pair("forcesprompt"),
+                    response(),
+                        token_pair("forcesprompt", "false"),
+                    response(),
+                        token_pair("forcesprompt", "true"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{forcesprompt: true}] } );
+        expect(rif.responses).toEqual( { anObject: [
+            {forcesprompt: true},
+            {forcesprompt: false},
+            {forcesprompt: true}
+        ] } );
     });
     it("should parse response is", function () {
         var rif = rifParse([

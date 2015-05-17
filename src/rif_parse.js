@@ -21,7 +21,10 @@ rifParse = (function () {
     };
 
     Parser.prototype.setFlag = function(target, entry) {
-        target[entry.token] = true;
+        if (entry.value === "")
+            target[entry.token] = true;
+        else
+            target[entry.token] = entry.value.toLowerCase() === "true";
         this.index++;
     };
 
