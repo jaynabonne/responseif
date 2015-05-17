@@ -1,0 +1,5 @@
+.responses player
+    .response
+        .matches START
+        .does
+            .says Hello, world.
