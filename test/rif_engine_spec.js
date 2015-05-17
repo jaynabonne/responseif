@@ -5,12 +5,20 @@ describe('rif_engine', function() {
         completion('');
     }
     beforeEach(function() {
-        var params = {
-            rif_file: 'somefile',
-            load_file: loadFile,
-            dom: jasmine.createSpyObj('dom', ['append', 'createDiv'])
-        };
-        engine = new RifEngine(params);
+        var completed = false;
+        runs(function() {
+            var params = {
+                rif_file: 'somefile',
+                load_file: loadFile,
+                dom: jasmine.createSpyObj('dom', ['append', 'createDiv'])
+            };
+            engine = new RifEngine(params, function() {
+                completed = true;
+            });
+        });
+        waitsFor(function() {
+            return completed;
+        }, "Initialize engine", 3000);
     });
     it('should create a world', function() {
         expect(engine.getWorld()).not.toBeNull();

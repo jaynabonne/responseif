@@ -9,9 +9,7 @@ var RifEngine = (function() {
             });
         });
     }
-    function createInteract(rif) {
-        return
-    }
+
     function initFromParams(params) {
         var self = this;
         self.data_root = params.data_root || "data/";
