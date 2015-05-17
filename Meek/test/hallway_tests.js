@@ -1,15 +1,20 @@
-describe("game startup and title", function() {
+describe("hallway responses", function() {
     var engine;
 
     beforeEach(function() {
         engine = createTestEngine(function(result) {
             engine = result;
+            engine.world.setParent('player', 'hallway');
         });
     });
 
-    xit("has a way to move to the mining nexus", function() {
-        engine.world.setParent('player', 'hallway');
-        engine.interact.sendCommand(["MOVE MINING_NEXUS"]);
-        expect(engine.world.getParent("player")).toBe("mining nexus");
+    it("supports look", function() {
+        verifyThereIsAResponseTo(engine, ["LOOK"]);
+    });
+    it("has a way to move to the mining nexus", function() {
+        verifyThereIsAResponseTo(engine, ["MOVE", "MINING_NEXUS"]);
+    });
+    it("has a way to move to the controller corridor", function() {
+        verifyThereIsAResponseTo(engine, ["MOVE", "CONTROLLER_CORRIDOR"]);
     });
 });
