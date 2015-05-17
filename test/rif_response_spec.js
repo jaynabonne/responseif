@@ -370,17 +370,17 @@ describe("RifResponse", function () {
                 responseLib.processResponses([candidate1, candidate2], "", interact);
                 expect(interact.choose).toHaveBeenCalledWith(["Go north", "Go south"], jasmine.any(Function));
             });
-            it("processes a single prompt as a normal response", function () {
+            it("processes a single prompt as a normal response if forcesprompt is false", function () {
                 interact.say = jasmine.createSpy("say");
                 interact.choose = jasmine.createSpy("choose");
-                var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: { text: "something" } } ] } }, score: 10000 };
+                var candidate1 = { response: { prompts: "Go north", forcesprompt: false, does: { common: [ { says: { text: "something" } } ] } }, score: 10000 };
                 responseLib.processResponses([candidate1], "", interact);
                 expect(interact.choose).not.toHaveBeenCalled();
                 expect(interact.say).toHaveBeenCalled();
             });
-            it("processes a single prompt as a prompt if 'forcesprompt' is set", function () {
+            it("processes a single prompt as a prompt if 'forcesprompt' is not set", function () {
                 interact.choose = jasmine.createSpy("choose");
-                var candidate1 = { response: { prompts: "Go north", forcesprompt: true }, score: 10000 };
+                var candidate1 = { response: { prompts: "Go north"}, score: 10000 };
                 responseLib.processResponses([candidate1], "", interact);
                 expect(interact.choose).toHaveBeenCalledWith(["Go north"], jasmine.any(Function));
             });

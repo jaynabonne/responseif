@@ -366,8 +366,12 @@ var RifResponse = (function () {
         });
     };
 
+    function forcesPrompt(response) {
+        return response.forcesprompt === undefined || response.forcesprompt;
+    }
+
     proto.processPrompts = function (prompts, caller, interact) {
-        if (prompts.length === 1 && !prompts[0].response.forcesprompt) {
+        if (prompts.length === 1 && !forcesPrompt(prompts[0].response)) {
             this.processGroup(prompts, caller, interact);
         } else if (prompts.length > 0) {
             this.runMenu(prompts, caller, interact);
