@@ -324,13 +324,21 @@ describe("RifResponse", function () {
                     expect(interact.call).toHaveBeenCalledWith(["FIRST", "NAME"]);
                 });
                 function fakeCall(topics) {
+                    var candidate;
                     if (topics[0] == "NAME") {
-                        interact.say({ text: "Ishmael" });
+                        candidate = {
+                            response: {
+                                does: { common: [ { says: { text: "Ishmael" } } ] }
+                            }, score: 10000 };
                     } else {
-                        interact.say({ text: "Nemo" });
+                        candidate = {
+                            response: {
+                                does: { common: [ { says: { text: "Nemo" } } ] }
+                            }, score: 10000 };
                     }
-                };
-                it("should 'say' the individual pieces of text in the correct order", function() {
+                    responseLib.processResponses([candidate], "", interact);
+                }
+                it("should 'say' the individual pieces of text as a single string", function() {
                     interact.say = jasmine.createSpy("say");
                     interact.call = jasmine.createSpy("call");
                     interact.call.andCallFake(fakeCall);
@@ -339,10 +347,8 @@ describe("RifResponse", function () {
                             does: { common: [ { says: { text: "My name is {+NAME+}." } } ] }
                         }, score: 10000 };
                     responseLib.processResponses([candidate], "", interact);
-                    expect(interact.say.callCount).toBe(3);
-                    expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is " }, candidate.response]);
-                    expect(interact.say.argsForCall[1]).toEqual([{ text: "Ishmael" }]);
-                    expect(interact.say.argsForCall[2]).toEqual([{ text: "." }, candidate.response]);
+                    expect(interact.say.callCount).toBe(1);
+                    expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is Ishmael." }, candidate.response]);
                 });
                 it("should handle multiple 'calls' markups", function() {
                     interact.say = jasmine.createSpy("say");
@@ -353,12 +359,8 @@ describe("RifResponse", function () {
                             does: { common: [ { says: { text: "My name is {+NAME+}, but you're just {+FISH+}." } } ] }
                         }, score: 10000 };
                     responseLib.processResponses([candidate], "", interact);
-                    expect(interact.say.callCount).toBe(5);
-                    expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is " }, candidate.response]);
-                    expect(interact.say.argsForCall[1]).toEqual([{ text: "Ishmael" }]);
-                    expect(interact.say.argsForCall[2]).toEqual([{ text: ", but you're just " }, candidate.response]);
-                    expect(interact.say.argsForCall[3]).toEqual([{ text: "Nemo" }]);
-                    expect(interact.say.argsForCall[4]).toEqual([{ text: "." }, candidate.response]);
+                    expect(interact.say.callCount).toBe(1);
+                    expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is Ishmael, but you're just Nemo." }, candidate.response]);
                 });
             });
         });
