@@ -65,11 +65,11 @@ describe("RifHtmlFormatter", function () {
         });
         it("formats a menu node properly", function () {
             var node = formatter.formatMenu(["A menu entry"], clickFactory);
-            expect(node.html()).toBe('<li class="menuitem">A menu entry</li>');
+            expect(node.html()).toBe('<div class="menuitem">A menu entry</div>');
         });
         it("formats multiple menu nodes properly", function () {
             var node = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
-            expect(node.html()).toBe('<li class="menuitem">A menu entry</li><li class="menuitem">Another menu entry</li>');
+            expect(node.html()).toBe('<div class="menuitem">A menu entry</div><div class="menuitem">Another menu entry</div>');
         });
         it("sets click handlers for the menu item spans", function () {
             var clickresult;
@@ -79,7 +79,7 @@ describe("RifHtmlFormatter", function () {
                 };
             };
             var node = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
-            var span = node.children("li.menuitem");
+            var span = node.children("div.menuitem");
             $(span[0]).click();
             expect(clickresult).toBe(0);
             $(span[1]).click();
