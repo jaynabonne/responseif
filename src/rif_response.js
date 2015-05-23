@@ -220,7 +220,7 @@ var RifResponse = (function () {
             }
             says_context.output_string += text;
             if (incoming_context === undefined) {
-                new_says = $.extend(action.says, {text: says_context.output_string});
+                new_says = $.extend({}, action.says, {text: says_context.output_string});
                 interact.say(this.replaceMarkup(new_says, responder), response);
             }
 
@@ -289,6 +289,7 @@ var RifResponse = (function () {
     };
 
     proto.processResponse = function (candidate, caller, interact) {
+        console.log("processResponse: ", candidate);
         interact = interact || interact;
         var response = candidate.response;
         var responder = candidate.responder;
