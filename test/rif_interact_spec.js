@@ -5,6 +5,9 @@ describe("RifInteract", function () {
     var formatter;
     var responseLib;
     var world;
+    var rif;
+    var dom;
+    var response_lib;
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
         dom = {
@@ -87,44 +90,24 @@ describe("RifInteract", function () {
             interact.say(says);
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"FIRST"}, {keyword:"NAME"}], "player", jasmine.any(Object));
         });
-        function fakeCall(topics) {
-            var candidate;
-            if (topics[0] == "NAME") {
-                candidate = {
-                    response: {
-                        does: { common: [ { says: { text: "Ishmael" } } ] }
-                    }, score: 10000 };
+        function fakeCall(responses, topics) {
+            if (topics[0].keyword == "NAME") {
+                interact.say({ text: "Ishmael"});
             } else {
-                candidate = {
-                    response: {
-                        does: { common: [ { says: { text: "Nemo" } } ] }
-                    }, score: 10000 };
+                interact.say({ text: "Nemo"});
             }
-            responseLib.processResponses([candidate], "", interact);
         }
-        xit("should 'say' the individual pieces of text as a single string", function() {
-            interact.say = jasmine.createSpy("say");
-            interact.call = jasmine.createSpy("call");
-            interact.call.andCallFake(fakeCall);
-            var candidate = {
-                response: {
-                    does: { common: [ { says: { text: "My name is {+NAME+}." } } ] }
-                }, score: 10000 };
-            responseLib.processResponses([candidate], "", interact);
-            expect(interact.say.callCount).toBe(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is Ishmael." }, candidate.response]);
+        it("should 'say' the individual pieces of text as a single string", function() {
+            response_lib.callTopics.andCallFake(fakeCall);
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            interact.say( { text: "My name is {+NAME+}." });
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function));
         });
-        xit("should handle multiple 'calls' markups", function() {
-            interact.say = jasmine.createSpy("say");
-            interact.call = jasmine.createSpy("call");
-            interact.call.andCallFake(fakeCall);
-            var candidate = {
-                response: {
-                    does: { common: [ { says: { text: "My name is {+NAME+}, but you're just {+FISH+}." } } ] }
-                }, score: 10000 };
-            responseLib.processResponses([candidate], "", interact);
-            expect(interact.say.callCount).toBe(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is Ishmael, but you're just Nemo." }, candidate.response]);
+        it("should handle multiple 'calls' markups", function() {
+            response_lib.callTopics.andCallFake(fakeCall);
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." });
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function));
         });
     });
     describe("call", function () {
