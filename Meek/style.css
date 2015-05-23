@@ -62,8 +62,50 @@ div#barspacer {
     height:15px;
 }
 span.keyword {color:inherit; cursor:pointer;}
-ul.menu { margin: 4px 0px 4px -12px;}
-li.menuitem {color:#ca8642; cursor:pointer;}
+.menu { margin: 4px 0px 4px 0px;}
+.menuitem {
+    background-color: #654321;
+    width: 200px;
+    height: 23px;
+    text-align: center;
+    border-radius: 20px;
+    padding: 5px;
+    cursor:pointer;
+    font-size: 16px;
+    margin-top: 4px;
+}
+.menuitem:hover {
+    background-color: #a86420;
+}
+
+.rose-option {
+    background-color: #654321;
+    width: 150px;
+    text-align: center;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.rose-none {
+    background-color: #404040;
+    width: 150px;
+    text-align: center;
+    border-radius: 20px;
+    padding: 5px;
+    color: #666;
+}
+
+.menu-entry {
+    background-color: #654321;
+    width: 150px;
+    text-align: center;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.menu-entry:hover {
+    background-color: #a86420;
+}
 
 div#intro {
     width:100%;
@@ -100,4 +142,37 @@ div.separator {
     background-color:#A05000;
     width:100%;
     height:100%;
+}
+
+div.rose-north {
+    display: inline-block;
+    clear:both;
+}
+
+div.rose-west {
+    display: inline-block;
+    float:left;
+}
+
+div#rose-middle {
+    clear:both;
+    overflow: auto;
+}
+
+div#rose-center {
+    width: 10px;
+    float: left;
+}
+
+div.rose-east{
+    display: inline-block;
+    float: left;
+}
+div.rose-south {
+    display:inline-block;
+    clear:both;
+}
+
+div#rose {
+    position: relative;
 }

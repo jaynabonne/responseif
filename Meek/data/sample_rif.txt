@@ -23,7 +23,7 @@
 
 .define populates-icons
 			.says <div class="baricon">{!<img src="image/look.png">|LOOK!}</div>
-					<div class="baricon">{!<img src="image/move.png">|MOVE!}</div>
+					<div class="baricon">{!<img src="image/move.png">|MOVE_ROSE!}</div>
 					<div class="baricon">{!<img src="image/use.png">|USE!}</div>
 					<div class="baricon" style="margin-left:8px">{!<img src="image/talk.png">|TALK!}</div>
 				.into #commandPane
@@ -108,6 +108,15 @@
 
 .responses alcove
 	.response
+		.matches MOVE_ROSE
+		.does
+			.says <div id = "rose">
+					<div class="rose-north">{+ROSE-NORTH+}</div>
+					<div id="rose-middle"><div class="rose-west">{+ROSE-WEST+}</div><div id="rose-center">&nbsp;</div><div class="rose-east">{+ROSE-EAST+}</div></div>
+					<div class="rose-south">{+ROSE-SOUTH+}</div>
+				  </div>
+				.autohides
+	.response
 		.matches ENTER
 		.occurs 1
 		.does
@@ -119,12 +128,28 @@
 	.response
 		.matches theothers
 		.does
-			.says 
-
-	.response .matches EAR .does .says "Evaluate and repair." 
+			.says
 
 	.response
-		.matches MOVE
+		.matches ROSE-NORTH=1
+		.does .says <div class="rose-none">none</div>
+
+	.response
+		.matches ROSE-SOUTH=1
+		.does .says <div class="rose-none">none</div>
+
+	.response
+		.matches ROSE-WEST=1
+		.does .says <div class="rose-none">none</div>
+
+	.response
+		.matches ROSE-EAST=1
+		.does .says <div class="rose-none">none</div>
+
+	.response .matches EAR .does .says "Evaluate and repair."
+
+	.response
+		.matches ROSE-NORTH
 		.prompts Exit your alcove
 		.does
 			.uses first
