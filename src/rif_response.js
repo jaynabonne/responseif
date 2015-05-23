@@ -185,31 +185,6 @@ var RifResponse = (function () {
     proto.processSays = function (action, response, responder, interact) {
         if (action.says) {
             interact.say(action.says, response);
-
-            //var incoming_context = this.says_context;
-            //var says_context = incoming_context || { output_string: ""};
-            //
-            //var text = action.says.text;
-            //var new_says;
-            //while (text !== "") {
-            //    var index = text.indexOf("{+");
-            //    if (index === -1) {
-            //        break;
-            //    }
-            //    var end_index = text.indexOf("+}", index+2);
-            //    var topics = text.substring(index+2, end_index);
-            //    says_context.output_string += text.substring(0, index);
-            //    this.says_context = says_context;
-            //    interact.call(topics.split(" "));
-            //    text = text.substring(end_index+2);
-            //}
-            //says_context.output_string += text;
-            //if (incoming_context === undefined) {
-            //    new_says = $.extend({}, action.says, {text: says_context.output_string});
-            //    interact.say(this.replaceMarkup(new_says, responder), response);
-            //}
-            //
-            //this.says_context = incoming_context;
         }
     };
 

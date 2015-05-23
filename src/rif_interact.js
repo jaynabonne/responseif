@@ -42,12 +42,43 @@ var RifInteract = (function() {
         return text;
     }
 
+    function replaceCallMarkup(text) {
+        var incoming_context = this.says_context;
+        var says_context = incoming_context || { output_string: ""};
+
+        while (text !== "") {
+            var index = text.indexOf("{+");
+            if (index === -1) {
+                break;
+            }
+            var end_index = text.indexOf("+}", index+2);
+            var topics = text.substring(index+2, end_index);
+            says_context.output_string += text.substring(0, index);
+            this.says_context = says_context;
+            this.call(topics.split(" "));
+            text = text.substring(end_index+2);
+        }
+        says_context.output_string += text;
+        if (incoming_context === undefined) {
+            text = says_context.output_string;
+        } else {
+            text = null;
+        }
+
+        this.says_context = incoming_context;
+        return text;
+    }
+
     type.prototype = {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
         say: function (says, response) {
             var text = replaceMarkup(says.text, "", this.world);
+            var text = replaceCallMarkup.call(this, text);
+            if (text === null) {
+                return;
+            }
             var formatted = this.formatter.formatOutput(text, this.clickFactory);
             //console.log("say...", response);
             if (says.into) {
