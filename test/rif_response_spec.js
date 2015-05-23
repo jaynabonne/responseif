@@ -284,7 +284,7 @@ describe("RifResponse", function () {
                     [{ text: "See ya later!"}, candidate.response]
                 ]);
             });
-            it("replaces in-line markup with state values", function() {
+            xit("replaces in-line markup with state values", function() {
                 interact.say = jasmine.createSpy("say");
                 world.getState = function(id) {
                     if (id === "name") {
@@ -303,7 +303,7 @@ describe("RifResponse", function () {
                 expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael. Your name is mud." }, candidate.response);
             });
             describe("says with 'call' markup", function() {
-                it("should invoke 'call' on the interact for a topic", function() {
+                xit("should invoke 'call' on the interact for a topic", function() {
                     interact.say = jasmine.createSpy("say");
                     interact.call = jasmine.createSpy("call");
                     var candidate = {
@@ -313,7 +313,7 @@ describe("RifResponse", function () {
                     responseLib.processResponses([candidate], "", interact);
                     expect(interact.call).toHaveBeenCalledWith(["NAME"]);
                 });
-                it("should invoke 'call' on the interact for multiple topic", function() {
+                xit("should invoke 'call' on the interact for multiple topic", function() {
                     interact.say = jasmine.createSpy("say");
                     interact.call = jasmine.createSpy("call");
                     var candidate = {
@@ -338,7 +338,7 @@ describe("RifResponse", function () {
                     }
                     responseLib.processResponses([candidate], "", interact);
                 }
-                it("should 'say' the individual pieces of text as a single string", function() {
+                xit("should 'say' the individual pieces of text as a single string", function() {
                     interact.say = jasmine.createSpy("say");
                     interact.call = jasmine.createSpy("call");
                     interact.call.andCallFake(fakeCall);
@@ -350,7 +350,7 @@ describe("RifResponse", function () {
                     expect(interact.say.callCount).toBe(1);
                     expect(interact.say.argsForCall[0]).toEqual([{ text: "My name is Ishmael." }, candidate.response]);
                 });
-                it("should handle multiple 'calls' markups", function() {
+                xit("should handle multiple 'calls' markups", function() {
                     interact.say = jasmine.createSpy("say");
                     interact.call = jasmine.createSpy("call");
                     interact.call.andCallFake(fakeCall);
