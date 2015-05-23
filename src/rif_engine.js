@@ -16,7 +16,8 @@ var RifEngine = (function() {
 
         function loadFile(name, completion) {
             $.ajax({
-                url: self.data_root + name
+                url: self.data_root + name,
+                cache: false
             }).done(completion);
         }
 
