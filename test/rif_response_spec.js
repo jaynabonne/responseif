@@ -284,24 +284,6 @@ describe("RifResponse", function () {
                     [{ text: "See ya later!"}, candidate.response]
                 ]);
             });
-            xit("replaces in-line markup with state values", function() {
-                interact.say = jasmine.createSpy("say");
-                world.getState = function(id) {
-                    if (id === "name") {
-                        return "Ishmael";
-                    } else if (id === "yourname") {
-                        return "mud";
-                    } else {
-                        return false;
-                    }
-                };
-                var candidate = {
-                    response: {
-                        does: { common: [ { says: { text: "My name is {=name=}. Your name is {= yourname  =}." } } ] }
-                    }, score: 10000 };
-                responseLib.processResponses([candidate], "", interact);
-                expect(interact.say).toHaveBeenCalledWith({ text: "My name is Ishmael. Your name is mud." }, candidate.response);
-            });
             describe("says with 'call' markup", function() {
                 xit("should invoke 'call' on the interact for a topic", function() {
                     interact.say = jasmine.createSpy("say");

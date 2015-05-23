@@ -60,6 +60,21 @@ describe("RifInteract", function () {
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv2", 250);
         });
+        it("replaces in-line markup with state values", function() {
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            world.getState = function(id) {
+                if (id === "name") {
+                    return "Ishmael";
+                } else if (id === "yourname") {
+                    return "mud";
+                } else {
+                    return false;
+                }
+            };
+            var says = { text: "My name is {=name=}. Your name is {= yourname  =}." };
+            interact.say(says);
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael. Your name is mud.", jasmine.any(Function));
+        });
     });
     describe("call", function () {
         it("should call the passed topics", function () {

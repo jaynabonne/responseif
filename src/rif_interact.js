@@ -28,12 +28,27 @@ var RifInteract = (function() {
         return topics.map(function(value) { return {keyword: value} });
     }
 
+    function replaceMarkup(text, responder, world) {
+        var index;
+        while ((index = text.indexOf("{=")) != -1) {
+            var end_index = text.indexOf("=}", index+2);
+            if (end_index === -1) {
+                break;
+            }
+            var id = text.substring(index+2, end_index);
+            var value = world.getState(id.trim(), responder);
+            text = text.substring(0, index) + value + text.substring(end_index+2);
+        }
+        return text;
+    }
+
     type.prototype = {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
         say: function (says, response) {
-            var formatted = this.formatter.formatOutput(says.text, this.clickFactory);
+            var text = replaceMarkup(says.text, "", this.world);
+            var formatted = this.formatter.formatOutput(text, this.clickFactory);
             //console.log("say...", response);
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);

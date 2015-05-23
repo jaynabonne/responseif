@@ -180,24 +180,7 @@ var RifResponse = (function () {
             }
         }
         return section;
-    };
-
-    proto.replaceMarkup = function(says, responder) {
-        var newsays = jQuery.extend({}, says);
-        var index;
-        var text = newsays.text;
-        while ((index = text.indexOf("{=")) != -1) {
-            var endindex = text.indexOf("=}", index+2);
-            if (endindex === -1) {
-                break;
-            }
-            var id = text.substring(index+2, endindex);
-            var value = this.getState(id.trim(" "), responder);
-            text = text.substring(0, index) + value + text.substring(endindex+2);
-        }
-        newsays.text = text;
-        return newsays;
-    };
+    }
 
     proto.processSays = function (action, response, responder, interact) {
         if (action.says) {
