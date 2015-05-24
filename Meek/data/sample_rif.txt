@@ -108,15 +108,6 @@
 
 .responses alcove
 	.response
-		.matches MOVE_ROSE
-		.does
-			.says <div id = "rose">
-					<div class="rose-north">{+ROSE-NORTH+}</div>
-					<div id="rose-middle"><div class="rose-west">{+ROSE-WEST+}</div><div id="rose-center">&nbsp;</div><div class="rose-east">{+ROSE-EAST+}</div></div>
-					<div class="rose-south">{+ROSE-SOUTH+}</div>
-				  </div>
-				.autohides
-	.response
 		.matches ENTER
 		.occurs 1
 		.does
@@ -129,22 +120,6 @@
 		.matches theothers
 		.does
 			.says
-
-	.response
-		.matches ROSE-NORTH=1
-		.does .says <div class="rose-none">none</div>
-
-	.response
-		.matches ROSE-SOUTH=1
-		.does .says <div class="rose-none">none</div>
-
-	.response
-		.matches ROSE-WEST=1
-		.does .says <div class="rose-none">none</div>
-
-	.response
-		.matches ROSE-EAST=1
-		.does .says <div class="rose-none">none</div>
 
 	.response .matches EAR .does .says "Evaluate and repair."
 
@@ -187,15 +162,15 @@
 				.matches MINING_NEXUS
 				.does .says The mining nexus is a large cavern where the mining tunnels originate, leading off to underground depths. .autohides
 			.response
-				.matches MOVE MINING_NEXUS
-				.prompts Go down the corridor to the mining nexus
+				.matches ROSE-WEST MINING_NEXUS
+				.prompts Go to the mining nexus
 				.does 
 					.says You move along the passage to the mining nexus.
 					.moves-player-west-to mining nexus
 				.orders 2
 			.response
-				.matches MOVE CONTROLLER_CORRIDOR
-				.prompts Go up the corridor toward the processing center.
+				.matches ROSE-EAST CONTROLLER_CORRIDOR
+				.prompts Go toward the processing center
 				.does 
 					.says You head toward the processing center. The first stop along the corridor is a junction leading off
 					to two rooms, each containing a controller.
@@ -216,14 +191,14 @@
 	.response
 		.groups
 			.response
-				.matches MOVE HALLWAY
-				.prompts Go up the corridor toward your alcove and the mining nexus
+				.matches ROSE-WEST HALLWAY
+				.prompts Go up the corridor
 				.does 
 					.says You move along the passage to the mining nexus.
 					.moves-player-west-to hallway
 			.response
-				.matches MOVE PROCESSING_CENTER
-				.prompts Continue along the corridor to the processing center.
+				.matches ROSE-EAST PROCESSING_CENTER
+				.prompts Go to the processing center
 				.does 
 					.says You enter the processing center. 
 					.moves-player-east-to processing center

@@ -62,11 +62,10 @@ div#barspacer {
     height:15px;
 }
 span.keyword {color:inherit; cursor:pointer;}
-.menu { margin: 4px 0px 4px 0px;}
+.menu { }
 .menuitem {
     background-color: #654321;
     width: 200px;
-    height: 23px;
     text-align: center;
     border-radius: 20px;
     padding: 5px;
@@ -80,31 +79,21 @@ span.keyword {color:inherit; cursor:pointer;}
 
 .rose-option {
     background-color: #654321;
-    width: 150px;
+    width: 200px;
     text-align: center;
     border-radius: 20px;
     padding: 5px;
+    margin-top: 4px;
 }
 
 .rose-none {
     background-color: #404040;
-    width: 150px;
+    width: 200px;
     text-align: center;
     border-radius: 20px;
     padding: 5px;
     color: #666;
-}
-
-.menu-entry {
-    background-color: #654321;
-    width: 150px;
-    text-align: center;
-    border-radius: 20px;
-    padding: 5px;
-}
-
-.menu-entry:hover {
-    background-color: #a86420;
+    margin-top: 4px;
 }
 
 div#intro {
@@ -144,29 +133,29 @@ div.separator {
     height:100%;
 }
 
-div.rose-north {
+.rose-north {
     display: inline-block;
     clear:both;
 }
 
-div.rose-west {
+.rose-west {
     display: inline-block;
-    float:left;
 }
 
-div#rose-middle {
+.rose-row {
     clear:both;
     overflow: auto;
+    width: 450px;
+    text-align: center;
 }
 
 div#rose-center {
     width: 10px;
-    float: left;
+    display: inline-block;
 }
 
 div.rose-east{
     display: inline-block;
-    float: left;
 }
 div.rose-south {
     display:inline-block;

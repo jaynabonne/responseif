@@ -1,6 +1,19 @@
 
 .responses player
 	.response
+		.matches MOVE_ROSE
+		.does
+			.says <div id = "rose">
+					<div class="rose-row"><div class="rose-north">{+ROSE-NORTH+}</div></div>
+					<div class="rose-row"><div class="rose-west">{+ROSE-WEST+}</div><div id="rose-center">&nbsp;</div><div class="rose-east">{+ROSE-EAST+}</div></div>
+					<div class="rose-row"><div class="rose-south">{+ROSE-SOUTH+}</div></div>
+				  </div>
+				.autohides
+	.response
+		.matches ROSE-NORTH=1 ROSE-SOUTH=1 ROSE-WEST=1 ROSE-EAST=1
+		.does .says <div class="rose-none">--</div>
+
+	.response
 		.matches message
 		.does
 			.says
