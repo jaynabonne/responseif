@@ -69,32 +69,37 @@ var RifInteract = (function() {
         return text;
     }
 
+    function outputFormattedText(says, formatted) {
+        if (says.into) {
+            var element = this.dom.getElementBySelector(says.into);
+            $(element).html(formatted);
+        } else {
+            if (says.autohides) {
+                this.showAutoHideText(formatted);
+            } else {
+                this.currentDiv.append(formatted);
+                this.currentDiv.append(" ");
+                this.dom.scrollToEnd();
+            }
+            this.showSeparator();
+            this.needsSeparator = true;
+        }
+    }
+
     type.prototype = {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
         say: function (says, response) {
+            console.info("say: ", says);
             var text = replaceMarkup(says.text, "", this.world);
-            var text = replaceCallMarkup.call(this, text);
+            text = replaceCallMarkup.call(this, text);
             if (text === null) {
                 return;
             }
             var formatted = this.formatter.formatOutput(text, this.clickFactory);
             //console.log("say...", response);
-            if (says.into) {
-                var element = this.dom.getElementBySelector(says.into);
-                $(element).html(formatted);
-            } else {
-                if (says.autohides) {
-                    this.showAutoHideText(formatted);
-                } else {
-                    this.currentDiv.append(formatted);
-                    this.currentDiv.append(" ");
-                    this.dom.scrollToEnd();
-                }
-                this.showSeparator();
-                this.needsSeparator = true;
-            }
+            outputFormattedText.call(this, says, formatted);
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();
@@ -112,8 +117,9 @@ var RifInteract = (function() {
                     callback(i);
                 };
             };
-
             this.showAutoHideText(this.formatter.formatMenu(options, clickfactory));
+            //var says = { text: this.formatter.formatMenu(options, clickfactory), autohides: true};
+            //this.say(says);
         },
         beginSection: function(id) {
             this._appendNewDiv(id);
