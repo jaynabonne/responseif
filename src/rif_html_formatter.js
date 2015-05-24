@@ -8,8 +8,7 @@ var RifHtmlFormatter = (function () {
     }
     
     type.prototype = {
-        formatOutput: function(text, clickfactory, menuclickfactory) {
-
+        formatOutput: function(text, clickfactory, menu_callbacks) {
             text = text
                     .replace(/\{!/g, "<span class='keyword'>")
                     .replace(/!\}/g, "</span>");
@@ -25,8 +24,13 @@ var RifHtmlFormatter = (function () {
                     keyword = keyword.substring(subindex+1);
                 }
                 if (keyword.indexOf("menu:") === 0) {
-                    var index = parseInt(keyword.substring(5));
-                    $(span).click(menuclickfactory(index));
+                    var entry = keyword.substring(5);
+                    var pieces = entry.split(":");
+                    var callback = menu_callbacks[pieces[0]];
+                    var index = parseInt(pieces[1]);
+                    $(span).click(function() {
+                        callback(index);
+                    });
                 } else {
                     $(span).click(clickfactory(keyword));
                 }
@@ -34,10 +38,10 @@ var RifHtmlFormatter = (function () {
             return outerspan;
         },
 
-        formatMenu: function(options, clickfactory) {
+        formatMenu: function(options, menu_index) {
             var s = '<div class="menu">';
             $.each(options, function(index, value) {
-                s += '<div class="menuitem">{!' + value + '|menu:' + index + '!}</div>';
+                s += '<div class="menuitem">{!' + value + '|menu:' + menu_index + ':' + index + '!}</div>';
             });
             s += '</div>';
             return s;

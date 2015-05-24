@@ -1,5 +1,10 @@
 var RifInteract = (function() {
     "use strict";
+
+    function resetMenuCallbacks() {
+        this.menu_index = 0;
+        this.menu_callbacks = {};
+    }
     
     var type = function (dom, formatter, world, response_lib, rif) {
         this.id = 1;
@@ -22,6 +27,7 @@ var RifInteract = (function() {
                 self.sendCommand(keywords.split(" "));
             };
         };
+        resetMenuCallbacks.call(this);
     };
 
     function convertTopics(topics) {
@@ -90,14 +96,8 @@ var RifInteract = (function() {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
-        say: function (says, menu_callback) {
+        say: function (says) {
             var self = this;
-            var menu_click_factory = function(i) {
-                return function() {
-                    self.hideSections();
-                    menu_callback(i);
-                };
-            };
 
             var text = replaceMarkup(says.text, "", this.world);
             text = replaceCallMarkup.call(this, text);
@@ -105,8 +105,10 @@ var RifInteract = (function() {
                 // recursive call return
                 return;
             }
-            var formatted = this.formatter.formatOutput(text, this.clickFactory, menu_click_factory);
+
+            var formatted = this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks);
             outputFormattedText.call(this, says, formatted);
+            resetMenuCallbacks.call(this);
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();
@@ -117,8 +119,14 @@ var RifInteract = (function() {
             this.dom.scrollToEnd();
         },
         choose: function(options, callback) {
-            var says = { text: this.formatter.formatMenu(options), autohides: true};
-            this.say(says, callback);
+            var self = this;
+            var index = this.menu_index++;
+            this.menu_callbacks[index] = function(index) {
+                self.hideSections();
+                callback(index);
+            };
+            var says = { text: this.formatter.formatMenu(options, index), autohides: true};
+            this.say(says);
         },
         beginSection: function(id) {
             this._appendNewDiv(id);

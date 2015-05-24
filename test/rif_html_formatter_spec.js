@@ -56,12 +56,10 @@ describe("RifHtmlFormatter", function () {
                     clickresult = keyword;
                 };
             };
-            var menu_click_factory = function(i) {
-                return function() {
-                    clickresult = i;
-                };
+            var menu_callbacks = {
+                10: function(i) { clickresult = i; }
             };
-            var node = formatter.formatOutput("This is a {!menu item|menu:0!}. This is another {!one|menu:1!}. And {!a final one|menu:2!}", factory, menu_click_factory);
+            var node = formatter.formatOutput("This is a {!menu item|menu:10:0!}. This is another {!one|menu:10:1!}. And {!a final one|menu:10:2!}", factory, menu_callbacks);
             var span = node.children("span.keyword");
             $(span[0]).click();
             expect(clickresult).toBe(0);
@@ -77,16 +75,16 @@ describe("RifHtmlFormatter", function () {
     });
     describe("formatMenu", function () {
         it("returns an empty menu for no menu items", function () {
-            var text = formatter.formatMenu([]);
+            var text = formatter.formatMenu([], 13);
             expect(text).toBe('<div class="menu"></div>');
         });
         it("formats a menu node properly", function () {
-            var text = formatter.formatMenu(["A menu entry"]);
-            expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:0!}</div></div>');
+            var text = formatter.formatMenu(["A menu entry"], 15);
+            expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:15:0!}</div></div>');
         });
         it("formats multiple menu nodes properly", function () {
-            var text = formatter.formatMenu(["A menu entry", "Another menu entry"]);
-            expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:0!}</div><div class="menuitem">{!Another menu entry|menu:1!}</div></div>');
+            var text = formatter.formatMenu(["A menu entry", "Another menu entry"], 17);
+            expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:17:0!}</div><div class="menuitem">{!Another menu entry|menu:17:1!}</div></div>');
         });
     });
 });
