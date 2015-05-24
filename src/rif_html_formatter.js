@@ -30,12 +30,12 @@ var RifHtmlFormatter = (function () {
         },
 
         formatMenu: function(options, clickfactory) {
-            var element = $("<div>");
-            element.addClass("menu");
-            for (var i = 0; i < options.length; ++i) {
-                element.append(createClickable("div", options[i], 'menuitem', clickfactory(i)));
-            }
-            return element;
+            var s = '<div class="menu">';
+            $.each(options, function(index, value) {
+                s += '<div class="menuitem">{!' + value + '|menu:' + index + '!}</div>';
+            });
+            s += '</div>';
+            return s;
         }
     };
     return type;
