@@ -3,9 +3,9 @@
 	.response
 		.matches MOVE_ROSE
 		.does
-			.says <div id = "rose">
+			.says <div class = "rose">
 					<div class="rose-row"><div class="rose-north">{+ROSE-NORTH+}</div></div>
-					<div class="rose-row"><div class="rose-west">{+ROSE-WEST+}</div><div id="rose-center">&nbsp;</div><div class="rose-east">{+ROSE-EAST+}</div></div>
+					<div class="rose-row"><div class="rose-west">{+ROSE-WEST+}</div><div class="rose-center">&nbsp;</div><div class="rose-east">{+ROSE-EAST+}</div></div>
 					<div class="rose-row"><div class="rose-south">{+ROSE-SOUTH+}</div></div>
 				  </div>
 				.autohides
