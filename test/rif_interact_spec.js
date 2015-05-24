@@ -78,6 +78,21 @@ describe("RifInteract", function () {
             interact.say(says);
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael. Your name is mud.", jasmine.any(Function));
         });
+        it("replaces in-line markup with state values recursively", function() {
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            world.getState = function(id) {
+                if (id === "firstName") {
+                    return "Ishmael";
+                } else if (id === "name") {
+                    return "{=firstName=}";
+                } else {
+                    return false;
+                }
+            };
+            var says = { text: "My name is {=name=}." };
+            interact.say(says);
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function));
+        });
     });
     describe("says with 'call' markup", function() {
         it("should invoke 'call' on the interact for a topic", function() {
