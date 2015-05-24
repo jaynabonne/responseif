@@ -91,14 +91,13 @@ var RifInteract = (function() {
             return "outputdiv" + this.id++;
         },
         say: function (says, response) {
-            console.info("say: ", says);
             var text = replaceMarkup(says.text, "", this.world);
             text = replaceCallMarkup.call(this, text);
             if (text === null) {
+                // recursive call return
                 return;
             }
             var formatted = this.formatter.formatOutput(text, this.clickFactory);
-            //console.log("say...", response);
             outputFormattedText.call(this, says, formatted);
         },
         showAutoHideText: function (formatted) {
