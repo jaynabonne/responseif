@@ -8,7 +8,7 @@ var RifHtmlFormatter = (function () {
     }
     
     type.prototype = {
-        formatOutput: function(text, clickfactory) {
+        formatOutput: function(text, clickfactory, menuclickfactory) {
 
             text = text
                     .replace(/\{!/g, "<span class='keyword'>")
@@ -24,7 +24,12 @@ var RifHtmlFormatter = (function () {
                     span.innerHTML = keyword.substring(0, subindex);
                     keyword = keyword.substring(subindex+1);
                 }
-                $(span).click(clickfactory(keyword));
+                if (keyword.indexOf("menu:") === 0) {
+                    var index = parseInt(keyword.substring(5));
+                    $(span).click(menuclickfactory(index));
+                } else {
+                    $(span).click(clickfactory(keyword));
+                }
             });
             return outerspan;
         },

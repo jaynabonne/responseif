@@ -105,7 +105,7 @@ var RifInteract = (function() {
                 // recursive call return
                 return;
             }
-            var formatted = this.formatter.formatOutput(text, this.clickFactory);
+            var formatted = this.formatter.formatOutput(text, this.clickFactory, menu_click_factory);
             outputFormattedText.call(this, says, formatted);
         },
         showAutoHideText: function (formatted) {

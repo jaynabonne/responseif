@@ -49,6 +49,27 @@ describe("RifHtmlFormatter", function () {
             $(span[2]).click();
             expect(clickresult).toBe("lastone");
         });
+        it("sets click handlers for the keyword menu spans", function () {
+            var clickresult = "";
+            var factory = function(keyword) {
+                return function() {
+                    clickresult = keyword;
+                };
+            };
+            var menu_click_factory = function(i) {
+                return function() {
+                    clickresult = i;
+                };
+            };
+            var node = formatter.formatOutput("This is a {!menu item|menu:0!}. This is another {!one|menu:1!}. And {!a final one|menu:2!}", factory, menu_click_factory);
+            var span = node.children("span.keyword");
+            $(span[0]).click();
+            expect(clickresult).toBe(0);
+            $(span[1]).click();
+            expect(clickresult).toBe(1);
+            $(span[2]).click();
+            expect(clickresult).toBe(2);
+        });
         it("formats properly inside a div", function() {
             var node = formatter.formatOutput("<div>{!This is the text|Keyword!}</div>", clickfactory);
             expect(node.html()).toBe('<div><span class="keyword">This is the text</span></div>');
