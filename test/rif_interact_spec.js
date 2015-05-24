@@ -124,6 +124,19 @@ describe("RifInteract", function () {
             interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." });
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function));
         });
+        it("should handle call markup as a result of state markup", function() {
+            world.getState = function(id) {
+                if (id === "firstName") {
+                    return "{+NAME+}";
+                } else {
+                    return false;
+                }
+            };
+            response_lib.callTopics.andCallFake(fakeCall);
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            interact.say( { text: "My name is {=firstName=}." });
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function));
+        });
     });
     describe("call", function () {
         it("should call the passed topics", function () {
