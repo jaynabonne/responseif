@@ -273,6 +273,20 @@ describe("RifInteract", function () {
             interact.sendCommand([]);
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
         });
+        //xit("sets click handlers for the menu item spans", function () {
+        //    var clickresult;
+        //    var clickFactory = function(index) {
+        //        return function() {
+        //            clickresult = index;
+        //        };
+        //    };
+        //    var node = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
+        //    var span = node.children("div.menuitem");
+        //    $(span[0]).click();
+        //    expect(clickresult).toBe(0);
+        //    $(span[1]).click();
+        //    expect(clickresult).toBe(1);
+        //});
     });
     describe("expandResponseReferences", function() {
         it('should return the same responses if no references exist', function() {

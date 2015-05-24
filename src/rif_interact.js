@@ -90,7 +90,15 @@ var RifInteract = (function() {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
-        say: function (says, response) {
+        say: function (says, menu_callback) {
+            var self = this;
+            var menu_click_factory = function(i) {
+                return function() {
+                    self.hideSections();
+                    menu_callback(i);
+                };
+            };
+
             var text = replaceMarkup(says.text, "", this.world);
             text = replaceCallMarkup.call(this, text);
             if (text === null) {
@@ -109,16 +117,8 @@ var RifInteract = (function() {
             this.dom.scrollToEnd();
         },
         choose: function(options, callback) {
-            var self = this;
-            var clickfactory = function(i) {
-                return function() {
-                    self.hideSections();
-                    callback(i);
-                };
-            };
-            this.showAutoHideText(this.formatter.formatMenu(options, clickfactory));
-            //var says = { text: this.formatter.formatMenu(options, clickfactory), autohides: true};
-            //this.say(says);
+            var says = { text: this.formatter.formatMenu(options), autohides: true};
+            this.say(says, callback);
         },
         beginSection: function(id) {
             this._appendNewDiv(id);

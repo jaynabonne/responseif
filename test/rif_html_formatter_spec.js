@@ -55,35 +55,17 @@ describe("RifHtmlFormatter", function () {
         })
     });
     describe("formatMenu", function () {
-        var clickFactory;
-        beforeEach(function () {
-            clickFactory = function(i) { return function () {}; };
-        });
         it("returns an empty menu for no menu items", function () {
-            var text = formatter.formatMenu([], clickFactory);
+            var text = formatter.formatMenu([]);
             expect(text).toBe('<div class="menu"></div>');
         });
         it("formats a menu node properly", function () {
-            var text = formatter.formatMenu(["A menu entry"], clickFactory);
+            var text = formatter.formatMenu(["A menu entry"]);
             expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:0!}</div></div>');
         });
         it("formats multiple menu nodes properly", function () {
-            var text = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
+            var text = formatter.formatMenu(["A menu entry", "Another menu entry"]);
             expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:0!}</div><div class="menuitem">{!Another menu entry|menu:1!}</div></div>');
-        });
-        xit("sets click handlers for the menu item spans", function () {
-            var clickresult;
-            var clickFactory = function(index) {
-                return function() {
-                    clickresult = index;
-                };
-            };
-            var node = formatter.formatMenu(["A menu entry", "Another menu entry"], clickFactory);
-            var span = node.children("div.menuitem");
-            $(span[0]).click();
-            expect(clickresult).toBe(0);
-            $(span[1]).click();
-            expect(clickresult).toBe(1);
         });
     });
 });

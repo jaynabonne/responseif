@@ -236,7 +236,7 @@ describe("RifResponse", function () {
                         does: { common: [ { says: { text: "Hello world!" } } ] }
                     }, score: 10000 };
                 responseLib.processResponses([candidate], "", interact);
-                expect(interact.say).toHaveBeenCalledWith({ text: "Hello world!" }, candidate.response);
+                expect(interact.say).toHaveBeenCalledWith({ text: "Hello world!" });
             });
             it("no text for no matching responses", function() {
                 interact.say = jasmine.createSpy("say");
@@ -249,8 +249,8 @@ describe("RifResponse", function () {
                 var candidate2 = { response: { does: { common: [ {says: { text: "Goodnight moon!"} } ] } }, score: 10000 };
                 responseLib.processResponses([candidate1, candidate2], "", interact);
                 expect(interact.say.callCount).toEqual(2);
-                expect(interact.say.argsForCall[0]).toEqual([{ text: "Hello world!" }, candidate1.response]);
-                expect(interact.say.argsForCall[1]).toEqual([{ text: "Goodnight moon!" }, candidate2.response]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Hello world!" }]);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "Goodnight moon!" }]);
             });
             it("text only for matching responses that have text", function() {
                 interact.say = jasmine.createSpy("say");
@@ -258,7 +258,7 @@ describe("RifResponse", function () {
                 var candidate2 = { response: { does: { common: [ {says: { text: "See ya later!"} } ] } }, score: 10000 };
                 responseLib.processResponses([candidate1, candidate2], "", interact);
                 expect(interact.say.callCount).toEqual(1);
-                expect(interact.say.argsForCall[0]).toEqual([{ text: "See ya later!" }, candidate2.response]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "See ya later!" }]);
             });
             it("text in proper sequence", function() {
                 interact.say = jasmine.createSpy("say");
@@ -278,10 +278,10 @@ describe("RifResponse", function () {
                 responseLib.processResponses(candidates, "", interact);
                 responseLib.processResponses(candidates, "", interact);
                 expect(interact.say.argsForCall).toEqual([
-                    [{ text: "Hello world!"}, candidate.response],
-                    [{ text: "See ya later!"}, candidate.response],
-                    [{ text: "I'm going"}, candidate.response],
-                    [{ text: "See ya later!"}, candidate.response]
+                    [{ text: "Hello world!"}],
+                    [{ text: "See ya later!"}],
+                    [{ text: "I'm going"}],
+                    [{ text: "See ya later!"}]
                 ]);
             });
         });
@@ -315,7 +315,7 @@ describe("RifResponse", function () {
                 responseLib.processResponses([candidate1, candidate2], "", interact);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(1);
-                expect(interact.say).toHaveBeenCalledWith({text: "South"}, candidate2.response);
+                expect(interact.say).toHaveBeenCalledWith({text: "South"});
             });
             it("does nothing if the menu callback is called with -1", function () {
                 interact.choose = jasmine.createSpy("choose");
@@ -345,8 +345,8 @@ describe("RifResponse", function () {
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(0);
                 expect(interact.say.callCount).toEqual(2);
-                expect(interact.say.argsForCall[0]).toEqual([{ text: "North" }, candidate1.response]);
-                expect(interact.say.argsForCall[1]).toEqual([{ text: "North2" }, candidate2.response]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "North" }]);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "North2" }]);
             });
         });
         describe("sets", function() {
@@ -399,8 +399,8 @@ describe("RifResponse", function () {
                     responder: "aresponder" };
                 responseLib.processResponses([response], "", interact);
                 expect(interact.say.callCount).toEqual(2);
-                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, response1]);
-                expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }, response3]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }]);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }]);
             });
         });
         describe("uses first", function() {
@@ -428,7 +428,7 @@ describe("RifResponse", function () {
                     responder: "aresponder" };
                 responseLib.processResponses([response], "", interact);
                 expect(interact.say.callCount).toEqual(1);
-                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }, response2]);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }]);
             });
         });
         describe("calls", function () {
@@ -495,7 +495,7 @@ describe("RifResponse", function () {
             var response3 = { matches: [{keyword: "btopic"}], does: { common: [ { says: { text: "This is response 3" } } ] } };
             var responses = [response1, response2, response3];
             responseLib.callTopics({responder: responses}, [{keyword: "ctopic"}], "caller", interact);
-            expect(interact.say).toHaveBeenCalledWith({ text: "This is response 2" }, response2);
+            expect(interact.say).toHaveBeenCalledWith({ text: "This is response 2" });
         });
     });
 });
