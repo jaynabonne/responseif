@@ -124,6 +124,19 @@ describe("RifInteract", function () {
             interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." });
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function));
         });
+        it("should handle recursive call markup", function() {
+            function fakeCall(responses, topics) {
+                if (topics[0].keyword == "FIRSTNAME") {
+                    interact.say({ text: "Ishmael"});
+                } else if (topics[0].keyword == "NAME") {
+                    interact.say({ text: "{+FIRSTNAME+}"});
+                }
+            }
+            response_lib.callTopics.andCallFake(fakeCall);
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            interact.say( { text: "My name is {+NAME+}." });
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function));
+        });
         it("should handle call markup as a result of state markup", function() {
             world.getState = function(id) {
                 if (id === "firstName") {
@@ -135,6 +148,24 @@ describe("RifInteract", function () {
             response_lib.callTopics.andCallFake(fakeCall);
             formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {=firstName=}." });
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function));
+        });
+        it("should handle state markup as a result of call markup", function() {
+            function fakeCall(responses, topics) {
+                if (topics[0].keyword == "NAME") {
+                    interact.say({ text: "{=firstName=}"});
+                }
+            }
+            world.getState = function(id) {
+                if (id === "firstName") {
+                    return "Ishmael";
+                } else {
+                    return false;
+                }
+            };
+            response_lib.callTopics.andCallFake(fakeCall);
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            interact.say( { text: "My name is {+NAME+}." });
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function));
         });
     });
