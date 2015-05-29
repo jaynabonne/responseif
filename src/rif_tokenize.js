@@ -27,7 +27,24 @@ var rifTokenize = (function() {
         return index;
     }
 
+    function mergeToPreviousValue(result, token_pair) {
+        var count = result.length;
+        while (count > 0) {
+            var last_token_pair = result[count - 1];
+            if (last_token_pair.token !== "__LINE__") {
+                if (last_token_pair.value !== "") {
+                    last_token_pair.value += " ";
+                }
+                last_token_pair.value += token_pair.value;
+                break;
+            }
+            count--;
+        }
+        token_pair.value = "";
+    }
+
     return function(input) {
+        input = input.replace(/\n/gm, " .__LINE__ ");
         var parts = input.split(/[\s]/);
         var result = [];
 
@@ -35,7 +52,11 @@ var rifTokenize = (function() {
         while (index < parts.length) {
             var last_index = findNextToken(index+1, parts);
 
-            result.push(extractTokenPair(parts, index, last_index));
+            var token_pair = extractTokenPair(parts, index, last_index);
+            if (token_pair.token === "__LINE__" && token_pair.value !== "") {
+                mergeToPreviousValue(result, token_pair);
+            }
+            result.push(token_pair);
             index = last_index;
         }
         return result;
