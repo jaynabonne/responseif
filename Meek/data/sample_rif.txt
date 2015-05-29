@@ -76,8 +76,7 @@
 .enddef
 
 .responses door-base
-	.response
-		.matches *door
+	.response *door
 		.groups
 			.response
 				.needs !door-open
@@ -86,11 +85,9 @@
 				.needs door-open
 				.does .says The alcove door is open. .autohides
 		.end
-	.response
-		.matches ALCOVE-DOOR-OPENS
+	.response ALCOVE-DOOR-OPENS
 		.does .says {!You trigger the door, and it slides open.|door!}
-	.response
-		.matches ALCOVE-DOOR-CLOSES
+	.response ALCOVE-DOOR-CLOSES
 		.does .says {!You trigger the door, and it slides shut.|door!}
 .end
 
@@ -107,8 +104,7 @@
 .-------------------
 
 .responses alcove
-	.response
-		.matches ENTER
+	.response ENTER
 		.occurs 1
 		.does
 			.says
@@ -116,16 +112,17 @@
 				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}</div>
 			.animates #wakeup .fade-in .lasting 3000
 
-	.response
-		.matches theothers
+	.response theothers
 		.does
 			.says
 
 	.response .matches EAR .does .says "Evaluate and repair."
 
-	.response
-		.matches ROSE-NORTH
-		.prompts Exit your alcove
+	.response ALCOVE-EXIT-PROMPT
+		.does .says Exit your alcove
+
+	.response ROSE-NORTH
+		.prompts {+ALCOVE-EXIT-PROMPT+}
 		.does
 			.uses first
 				.response
@@ -136,8 +133,7 @@
 				.response
 					.does .says {!You can't move while your alcove door is closed.|door!} .autohides
 			.end
-	.response
-		.matches ALCOVE-DOOR-OPENS
+	.response ALCOVE-DOOR-OPENS
 		.orders 10
 		.occurs 1
 		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines.
@@ -153,23 +149,19 @@
 .- Hallway responses
 .--------------------
 .responses hallway
-	.response
-		.matches LOOK
+	.response LOOK
 		.does .says You're in the main corridor. {!One direction leads to the mining nexus|MINING_NEXUS!}, {!and the other leads toward the controller rooms and the processing center.|CONTROLLER_CORRIDOR!}
 	.response
 		.groups
-			.response
-				.matches MINING_NEXUS
+			.response MINING_NEXUS
 				.does .says The mining nexus is a large cavern where the mining tunnels originate, leading off to underground depths. .autohides
-			.response
-				.matches ROSE-WEST MINING_NEXUS
+			.response ROSE-WEST MINING_NEXUS
 				.prompts Go to the mining nexus
 				.does 
 					.says You move along the passage to the mining nexus.
 					.moves-player-west-to mining nexus
 				.orders 2
-			.response
-				.matches ROSE-EAST CONTROLLER_CORRIDOR
+			.response ROSE-EAST CONTROLLER_CORRIDOR
 				.prompts Go toward the processing center
 				.does 
 					.says You head toward the processing center. The first stop along the corridor is a junction leading off
@@ -184,20 +176,17 @@
 .--------------------------------
 
 .responses controller corridor
-	.response
-		.matches LOOK
+	.response LOOK
 		.does
 			.says This is a section of corridor outside the controller rooms. 
 	.response
 		.groups
-			.response
-				.matches ROSE-WEST HALLWAY
+			.response ROSE-WEST HALLWAY
 				.prompts Go up the corridor
 				.does 
 					.says You move along the passage to the mining nexus.
 					.moves-player-west-to hallway
-			.response
-				.matches ROSE-EAST PROCESSING_CENTER
+			.response ROSE-EAST PROCESSING_CENTER
 				.prompts Go to the processing center
 				.does 
 					.says You enter the processing center. 

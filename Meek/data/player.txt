@@ -1,7 +1,6 @@
 
 .responses player
-	.response
-		.matches MOVE_ROSE
+	.response MOVE_ROSE
 		.does
 			.says <div class = "rose">
 					<div class="rose-row"><div class="rose-north">{+ROSE-NORTH+}</div></div>
@@ -9,39 +8,32 @@
 					<div class="rose-row"><div class="rose-south">{+ROSE-SOUTH+}</div></div>
 				  </div>
 				.autohides
-	.response
-		.matches ROSE-NORTH=1 ROSE-SOUTH=1 ROSE-WEST=1 ROSE-EAST=1
+	.response ROSE-NORTH=1 ROSE-SOUTH=1 ROSE-WEST=1 ROSE-EAST=1
 		.does .says <div class="rose-none">--</div>
 
-	.response
-		.matches message
+	.response message
 		.does
 			.says
 				The message is terse and to the point:<br>
 				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
 				M47-C communication disconnect. {!EAR!}.</span>
 
-	.response
-		.matches USEx
+	.response USEx
 		.does .says There is nothing to do. .autohides
 
-	.response
-		.matches TALK=1
+	.response TALK=1
 		.does .says Talk! .autohides
 
-	.response
-		.matches door=50
+	.response door=50
 		.does
 			.says The door is a distant memory now.
 		`
-	.response
-		.matches ALCOVE-DOOR-OPENS=10
+	.response ALCOVE-DOOR-OPENS=10
 		.does
 			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now open.|door!}
 			.says {!Your alcove door now registers as being open.|door!}
 
-	.response
-		.matches ALCOVE-DOOR-CLOSES=10
+	.response ALCOVE-DOOR-CLOSES=10
 		.does
 			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now closed.|door!}
 			.says {!Your alcove door now registers as being closed.|door!}

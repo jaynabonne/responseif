@@ -9,8 +9,7 @@
 .enddef
 
 .responses titlescreen
-	.response
-		.matches START
+	.response START
 		.occurs 1
 		.does
 			.hides-bar
@@ -23,8 +22,7 @@
 					<div id="introdream">{!You dream.|INTRODREAM!}<div id="introdream1"></div></div><div id="introdream2"></div>
 				</div>
 			.animates #intro .fade-in .lasting 1000
-	.response
-		.matches INTRODREAM
+	.response INTRODREAM
 		.occurs 2
 		.does 1
 				.says {!The patter of rain|INTRORAIN!}<div id="rainpunc">.</div> <div id="introrain2"></div> .into #introrain
@@ -37,8 +35,7 @@
 				.sets intro_saw_dream
 				.calls INTRODONE
 
-	.response
-		.matches INTRORAIN 
+	.response INTRORAIN
 		.occurs 1
 		.does
 			.says , .into #rainpunc
@@ -48,9 +45,8 @@
 			.invokes
 				$("#introrain span").css("cursor", "inherit")
 			.calls INTRODONE
-	.response
-		.matches INTROWIND
-		.occurs 1 
+	.response INTROWIND
+		.occurs 1
 		.does
 			.says , .into #windpunc
 			.says but there is no wind. .into #introwind2
@@ -58,8 +54,7 @@
 			.sets intro_saw_wind
 			.calls INTRODONE
 		
-	.response
-		.matches INTRODONE
+	.response INTRODONE
 		.needs intro_saw_dream intro_saw_rain intro_saw_wind
 		.does
 			.fades-out-intro
