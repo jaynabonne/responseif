@@ -56,34 +56,27 @@ describe("rifTokenize", function () {
     it("should ignore non-tokenized value", function () {
         expect(rifTokenize("this is a value")).toEqual([]);
     });
-    it("should insert line tokens at line breaks in full token/value pairs", function() {
+    it("should insert line attributes at line breaks in full token/value pairs", function() {
         expect(rifTokenize(".token1 value1\n.token2 value2\n.token3 value3")).toEqual(
             [
                 {token: "token1", value:"value1"},
-                {token: "__LINE__", value:""},
-                {token: "token2", value:"value2"},
-                {token: "__LINE__", value:""},
-                {token: "token3", value:"value3"}
+                {token: "token2", value:"value2", line:2},
+                {token: "token3", value:"value3", line:3}
             ]
         );
     });
-    it("should insert line tokens at line breaks with dangling or split values", function() {
+    it("should insert line attributes at line breaks with dangling or split values", function() {
         expect(rifTokenize(".token1 value1\nvalue2\n.token3\nvalue3")).toEqual(
             [
                 {token: "token1", value:"value1 value2"},
-                {token: "__LINE__", value:""},
-                {token: "__LINE__", value:""},
-                {token: "token3", value:"value3"},
-                {token: "__LINE__", value:""}
+                {token: "token3", value:"value3", line:3},
             ]
         );
     });
-    it("should insert join values across multiple lines", function() {
+    it("should join values across multiple lines", function() {
         expect(rifTokenize(".token1 value1\nvalue2\nvalue3")).toEqual(
             [
                 {token: "token1", value:"value1 value2 value3"},
-                {token: "__LINE__", value:""},
-                {token: "__LINE__", value:""},
             ]
         );
     });
