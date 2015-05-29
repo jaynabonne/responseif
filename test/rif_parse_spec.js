@@ -9,8 +9,8 @@ describe("rifParse", function () {
     function actions(name) {
         return token_pair("actions", name);
     }
-    function response(name) {
-        return token_pair("response");
+    function response(topics) {
+        return token_pair("response", topics);
     }
     function says(text) {
         return token_pair("says", text);
@@ -125,6 +125,16 @@ describe("rifParse", function () {
                 responses("anObject"),
                     response(),
                         token_pair("matches","topicA topicB topicC"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
+    });
+    it("should parse response matches as the response token value", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response("topicA topicB topicC"),
                 end()
             ]
         );

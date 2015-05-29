@@ -139,8 +139,8 @@ rifParse = (function () {
     Parser.prototype.parse_response_needs = Parser.prototype.addList;
     Parser.prototype.parse_response_forcesprompt = Parser.prototype.setFlag;
 
-    Parser.prototype.parse_response_matches = function(target, entry) {
-        var values = entry.value.split(" ");
+    function parseMatches(matches_value) {
+        var values = matches_value.split(" ");
         var matches = [];
         $.each(values, function(index, value) {
             var fields = value.split("=");
@@ -150,8 +150,11 @@ rifParse = (function () {
                 matches.push({keyword: fields[0], weight: parseInt(fields[1])});
             }
         });
+        return matches;
+    }
 
-        target[entry.token] = matches;
+    Parser.prototype.parse_response_matches = function(target, entry) {
+        target[entry.token] = parseMatches(entry.value);
         this.index++;
     };
 
@@ -161,8 +164,12 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_response = function() {
+        var value = this.tokens[this.index].value;
         this.index++;
         var response = {};
+        if (value !== '') {
+            response.matches = parseMatches(value);
+        }
         this.parseEntries(response, "parse_response_");
         return response;
     };
