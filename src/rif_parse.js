@@ -10,10 +10,10 @@ rifParse = (function () {
 
     Parser.prototype.parseEntries = function(target, prefix) {
         while (this.index < this.tokens.length) {
-            var entry = this.tokens[this.index];
-            var handler = this[prefix + entry.token];
+            var pair = this.currentPair();
+            var handler = this[prefix + pair.token];
             if (handler) {
-                handler.call(this, target, entry);
+                handler.call(this, target, pair);
             } else {
                 break;
             }
@@ -98,7 +98,7 @@ rifParse = (function () {
         this.index++;
         var responses = this.parseResponseGroup();
         if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
-            var action = { uses: {}}
+            var action = { uses: {}};
             action.uses[entry.value] = responses;
             actions.push(action);
         }
@@ -164,7 +164,7 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_response = function() {
-        var value = this.tokens[this.index].value;
+        var value = this.currentPair().value;
         this.index++;
         var response = {};
         if (value !== '') {
@@ -175,7 +175,7 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_object = function () {
-        var value = this.tokens[this.index].value;
+        var value = this.currentPair().value;
         var rif = this.rif;
         rif.objects = rif.objects || {};
         rif.objects[value] = {};
@@ -185,7 +185,7 @@ rifParse = (function () {
     Parser.prototype.parseResponseGroup = function() {
         var responses = [];
         while (this.index < this.tokens.length) {
-            var pair = this.tokens[this.index]
+            var pair = this.currentPair();
             var token = pair.token;
             if (token === "response") {
                 responses.push(this.parse_response());
@@ -196,7 +196,7 @@ rifParse = (function () {
                 this.index++;
                 break;
             } else {
-                console.log('parse_responses: Unexpected token ".' + token + '" (expected ".end" or new ".response")');
+                console.log('parse_responses(' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or new ".response")');
                 break;
             }
         }
@@ -204,7 +204,7 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_responses = function () {
-        var pair = this.tokens[this.index];
+        var pair = this.currentPair();
         var token = pair.token;
         var value = pair.value;
         var rif = this.rif;
@@ -216,7 +216,7 @@ rifParse = (function () {
     Parser.prototype.parse_actions = Parser.prototype.parse_responses;
 
     Parser.prototype.parse_set = function() {
-        var expression = this.tokens[this.index].value;
+        var expression = this.currentPair().value;
         var rif = this.rif;
         rif.sets = rif.sets || [];
         rif.sets.push(expression);
@@ -224,7 +224,7 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_listener = function() {
-        var listener = this.tokens[this.index].value;
+        var listener = this.currentPair().value;
         var rif = this.rif;
         rif.listeners = rif.listeners || {};
         rif.listeners[listener] = {};
@@ -232,7 +232,7 @@ rifParse = (function () {
     };
 
     Parser.prototype.parse_move = function() {
-        var move = { target: this.tokens[this.index].value };
+        var move = { target: this.currentPair().value };
         this.index++;
         this.parseMoveAttributes(move);
         var rif = this.rif;
@@ -240,14 +240,22 @@ rifParse = (function () {
         rif.moves.push(move);
     };
 
+    Parser.prototype.currentPair = function() {
+        var pair = this.tokens[this.index];
+        if (pair.line) {
+            this.line = pair.line;
+        }
+        return pair;
+    };
+
     Parser.prototype.parse = function() {
         while (this.index < this.tokens.length) {
-            var token = this.tokens[this.index].token;
+            var token = this.currentPair().token;
             var attribute = "parse_"+ token;
             if (this[attribute]) {
                 this[attribute]();
             } else {
-                console.log("parse: no handler for token " + token);
+                console.log("parse(" + this.line + "): no handler for token " + token);
                 break;
             }
         }
