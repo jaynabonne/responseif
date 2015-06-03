@@ -11,7 +11,7 @@
 .enddef
 
 .define fades-out-link
-    .animates .<value> .to {"color": "#c0c0c0"} .lasting 200
+    .animates .<value> span.keyword .to {"color": "#c0c0c0"} .lasting 200
 .enddef
 
 .responses player
@@ -21,6 +21,7 @@
              {+HEADING+}
              {=break=}
              .calls INTRO
+
     .response HEADING
         .does
             .says
@@ -40,7 +41,7 @@
 
     .response walkway
         .does
-            .fades-out-link #intro span.keyword
+            .fades-out-link #intro
             .says
                 <div id="walkway">It's the wrong time of night to be wandering here, but it suits your mood perfectly.
                 You feel cold inside, your life sucked away completely by the {!events!} of the past week.</div>
@@ -49,7 +50,7 @@
 
     .response events
         .does
-            .fades-out-link #walkway span.keyword
+            .fades-out-link #walkway
             .says
                 <div id="events"><i>Mom, I need you. Where are you?</i>
                 {=break=}
@@ -64,9 +65,10 @@
                 In your despair and grief, you were drawn back to {!this place!}, the place you had lived as a child.</div>
             .fades-in-output #events
             .occurs 1
+
     .response events
         .does
-            .fades-out-link #events span.keyword
+            .fades-out-link #events
             .says
                 <div id="thisplace">
                     It has been years since you were here, many more since you've actually lived here. You slow your
@@ -74,9 +76,10 @@
                 </div>
             .fades-in-output #thisplace
             .occurs 1
+
     .response playground
         .does
-            .fades-out-link #thisplace span.keyword
+            .fades-out-link #thisplace
             .says
                 <div id="playground">
                     Oh, the summer days spent here! You can see Billy and Tommy and Mary riding the swings, sliding down
@@ -91,9 +94,10 @@
                 </div>
             .fades-in-output #playground
             .occurs 1
+
     .response foot bridge
         .does
-            .fades-out-link #playground span.keyword
+            .fades-out-link #playground
             .says
                 <div id="footbridge">
                     You make your way along the path and over the bridge. As you draw near {!home!}, you
@@ -102,16 +106,17 @@
                 </div>
             .fades-in-output #footbridge
             .occurs 1
+
     .response home
         .does
-            .fades-out-link #footbridge span.keyword
+            .fades-out-link #footbridge
             .says
                 <div id="home">
                     As you round the corner, the house comes into view. It's a different color now; you can tell even in
                     the dullness of the halogen-tinted night. You stand out front and look. Someone else lives there.
                     Someone else is making memories. It doesn't belong to you any more; you no longer belong there.
                     You are the stranger.
-                    (=break=}
+                    {=break=}
                     Wherever you look, you can see fleeting glimpses of motion. Little
                     scenes tucked away in your memories play out, appearing and disappearing before you can really see
                     them. The {!phantoms!} toy with you, answering your yearnings with teases, offering you no relief
@@ -119,9 +124,10 @@
                 </div>
             .fades-in-output #home
             .occurs 1
+
     .response phantoms
         .does
-            .fades-out-link #home span.keyword
+            .fades-out-link #home
             .says
                 <div id="phantoms">
                     <i>Quit haunting me!</i>
@@ -130,9 +136,10 @@
                 </div>
             .fades-in-output #phantoms
             .occurs 1
+
     .response motion
         .does
-            .fades-out-link #phantoms span.keyword
+            .fades-out-link #phantoms
             .says
                 <div id="motion">
                     A cat sits crouching along the side of the path. It looks at you, eyes wide. You make friendly
@@ -141,27 +148,30 @@
                 </div>
             .fades-in-output #motion
             .occurs 1
+
     .response continue on
         .does
-            .fades-out-link #motion span.keyword
+            .fades-out-link #motion
             .says
                 <div id="continueon">
                     You slow by the playground but {!keep going!}, sadness piercing to the very core of your soul.
                 </div>
             .fades-in-output #continueon
             .occurs 1
+
     .response keep going
         .does
-            .fades-out-link #contineon span.keyword
+            .fades-out-link #continueon
             .says
                 <div id="keepgoing">
                     As you pass under the trees, a man appears ahead of you, led by a {!dog!} on a leash.
                 </div>
             .fades-in-output #keepgoing
             .occurs 1
+
     .response dog
         .does
-            .fades-out-link #keepgoing span.keyword
+            .fades-out-link #keepgoing
             .says
                 <div id="dog">
                     The dog sniffs everywhere as they make their way towards you. You keep your head down, your
@@ -169,9 +179,10 @@
                 </div>
             .fades-in-output #dog
             .occurs 1
+
     .response eyes
         .does
-            .fades-out-link #dog span.keyword
+            .fades-out-link #dog
             .says
                 <div id="eyes">
                     You glance up, and the dog's eyes meet yours. It begins to slow a bit and move to the side, watching
@@ -179,9 +190,10 @@
                 </div>
             .fades-in-output #eyes
             .occurs 1
+
     .response man
         .does
-            .fades-out-link #eyes span.keyword
+            .fades-out-link #eyes
             .says
                 <div id="man">
                     You don't stray from your path; he doesn't stray from his. You exhale a sigh as he passes through
@@ -194,9 +206,10 @@
                 </div>
             .fades-in-output #man
             .occurs 1
+
     .response Without looking
         .does
-            .fades-out-link #man span.keyword
+            .fades-out-link #man
             .says
                 <div id="withoutlooking">
                     Your eyes still on the path, you continue your journey. A small {!moan!} escapes your lips. You
@@ -204,19 +217,28 @@
                 </div>
             .fades-in-output #withoutlooking
             .occurs 1
+
     .response moan
         .does
-            .fades-out-link #withoutlooking span.keyword
+            .fades-out-link #withoutlooking
             .says
                 <div id="moan">
                     You moan again, a little more deeply this time, your anguish taking voice. All around you is
                     darkness and emptiness. You are a stranger in this world. It no longer belongs to you, and you no
                     longer belong here.
                     {=break=}
-                    <i>The End</i>"
-                    <br/><br/>
-                    <i>An adaptation of a short story of mine, from years ago.</i><br/>
+                    <i>{!The End!}</i>
                 </div>
             .fades-in-output #moan
             .occurs 1
+
+    .response The End
+        .does
+            .fades-out-link #moan
+            .says
+                <br/>
+                <i>An adaptation of a short story of mine, from years ago.</i><br/>
+                <i>Created using <a href="https://github.com/jaynabonne/responseif/" target="_blank">ResponsIF.</a></i><br/>
+                <br/>
+                <i><a href="https://github.com/jaynabonne/responseif/tree/master/sample/thehaunting" target="_blank">(Game source)</a></i>
 .end

@@ -8,6 +8,12 @@ body {
     padding-left:20px;
     padding-right:20px;
 }
+a {
+    color: #ca8642
+}
+a:visited {
+    color: #654321
+}
 div#holder {
     width:90%;
     height:90%;
