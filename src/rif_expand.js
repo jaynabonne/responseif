@@ -32,14 +32,22 @@ var rifExpand = (function () {
     };
 
     function replaceValues(tokens, value) {
-        for (var i = 1; i < tokens.length; ++i) {
+        var new_tokens = [];
+        for (var i = 0; i < tokens.length; ++i) {
             var token_pair = tokens[i];
             if (token_pair.token === "<value>") {
-                var last_token = tokens[i-1].token;
-                tokens[i-1] = {token: last_token, value: value};
+                var last_pair = new_tokens[i-1];
+                var new_value = value;
+                var last_value = last_pair.value;
+                if (last_value !== undefined && last_value !==  '') {
+                    new_value = last_value + " " + value;
+                }
+                new_tokens[i-1] = {token: last_pair.token, value: new_value};
+            } else {
+                new_tokens.push(token_pair);
             }
         }
-        return tokens;
+        return new_tokens;
     }
 
     Expander.prototype.applyDefinition = function(token, value) {
