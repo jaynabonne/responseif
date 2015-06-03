@@ -69,7 +69,7 @@
                 In your despair and grief, you were drawn back to {!this place!}, the place you had lived as a child.</div>
             .fades-in-output #events
 
-    .response events
+    .response this place
         .occurs 1
         .does
             .says
