@@ -22,9 +22,11 @@ var RifInteract = (function() {
         this.clickFactory = function (keywords) {
             return function (e) {
                 var target = $(e.target);
-                var original_color = target.css("color");
-                dom.animate(target, '{"color": "#c0c000"}', 250);
-                dom.animate(target, '{"color": "' + original_color +'"}', 300);
+                if (rif.clickEffect !== undefined) {
+                    $.each(rif.clickEffect.transitions, function(index, transition) {
+                        self.dom.animate(target, transition.to, transition.lasting);
+                    });
+                }
                 self.sendCommand(keywords.split(" "));
             };
         };
