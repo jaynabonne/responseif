@@ -1,6 +1,4 @@
 @import url(http://fonts.googleapis.com/css?family=Cantarell);
-@import url(http://fonts.googleapis.com/css?family=Rancho);
-@import url(http://fonts.googleapis.com/css?family=Unkempt);
 body {
     background-color: #101010;
     color: #c0c0c0;
@@ -12,7 +10,7 @@ a {
     color: #ca8642
 }
 a:visited {
-    color: #654321
+    color: #888888
 }
 div#holder {
     width:90%;
@@ -33,28 +31,17 @@ div#output {
     display:block;
     font-family:'Cantarell', Georgia, serif;
 }
-div#header {
-    font-size:12pt;
-    width:100%; 
-    background-color:#808080;
-    color:#ffffff;
-    padding:4px;
-    position:fixed;
-    top:0px;
-    height:25px;
-}
-div#bar {
+
+div#links-bar {
     width:100%;
     height:auto;
-    background-color:#404040;
     padding: 2px;
     font-size:12pt;
     padding-left:6px;
-}
-
-div#barspacer {
-    width:100%;
-    height:15px;
+    position: absolute;
+    top: 0px;
+    font-family: 'trebuchet ms', verdana, arial;
+    font-style: italic;
 }
 
 span.keyword {color:#f0f020; cursor:pointer;}
