@@ -676,4 +676,20 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse click-effect animates", function () {
+        var rif = rifParse(
+            [
+                token_pair("click-effect"),
+                    token_pair("to","properties"),
+                    token_pair("lasting","1000"),
+                    token_pair("to","other_properties"),
+                    token_pair("lasting","2000"),
+            ]
+        );
+        expect(rif.clickEffect).toEqual(
+            {
+                transitions: [{to: "properties", lasting: 1000}, {to: "other_properties", lasting: 2000}]
+            }
+        );
+    });
 });

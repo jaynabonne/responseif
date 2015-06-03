@@ -240,6 +240,13 @@ rifParse = (function () {
         rif.moves.push(move);
     };
 
+    Parser.prototype["parse_click-effect"] = function() {
+        var rif = this.rif;
+        rif.clickEffect = { transitions:[]};
+        this.index++;
+        this.parseEntries(rif.clickEffect, "parse_animates_");
+    };
+
     Parser.prototype.currentPair = function() {
         var pair = this.tokens[this.index];
         if (pair.line) {
