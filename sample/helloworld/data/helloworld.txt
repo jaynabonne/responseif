@@ -1,0 +1,4 @@
+.responses player
+    .response START
+        .does
+            .says Hello, world!
