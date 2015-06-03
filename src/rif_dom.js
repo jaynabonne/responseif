@@ -11,7 +11,7 @@ var RifDOM = (function(formatter) {
         } else {
             return $('<div>');
         }
-    }
+    };
 
     prototype.scrollToEnd = function() {
         var scrollTo = $(document).height();
