@@ -31,17 +31,25 @@ var rifExpand = (function () {
         this.definitions[id] = definition;
     };
 
+    function isNotEmpty(value) {
+        return value !== undefined && value !== '';
+    }
+    function joinStrings(s1, s2) {
+        if (isNotEmpty(s1)) {
+            if (isNotEmpty(s2)) {
+                return s1 + " " + s2;
+            }
+            return s1;
+        }
+        return isNotEmpty(s2) ? s2 : '';
+    }
     function replaceValues(tokens, value) {
         var new_tokens = [];
         for (var i = 0; i < tokens.length; ++i) {
             var token_pair = tokens[i];
             if (token_pair.token === "<value>") {
                 var last_pair = new_tokens[i-1];
-                var new_value = value;
-                var last_value = last_pair.value;
-                if (last_value !== undefined && last_value !==  '') {
-                    new_value = last_value + " " + value;
-                }
+                var new_value = joinStrings(joinStrings(last_pair.value, value), token_pair.value);
                 new_tokens[i-1] = {token: last_pair.token, value: new_value};
             } else {
                 new_tokens.push(token_pair);
