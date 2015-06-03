@@ -47,6 +47,7 @@ var RifDOM = (function(formatter) {
     };
 
     prototype.animate = function(selector, options, duration) {
+        console.log("options: ", options);
         if (!options) {
             console.log("no options specified");
             return;
@@ -56,7 +57,10 @@ var RifDOM = (function(formatter) {
             console.log("options: '" + options + "' are invalid JSON");
             return;
         }
-        var element = $(selector);
+        var element = selector;
+        if (typeof selector === 'string') {
+            element = $(selector);
+        }
         if (!element) {
             console.log("no element for " + selector);
             return;

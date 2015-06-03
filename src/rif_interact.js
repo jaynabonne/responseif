@@ -23,7 +23,8 @@ var RifInteract = (function() {
             return function (e) {
                 var target = $(e.target);
                 var original_color = target.css("color");
-                target.animate({color: "#c0c000"}, 250).animate({color: original_color}, 300);
+                dom.animate(target, '{"color": "#c0c000"}', 250);
+                dom.animate(target, '{"color": "' + original_color +'"}', 300);
                 self.sendCommand(keywords.split(" "));
             };
         };
