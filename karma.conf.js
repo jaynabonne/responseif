@@ -19,6 +19,7 @@ module.exports = function(config) {
       'src/rif_response.js',
       'src/rif_tokenize.js',
       'src/rif_expand.js',
+      'src/rif_expression.js',
       'src/rif_load.js',
       'src/rif_parse.js',
       'src/rif_world.js',
