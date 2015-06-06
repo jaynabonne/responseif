@@ -54,4 +54,8 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("A and B or C");
         expect(RifExpression.evaluate(expression, {A: 0.5, B: 0, C: 0.7})).toBe(0.7);
     });
+    it('should work with differently cased words', function() {
+        var expression = RifExpression.compile("NOT A aNd B Or C");
+        expect(RifExpression.evaluate(expression, {A: 0.5, B: 0, C: 0.7})).toBe(0.7);
+    });
 });
