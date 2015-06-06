@@ -13,24 +13,22 @@ var RifExpression = (function() {
     }
 
     function compileExpression(context) {
-        while (context.index < context.parts.length) {
-            var part = context.parts[context.index++];
-            var expression;
-            if (part === 'not') {
-                var exp_index = context.expressions.length;
-                compileExpression(context);
-                var f = context.expressions.pop();
-                expression = function(state) {
-                    return 1.0 - f(state);
-                }
+        var part = context.parts[context.index++];
+        var expression;
+        if (part === 'not') {
+            var exp_index = context.expressions.length;
+            compileExpression(context);
+            var f = context.expressions.pop();
+            expression = function(state) {
+                return 1.0 - f(state);
             }
-            else if (isNaN(part)) {
-                expression = variableFunction(part);
-            } else {
-                expression = constantFunction(part);
-            }
-            context.expressions.push(expression);
         }
+        else if (isNaN(part)) {
+            expression = variableFunction(part);
+        } else {
+            expression = constantFunction(part);
+        }
+        context.expressions.push(expression);
     }
 
     return {
@@ -45,6 +43,9 @@ var RifExpression = (function() {
             };
             compileExpression(context);
             return context.expressions[0];
+        },
+        evaluate: function(compiled_expression, parameters) {
+            return compiled_expression(parameters);
         }
     };
 })();
