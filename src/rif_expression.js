@@ -1,34 +1,33 @@
 var RifExpression = (function() {
     function variableFunction(expression) {
-        return function (state) {
-            return state[expression];
+        return function (state, stack) {
+            stack.push(state[expression]);
         }
     }
 
     function constantFunction(expression) {
         var value = parseFloat(expression);
-        return function (state) {
-            return value;
+        return function (state, stack) {
+            stack.push(value);
         }
     }
 
-    function compileExpression(context) {
-        var part = context.parts[context.index++];
-        var expression;
+    function notFunction() {
+        return function (state, stack) {
+            stack.push(1.0-stack.pop());
+        };
+    }
+
+    function compileNext(context) {
+        var part = context.parts[context.index];
         if (part === 'not') {
-            var exp_index = context.expressions.length;
-            compileExpression(context);
-            var f = context.expressions.pop();
-            expression = function(state) {
-                return 1.0 - f(state);
-            }
+            context.operators.push(notFunction());
         }
         else if (isNaN(part)) {
-            expression = variableFunction(part);
+            context.expressions.push(variableFunction(part));
         } else {
-            expression = constantFunction(part);
+            context.expressions.push(constantFunction(part));
         }
-        context.expressions.push(expression);
     }
 
     return {
@@ -39,13 +38,23 @@ var RifExpression = (function() {
             var context = {
                 parts: expression.split(' '),
                 index: 0,
-                expressions: []
+                expressions: [],
+                operators: []
             };
-            compileExpression(context);
-            return context.expressions[0];
+            for (context.index = 0; context.index < context.parts.length; ++context.index) {
+                compileNext(context);
+            }
+            while (context.operators.length !== 0) {
+                context.expressions.push(context.operators.pop());
+            }
+            return context.expressions;
         },
         evaluate: function(compiled_expression, parameters) {
-            return compiled_expression(parameters);
+            var stack = [];
+            $.each(compiled_expression, function(index, value) {
+                value(parameters, stack);
+            });
+            return stack.pop();
         }
     };
 })();
