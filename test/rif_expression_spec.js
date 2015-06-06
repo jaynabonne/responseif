@@ -1,4 +1,7 @@
 describe('RifExpression', function() {
+    it('should return null for an empty expression', function() {
+        expect(RifExpression.compile("")).toBeNull();
+    });
     it('should compile a variable', function() {
         var expression = RifExpression.compile("variable");
         expect(expression({variable: 1})).toBe(1);

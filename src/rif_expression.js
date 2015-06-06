@@ -14,11 +14,15 @@ var RifExpression = (function() {
 
     return {
         compile: function(expression) {
+            if (expression === '') {
+                return null;
+            }
             var parts = expression.split(' ');
-            var part = parts[0];
+            var index = 0;
+            var part = parts[index];
             if (part === 'not') {
                 return function(state) {
-                    return 1.0 - variableFunction(parts[1])(state);
+                    return 1.0 - variableFunction(parts[index+1])(state);
                 }
             }
             else if (isNaN(expression)) {
