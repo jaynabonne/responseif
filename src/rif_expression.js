@@ -24,22 +24,34 @@ var RifExpression = (function() {
         stack.push(Math.max(stack.pop(), stack.pop()));
     };
 
+    function pushOperator(context, operator) {
+        context.operators.push(operator);
+    }
+
+    function pushOperand(context, operand) {
+        context.expressions.push(operand);
+    }
+
+    var operators = {
+        'not': Not,
+        'and': And,
+        'or': Or
+    };
+
     function compileNext(part, context) {
         if (part === '') return;
-        if (part === 'not') {
-            context.operators.push(Not);
-        }
-        else if (part === 'and') {
-            context.operators.push(And);
-        }
-        else if (part === 'or') {
-            context.operators.push(Or);
-        }
-        else if (isNaN(part)) {
-            context.expressions.push(Variable(part));
+        var operator = operators[part];
+        if (operator) {
+            pushOperator(context, operator);
+        } else if (isNaN(part)) {
+            pushOperand(context, Variable(part));
         } else {
-            context.expressions.push(Constant(part));
+            pushOperand(context, Constant(part));
         }
+    }
+
+    function splitExpression(expression) {
+        return expression.split(' ');
     }
 
     return {
@@ -48,7 +60,7 @@ var RifExpression = (function() {
                 expressions: [],
                 operators: []
             };
-            $.each(expression.split(' '), function(index, value) {
+            $.each(splitExpression(expression), function(index, value) {
                 compileNext(value, context);
             });
             while (context.operators.length !== 0) {
