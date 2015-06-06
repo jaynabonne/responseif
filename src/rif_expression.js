@@ -18,8 +18,8 @@ var RifExpression = (function() {
         };
     }
 
-    function compileNext(context) {
-        var part = context.parts[context.index];
+    function compileNext(part, context) {
+        if (part === '') return;
         if (part === 'not') {
             context.operators.push(notFunction());
         }
@@ -32,18 +32,13 @@ var RifExpression = (function() {
 
     return {
         compile: function(expression) {
-            if (expression === '') {
-                return null;
-            }
             var context = {
-                parts: expression.split(' '),
-                index: 0,
                 expressions: [],
                 operators: []
             };
-            for (context.index = 0; context.index < context.parts.length; ++context.index) {
-                compileNext(context);
-            }
+            $.each(expression.split(' '), function(index, value) {
+                compileNext(value, context);
+            });
             while (context.operators.length !== 0) {
                 context.expressions.push(context.operators.pop());
             }
