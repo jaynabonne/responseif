@@ -49,7 +49,7 @@ var RifExpression = (function() {
             $.each(compiled_expression, function(index, value) {
                 value(parameters, stack);
             });
-            return stack.pop();
+            return stack.length === 1 ? stack.pop() : null;
         }
     };
 })();
