@@ -58,4 +58,12 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("NOT A aNd B Or C");
         expect(RifExpression.evaluate(expression, {A: 0.5, B: 0, C: 0.7})).toBe(0.7);
     });
+    it('should support fuzzy difference', function() {
+        var expression = RifExpression.compile("var1 difference var2");
+        expect(RifExpression.evaluate(expression, {var1: 0.5, var2: 0.7})).toBeCloseTo(0.2);
+    });
+    it('should support fuzzy equals', function() {
+        var expression = RifExpression.compile("var1 equals var2");
+        expect(RifExpression.evaluate(expression, {var1: 0.5, var2: 0.7})).toBeCloseTo(0.8);
+    });
 });

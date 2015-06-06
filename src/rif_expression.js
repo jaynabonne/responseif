@@ -15,17 +15,27 @@ var RifExpression = (function() {
     var Not = function (state, stack) {
         stack.push(1.0-stack.pop());
     };
-    Not.precedence = 3;
+    Not.precedence = 30;
 
     var And = function (state, stack) {
         stack.push(Math.min(stack.pop(), stack.pop()));
     };
-    And.precedence = 2;
+    And.precedence = 20;
 
     var Or = function (state, stack) {
         stack.push(Math.max(stack.pop(), stack.pop()));
     };
-    Or.precedence = 1;
+    Or.precedence = 10;
+
+    var Difference = function (state, stack) {
+        stack.push(Math.abs(stack.pop()-stack.pop()));
+    };
+    Difference.precedence = 5;
+
+    var Equals = function (state, stack) {
+        stack.push(1.0 - Math.abs(stack.pop()-stack.pop()));
+    };
+    Equals.precedence = 5;
 
     function pushOperator(context, operator) {
         if (context.expressions.length !== 0) {
@@ -43,7 +53,9 @@ var RifExpression = (function() {
     var operators = {
         'not': Not,
         'and': And,
-        'or': Or
+        'or': Or,
+        'difference': Difference,
+        'equals': Equals
     };
 
     function compileNext(part, context) {
