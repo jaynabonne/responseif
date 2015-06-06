@@ -15,16 +15,24 @@ var RifExpression = (function() {
     var Not = function (state, stack) {
         stack.push(1.0-stack.pop());
     };
+    Not.precedence = 3;
 
     var And = function (state, stack) {
         stack.push(Math.min(stack.pop(), stack.pop()));
     };
+    And.precedence = 2;
 
     var Or = function (state, stack) {
         stack.push(Math.max(stack.pop(), stack.pop()));
     };
+    Or.precedence = 1;
 
     function pushOperator(context, operator) {
+        if (context.expressions.length !== 0) {
+            while (context.operators.length !== 0 && context.operators.slice(-1)[0].precedence >= operator.precedence) {
+                context.expressions.push(context.operators.pop());
+            }
+        }
         context.operators.push(operator);
     }
 

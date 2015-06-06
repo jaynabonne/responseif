@@ -42,4 +42,16 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1);
         expect(RifExpression.evaluate(expression, {var1: 0.6, var2: 0.5})).toBe(0.6);
     });
+    it('should give NOT precedence over AND', function() {
+        var expression = RifExpression.compile("not var1 and var2");
+        expect(RifExpression.evaluate(expression, {var1: 0, var2: 0})).toBe(0);
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 0})).toBe(0);
+        expect(RifExpression.evaluate(expression, {var1: 0, var2: 1})).toBe(1);
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(0);
+        expect(RifExpression.evaluate(expression, {var1: 0.6, var2: 0.5})).toBe(0.4);
+    });
+    it('should give AND precedence over OR', function() {
+        var expression = RifExpression.compile("A and B or C");
+        expect(RifExpression.evaluate(expression, {A: 0.5, B: 0, C: 0.7})).toBe(0.7);
+    });
 });
