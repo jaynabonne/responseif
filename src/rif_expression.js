@@ -13,17 +13,23 @@ var RifExpression = (function() {
     }
 
     function compileExpression(context) {
-        var part = context.parts[context.index++];
-        if (part === 'not') {
-            var f = compileExpression(context);
-            return function(state) {
-                return 1.0 - f(state);
+        while (context.index < context.parts.length) {
+            var part = context.parts[context.index++];
+            var expression;
+            if (part === 'not') {
+                var exp_index = context.expressions.length;
+                compileExpression(context);
+                var f = context.expressions.pop();
+                expression = function(state) {
+                    return 1.0 - f(state);
+                }
             }
-        }
-        else if (isNaN(part)) {
-            return variableFunction(part);
-        } else {
-            return constantFunction(part);
+            else if (isNaN(part)) {
+                expression = variableFunction(part);
+            } else {
+                expression = constantFunction(part);
+            }
+            context.expressions.push(expression);
         }
     }
 
@@ -34,9 +40,11 @@ var RifExpression = (function() {
             }
             var context = {
                 parts: expression.split(' '),
-                index: 0
-            }
-            return compileExpression(context);
+                index: 0,
+                expressions: []
+            };
+            compileExpression(context);
+            return context.expressions[0];
         }
     };
 })();
