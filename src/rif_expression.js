@@ -15,7 +15,7 @@ var RifExpression = (function() {
     function compileExpression(context) {
         var part = context.parts[context.index++];
         if (part === 'not') {
-            var f = variableFunction(context.parts[context.index++]);
+            var f = compileExpression(context);
             return function(state) {
                 return 1.0 - f(state);
             }
