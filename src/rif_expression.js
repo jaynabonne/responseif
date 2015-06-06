@@ -1,32 +1,44 @@
 var RifExpression = (function() {
-    function variableFunction(expression) {
+    function Variable(expression) {
         return function (state, stack) {
             stack.push(state[expression]);
         }
     }
 
-    function constantFunction(expression) {
+    function Constant(expression) {
         var value = parseFloat(expression);
         return function (state, stack) {
             stack.push(value);
         }
     }
 
-    function notFunction() {
-        return function (state, stack) {
-            stack.push(1.0-stack.pop());
-        };
-    }
+    var Not = function (state, stack) {
+        stack.push(1.0-stack.pop());
+    };
+
+    var And = function (state, stack) {
+        stack.push(Math.min(stack.pop(), stack.pop()));
+    };
+
+    var Or = function (state, stack) {
+        stack.push(Math.max(stack.pop(), stack.pop()));
+    };
 
     function compileNext(part, context) {
         if (part === '') return;
         if (part === 'not') {
-            context.operators.push(notFunction());
+            context.operators.push(Not);
+        }
+        else if (part === 'and') {
+            context.operators.push(And);
+        }
+        else if (part === 'or') {
+            context.operators.push(Or);
         }
         else if (isNaN(part)) {
-            context.expressions.push(variableFunction(part));
+            context.expressions.push(Variable(part));
         } else {
-            context.expressions.push(constantFunction(part));
+            context.expressions.push(Constant(part));
         }
     }
 

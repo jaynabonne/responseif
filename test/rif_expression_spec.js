@@ -26,12 +26,20 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {variable: 1})).toBe(1);
         expect(RifExpression.evaluate(expression, {variable: 0})).toBe(0);
     });
-    xit('should compile a logical AND', function() {
+    it('should compile a logical AND', function() {
         var expression = RifExpression.compile("var1 and var2");
         expect(RifExpression.evaluate(expression, {var1: 0, var2: 0})).toBe(0);
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 0})).toBe(0);
         expect(RifExpression.evaluate(expression, {var1: 0, var2: 1})).toBe(0);
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1);
         expect(RifExpression.evaluate(expression, {var1: 0.6, var2: 0.5})).toBe(0.5);
+    });
+    it('should compile a logical OR', function() {
+        var expression = RifExpression.compile("var1 or var2");
+        expect(RifExpression.evaluate(expression, {var1: 0, var2: 0})).toBe(0);
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 0})).toBe(1);
+        expect(RifExpression.evaluate(expression, {var1: 0, var2: 1})).toBe(1);
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1);
+        expect(RifExpression.evaluate(expression, {var1: 0.6, var2: 0.5})).toBe(0.6);
     });
 });
