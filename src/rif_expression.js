@@ -12,24 +12,31 @@ var RifExpression = (function() {
         }
     }
 
+    function compileExpression(context) {
+        var part = context.parts[context.index++];
+        if (part === 'not') {
+            var f = variableFunction(context.parts[context.index++]);
+            return function(state) {
+                return 1.0 - f(state);
+            }
+        }
+        else if (isNaN(part)) {
+            return variableFunction(part);
+        } else {
+            return constantFunction(part);
+        }
+    }
+
     return {
         compile: function(expression) {
             if (expression === '') {
                 return null;
             }
-            var parts = expression.split(' ');
-            var index = 0;
-            var part = parts[index];
-            if (part === 'not') {
-                return function(state) {
-                    return 1.0 - variableFunction(parts[index+1])(state);
-                }
+            var context = {
+                parts: expression.split(' '),
+                index: 0
             }
-            else if (isNaN(expression)) {
-                return variableFunction(expression);
-            } else {
-                return constantFunction(expression);
-            }
+            return compileExpression(context);
         }
     };
 })();
