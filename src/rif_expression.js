@@ -27,6 +27,13 @@ var RifExpression = (function() {
     };
     Or.precedence = 10;
 
+    var Xor = function (state, stack) {
+        var a = stack.pop();
+        var b = stack.pop();
+        stack.push(Math.max(Math.min(1.0-a, b), Math.min(a,1.0-b)));
+    };
+    Xor.precedence = 10;
+
     var Difference = function (state, stack) {
         stack.push(Math.abs(stack.pop()-stack.pop()));
     };
@@ -54,6 +61,7 @@ var RifExpression = (function() {
         'not': Not,
         'and': And,
         'or': Or,
+        'xor': Xor,
         'difference': Difference,
         'equals': Equals
     };

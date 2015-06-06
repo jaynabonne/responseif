@@ -42,6 +42,14 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1);
         expect(RifExpression.evaluate(expression, {var1: 0.6, var2: 0.5})).toBe(0.6);
     });
+    it('should compile a logical XOR', function() {
+        var expression = RifExpression.compile("var1 xor var2");
+        expect(RifExpression.evaluate(expression, {var1: 0, var2: 0})).toBe(0);
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 0})).toBe(1);
+        expect(RifExpression.evaluate(expression, {var1: 0, var2: 1})).toBe(1);
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(0);
+        expect(RifExpression.evaluate(expression, {var1: 0.6, var2: 0.5})).toBe(0.5);
+    });
     it('should give NOT precedence over AND', function() {
         var expression = RifExpression.compile("not var1 and var2");
         expect(RifExpression.evaluate(expression, {var1: 0, var2: 0})).toBe(0);
@@ -65,5 +73,9 @@ describe('RifExpression', function() {
     it('should support fuzzy equals', function() {
         var expression = RifExpression.compile("var1 equals var2");
         expect(RifExpression.evaluate(expression, {var1: 0.5, var2: 0.7})).toBeCloseTo(0.8);
+    });
+    xit('should support double NOT later in the expression', function() {
+        var expression = RifExpression.compile("var1 and not not var2");
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1.0);
     });
 });
