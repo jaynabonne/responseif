@@ -74,7 +74,7 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("var1 equals var2");
         expect(RifExpression.evaluate(expression, {var1: 0.5, var2: 0.7})).toBeCloseTo(0.8);
     });
-    xit('should support double NOT later in the expression', function() {
+    it('should support double NOT later in the expression', function() {
         var expression = RifExpression.compile("var1 and not not var2");
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1.0);
     });

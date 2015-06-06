@@ -15,37 +15,31 @@ var RifExpression = (function() {
     var Not = function (state, stack) {
         stack.push(1.0-stack.pop());
     };
-    Not.precedence = 30;
 
     var And = function (state, stack) {
         stack.push(Math.min(stack.pop(), stack.pop()));
     };
-    And.precedence = 20;
 
     var Or = function (state, stack) {
         stack.push(Math.max(stack.pop(), stack.pop()));
     };
-    Or.precedence = 10;
 
     var Xor = function (state, stack) {
         var a = stack.pop();
         var b = stack.pop();
         stack.push(Math.max(Math.min(1.0-a, b), Math.min(a,1.0-b)));
     };
-    Xor.precedence = 10;
 
     var Difference = function (state, stack) {
         stack.push(Math.abs(stack.pop()-stack.pop()));
     };
-    Difference.precedence = 5;
 
     var Equals = function (state, stack) {
         stack.push(1.0 - Math.abs(stack.pop()-stack.pop()));
     };
-    Equals.precedence = 5;
 
     function pushOperator(context, operator) {
-        if (context.expressions.length !== 0) {
+        if (!operator.unary) {
             while (context.operators.length !== 0 && context.operators.slice(-1)[0].precedence >= operator.precedence) {
                 context.expressions.push(context.operators.pop());
             }
@@ -54,16 +48,16 @@ var RifExpression = (function() {
     }
 
     function pushOperand(context, operand) {
-        context.expressions.push(operand);
+        context.expressions.push({ execute: operand });
     }
 
     var operators = {
-        'not': Not,
-        'and': And,
-        'or': Or,
-        'xor': Xor,
-        'difference': Difference,
-        'equals': Equals
+        'not': { execute: Not, precedence: 30, unary: true },
+        'and': { execute: And, precedence: 20, unary: false },
+        'or': { execute: Or, precedence: 10, unary: false },
+        'xor': { execute: Xor, precedence: 10, unary: false },
+        'difference': { execute: Difference, precedence: 5, unary: false },
+        'equals': { execute: Equals, precedence: 5, unary: false }
     };
 
     function compileNext(part, context) {
@@ -99,7 +93,7 @@ var RifExpression = (function() {
         evaluate: function(compiled_expression, parameters) {
             var stack = [];
             $.each(compiled_expression, function(index, value) {
-                value(parameters, stack);
+                value.execute(parameters, stack);
             });
             return stack.length === 1 ? stack.pop() : null;
         }
