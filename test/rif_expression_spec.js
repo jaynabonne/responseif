@@ -78,4 +78,20 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("var1 and not not var2");
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(1.0);
     });
+    it('should support addition in the expression', function() {
+        var expression = RifExpression.compile("var1 + var2");
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(2.0);
+    });
+    it('should support subtraction in the expression', function() {
+        var expression = RifExpression.compile("var1 - var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 1.5})).toBe(3.5);
+    });
+    it('should support multiplication in the expression', function() {
+        var expression = RifExpression.compile("var1 * var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 1.5})).toBe(7.5);
+    });
+    it('should support division in the expression', function() {
+        var expression = RifExpression.compile("var1 / var2");
+        expect(RifExpression.evaluate(expression, {var1: 6, var2: 1.5})).toBe(4);
+    });
 });

@@ -38,6 +38,24 @@ var RifExpression = (function() {
         stack.push(1.0 - Math.abs(stack.pop()-stack.pop()));
     };
 
+    var Plus = function (state, stack) {
+        stack.push(stack.pop()+stack.pop());
+    };
+
+    var Minus = function (state, stack) {
+        var second = stack.pop();
+        stack.push(stack.pop()-second);
+    };
+
+    var Times = function (state, stack) {
+        stack.push(stack.pop()*stack.pop());
+    };
+
+    var Divides = function (state, stack) {
+        var second = stack.pop();
+        stack.push(stack.pop()/second);
+    };
+
     function pushOperator(context, operator) {
         if (!operator.unary) {
             while (context.operators.length !== 0 && context.operators.slice(-1)[0].precedence >= operator.precedence) {
@@ -53,11 +71,15 @@ var RifExpression = (function() {
 
     var operators = {
         'not': { execute: Not, precedence: 30, unary: true },
-        'and': { execute: And, precedence: 20, unary: false },
-        'or': { execute: Or, precedence: 10, unary: false },
-        'xor': { execute: Xor, precedence: 10, unary: false },
-        'difference': { execute: Difference, precedence: 5, unary: false },
-        'equals': { execute: Equals, precedence: 5, unary: false }
+        'and': { execute: And, precedence: 20 },
+        '*': { execute: Times, precedence: 20 },
+        '/': { execute: Divides, precedence: 20 },
+        'or': { execute: Or, precedence: 10 },
+        'xor': { execute: Xor, precedence: 10 },
+        '+': { execute: Plus, precedence: 10 },
+        '-': { execute: Minus, precedence: 10 },
+        'difference': { execute: Difference, precedence: 5 },
+        'equals': { execute: Equals, precedence: 5 }
     };
 
     function compileNext(part, context) {
