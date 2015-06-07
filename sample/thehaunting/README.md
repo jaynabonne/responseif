@@ -1,0 +1,1 @@
+A simple, linear, not very interactive adaptation of a short story of mine. It does show basic threaded movement through a piece, with links in response text invoking other responses. It also illustrates some simple formatting and animation, including fading in text and customizing the "click effect". 
