@@ -145,12 +145,20 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(2);
         expect(RifExpression.evaluate(expression, {var1: 2, var2: 3})).toBe(5);
     });
-    it('should support negative numbers', function() {
+    it('should support unary minus', function() {
         var expression = RifExpression.compile("-13");
         expect(RifExpression.evaluate(expression, {})).toBe(-13);
         expression = RifExpression.compile("-var");
         expect(RifExpression.evaluate(expression, {var: 13})).toBe(-13);
         expression = RifExpression.compile("var1 - -var2");
         expect(RifExpression.evaluate(expression, {var1: 13, var2: 9})).toBe(22);
+    });
+    it('should support unary plus', function() {
+        var expression = RifExpression.compile("+13");
+        expect(RifExpression.evaluate(expression, {})).toBe(13);
+        expression = RifExpression.compile("+var");
+        expect(RifExpression.evaluate(expression, {var: 13})).toBe(13);
+        expression = RifExpression.compile("var1 - +var2");
+        expect(RifExpression.evaluate(expression, {var1: 13, var2: 9})).toBe(4);
     });
 });

@@ -42,6 +42,11 @@ var RifExpression = (function() {
                 stack.push(-stack.pop());
             }
         },
+        'unary +': {
+            precedence: 2,
+            unary: true,
+            execute: function (state, stack) {}
+        },
         '*': {
             precedence: 3,
             execute: function (state, stack) {
