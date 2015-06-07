@@ -152,7 +152,6 @@ var RifExpression = (function() {
     };
 
     function compileNext(part, context) {
-        if (part === '') return;
         var operator = operators[part.toLowerCase()];
         if (operator) {
             pushOperator(context, operator);
