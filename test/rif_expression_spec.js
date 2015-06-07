@@ -94,4 +94,50 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("var1 / var2");
         expect(RifExpression.evaluate(expression, {var1: 6, var2: 1.5})).toBe(4);
     });
+    it('should support mod in the expression', function() {
+        var expression = RifExpression.compile("var1 % var2");
+        expect(RifExpression.evaluate(expression, {var1: 10, var2: 4})).toBe(2);
+    });
+    it('should support > in the expression', function() {
+        var expression = RifExpression.compile("var1 > var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 4})).toBe(0.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 5})).toBe(0.0);
+    });
+    it('should support >= in the expression', function() {
+        var expression = RifExpression.compile("var1 >= var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 5})).toBe(0.0);
+    });
+    it('should support < in the expression', function() {
+        var expression = RifExpression.compile("var1 < var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 4})).toBe(0.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 4})).toBe(0.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 5})).toBe(1.0);
+    });
+    it('should support <= in the expression', function() {
+        var expression = RifExpression.compile("var1 <= var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 4})).toBe(0.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 5})).toBe(1.0);
+    });
+    it('should support = in the expression', function() {
+        var expression = RifExpression.compile("var1 = var2");
+        expect(RifExpression.evaluate(expression, {var1: 5, var2: 4})).toBe(0.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 4, var2: 5})).toBe(0.0);
+    });
+    it('should support mod (fuzzy truncation) in the expression', function() {
+        var expression = RifExpression.compile("var1 mod var2");
+        expect(RifExpression.evaluate(expression, {var1: 0.5, var2: 0.4})).toBe(0.5);
+        expect(RifExpression.evaluate(expression, {var1: 0.4, var2: 0.4})).toBe(0.0);
+        expect(RifExpression.evaluate(expression, {var1: 0.3, var2: 0.3})).toBe(0.0);
+    });
+    it('should support rem (fuzzy rounding) in the expression', function() {
+        var expression = RifExpression.compile("var1 rem var2");
+        expect(RifExpression.evaluate(expression, {var1: 0.5, var2: 0.4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 0.4, var2: 0.4})).toBe(1.0);
+        expect(RifExpression.evaluate(expression, {var1: 0.3, var2: 0.5})).toBe(0.3);
+    });
 });

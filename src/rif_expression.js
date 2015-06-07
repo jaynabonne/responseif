@@ -53,6 +53,22 @@ var RifExpression = (function() {
                 stack.push(stack.pop()%second);
             }
         },
+        'mod': {
+            precedence: 3,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                var first = stack.pop();
+                stack.push(first > second ? first : 0.0);
+            }
+        },
+        'rem': {
+            precedence: 3,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                var first = stack.pop();
+                stack.push(first < second ? first : 1.0);
+            }
+        },
         '+': {
             precedence: 4,
             execute: function (state, stack) {
