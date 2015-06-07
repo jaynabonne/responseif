@@ -165,12 +165,16 @@ var RifExpression = (function() {
         }
     };
 
-    function compileNext(part, context) {
+    function getOperator(part, context) {
         var op_id = part.toLowerCase();
         if (!context.lastWasOperand) {
             op_id = "unary " + op_id;
         }
-        var operator = operators[op_id];
+        return operators[op_id];
+    }
+
+    function compileNext(part, context) {
+        var operator = getOperator(part, context);
         if (operator) {
             pushOperator(context, operator);
         } else if (isNaN(part)) {
@@ -184,23 +188,36 @@ var RifExpression = (function() {
     function isIdentifier(value) {
         return identifierChars.indexOf(value) >= 0;
     }
+
     function splitExpression(expression) {
         var parts = [];
         var part = '';
         for (var i = 0; i < expression.length; ++i) {
-            var value = expression[i];
-            if (part !== '' && (value === ' ' || isIdentifier(value) != isIdentifier(part[0]))) {
+            var ch = expression[i];
+            if (part !== '' && (ch === ' ' || isIdentifier(ch) != isIdentifier(part[0]))) {
                 parts.push(part);
                 part = '';
             }
-            if (value != ' ')
-                part += value;
+            if (ch != ' ')
+                part += ch;
         }
         if (part !== '') {
             parts.push(part);
         }
         //console.log('"'+expression+'" yields ', parts);
         return parts;
+    }
+
+    function pushRemainingOperators(context) {
+        while (context.operators.length !== 0) {
+            context.expressions.push(context.operators.pop());
+        }
+    }
+
+    function compileParts(parts, context) {
+        $.each(parts, function (index, value) {
+            compileNext(value, context);
+        });
     }
 
     return {
@@ -210,12 +227,8 @@ var RifExpression = (function() {
                 operators: [],
                 lastWasOperand: false
             };
-            $.each(splitExpression(expression), function(index, value) {
-                compileNext(value, context);
-            });
-            while (context.operators.length !== 0) {
-                context.expressions.push(context.operators.pop());
-            }
+            compileParts(splitExpression(expression), context);
+            pushRemainingOperators(context);
             return context.expressions;
         },
         evaluate: function(compiled_expression, parameters) {
