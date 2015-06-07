@@ -14,17 +14,9 @@ var RifWorld = (function() {
         this.values[id] = value;
     };
     proto.getState = function(id, responder) {
-        var index = id.indexOf("=");
-        if (index != -1) {
-            var value = id.substring(index + 1);
-            id = id.substring(0, index);
-            var cur_value = this.getValue(id);
-            return cur_value === value;
-        } else if (id[0] === "!") {
-            return !this.getValue(id.substr(1));
-        } else {
-            return this.getValue(id);
-        }
+        var expression = RifExpression.compile(id);
+        var value = RifExpression.evaluate(expression, this.values);
+        return value;
     };
     proto.setState = function(id, responder) {
         var index = id.indexOf("=");
@@ -32,8 +24,8 @@ var RifWorld = (function() {
             var value = id.substring(index+1);
             id = id.substring(0, index);
             this.setValue(id, value);
-        } else if (id[0] === "!") {
-            this.setValue(id.substr(1), false);
+        } else if (id.slice(0, 4) === "not ") {
+            this.setValue(id.substr(4), false);
         } else {
             this.setValue(id, true);
         }

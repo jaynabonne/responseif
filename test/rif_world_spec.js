@@ -23,21 +23,6 @@ describe("RifWorld", function () {
         beforeEach(function () {
             world.getValue = jasmine.createSpy("getValue");
         });
-        it("should invoke getValue for a bare id", function () {
-            world.getValue.andReturn(true);
-            expect(world.getState("somestate")).toBe(true);
-            expect(world.getValue).toHaveBeenCalledWith("somestate");
-        });
-        it("should invert the getValue value for !id", function () {
-            world.getValue.andReturn(true);
-            expect(world.getState("!somestate")).toBe(false);
-            expect(world.getValue).toHaveBeenCalledWith("somestate");
-        });
-        it("should test an explicit value", function() {
-            world.getValue.andReturn("somevalue");
-            expect(world.getState("somestate=somevalue")).toBe(true);
-            expect(world.getValue).toHaveBeenCalledWith("somestate");
-        });
     });
     describe("setState", function() {
         beforeEach(function () {
@@ -48,7 +33,7 @@ describe("RifWorld", function () {
             expect(world.setValue).toHaveBeenCalledWith("somestate", true);
         });
         it("should invoke setValue with false for a negated id", function() {
-            world.setState("!somestate");
+            world.setState("not somestate");
             expect(world.setValue).toHaveBeenCalledWith("somestate", false);
         });
         it("should set an explicit value", function() {
@@ -58,7 +43,7 @@ describe("RifWorld", function () {
     });
     describe("addRif", function() {
         it("sets variables from the 'sets' array", function() {
-            var rif = { sets: ["somestate", "somevar=314", "!visited"]};
+            var rif = { sets: ["somestate", "somevar=314", "not visited"]};
             world.addRif(rif);
             expect(world.getValue("somestate")).toBe(true);
             expect(world.getValue("somevar")).toBe("314");

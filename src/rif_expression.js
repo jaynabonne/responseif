@@ -184,7 +184,7 @@ var RifExpression = (function() {
         }
     }
 
-    var identifierChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._$"
+    var identifierChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._$:";
     function isIdentifier(value) {
         return identifierChars.indexOf(value) >= 0;
     }
