@@ -14,7 +14,7 @@ var RifExpression = (function() {
 
     function pushOperator(context, operator) {
         if (!operator.unary) {
-            while (context.operators.length !== 0 && context.operators.slice(-1)[0].precedence >= operator.precedence) {
+            while (context.operators.length !== 0 && context.operators.slice(-1)[0].precedence <= operator.precedence) {
                 context.expressions.push(context.operators.pop());
             }
         }
@@ -27,68 +27,68 @@ var RifExpression = (function() {
 
     var operators = {
         'not': {
-            precedence: 30,
+            precedence: 1,
             unary: true,
             execute: function (state, stack) {
                 stack.push(1.0-stack.pop());
             }
         },
-        'and': {
-            precedence: 20,
-            execute: function (state, stack) {
-                stack.push(Math.min(stack.pop(), stack.pop()));
-            }
-        },
         '*': {
-            precedence: 20,
+            precedence: 3,
             execute: function (state, stack) {
                 stack.push(stack.pop()*stack.pop());
             }
         },
         '/': {
-            precedence: 20,
+            precedence: 3,
             execute: function (state, stack) {
                 var second = stack.pop();
                 stack.push(stack.pop()/second);
             }
         },
-        'or': {
-            precedence: 10,
-            execute: function (state, stack) {
-                stack.push(Math.max(stack.pop(), stack.pop()));
-            }
-        },
-        'xor': {
-            precedence: 10,
-            execute: function (state, stack) {
-                var a = stack.pop();
-                var b = stack.pop();
-                stack.push(Math.max(Math.min(1.0-a, b), Math.min(a,1.0-b)));
-            }
-        },
         '+': {
-            precedence: 10,
+            precedence: 4,
             execute: function (state, stack) {
                 stack.push(stack.pop()+stack.pop());
             }
         },
         '-': {
-            precedence: 10,
+            precedence: 4,
             execute: function (state, stack) {
                 var second = stack.pop();
                 stack.push(stack.pop()-second);
             }
         },
         'difference': {
-            precedence: 5,
+            precedence: 4,
             execute: function (state, stack) {
                 stack.push(Math.abs(stack.pop()-stack.pop()));
             }
         },
         'equals': {
-            precedence: 5,
+            precedence: 7,
             execute: function (state, stack) {
                 stack.push(1.0 - Math.abs(stack.pop()-stack.pop()));
+            }
+        },
+        'and': {
+            precedence: 11,
+            execute: function (state, stack) {
+                stack.push(Math.min(stack.pop(), stack.pop()));
+            }
+        },
+        'or': {
+            precedence: 12,
+            execute: function (state, stack) {
+                stack.push(Math.max(stack.pop(), stack.pop()));
+            }
+        },
+        'xor': {
+            precedence: 12,
+            execute: function (state, stack) {
+                var a = stack.pop();
+                var b = stack.pop();
+                stack.push(Math.max(Math.min(1.0-a, b), Math.min(a,1.0-b)));
             }
         }
     };
