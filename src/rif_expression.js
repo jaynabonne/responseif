@@ -72,10 +72,45 @@ var RifExpression = (function() {
                 stack.push(Math.abs(stack.pop()-stack.pop()));
             }
         },
+        '>': {
+            precedence: 6,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() > second ? 1.0 : 0.0);
+            }
+        },
+        '>=': {
+            precedence: 6,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() >= second ? 1.0 : 0.0);
+            }
+        },
+        '<': {
+            precedence: 6,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() < second ? 1.0 : 0.0);
+            }
+        },
+        '<=': {
+            precedence: 6,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() <= second ? 1.0 : 0.0);
+            }
+        },
         'equals': {
             precedence: 7,
             execute: function (state, stack) {
                 stack.push(1.0 - Math.abs(stack.pop()-stack.pop()));
+            }
+        },
+        '=': {
+            precedence: 6,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() == second ? 1.0 : 0.0);
             }
         },
         'and': {
