@@ -46,6 +46,13 @@ var RifExpression = (function() {
                 stack.push(stack.pop()/second);
             }
         },
+        '%': {
+            precedence: 3,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop()%second);
+            }
+        },
         '+': {
             precedence: 4,
             execute: function (state, stack) {
