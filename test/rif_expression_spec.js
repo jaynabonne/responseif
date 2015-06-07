@@ -140,4 +140,9 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {var1: 0.4, var2: 0.4})).toBe(1.0);
         expect(RifExpression.evaluate(expression, {var1: 0.3, var2: 0.5})).toBe(0.3);
     });
+    it('should support symbolic expressions without spaces', function() {
+        var expression = RifExpression.compile("var1+var2");
+        expect(RifExpression.evaluate(expression, {var1: 1, var2: 1})).toBe(2);
+        expect(RifExpression.evaluate(expression, {var1: 2, var2: 3})).toBe(5);
+    });
 });

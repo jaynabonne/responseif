@@ -163,8 +163,27 @@ var RifExpression = (function() {
         }
     }
 
+    var identifierChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._$"
+    function isIdentifier(value) {
+        return identifierChars.indexOf(value) >= 0;
+    }
     function splitExpression(expression) {
-        return expression.split(' ');
+        var parts = [];
+        var part = '';
+        for (var i = 0; i < expression.length; ++i) {
+            var value = expression[i];
+            if (part !== '' && isIdentifier(value) != isIdentifier(part[0])) {
+                parts.push(part);
+                part = '';
+            }
+            if (value != ' ')
+                part += value;
+        }
+        if (part !== '') {
+            parts.push(part);
+        }
+        //console.log('"'+expression+'" yields ', parts);
+        return parts;
     }
 
     return {
