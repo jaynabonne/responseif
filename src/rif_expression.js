@@ -19,18 +19,27 @@ var RifExpression = (function() {
             }
         }
         context.operators.push(operator);
+        context.lastWasOperand = false;
     }
 
     function pushOperand(context, operand) {
         context.expressions.push({ execute: operand });
+        context.lastWasOperand = true;
     }
 
     var operators = {
-        'not': {
+        'unary not': {
             precedence: 1,
             unary: true,
             execute: function (state, stack) {
                 stack.push(1.0-stack.pop());
+            }
+        },
+        'unary -': {
+            precedence: 2,
+            unary: true,
+            execute: function (state, stack) {
+                stack.push(-stack.pop());
             }
         },
         '*': {
@@ -152,7 +161,11 @@ var RifExpression = (function() {
     };
 
     function compileNext(part, context) {
-        var operator = operators[part.toLowerCase()];
+        var op_id = part.toLowerCase();
+        if (!context.lastWasOperand) {
+            op_id = "unary " + op_id;
+        }
+        var operator = operators[op_id];
         if (operator) {
             pushOperator(context, operator);
         } else if (isNaN(part)) {
@@ -171,7 +184,7 @@ var RifExpression = (function() {
         var part = '';
         for (var i = 0; i < expression.length; ++i) {
             var value = expression[i];
-            if (part !== '' && isIdentifier(value) != isIdentifier(part[0])) {
+            if (part !== '' && (value === ' ' || isIdentifier(value) != isIdentifier(part[0]))) {
                 parts.push(part);
                 part = '';
             }
@@ -189,7 +202,8 @@ var RifExpression = (function() {
         compile: function(expression) {
             var context = {
                 expressions: [],
-                operators: []
+                operators: [],
+                lastWasOperand: false
             };
             $.each(splitExpression(expression), function(index, value) {
                 compileNext(value, context);
