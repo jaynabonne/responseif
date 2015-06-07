@@ -123,7 +123,7 @@ var RifExpression = (function() {
             }
         },
         '=': {
-            precedence: 6,
+            precedence: 7,
             execute: function (state, stack) {
                 var second = stack.pop();
                 stack.push(stack.pop() == second ? 1.0 : 0.0);
