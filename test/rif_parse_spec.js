@@ -156,11 +156,12 @@ describe("rifParse", function () {
             [
                 responses("anObject"),
                     response(),
-                        token_pair("needs","need1 need2"),
+                        token_pair("needs","some expression"),
+                        token_pair("needs","some other expression"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{needs: ["need1", "need2"]}] } );
+        expect(rif.responses).toEqual( { anObject: [{needs: ["some expression", "some other expression"]}] } );
     });
     it("should parse response prompts", function () {
         var rif = rifParse(

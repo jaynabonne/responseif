@@ -56,21 +56,20 @@
 .-----------------
 
 .define door-open-close-response
-	.response
-		.matches .<value>
+	.response .<value>
 		.groups
 			.response
-				.needs !door-open
+				.needs not door_open
 				.prompts Open the alcove door
 				.does
-					.sets door-open
+					.sets door_open
 					.calls ALCOVE-DOOR-OPENS
 
 			.response
-				.needs door-open
+				.needs door_open
 				.prompts Close the alcove door
 				.does
-					.sets !door-open
+					.sets not door_open
 					.calls ALCOVE-DOOR-CLOSES
 		.end
 .enddef
@@ -79,10 +78,10 @@
 	.response *door
 		.groups
 			.response
-				.needs !door-open
+				.needs not door_open
 				.does .says The alcove door is closed. .autohides
 			.response
-				.needs door-open
+				.needs door_open
 				.does .says The alcove door is open. .autohides
 		.end
 	.response ALCOVE-DOOR-OPENS
@@ -126,7 +125,7 @@
 		.does
 			.uses first
 				.response
-					.needs door-open
+					.needs door_open
 					.does 
 						.says Motors engage, wheels turn, and you slowly roll out of your alcove into the hallway.
 						.moves-player-north-to hallway

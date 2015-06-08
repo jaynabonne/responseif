@@ -55,7 +55,7 @@
 			.calls INTRODONE
 		
 	.response INTRODONE
-		.needs intro_saw_dream intro_saw_rain intro_saw_wind
+		.needs intro_saw_dream and intro_saw_rain and intro_saw_wind
 		.does
 			.fades-out-intro
 			.populates-icons

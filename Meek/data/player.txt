@@ -27,7 +27,7 @@
 	.response door=50
 		.does
 			.says The door is a distant memory now.
-		`
+
 	.response ALCOVE-DOOR-OPENS=10
 		.does
 			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now open.|door!}

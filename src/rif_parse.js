@@ -33,6 +33,12 @@ rifParse = (function () {
         this.index++;
     };
 
+    Parser.prototype.addMultiString = function(target, entry) {
+        target[entry.token] = target[entry.token] || [];
+        target[entry.token].push(entry.value);
+        this.index++;
+    };
+
     Parser.prototype.addList = function(target, entry) {
         target[entry.token] = entry.value.split(" ");
         this.index++;
@@ -136,7 +142,7 @@ rifParse = (function () {
     Parser.prototype.parse_response_is = Parser.prototype.addString;
     Parser.prototype.parse_response_occurs = Parser.prototype.addInt;
     Parser.prototype.parse_response_orders = Parser.prototype.addInt;
-    Parser.prototype.parse_response_needs = Parser.prototype.addList;
+    Parser.prototype.parse_response_needs = Parser.prototype.addMultiString;
     Parser.prototype.parse_response_forcesprompt = Parser.prototype.setFlag;
 
     function parseMatches(matches_value) {
