@@ -161,4 +161,8 @@ describe('RifExpression', function() {
         expression = RifExpression.compile("var1 - +var2");
         expect(RifExpression.evaluate(expression, {var1: 13, var2: 9})).toBe(4);
     });
+    it('should return true for NOT of an undefined variable', function() {
+        var expression = RifExpression.compile("not somevar");
+        expect(RifExpression.evaluate(expression, {})).toBe(1.0);
+    });
 });

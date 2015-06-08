@@ -32,7 +32,11 @@ var RifExpression = (function() {
             precedence: 1,
             unary: true,
             execute: function (state, stack) {
-                stack.push(1.0-stack.pop());
+                var value = stack.pop();
+                if (value === undefined) {
+                    value = 0.0;
+                }
+                stack.push(1.0-value);
             }
         },
         'unary -': {
