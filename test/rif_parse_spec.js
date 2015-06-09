@@ -287,7 +287,10 @@ describe("rifParse", function () {
                 responses("anObject"),
                     response(),
                         does(),
-                            token_pair("sets","value1 value2 value3"),
+                            token_pair("sets","expression1"),
+                            token_pair("sets","var=expression2"),
+                            token_pair("sets","var2"),
+                            token_pair("to","expression3"),
                 end()
             ]
         );
@@ -296,7 +299,11 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: [ { sets: ["value1", "value2", "value3"] } ]
+                            common: [
+                                { sets: {expression: "expression1"} },
+                                { sets: {expression: "var=expression2"} },
+                                { sets: {expression: "var2", to: "expression3"} }
+                            ]
                         }
                     }
                 ]

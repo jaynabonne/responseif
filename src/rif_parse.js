@@ -80,7 +80,22 @@ rifParse = (function () {
     Parser.prototype.parse_says_into = Parser.prototype.parse_says_attribute;
     Parser.prototype.parse_says_autohides = Parser.prototype.set_says_attribute_flag;
 
-    Parser.prototype.parse_does_sets = Parser.prototype.addDoesList;
+    Parser.prototype.parse_does_sets = function(actions, entry) {
+        this.index++;
+        var action = {};
+        var value = entry.value;
+        action[entry.token] = { expression: value}
+        if (value.indexOf('=') === -1) {
+            this.parseEntries(action[entry.token], "parse_sets_");
+        }
+        actions.push(action);
+    };
+
+    Parser.prototype.parse_sets_to = function(action, entry) {
+      action.to = entry.value;
+      this.index++;
+    };
+
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
