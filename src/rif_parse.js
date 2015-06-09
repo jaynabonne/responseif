@@ -80,14 +80,19 @@ rifParse = (function () {
     Parser.prototype.parse_says_into = Parser.prototype.parse_says_attribute;
     Parser.prototype.parse_says_autohides = Parser.prototype.set_says_attribute_flag;
 
+    Parser.prototype.parseSetExpression = function(value) {
+        var o = { expression: value };
+        if (value.indexOf('=') === -1) {
+            this.parseEntries(o, "parse_sets_");
+        }
+        return o;
+    };
+
     Parser.prototype.parse_does_sets = function(actions, entry) {
         this.index++;
         var action = {};
         var value = entry.value;
-        action[entry.token] = { expression: value}
-        if (value.indexOf('=') === -1) {
-            this.parseEntries(action[entry.token], "parse_sets_");
-        }
+        action[entry.token] = this.parseSetExpression(value);
         actions.push(action);
     };
 
@@ -238,10 +243,10 @@ rifParse = (function () {
 
     Parser.prototype.parse_set = function() {
         var expression = this.currentPair().value;
+        this.index++;
         var rif = this.rif;
         rif.sets = rif.sets || [];
-        rif.sets.push(expression);
-        this.index++;
+        rif.sets.push(this.parseSetExpression(expression));
     };
 
     Parser.prototype.parse_listener = function() {

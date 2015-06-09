@@ -544,10 +544,11 @@ describe("rifParse", function () {
         var rif = rifParse(
             [
                 token_pair("set", "setexpression1"),
-                token_pair("set", "setexpression2")
+                token_pair("set", "target"),
+                token_pair("to", "setexpression2")
             ]
         );
-        expect(rif.sets).toEqual( ["setexpression1", "setexpression2"] );
+        expect(rif.sets).toEqual( [{ expression: "setexpression1"} , { expression: "target", to: "setexpression2"}] );
     });
     it("should parse listeners", function () {
         var rif = rifParse(
