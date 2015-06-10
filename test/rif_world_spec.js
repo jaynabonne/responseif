@@ -43,11 +43,17 @@ describe("RifWorld", function () {
     });
     describe("addRif", function() {
         it("sets variables from the 'sets' array", function() {
-            var rif = { sets: ["somestate", "somevar=314", "not visited"]};
+            var rif = { sets: [
+                {expression:"somestate"},
+                {expression:"somevar=314"},
+                {expression:"not visited"},
+                {expression:"astring", to:"not visited"}
+            ]};
             world.addRif(rif);
             expect(world.getValue("somestate")).toBe(true);
             expect(world.getValue("somevar")).toBe("314");
             expect(world.getValue("visited")).toBe(false);
+            expect(world.getValue("astring")).toBe("not visited");
         });
         it("set parents of objects in the 'moves' array", function() {
             var rif = {moves: [{target: "object1", to: "parent1"}, {target: "object2", to: "parent2"}]};

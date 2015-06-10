@@ -35,7 +35,11 @@ var RifWorld = (function() {
         if (rif.sets) {
             var self = this;
             $.each(rif.sets, function(index, value) {
-                self.setState(value);
+                if (value.to === undefined) {
+                    self.setState(value.expression);
+                } else {
+                    self.setValue(value.expression, value.to);
+                }
             });
         }
         if (rif.moves) {
