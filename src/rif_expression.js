@@ -1,15 +1,16 @@
 var RifExpression = (function() {
-    function Variable(expression) {
+    "use strict";
+    function variable(expression) {
         return function (state, stack) {
             stack.push(state[expression]);
-        }
+        };
     }
 
-    function Constant(expression) {
+    function constant(expression) {
         var value = parseFloat(expression);
         return function (state, stack) {
             stack.push(value);
-        }
+        };
     }
 
     function pushOperator(context, operator) {
@@ -182,9 +183,9 @@ var RifExpression = (function() {
         if (operator) {
             pushOperator(context, operator);
         } else if (isNaN(part)) {
-            pushOperand(context, Variable(part));
+            pushOperand(context, variable(part));
         } else {
-            pushOperand(context, Constant(part));
+            pushOperand(context, constant(part));
         }
     }
 
@@ -202,8 +203,9 @@ var RifExpression = (function() {
                 parts.push(part);
                 part = '';
             }
-            if (ch != ' ')
+            if (ch != ' ') {
                 part += ch;
+            }
         }
         if (part !== '') {
             parts.push(part);
