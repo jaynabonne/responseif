@@ -15,35 +15,34 @@ var RifWorld = (function() {
     };
     proto.getState = function(id, responder) {
         var expression = RifExpression.compile(id);
-        var value = RifExpression.evaluate(expression, this.values);
-        return value;
+        return RifExpression.evaluate(expression, this.values);
     };
-    proto.setState = function(id, responder) {
-        var index = id.indexOf("=");
-        if (index != -1) {
-            var value = id.substring(index+1);
-            id = id.substring(0, index);
-            this.setValue(id, value);
-        } else if (id.slice(0, 4) === "not ") {
-            this.setValue(id.substr(4), false);
+    proto.setState = function(state, responder) {
+        var expression = state.expression;
+        if (state.to !== undefined) {
+            this.setValue(expression, state.to);
         } else {
-            this.setValue(id, true);
+            var index = expression.indexOf("=");
+            if (index != -1) {
+                var value = expression.substring(index + 1);
+                expression = expression.substring(0, index);
+                this.setValue(expression, value);
+            } else if (expression.slice(0, 4) === "not ") {
+                this.setValue(expression.substr(4), false);
+            } else {
+                this.setValue(expression, true);
+            }
         }
     };
 
     proto.addRif = function(rif) {
+        var self = this;
         if (rif.sets) {
-            var self = this;
             $.each(rif.sets, function(index, value) {
-                if (value.to === undefined) {
-                    self.setState(value.expression);
-                } else {
-                    self.setValue(value.expression, value.to);
-                }
+                self.setState(value);
             });
         }
         if (rif.moves) {
-            var self = this;
             $.each(rif.moves, function(index, value) {
                 self.setParent(value.target, value.to);
             });

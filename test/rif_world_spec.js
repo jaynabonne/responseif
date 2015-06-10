@@ -29,15 +29,15 @@ describe("RifWorld", function () {
             world.setValue = jasmine.createSpy("setValue");
         });
         it("should invoke the setValue with true for a bare id", function() {
-            world.setState("somestate");
+            world.setState({expression: "somestate"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", true);
         });
         it("should invoke setValue with false for a negated id", function() {
-            world.setState("not somestate");
+            world.setState({expression: "not somestate"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", false);
         });
         it("should set an explicit value", function() {
-            world.setState("somestate=somevalue");
+            world.setState({expression: "somestate=somevalue"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", "somevalue");
         });
     });
