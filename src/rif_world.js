@@ -25,8 +25,8 @@ var RifWorld = (function() {
             var index = expression.indexOf("=");
             if (index != -1) {
                 var value = expression.substring(index + 1);
-                expression = expression.substring(0, index);
-                this.setValue(expression, value);
+                var variable = expression.substring(0, index);
+                this.setValue(variable, this.getState(value, responder));
             } else if (expression.slice(0, 4) === "not ") {
                 this.setValue(expression.substr(4), false);
             } else {

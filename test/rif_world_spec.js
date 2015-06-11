@@ -37,8 +37,8 @@ describe("RifWorld", function () {
             expect(world.setValue).toHaveBeenCalledWith("somestate", false);
         });
         it("should set an explicit value", function() {
-            world.setState({expression: "somestate=somevalue"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", "somevalue");
+            world.setState({expression: "somestate=678"});
+            expect(world.setValue).toHaveBeenCalledWith("somestate", 678);
         });
     });
     describe("addRif", function() {
@@ -51,7 +51,7 @@ describe("RifWorld", function () {
             ]};
             world.addRif(rif);
             expect(world.getValue("somestate")).toBe(true);
-            expect(world.getValue("somevar")).toBe("314");
+            expect(world.getValue("somevar")).toBe(314);
             expect(world.getValue("visited")).toBe(false);
             expect(world.getValue("astring")).toBe("not visited");
         });
