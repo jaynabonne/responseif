@@ -1,4 +1,4 @@
-.set break=<div style='font-size:6pt;'><br></div>
+.set break .to <div style='font-size:6pt;'><br></div>
 
 .define fades-in
 	.to {"opacity": 0.0}
