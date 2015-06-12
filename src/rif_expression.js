@@ -7,7 +7,7 @@ var RifExpression = (function() {
     }
 
     function constant(expression) {
-        var value = parseFloat(expression);
+        var value = expression[0] === '"' ? expression.slice(1,-1) : parseFloat(expression);
         return function (state, stack) {
             stack.push(value);
         };
@@ -182,7 +182,7 @@ var RifExpression = (function() {
         var operator = getOperator(part, context);
         if (operator) {
             pushOperator(context, operator);
-        } else if (isNaN(part)) {
+        } else if (isNaN(part) && part[0] !== '"') {
             pushOperand(context, variable(part));
         } else {
             pushOperand(context, constant(part));
@@ -197,9 +197,16 @@ var RifExpression = (function() {
     function splitExpression(expression) {
         var parts = [];
         var part = '';
+        var in_string = false;
         for (var i = 0; i < expression.length; ++i) {
             var ch = expression[i];
-            if (part !== '' && (ch === ' ' || isIdentifier(ch) != isIdentifier(part[0]))) {
+            if (in_string) {
+                if (ch === '"') {
+                    in_string = false;
+                }
+            } else if (ch === '"') {
+                in_string = true;
+            } else if (part !== '' && (ch === ' ' || isIdentifier(ch) != isIdentifier(part[0]))) {
                 parts.push(part);
                 part = '';
             }
@@ -208,6 +215,10 @@ var RifExpression = (function() {
             }
         }
         if (part !== '') {
+            if (in_string) {
+                console.log("Error: unclosed string: " + part);
+                part += '"';
+            }
             parts.push(part);
         }
         //console.log('"'+expression+'" yields ', parts);

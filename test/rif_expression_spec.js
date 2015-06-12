@@ -165,4 +165,8 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("not somevar");
         expect(RifExpression.evaluate(expression, {})).toBe(1.0);
     });
+    it('should support a string variable', function() {
+        var expression = RifExpression.compile('"literal"');
+        expect(RifExpression.evaluate(expression, {})).toBe("literal");
+    });
 });
