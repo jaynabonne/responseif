@@ -161,8 +161,8 @@ describe("RifWorld", function () {
                 hits[result-1]++;
             }
             for (i = 0; i < 10; ++i) {
-                expect(hits[i]).toBeGreaterThan(900);
-                expect(hits[i]).toBeLessThan(1100);
+                expect(hits[i]).toBeGreaterThan(800);
+                expect(hits[i]).toBeLessThan(1200);
             }
         });
     });
