@@ -151,11 +151,19 @@ describe("RifWorld", function () {
         });
     });
     describe("getRandomInRange", function() {
-        it("returns random numbers in the specified range (as far as I can test)", function() {
+        it("returns random numbers in the specified range", function() {
             expect(world.getRandomInRange(4,4)).toBe(4);
-            var result = world.getRandomInRange(1, 10);
-            expect(result).toBeGreaterThan(0);
-            expect(result).toBeLessThan(11);
+            var hits = [0,0,0,0,0,0,0,0,0,0];
+            for (var i = 0; i < 10000; ++i) {
+                var result = world.getRandomInRange(1, 10);
+                expect(result).toBeGreaterThan(0);
+                expect(result).toBeLessThan(11);
+                hits[result-1]++;
+            }
+            for (i = 0; i < 10; ++i) {
+                expect(hits[i]).toBeGreaterThan(900);
+                expect(hits[i]).toBeLessThan(1100);
+            }
         });
     });
 });
