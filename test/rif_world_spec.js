@@ -150,4 +150,12 @@ describe("RifWorld", function () {
             expect(responders.indexOf("adam")).not.toBe(-1);
         });
     });
+    describe("getRandomInRange", function() {
+        it("returns random numbers in the specified range (as far as I can test)", function() {
+            expect(world.getRandomInRange(4,4)).toBe(4);
+            var result = world.getRandomInRange(1, 10);
+            expect(result).toBeGreaterThan(0);
+            expect(result).toBeLessThan(11);
+        });
+    });
 });
