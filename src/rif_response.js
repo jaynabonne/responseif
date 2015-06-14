@@ -215,6 +215,14 @@ var RifResponse = (function () {
                     }
                 });
             }
+            if (action.uses.random) {
+                var list = action.uses.random;
+                if (list.length !== 0) {
+                    if (self.responseIsEligible(list[0], [], responder)) {
+                        self.processResponse({response: list[0], responder: responder}, caller, interact);
+                    }
+                }
+            }
         }
     };
 

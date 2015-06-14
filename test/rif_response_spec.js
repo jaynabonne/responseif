@@ -431,6 +431,48 @@ describe("RifResponse", function () {
                 expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }]);
             });
         });
+        describe("uses random", function() {
+            var response1, response2, response3;
+
+            function getResponseForResponses(responses) {
+                return {
+                    response: {
+                        does: {
+                            common: [{
+                                uses: {
+                                    random: responses
+                                }
+                            }]
+                        }
+                    },
+                    score: 10000,
+                    responder: "aresponder"
+                };
+            }
+
+            beforeEach(function() {
+                response1 = { needs: "cond1", does: { common: [ { says: {text: "Text 1"} } ] } };
+                response2 = { needs: "cond2", does: { common: [ { says: {text: "Text 2"} } ] } };
+                response3 = { needs: "cond3", does: { common: [ { says: {text: "Text 3"} } ] } };
+            });
+            it("processes a single response", function() {
+                world.getState = function(id) { return true;};
+
+                var response = getResponseForResponses([ response1 ]);
+                interact.say = jasmine.createSpy("say");
+                responseLib.processResponses([response], "", interact);
+                expect(interact.say.callCount).toEqual(1);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }]);
+            });
+            it("does not process an ineligible response", function() {
+                world.getState = function(id) { return false;};
+
+                var response = getResponseForResponses([ response1 ]);
+                interact.say = jasmine.createSpy("say");
+                responseLib.processResponses([response], "", interact);
+                expect(interact.say.callCount).toEqual(0);
+            });
+        });
         describe("calls", function () {
             it("should call the specified topics", function() {
                 interact.call = jasmine.createSpy("call");
