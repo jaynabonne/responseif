@@ -451,9 +451,9 @@ describe("RifResponse", function () {
             }
 
             beforeEach(function() {
-                response1 = { needs: "cond1", does: { common: [ { says: {text: "Text 1"} } ] } };
-                response2 = { needs: "cond2", does: { common: [ { says: {text: "Text 2"} } ] } };
-                response3 = { needs: "cond3", does: { common: [ { says: {text: "Text 3"} } ] } };
+                response1 = { needs: ["cond1"], does: { common: [ { says: {text: "Text 1"} } ] } };
+                response2 = { needs: ["cond2"], does: { common: [ { says: {text: "Text 2"} } ] } };
+                response3 = { needs: ["cond3"], does: { common: [ { says: {text: "Text 3"} } ] } };
                 world.getRandomInRange = jasmine.createSpy('getRandomInRange').andReturn(0);
                 world.getState = function(id) { return true;};
             });
@@ -491,6 +491,27 @@ describe("RifResponse", function () {
 
                 expect(interact.say.callCount).toEqual(2);
                 expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 2" }]);
+            });
+            it("randomly chooses only among eligible responses", function() {
+                var response = getResponseForResponses([ response1, response2, response3 ]);
+                interact.say = jasmine.createSpy("say");
+                world.getState = function(id) { return id !== 'cond2';};
+
+                world.getRandomInRange.andReturn(0);
+
+                responseLib.processResponses([response], "", interact);
+                expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
+
+                expect(interact.say.callCount).toEqual(1);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }]);
+
+                world.getRandomInRange.andReturn(1);
+
+                responseLib.processResponses([response], "", interact);
+                expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
+
+                expect(interact.say.callCount).toEqual(2);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }]);
             });
         });
         describe("calls", function () {

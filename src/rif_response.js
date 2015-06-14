@@ -216,12 +216,15 @@ var RifResponse = (function () {
                 });
             }
             if (action.uses.random) {
-                var list = action.uses.random;
+                var list = [];
+                $.each(action.uses.random, function(index, child) {
+                    if (self.responseIsEligible(child, [], responder)) {
+                        list.push(child);
+                    }
+                });
                 if (list.length !== 0) {
                     var index = this.world.getRandomInRange(0, list.length-1);
-                    if (self.responseIsEligible(list[index], [], responder)) {
-                        self.processResponse({response: list[index], responder: responder}, caller, interact);
-                    }
+                    self.processResponse({response: list[index], responder: responder}, caller, interact);
                 }
             }
         }
