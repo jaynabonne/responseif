@@ -454,10 +454,10 @@ describe("RifResponse", function () {
                 response1 = { needs: "cond1", does: { common: [ { says: {text: "Text 1"} } ] } };
                 response2 = { needs: "cond2", does: { common: [ { says: {text: "Text 2"} } ] } };
                 response3 = { needs: "cond3", does: { common: [ { says: {text: "Text 3"} } ] } };
+                world.getRandomInRange = jasmine.createSpy('getRandomInRange').andReturn(0);
+                world.getState = function(id) { return true;};
             });
             it("processes a single response", function() {
-                world.getState = function(id) { return true;};
-
                 var response = getResponseForResponses([ response1 ]);
                 interact.say = jasmine.createSpy("say");
                 responseLib.processResponses([response], "", interact);
@@ -471,6 +471,26 @@ describe("RifResponse", function () {
                 interact.say = jasmine.createSpy("say");
                 responseLib.processResponses([response], "", interact);
                 expect(interact.say.callCount).toEqual(0);
+            });
+            it("returns a randomly selected response", function() {
+                var response = getResponseForResponses([ response1, response2 ]);
+                interact.say = jasmine.createSpy("say");
+
+                world.getRandomInRange.andReturn(0);
+
+                responseLib.processResponses([response], "", interact);
+                expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
+
+                expect(interact.say.callCount).toEqual(1);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }]);
+
+                world.getRandomInRange.andReturn(1);
+
+                responseLib.processResponses([response], "", interact);
+                expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
+
+                expect(interact.say.callCount).toEqual(2);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 2" }]);
             });
         });
         describe("calls", function () {
