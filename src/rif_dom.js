@@ -7,9 +7,9 @@ var RifDOM = (function(formatter) {
     var prototype = type.prototype;
     prototype.createDiv = function(id) {
         if (id) {
-            return $('<div>', {id: id });
+            return $('<div>', {id: id, class: 'section' });
         } else {
-            return $('<div>');
+            return $('<div>', {class: 'section'});
         }
     };
 
