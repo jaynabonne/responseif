@@ -36,6 +36,10 @@ describe("RifResponse", function () {
             var response = { matches: [{keyword: "*atopic"}] };
             expect(responseLib.responseIsEligible(response, [{keyword: "btopics"}])).toEqual(false);
         });
+        it("returns false if topics score is not positive", function () {
+            var response = { matches: [{keyword: "atopic"}] };
+            expect(responseLib.responseIsEligible(response, [{keyword: "btopics"}])).toEqual(false);
+        });
         it("passes the responder as state prefix if passed", function () {
             world.getState = function(id, responder) { return id === "somestate" && responder === "aresponder"; };
             var response = { needs: ["somestate"] };
@@ -513,9 +517,7 @@ describe("RifResponse", function () {
                 expect(interact.say.callCount).toEqual(2);
                 expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }]);
             });
-            it('should choose according to random weights', function() {
 
-            });
         });
         describe("calls", function () {
             it("should call the specified topics", function() {
