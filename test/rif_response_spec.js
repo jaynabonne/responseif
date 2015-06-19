@@ -513,6 +513,9 @@ describe("RifResponse", function () {
                 expect(interact.say.callCount).toEqual(2);
                 expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }]);
             });
+            it('should choose according to random weights', function() {
+
+            });
         });
         describe("calls", function () {
             it("should call the specified topics", function() {

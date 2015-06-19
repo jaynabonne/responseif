@@ -127,7 +127,8 @@ var RifResponse = (function () {
     proto.responseIsEligible = function(response, topics, responder) {
         return responseCountValid(response) &&
                 this.responseNeedsAreMet(response, responder) &&
-                responseRequiredTopicsAreDefined(response, topics);
+                responseRequiredTopicsAreDefined(response, topics) &&
+                this.computeScore(response.matches, topics) > 0;
     };
 
     proto.computeScore = function(response_topics, topics) {
