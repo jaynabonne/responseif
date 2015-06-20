@@ -24,8 +24,8 @@ describe("rifParse", function () {
     function invokes(text) {
         return token_pair("invokes", text);
     }
-    function groups() {
-        return token_pair("groups");
+    function selects() {
+        return token_pair("selects");
     }
     function uses(type) {
         return token_pair("uses", type);
@@ -382,12 +382,12 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse an empty response 'groups'", function() {
+    it("should parse an empty response 'selects'", function() {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
-                        groups(),
+                        selects(),
                         end(),
                 end()
             ]
@@ -396,18 +396,18 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
-                        groups: []
+                        selects: []
                     }
                 ]
             }
         );
     });
-    it("should parse a response 'groups'", function() {
+    it("should parse a response 'selects'", function() {
         var rif = rifParse(
             [
                 responses("anObject"),
                     response(),
-                        groups(),
+                        selects(),
                             response(),
                                 does(),
                                     says("some text"),
@@ -422,7 +422,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
-                        groups: [
+                        selects: [
                             { does: { common: [ {says: { text: "some text"} } ] } },
                             { does: { common: [ {says: { text: "some more text"} } ] } }
                         ]

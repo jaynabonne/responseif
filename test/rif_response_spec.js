@@ -155,7 +155,7 @@ describe("RifResponse", function () {
                 response2 = {b: 2, matches: [{keyword: "btopic"}]},
                 response3 = {c: 3},
                 response4 = {d: 4, run: 4, occurs: 4 },
-                parentresponse = { groups: [response1, response2, response3, response4] },
+                parentresponse = { selects: [response1, response2, response3, response4] },
                 responses = [parentresponse],
                 topics = [{keyword: "atopic"}],
                 candidates = responseLib.selectResponses(responses, topics);
@@ -163,7 +163,7 @@ describe("RifResponse", function () {
         });
         it("does not return eligible child responses if the parent is ineligible", function () {
             var response1 = {a: 1},
-                parentresponse = { matches:[{keyword: "*atopic"}], groups: [response1] },
+                parentresponse = { matches:[{keyword: "*atopic"}], selects: [response1] },
                 responses = [parentresponse],
                 topics = [],
                 candidates = responseLib.selectResponses(responses, topics);

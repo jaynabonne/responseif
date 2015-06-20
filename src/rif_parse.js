@@ -184,9 +184,9 @@ rifParse = (function () {
         this.index++;
     };
 
-    Parser.prototype.parse_response_groups = function(response, entry) {
+    Parser.prototype.parse_response_selects = function(response, entry) {
         this.index++;
-        response.groups = this.parseResponseGroup();
+        response.selects = this.parseResponseGroup();
     };
 
     Parser.prototype.parse_response = function() {

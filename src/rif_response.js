@@ -144,8 +144,8 @@ var RifResponse = (function () {
 
     proto.addResponse = function (response, topics, candidates, responder) {
         if (this.responseIsEligible(response, topics, responder)) {
-            if (response.groups !== undefined) {
-                this.addResponses(response.groups, topics, candidates, responder);
+            if (response.selects !== undefined) {
+                this.addResponses(response.selects, topics, candidates, responder);
             } else {
                 this.addIfHasScore(response, topics, candidates, responder);
             }
