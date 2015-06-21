@@ -39,7 +39,7 @@ var RifResponse = (function () {
             var self = this;
             var bound = function(response) {
                 self.addPriorityResponse(response)
-            }
+            };
             candidates.forEach(bound);
         };
 
@@ -191,10 +191,7 @@ var RifResponse = (function () {
 
     proto.processSets = function (action, responder) {
         if (action.sets) {
-            var self = this;
-            action.sets.forEach( function(set) {
-                self.setState(set, responder);
-            })
+            this.setState(action.sets, responder);
         }
     };
 

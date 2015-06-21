@@ -359,23 +359,15 @@ describe("RifResponse", function () {
             }
             it("sets state for a single id with 'sets' attribute", function () {
                 spyOnSetState();
-                var response = { response: { does: { common: [ { sets: ["somestate"] } ] } }, score: 10000 };
+                var response = { response: { does: { common: [ { sets: {expression:"somestate" } } ] } }, score: 10000 };
                 responseLib.processResponses([response], "", interact);
-                expect(world.setState).toHaveBeenCalledWith("somestate", "");
-            });
-            it("sets state for multiple ids with 'sets' attribute", function () {
-                spyOnSetState();
-                var response = { response: { does: { common: [ { sets: ["somestate", "someotherstate"] } ] } }, score: 10000 };
-                responseLib.processResponses([response], "", interact);
-                expect(world.setState.callCount).toEqual(2);
-                expect(world.setState.argsForCall[0]).toEqual(["somestate", ""]);
-                expect(world.setState.argsForCall[1]).toEqual(["someotherstate", ""]);
+                expect(world.setState).toHaveBeenCalledWith({expression:"somestate"}, "");
             });
             it("includes the responder if passed", function () {
                 spyOnSetState();
-                var response = { response: { does: { common: [ { sets: [":somestate"] } ] } }, score: 10000, responder: "aresponder" };
+                var response = { response: { does: { common: [ { sets: {expression: ":somestate"} } ] } }, score: 10000, responder: "aresponder" };
                 responseLib.processResponses([response], "", interact);
-                expect(world.setState).toHaveBeenCalledWith(":somestate", "aresponder");
+                expect(world.setState).toHaveBeenCalledWith({expression: ":somestate"}, "aresponder");
             });
         });
         describe("uses all", function() {
