@@ -210,7 +210,7 @@ var RifExpression = (function() {
                 parts.push(part);
                 part = '';
             }
-            if (ch != ' ') {
+            if (in_string || ch != ' ') {
                 part += ch;
             }
         }

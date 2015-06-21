@@ -169,4 +169,8 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('"literal"');
         expect(RifExpression.evaluate(expression, {})).toBe("literal");
     });
+    it('should support a string variable with spaces', function() {
+        var expression = RifExpression.compile('"a string literal"');
+        expect(RifExpression.evaluate(expression, {})).toBe("a string literal");
+    });
 });
