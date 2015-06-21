@@ -1,0 +1,48 @@
+.responses player
+    .response START
+        .does
+            .says Once upon a time, there lived a {!king!} in
+                    a faraway kingdom.
+
+    .response king
+        .does 1
+            .says The king was getting on in years, and he was
+                concerned that his kingdom would fall into
+                chaos {!upon his death|mortality!}.
+        .does
+            .uses random
+                .response
+                    .does .says The king needed to find a solution to his dilemma. .autohides
+                .response
+                    .does .says The king pondered his problem. .autohides
+                .response
+                    .does .says The king was a good man facing a tough decision. .autohides
+                .end
+
+    .response mortality
+        .needs not shared
+        .selects all
+            .response
+                .does
+                    .says One day, the king felt it was time to share his worries with someone close to him.
+            .response
+                .prompts He sought the advice of the Queen
+                .does
+                    .says He decided to seek the advice of the Queen, who often had insights that he himself did not.
+                    .sets shared="the Queen"
+            .response
+                .prompts He went to see his trusted adviser
+                .does
+                    .says He decided to seek the advice of his trusted adviser, whom he considered quite wise.
+                    .sets shared="his adviser"
+            .response
+                .prompts He had a conversation with his son
+                .does
+                    .says He decided to have a conversation with his son, the most likely heir to his throne.
+                    .sets shared="his son"
+        .end
+
+    .response mortality=50
+        .does
+            .says The king felt better after sharing his concerns with {=shared=}.
+.end
