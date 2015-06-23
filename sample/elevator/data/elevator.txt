@@ -1,0 +1,9 @@
+.responses player
+    .response START
+        .does
+            .says There is an {!elevator!} here.
+
+    .response elevator
+        .does
+            .says Foo
+.end

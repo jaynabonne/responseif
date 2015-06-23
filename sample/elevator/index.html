@@ -1,0 +1,38 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Elevator - ResponsIF Sample</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="/lib/jquery-1.11.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="/src/rif_html_formatter.js"></script>
+    <script type="text/javascript" src="/src/rif_interact.js"></script>
+    <script type="text/javascript" src="/src/rif_response.js"></script>
+    <script type="text/javascript" src="/src/rif_dom.js"></script>
+    <script type="text/javascript" src="/src/rif_expression.js"></script>
+    <script type="text/javascript" src="/src/rif_expand.js"></script>
+    <script type="text/javascript" src="/src/rif_parse.js"></script>
+    <script type="text/javascript" src="/src/rif_tokenize.js"></script>
+    <script type="text/javascript" src="/src/rif_world.js"></script>
+    <script type="text/javascript" src="/src/rif_load.js"></script>
+    <script type="text/javascript" src="/src/rif_engine.js"></script>
+
+    <script type="text/javascript">
+        function init() {
+            var params = {
+                rif_file: 'elevator.txt',
+                element: $('#output')
+            };
+            var engine = new RifEngine(params, function() {
+                engine.interact.sendCommand(["START"]);
+            });
+        }
+    </script>
+</head>
+<body onLoad="init()">
+    <div id="holder">
+        <div id="output"></div>
+    </div>
+</body>
+</html>
