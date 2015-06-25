@@ -17,6 +17,12 @@ var RifWorld = (function() {
         var expression = RifExpression.compile(id);
         return RifExpression.evaluate(expression, this.values);
     };
+    function getTarget(expression, responder){
+        if (expression[0] !== ':') {
+            return expression;
+        }
+        return responder + expression;
+    }
     proto.setState = function(state, responder) {
         var expression = state.expression;
         if (state.to !== undefined) {
@@ -26,11 +32,11 @@ var RifWorld = (function() {
             if (index != -1) {
                 var value = expression.substring(index + 1);
                 var variable = expression.substring(0, index);
-                this.setValue(variable, this.getState(value, responder));
+                this.setValue(getTarget(variable, responder), this.getState(value, responder));
             } else if (expression.slice(0, 4) === "not ") {
-                this.setValue(expression.substr(4), false);
+                this.setValue(getTarget(expression.substr(4), responder), false);
             } else {
-                this.setValue(expression, true);
+                this.setValue(getTarget(expression, responder), true);
             }
         }
     };

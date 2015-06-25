@@ -31,14 +31,20 @@ describe("RifWorld", function () {
         it("should invoke the setValue with true for a bare id", function() {
             world.setState({expression: "somestate"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", true);
+            world.setState({expression: ":somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", true);
         });
         it("should invoke setValue with false for a negated id", function() {
             world.setState({expression: "not somestate"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", false);
+            world.setState({expression: "not :somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", false);
         });
         it("should set an explicit value", function() {
             world.setState({expression: "somestate=678"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", 678);
+            world.setState({expression: ":somestate=678"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 678);
         });
     });
     describe("addRif", function() {
