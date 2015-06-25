@@ -173,4 +173,10 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('"a string literal"');
         expect(RifExpression.evaluate(expression, {})).toBe("a string literal");
     });
+    it('should compile a relative variable', function() {
+        var expression = RifExpression.compile(":variable");
+        expect(RifExpression.evaluate(expression, {'responder:variable': 1}, "responder")).toBe(1);
+        expect(RifExpression.evaluate(expression, {'responder:variable': 0}, "responder")).toBe(0);
+        expect(RifExpression.evaluate(expression, {':variable': 0})).toBe(0);
+    });
 });

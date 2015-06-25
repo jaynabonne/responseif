@@ -1,8 +1,12 @@
 var RifExpression = (function() {
     "use strict";
     function variable(expression) {
-        return function (state, stack) {
-            stack.push(state[expression]);
+        return function (state, stack, prefix) {
+            var id = expression;
+            if (id[0] === ':') {
+                id = prefix + id;
+            }
+            stack.push(state[id]);
         };
     }
 
@@ -183,7 +187,7 @@ var RifExpression = (function() {
         if (operator) {
             pushOperator(context, operator);
         } else if (isNaN(part) && part[0] !== '"') {
-            pushOperand(context, variable(part));
+            pushOperand(context, variable(part, context));
         } else {
             pushOperand(context, constant(part));
         }
@@ -238,20 +242,22 @@ var RifExpression = (function() {
     }
 
     return {
-        compile: function(expression) {
+        compile: function(expression, prefix) {
             var context = {
                 expressions: [],
                 operators: [],
-                lastWasOperand: false
+                lastWasOperand: false,
+                prefix: prefix
             };
             compileParts(splitExpression(expression), context);
             pushRemainingOperators(context);
             return context.expressions;
         },
-        evaluate: function(compiled_expression, parameters) {
+        evaluate: function(compiled_expression, parameters, prefix) {
             var stack = [];
+            prefix = prefix || '';
             $.each(compiled_expression, function(index, value) {
-                value.execute(parameters, stack);
+                value.execute(parameters, stack, prefix);
             });
             return stack.length === 1 ? stack.pop() : null;
         }
