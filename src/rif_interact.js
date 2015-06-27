@@ -64,7 +64,7 @@ var RifInteract = (function() {
             var topics = text.substring(index+2, end_index);
             says_context.output_string += text.substring(0, index);
             this.says_context = says_context;
-            this.call(topics.split(" "));
+            this.call(topics);
             text = text.substring(end_index+2);
         }
         says_context.output_string += text;
@@ -146,17 +146,24 @@ var RifInteract = (function() {
             this.currentDiv = div;
         },
         call: function(topics) {
-            this.callTopics(topics);
+            this.callTopics(topics.split(" "));
         },
         callTopics: function(topics) {
-            topics = convertTopics(topics);
-            var responses = {};
             var caller = this.world.getPOV();
+            var responders = this.world.getCurrentResponders(caller);
+            this.callTopicsWithResponders.call(this, topics, responders, caller);
+        },
+        getResponses: function (responders) {
+            var responses = {};
             var self = this;
-            $.each(this.world.getCurrentResponders(caller), function(index, value) {
+            $.each(responders, function (index, value) {
                 responses[value] = self.expandResponseReferences(self.rif.responses[value]);
             });
-            this.response_lib.callTopics(responses, topics, caller, this);
+            return responses;
+        },
+        callTopicsWithResponders: function(topics, responders, caller) {
+            topics = convertTopics(topics);
+            this.response_lib.callTopics(this.getResponses(responders), topics, caller, this);
         },
         callActions: function(topics) {
             //console.log("callActions");

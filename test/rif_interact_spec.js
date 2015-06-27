@@ -100,6 +100,11 @@ describe("RifInteract", function () {
             interact.say(says);
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME"}], "player", jasmine.any(Object));
         });
+        xit("should invoke 'call' on the interact for a caller-targeted topic", function() {
+            var says = { text: "My name is {+NAME>\"responder\"+}." };
+            interact.say(says);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME"}], "responder", jasmine.any(Object));
+        });
         it("should invoke 'call' on the interact for multiple topic", function() {
             var says = { text: "My name is {+FIRST NAME+}." };
             interact.say(says);
@@ -171,7 +176,7 @@ describe("RifInteract", function () {
     });
     describe("call", function () {
         it("should call the passed topics", function () {
-            interact.call(["topicA", "topicB", "topicC"]);
+            interact.call("topicA topicB topicC");
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "player", interact);
         });
     });
