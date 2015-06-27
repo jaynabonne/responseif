@@ -100,7 +100,8 @@ describe("RifInteract", function () {
             interact.say(says);
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME"}], "player", jasmine.any(Object));
         });
-        xit("should invoke 'call' on the interact for a caller-targeted topic", function() {
+        it("should invoke 'call' on the interact for a caller-targeted topic", function() {
+            world.getState.andReturn("responder");
             var says = { text: "My name is {+NAME>\"responder\"+}." };
             interact.say(says);
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME"}], "responder", jasmine.any(Object));

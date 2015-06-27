@@ -146,12 +146,21 @@ var RifInteract = (function() {
             this.currentDiv = div;
         },
         call: function(topics) {
-            this.callTopics(topics.split(" "));
+            var index = topics.indexOf('>');
+            if (index >= 0) {
+                var caller = topics.substring(index+1);
+                topics = topics.substring(0, index);
+                this.callTopicsForCaller(this.world.getState(caller), topics.split(" "));
+            } else {
+                this.callTopics(topics.split(" "));
+            }
+        },
+        callTopicsForCaller: function (caller, topics) {
+            var responders = this.world.getCurrentResponders(caller);
+            this.callTopicsWithResponders(topics, responders, caller);
         },
         callTopics: function(topics) {
-            var caller = this.world.getPOV();
-            var responders = this.world.getCurrentResponders(caller);
-            this.callTopicsWithResponders.call(this, topics, responders, caller);
+            this.callTopicsForCaller(this.world.getPOV(), topics);
         },
         getResponses: function (responders) {
             var responses = {};
