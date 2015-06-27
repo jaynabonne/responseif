@@ -99,10 +99,10 @@ var RifInteract = (function() {
         getNextId: function() {
             return "outputdiv" + this.id++;
         },
-        say: function (says) {
+        say: function (says, responder) {
             var self = this;
 
-            var text = replaceMarkup(says.text, "", this.world);
+            var text = replaceMarkup(says.text, responder, this.world);
             text = replaceCallMarkup.call(this, text);
             if (text === null) {
                 // recursive call return
