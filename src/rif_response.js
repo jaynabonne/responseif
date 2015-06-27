@@ -185,7 +185,7 @@ var RifResponse = (function () {
 
     proto.processSays = function (action, response, responder, interact) {
         if (action.says) {
-            interact.say(action.says);
+            interact.say(action.says, responder);
         }
     };
 
