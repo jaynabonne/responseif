@@ -177,7 +177,7 @@ describe("RifInteract", function () {
     });
     describe("call", function () {
         it("should call the passed topics", function () {
-            interact.call("topicA topicB topicC");
+            interact.call(["topicA", "topicB", "topicC"]);
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "player", interact);
         });
     });
