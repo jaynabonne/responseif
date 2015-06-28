@@ -198,6 +198,36 @@ var RifExpression = (function() {
         return identifierChars.indexOf(value) >= 0;
     }
 
+    function isSpace(value) {
+        return value === ' ';
+    }
+
+    function isOperator(part) {
+        return operators.hasOwnProperty(part) || operators.hasOwnProperty('unary ' + part);
+    }
+
+    function isJoinableIdentifier(part) {
+        return (isIdentifier(part[0]) || isSpace(part[0])) && !isOperator(part.toLowerCase());
+    }
+
+    function combineOperands(parts) {
+        var new_parts = [];
+        var length = parts.length;
+        for (var i = 0; i < length; ) {
+            var part = parts[i++];
+            if (isJoinableIdentifier(part)) {
+                while (i < length && isJoinableIdentifier(parts[i])) {
+                    part += parts[i++];
+                }
+            }
+            part = part.trim();
+            if (part != '') {
+                new_parts.push(part);
+            }
+        }
+        return new_parts;
+    }
+
     function splitExpression(expression) {
         var parts = [];
         var part = '';
@@ -210,13 +240,11 @@ var RifExpression = (function() {
                 }
             } else if (ch === '"') {
                 in_string = true;
-            } else if (part !== '' && (ch === ' ' || isIdentifier(ch) != isIdentifier(part[0]))) {
+            } else if (part !== '' && (isSpace(ch) != isSpace(part[0]) || isIdentifier(ch) != isIdentifier(part[0]))) {
                 parts.push(part);
                 part = '';
             }
-            if (in_string || ch != ' ') {
-                part += ch;
-            }
+            part += ch;
         }
         if (part !== '') {
             if (in_string) {
@@ -226,7 +254,7 @@ var RifExpression = (function() {
             parts.push(part);
         }
         //console.log('"'+expression+'" yields ', parts);
-        return parts;
+        return combineOperands(parts);
     }
 
     function pushRemainingOperators(context) {
@@ -236,6 +264,7 @@ var RifExpression = (function() {
     }
 
     function compileParts(parts, context) {
+        console.log("compileParts:", parts);
         $.each(parts, function (index, value) {
             compileNext(value, context);
         });

@@ -179,4 +179,14 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {'responder:variable': 0}, "responder")).toBe(0);
         expect(RifExpression.evaluate(expression, {':variable': 0})).toBe(0);
     });
+    it('should support a variable with a space in the name', function() {
+        var expression = RifExpression.compile("a spaced variable");
+        expect(RifExpression.evaluate(expression, {'a spaced variable': 1}, "responder")).toBe(1);
+        expect(RifExpression.evaluate(expression, {'a spaced variable': 0}, "responder")).toBe(0);
+    })
+    it('should support a responder with a space in the name', function() {
+        var expression = RifExpression.compile(":variable");
+        expect(RifExpression.evaluate(expression, {'a spaced responder:variable': 1}, "a spaced responder")).toBe(1);
+        expect(RifExpression.evaluate(expression, {'a spaced responder:variable': 0}, "a spaced responder")).toBe(0);
+    })
 });
