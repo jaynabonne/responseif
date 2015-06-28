@@ -14,8 +14,7 @@ var RifWorld = (function() {
         this.values[id] = value;
     };
     proto.getState = function(id, responder) {
-        var expression = RifExpression.compile(id);
-        return RifExpression.evaluate(expression, this.values);
+        return RifExpression.evaluate(RifExpression.compile(id), this.values, responder);
     };
     function getTarget(expression, responder){
         if (expression[0] !== ':') {
