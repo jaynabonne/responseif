@@ -1,9 +1,132 @@
+
+.move first floor hallway .to first floor
+.move first floor facade .to first floor hallway
+
+.move second floor hallway .to second floor
+.move second floor facade .to second floor hallway
+
+.move third floor hallway .to third floor
+.move third floor facade .to third floor hallway
+
+.move elevator .to first floor
+.move player .to first floor hallway
+
+.set first floor:indicator .to Grd
+.set second floor:indicator .to 2
+.set third floor:indicator .to 3
+.set third floor:indicator .to 3
+
 .responses player
     .response START
         .does
-            .says There is an {!elevator!} here.
+            .calls LOOK
+    .end
 
-    .response elevator
+.responses first floor hallway
+    .response LOOK elevator
         .does
-            .says Foo
+            .says There is an {!elevator!} here. {+INDICATOR_STATUS+}<br>
+            {+DOOR_STATUS+}, and {+BUTTON_STATUS+}
+
+    .response DOOR_STATUS
+        .does .uses first
+            .response .needs :door open
+                .does .says The elevator {!door!} is open
+            .response
+                .does .says The elevator door is closed
+        .end
+
+    .response BUTTON_STATUS
+        .does
+            .uses first
+                .response .needs :button pressed
+                    .does .says the {!button!} beside the elevator is lit.
+                .response
+                    .does .says the {!button!} beside the elevator is dark.
+            .end
+
+    .response INDICATOR_STATUS
+        .does
+            .says The indicator above the door says "{+FLOOR_INDICATOR>"elevator"+}".
+
+    .response button
+        .prompts Press button
+        .does
+            .uses first
+                .response .needs :button pressed
+                    .does .says The {!button!} is already lit.
+                .response
+                    .does .says You press the button, and it lights up.
+                    .sets :button pressed
+            .end
+
+    .response door
+        .needs door_open
+        .prompts Enter elevator
+        .does
+            .says You enter the {!elevator!}
+            .moves player .to elevator car
+.end
+
+.responses elevator
+    .response elevator
+        .does .says {+PANEL+} {+INDICATOR+} {+DOORS+}
+
+    .response PANEL
+        .does .says There is a panel with buttons on one wall.
+
+    .response INDICATOR
+        .does .says A floor indicator above the panel reads "{=floor=}".
+
+    .response DOORS
+        .does
+            .uses first
+                .response .needs door_open
+                    .does .says The elevator {!door!} is open.
+                .response
+                    .does .says The elevator door is closed.
+            .end
+    .response door
+        .needs door_open
+        .prompts Exit elevator
+        .does
+            .calls EXIT_ELEVATOR
+.end
+
+.responses first floor
+    .response FLOOR_INDICATOR .does .says {=:indicator=}
+    .response CAR_UP
+        .does .moves elevator .to second floor
+    .response EXIT_ELEVATOR
+        .does
+            .says You exit the {!elevator!}.
+            .moves player .to first floor hallway
+    .response OPEN_DOOR
+        .does
+            .says The {!door!} opens, and the elevator button goes dark.
+            .sets elevator:door_open
+            .sets :door_open
+            .sets not first_floor_button_pressed
+.end
+
+.responses second floor
+    .response FLOOR_INDICATOR .does .says {=:indicator=}
+    .response CAR_DOWN
+        .does .moves elevator .to first floor
+    .response CAR_UP
+        .does .moves elevator .to third floor
+    .response EXIT_ELEVATOR
+        .does
+            .says You exit the {!elevator!}.
+            .moves player .to second floor hallway
+.end
+
+.responses third floor
+    .response FLOOR_INDICATOR .does .says {=:indicator=}
+    .response CAR_DOWN
+        .does .moves elevator .to second floor
+    .response EXIT_ELEVATOR
+        .does
+            .says You exit the {!elevator!}.
+            .moves player .to third floor hallway
 .end
