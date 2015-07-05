@@ -127,6 +127,7 @@ var RifInteract = (function() {
             this.menu_callbacks[index] = function(index) {
                 self.hideSections();
                 callback(index);
+                self.idleProcessing();
             };
             var says = { text: this.formatter.formatMenu(options, index), autohides: true};
             this.say(says);
