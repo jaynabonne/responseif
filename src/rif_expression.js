@@ -264,7 +264,6 @@ var RifExpression = (function() {
     }
 
     function compileParts(parts, context) {
-        console.log("compileParts:", parts);
         $.each(parts, function (index, value) {
             compileNext(value, context);
         });
