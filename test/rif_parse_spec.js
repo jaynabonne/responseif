@@ -364,6 +364,7 @@ describe("rifParse", function () {
                             token_pair("adds","topic1 topic2 topic3"),
                             token_pair("adds","topic4 topic5"),
                             token_pair("to","someone"),
+                            token_pair("adds","topic6=50 topic7=90"),
                 end()
             ]
         );
@@ -373,8 +374,9 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: [
-                                { adds: ["topic1", "topic2", "topic3"] },
-                                { adds: ["topic4", "topic5"], to: "someone" }
+                                { adds: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}] },
+                                { adds: [{keyword: "topic4"}, {keyword: "topic5"}], to: "someone" },
+                                { adds: [{keyword: "topic6", weight: 50}, {keyword: "topic7", weight: 90}] }
                             ]
                         }
                     }
