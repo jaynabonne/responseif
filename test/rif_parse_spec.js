@@ -325,7 +325,7 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: [ { calls: ["call1", "call2", "call3"] } ]
+                            common: [ { calls: [{keyword: "call1"}, {keyword: "call2"}, {keyword: "call3"}] } ]
                         }
                     }
                 ]
@@ -347,7 +347,7 @@ describe("rifParse", function () {
                 anObject: [
                     {
                         does: {
-                            common: [ { suggests: ["topic1", "topic2", "topic3"] } ]
+                            common: [ { suggests: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}] } ]
                         }
                     }
                 ]

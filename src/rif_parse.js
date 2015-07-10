@@ -49,9 +49,9 @@ rifParse = (function () {
         this.index++;
     };
 
-    Parser.prototype.addDoesList = function(actions, entry) {
+    Parser.prototype.addDoesTopicList = function(actions, entry) {
         var action = {};
-        action[entry.token] = entry.value.split(" ");
+        action[entry.token] = parseWeightedTopics(entry.value);
         actions.push(action);
         this.index++;
     };
@@ -101,9 +101,9 @@ rifParse = (function () {
       this.index++;
     };
 
-    Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
+    Parser.prototype.parse_does_calls = Parser.prototype.addDoesTopicList;
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
-    Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
+    Parser.prototype.parse_does_suggests = Parser.prototype.addDoesTopicList;
     Parser.prototype.parse_does_adds = function(actions, entry) {
         var action = {adds: entry.value.split(" ") };
         this.index++;
@@ -175,10 +175,10 @@ rifParse = (function () {
     Parser.prototype.parse_response_needs = Parser.prototype.addMultiString;
     Parser.prototype.parse_response_forcesprompt = Parser.prototype.setFlag;
 
-    function parseMatches(matches_value) {
+    function parseWeightedTopics(matches_value) {
         var values = matches_value.split(" ");
         var matches = [];
-        $.each(values, function(index, value) {
+        $.each(values, function (index, value) {
             var fields = value.split("=");
             if (fields.length === 1) {
                 matches.push({keyword: fields[0]});
@@ -187,6 +187,10 @@ rifParse = (function () {
             }
         });
         return matches;
+    }
+
+    function parseMatches(matches_value) {
+        return parseWeightedTopics(matches_value);
     }
 
     Parser.prototype.parse_response_matches = function(target, entry) {
