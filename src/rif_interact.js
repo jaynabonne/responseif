@@ -5,7 +5,11 @@ var RifInteract = (function() {
         this.menu_index = 0;
         this.menu_callbacks = {};
     }
-    
+
+    function convertTopics(topics) {
+        return topics.map(function(value) { return {keyword: value} });
+    }
+
     var type = function (dom, formatter, world, response_lib, rif) {
         this.id = 1;
         this.dom = dom;
@@ -27,15 +31,11 @@ var RifInteract = (function() {
                         self.dom.animate(target, transition.to, transition.lasting);
                     });
                 }
-                self.sendCommand(keywords.split(" "));
+                self.sendCommand(convertTopics(keywords.split(" ")));
             };
         };
         resetMenuCallbacks.call(this);
     };
-
-    function convertTopics(topics) {
-        return topics.map(function(value) { return {keyword: value} });
-    }
 
     function replaceMarkup(text, responder, world) {
         var index;
@@ -151,11 +151,11 @@ var RifInteract = (function() {
             if (index >= 0) {
                 var caller = topics.substring(index+1);
                 topics = topics.substring(0, index);
-                this.callTopicsForCaller(this.world.getState(caller), topics.split(" "));
+                this.callTopicsForCaller(this.world.getState(caller), convertTopics(topics.split(" ")));
             } else {
                 console.log("topics=" + topics);
                 console.log("type=", typeof topics);
-                this.callTopics(topics.split(" "));
+                this.callTopics(convertTopics(topics.split(" ")));
             }
         },
         call: function(topics) {
@@ -177,7 +177,6 @@ var RifInteract = (function() {
             return responses;
         },
         callTopicsWithResponders: function(topics, responders, caller) {
-            topics = convertTopics(topics);
             this.response_lib.callTopics(this.getResponses(responders), topics, caller, this);
         },
         callActions: function(topics) {
