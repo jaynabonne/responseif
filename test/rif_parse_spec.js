@@ -354,6 +354,35 @@ describe("rifParse", function () {
             }
         );
     });
+
+    it("should parse response adds", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("adds","topic1 topic2 topic3"),
+                            token_pair("adds","topic4 topic5"),
+                            token_pair("to","someone"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [
+                                { adds: ["topic1", "topic2", "topic3"] },
+                                { adds: ["topic4", "topic5"], to: "someone" }
+                            ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
+
     it("should parse response does for other slots", function () {
         var rif = rifParse(
             [

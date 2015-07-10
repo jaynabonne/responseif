@@ -104,6 +104,16 @@ rifParse = (function () {
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesList;
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesList;
+    Parser.prototype.parse_does_adds = function(actions, entry) {
+        var action = {adds: entry.value.split(" ") };
+        this.index++;
+        this.parseEntries(action, "parse_adds_");
+        actions.push(action );
+    };
+    Parser.prototype.parse_adds_to = function(action, entry) {
+        action.to = entry.value;
+        this.index++;
+    };
     Parser.prototype.parse_does_animates = function(actions, entry) {
         var action = {animates: { selector: entry.value, transitions: [] } };
         this.index++;
