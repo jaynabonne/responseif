@@ -258,6 +258,12 @@ var RifResponse = (function () {
         }
     };
 
+    proto.processAdds = function (action, responder, interact) {
+        if (action.adds) {
+            interact.addTopics(action.adds, action.to || responder);
+        }
+    };
+
     proto.processResponse = function (candidate, caller, interact) {
         console.log("processResponse: ", candidate);
         interact = interact || interact;
@@ -276,6 +282,7 @@ var RifResponse = (function () {
                 self.processInvokes(action, interact);
                 self.processMoves(action);
                 self.processSuggests(action, interact);
+                self.processAdds(action, responder, interact);
             });
         }
     };
@@ -392,6 +399,7 @@ var RifResponse = (function () {
     proto.callTopics = function(responders, topics, caller, interact) {
         console.log("call topics:", topics);
         var candidates = [];
+        console.log("responders: ", responders);
         for (var responder in responders) {
             if (responders.hasOwnProperty(responder)) {
                 var responses = responders[responder];
@@ -401,6 +409,7 @@ var RifResponse = (function () {
             }
         }
         candidates = this.getPriorityResponses(candidates);
+        console.log("candidates: ", candidates);
 
         this.processResponses(candidates, caller, interact);
     };

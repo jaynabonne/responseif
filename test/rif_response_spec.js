@@ -566,6 +566,30 @@ describe("RifResponse", function () {
                 expect(interact.suggest).toHaveBeenCalledWith(["topicA", "topicB", "topicC"]);
             });
         });
+        describe("addTopics", function () {
+            it("should add the topics to the responder if a target is not specified", function() {
+                interact.addTopics = jasmine.createSpy("suggest");
+                var candidate = {
+                    response: {
+                        does: { common: [ { adds: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } ] }
+                    },
+                    score: 10000,
+                    responder: "responder"};
+                responseLib.processResponses([candidate], "", interact);
+                expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "responder");
+            });
+            it("should add the topics to the specified target", function() {
+                interact.addTopics = jasmine.createSpy("suggest");
+                var candidate = {
+                    response: {
+                        does: { common: [ { adds: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], to: "aTarget" } ] }
+                    },
+                    score: 10000,
+                    responder: "responder"};
+                responseLib.processResponses([candidate], "", interact);
+                expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "aTarget");
+            });
+        });
     });
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
