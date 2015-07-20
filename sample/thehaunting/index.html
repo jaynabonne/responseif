@@ -25,7 +25,7 @@
                 element: $('#output')
             };
             var engine = new RifEngine(params, function() {
-                engine.interact.sendCommand(["START"]);
+                engine.interact.sendCommand([{keyword:"START"}]);
             });
         }
     </script>
