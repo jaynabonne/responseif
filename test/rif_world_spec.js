@@ -172,4 +172,28 @@ describe("RifWorld", function () {
             }
         });
     });
+
+    describe('PersistentTopics', function() {
+        it('returns an empty array if no topics have been set', function() {
+            var topics = world.getPersistentTopics('actor');
+            expect(topics).toEqual([]);
+        });
+        it('can add and then get a topic', function() {
+            world.addPersistentTopics('actor', ['atopic']);
+            var topics = world.getPersistentTopics('actor');
+            expect(topics).toEqual(['atopic']);
+        });
+        it('can add sequential topic', function() {
+            world.addPersistentTopics('actor', ['atopic']);
+            world.addPersistentTopics('actor', ['btopic']);
+            var topics = world.getPersistentTopics('actor');
+            expect(topics).toEqual(['atopic', 'btopic']);
+        });
+        it('can remove topic', function() {
+            world.addPersistentTopics('actor', ['topic1', 'topic2', 'topic3', 'topic4']);
+            world.removePersistentTopics('actor', ['topic2', 'topic4']);
+            var topics = world.getPersistentTopics('actor');
+            expect(topics).toEqual(['topic1', 'topic3']);
+        });
+    });
 });

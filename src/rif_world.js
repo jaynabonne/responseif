@@ -4,6 +4,7 @@ var RifWorld = (function() {
         this.values = {};
         this.children = {};
         this.pov = "player";
+        this.persistentTopics = {};
     };
 
     var proto = RifWorld.prototype;
@@ -11,6 +12,7 @@ var RifWorld = (function() {
         return this.values[id];
     };
     proto.setValue = function(id, value) {
+        //console.log("set value", id, "to", value);
         this.values[id] = value;
     };
     proto.getState = function(id, responder) {
@@ -112,6 +114,24 @@ var RifWorld = (function() {
 
     proto.getRandomInRange = function(minimum, maximum) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+    };
+
+    proto.getPersistentTopics = function(actor) {
+        return this.persistentTopics[actor] || [];
+    };
+
+    proto.addPersistentTopics = function(actor, topics) {
+        var currentTopics = this.getPersistentTopics(actor);
+        this.persistentTopics[actor] = currentTopics.concat(topics);
+    };
+
+    proto.removePersistentTopics = function(actor, topics) {
+        var currentTopics = this.getPersistentTopics('actor');
+        for(var i = currentTopics.length - 1; i >= 0; i--) {
+            if(topics.indexOf(currentTopics[i]) != -1) {
+                currentTopics.splice(i, 1);
+            }
+        }
     };
 
     return RifWorld;
