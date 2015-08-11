@@ -200,7 +200,7 @@ var RifResponse = (function () {
             var self = this;
             if (action.uses.all) {
                 $.each(action.uses.all, function(index, child) {
-                    if (self.responseIsEligible(child, [], responder)) {
+                    if (self.responseIsEligible(child, topics, responder)) {
                         self.processResponse({response: child, responder: responder}, caller, interact, topics);
                     }
                 });
@@ -216,7 +216,7 @@ var RifResponse = (function () {
             if (action.uses.random) {
                 var list = [];
                 $.each(action.uses.random, function(index, child) {
-                    if (self.responseIsEligible(child, [], responder)) {
+                    if (self.responseIsEligible(child, topics, responder)) {
                         list.push(child);
                     }
                 });
