@@ -195,20 +195,20 @@ var RifResponse = (function () {
         }
     };
 
-    proto.processUses = function (action, caller, responder, interact) {
+    proto.processUses = function (action, caller, responder, interact, topics) {
         if (action.uses) {
             var self = this;
             if (action.uses.all) {
                 $.each(action.uses.all, function(index, child) {
                     if (self.responseIsEligible(child, [], responder)) {
-                        self.processResponse({response: child, responder: responder}, caller, interact);
+                        self.processResponse({response: child, responder: responder}, caller, interact, topics);
                     }
                 });
             }
             if (action.uses.first) {
                 $.each(action.uses.first, function(index, child) {
-                    if (self.responseIsEligible(child, [], responder)) {
-                        self.processResponse({response: child, responder: responder}, caller, interact);
+                    if (self.responseIsEligible(child, topics, responder)) {
+                        self.processResponse({response: child, responder: responder}, caller, interact, topics);
                         return false;
                     }
                 });
@@ -222,7 +222,7 @@ var RifResponse = (function () {
                 });
                 if (list.length !== 0) {
                     var index = this.world.getRandomInRange(0, list.length-1);
-                    self.processResponse({response: list[index], responder: responder}, caller, interact);
+                    self.processResponse({response: list[index], responder: responder}, caller, interact, topics);
                 }
             }
         }
@@ -264,7 +264,7 @@ var RifResponse = (function () {
         }
     };
 
-    proto.processResponse = function (candidate, caller, interact) {
+    proto.processResponse = function (candidate, caller, interact, topics) {
         console.log("processResponse: ", candidate);
         interact = interact || interact;
         var response = candidate.response;
@@ -276,7 +276,7 @@ var RifResponse = (function () {
             $.each(section, function(index, action) {
                 self.processSays(action, response, responder, interact);
                 self.processSets(action, responder);
-                self.processUses(action, caller, responder, interact);
+                self.processUses(action, caller, responder, interact, topics);
                 self.processCalls(action, interact);
                 self.processAnimates(action, interact);
                 self.processInvokes(action, interact);
@@ -313,11 +313,11 @@ var RifResponse = (function () {
                     : 1;
     }
 
-    proto.processGroup = function(group, caller, interact) {
+    proto.processGroup = function(group, caller, interact, topics) {
         group.sort(orderCompare);
 
         var self = this;
-        group.forEach(function(response) { self.processResponse(response, caller, interact); });
+        group.forEach(function(response) { self.processResponse(response, caller, interact, topics); });
     };
 
     function addPrompt(items, candidate) {
@@ -333,21 +333,21 @@ var RifResponse = (function () {
         return items;
     }
 
-    proto.processMenuResponses = function(prompt, prompts, caller, interact) {
+    proto.processMenuResponses = function(prompt, prompts, caller, interact, topics) {
         var self = this;
         prompts.forEach(function (candidate) {
             if (candidate.response.prompts === prompt) {
-                self.processResponse(candidate, caller, interact);
+                self.processResponse(candidate, caller, interact, topics);
             }
         });
     };
 
-    proto.runMenu = function(prompts, caller, interact) {
+    proto.runMenu = function(prompts, caller, interact, topics) {
         var self = this;
         var items = getMenuItems(prompts);
         interact.choose(items, function (which) {
             if (which !== -1) {
-                self.processMenuResponses(items[which], prompts, caller, interact);
+                self.processMenuResponses(items[which], prompts, caller, interact, topics);
             }
         });
     };
@@ -356,40 +356,40 @@ var RifResponse = (function () {
         return response.forcesprompt === undefined || response.forcesprompt;
     }
 
-    proto.processPrompts = function (prompts, caller, interact) {
+    proto.processPrompts = function (prompts, caller, interact, topics) {
         if (prompts.length === 1 && !forcesPrompt(prompts[0].response)) {
-            this.processGroup(prompts, caller, interact);
+            this.processGroup(prompts, caller, interact, topics);
         } else if (prompts.length > 0) {
-            this.runMenu(prompts, caller, interact);
+            this.runMenu(prompts, caller, interact, topics);
         }
     };
 
-    proto.processDefinedGroups = function(groups, caller, interact) {
+    proto.processDefinedGroups = function(groups, caller, interact, topics) {
         var self = this;
         this.types.forEach(function (type) {
             if (groups.hasOwnProperty(type)) {
-                self.processGroup(groups[type], caller, interact);
+                self.processGroup(groups[type], caller, interact, topics);
                 groups[type] = undefined;
             }
         });
     };
 
-    proto.processGroups = function(groups, caller, interact) {
+    proto.processGroups = function(groups, caller, interact, topics) {
         for (var group in groups) {
             if (groups.hasOwnProperty(group) && groups[group]) {
-                this.processGroup(groups[group], caller, interact);
+                this.processGroup(groups[group], caller, interact, topics);
             }
         }
     };
 
-    proto.processResponses = function (candidates, caller, interact) {
+    proto.processResponses = function (candidates, caller, topics, interact) {
         var self = this;
         var prompts = [];
         var groups = groupCandidates(candidates, prompts);
 
-        this.processDefinedGroups(groups, caller, interact);
-        this.processGroups(groups, caller, interact);
-        this.processPrompts(prompts, caller, interact);
+        this.processDefinedGroups(groups, caller, interact, topics);
+        this.processGroups(groups, caller, interact, topics);
+        this.processPrompts(prompts, caller, interact, topics);
     };
 
     proto.setTypes = function(types) {
@@ -411,7 +411,7 @@ var RifResponse = (function () {
         candidates = this.getPriorityResponses(candidates);
         console.log("candidates: ", candidates);
 
-        this.processResponses(candidates, caller, interact);
+        this.processResponses(candidates, caller, topics, interact);
     };
 
     return type;
