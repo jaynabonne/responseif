@@ -130,6 +130,11 @@ describe("RifWorld", function () {
             var responders = world.getCurrentResponders("thepov");
             expect(responders.indexOf("theparent")).not.toBe(-1);
         });
+        it("returns the current pov's children", function() {
+            world.setParent("responder", "thepov");
+            var responders = world.getCurrentResponders("thepov");
+            expect(responders.indexOf("responder")).not.toBe(-1);
+        });
         it("returns the current pov's siblings", function() {
             world.setParent("thepov", "theparent");
             world.setParent("sibling1", "theparent");

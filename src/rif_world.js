@@ -104,6 +104,7 @@ var RifWorld = (function() {
         var parent = this.getParent(pov);
         var responders = ['everywhere', pov];
         responders = responders.concat(this.getChildren('everywhere'));
+        responders = responders.concat(this.getChildren(pov));
         if (!parent) {
             return responders;
         }
