@@ -580,6 +580,17 @@ describe("RifResponse", function () {
                 responseLib.processResponses([candidate], "", [], interact);
                 expect(world.setParent).toHaveBeenCalledWith("thing", "room");
             });
+            it("should set the responder parent if no target is specified", function() {
+                world.setParent = jasmine.createSpy("setParent");
+                var candidate = {
+                    response: {
+                        does: { common: [ { moves: { target: "", to: "room"} } ] }
+                    },
+                    score: 10000,
+                    responder: 'responder'};
+                responseLib.processResponses([candidate], "", [], interact);
+                expect(world.setParent).toHaveBeenCalledWith("responder", "room");
+            });
         });
         describe("suggests", function () {
             it("should suggest the topics", function() {

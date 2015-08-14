@@ -246,9 +246,9 @@ var RifResponse = (function () {
         }
     };
 
-    proto.processMoves = function(action) {
+    proto.processMoves = function(action, responder) {
         if (action.moves) {
-            this.world.setParent(action.moves.target, action.moves.to);
+            this.world.setParent(action.moves.target || responder, action.moves.to);
         }
     };
 
@@ -280,7 +280,7 @@ var RifResponse = (function () {
                 self.processCalls(action, interact);
                 self.processAnimates(action, interact);
                 self.processInvokes(action, interact);
-                self.processMoves(action);
+                self.processMoves(action, responder);
                 self.processSuggests(action, interact);
                 self.processAdds(action, responder, interact);
             });
