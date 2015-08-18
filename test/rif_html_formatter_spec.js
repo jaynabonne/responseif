@@ -71,7 +71,11 @@ describe("RifHtmlFormatter", function () {
         it("formats properly inside a div", function() {
             var node = formatter.formatOutput("<div>{!This is the text|Keyword!}</div>", clickfactory);
             expect(node.html()).toBe('<div><span class="keyword">This is the text</span></div>');
-        })
+        });
+        it("sets the class of the span if passed", function () {
+            var node = formatter.formatOutput("this is some text", clickfactory, null, "aclass");
+            expect(node.hasClass('aclass')).toBeTruthy();
+        });
     });
     describe("formatMenu", function () {
         it("returns an empty menu for no menu items", function () {

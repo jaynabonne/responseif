@@ -8,12 +8,15 @@ var RifHtmlFormatter = (function () {
     }
     
     type.prototype = {
-        formatOutput: function(text, clickfactory, menu_callbacks) {
+        formatOutput: function(text, clickfactory, menu_callbacks, css_class) {
             text = text
                     .replace(/\{!/g, "<span class='keyword'>")
                     .replace(/!\}/g, "</span>");
 
             var outerspan = $("<span>");
+            if (css_class) {
+                outerspan.addClass(css_class);
+            }
             outerspan.append(text);
             var clickspans = outerspan.find(".keyword");
             clickspans.each( function(id, span) {
