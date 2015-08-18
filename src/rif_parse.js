@@ -78,6 +78,7 @@ rifParse = (function () {
         this.index++;
     };
     Parser.prototype.parse_says_into = Parser.prototype.parse_says_attribute;
+    Parser.prototype.parse_says_as = Parser.prototype.parse_says_attribute;
     Parser.prototype.parse_says_autohides = Parser.prototype.set_says_attribute_flag;
 
     Parser.prototype.parseSetExpression = function(value) {

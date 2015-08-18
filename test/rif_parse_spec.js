@@ -18,6 +18,9 @@ describe("rifParse", function () {
     function into(selector) {
         return token_pair("into", selector);
     }
+    function as(selector) {
+        return token_pair("as", selector);
+    }
     function does(slot) {
         return token_pair("does", slot || "");
     }
@@ -252,6 +255,29 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: [ { says: { text: "some text to display for this response", into: "someelement" } } ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse response does says with 'as'", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                response(),
+                does(),
+                says("some text to display for this response"),
+                as("someclass"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [ { says: { text: "some text to display for this response", as: "someclass" } } ]
                         }
                     }
                 ]
