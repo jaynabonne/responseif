@@ -109,7 +109,7 @@ var RifInteract = (function() {
                 return;
             }
 
-            var formatted = this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks);
+            var formatted = this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
             outputFormattedText.call(this, says, formatted);
             resetMenuCallbacks.call(this);
         },

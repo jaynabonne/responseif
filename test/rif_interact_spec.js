@@ -46,6 +46,11 @@ describe("RifInteract", function () {
             interact.say({ text: "This is some text" }, 'responder');
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
+        it("should format with a class if specified", function() {
+            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            interact.say({ text: "This is some text", as: "aclass" }, 'responder');
+            expect(formatter.formatOutput).toHaveBeenCalledWith("This is some text", jasmine.any(Function), jasmine.any(Object), "aclass");
+        });
         it("should output the text into the specified element", function() {
             interact.say({ text: "This is some text", into: "someelement" }, 'responder');
             expect(dom.getElementBySelector).toHaveBeenCalledWith("someelement");
@@ -78,7 +83,7 @@ describe("RifInteract", function () {
             };
             var says = { text: "My name is {=name=}. Your name is {= yourname  =}. Your state is {=:state=}." };
             interact.say(says, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael. Your name is mud. Your state is happy.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael. Your name is mud. Your state is happy.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("replaces in-line markup with state values recursively", function() {
             formatter.formatOutput = jasmine.createSpy("formatOutput");
@@ -93,7 +98,7 @@ describe("RifInteract", function () {
             };
             var says = { text: "My name is {=name=}." };
             interact.say(says, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
     });
     describe("says with 'call' markup", function() {
@@ -124,13 +129,13 @@ describe("RifInteract", function () {
             response_lib.callTopics.andCallFake(fakeCall);
             formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("should handle multiple 'calls' markups", function() {
             response_lib.callTopics.andCallFake(fakeCall);
             formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("should handle recursive call markup", function() {
             function fakeCall(responses, topics) {
@@ -143,7 +148,7 @@ describe("RifInteract", function () {
             response_lib.callTopics.andCallFake(fakeCall);
             formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("should handle call markup as a result of state markup", function() {
             world.getState = function(id) {
@@ -156,7 +161,7 @@ describe("RifInteract", function () {
             response_lib.callTopics.andCallFake(fakeCall);
             formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {=firstName=}." }, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("should handle state markup as a result of call markup", function() {
             function fakeCall(responses, topics) {
@@ -174,7 +179,7 @@ describe("RifInteract", function () {
             response_lib.callTopics.andCallFake(fakeCall);
             formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object));
+            expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
     });
     describe("call", function () {
