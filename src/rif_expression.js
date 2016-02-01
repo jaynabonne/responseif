@@ -152,6 +152,20 @@ var RifExpression = (function() {
                 stack.push(stack.pop() == second ? 1.0 : 0.0);
             }
         },
+        '!=': {
+            precedence: 7,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() == second ? 0.0 : 1.0);
+            }
+        },
+        '<>': {
+            precedence: 7,
+            execute: function (state, stack) {
+                var second = stack.pop();
+                stack.push(stack.pop() == second ? 0.0 : 1.0);
+            }
+        },
         'and': {
             precedence: 11,
             execute: function (state, stack) {
