@@ -234,7 +234,18 @@ describe("RifInteract", function () {
             expect(dom.append).toHaveBeenCalled();
             expect(dom.showElement).not.toHaveBeenCalled();
         });
-        it("should show the separator when new text is output", function() {
+        it("should not show the separator when new text is output if show_separator is not set", function() {
+            interact.say({ text: "This is some text" });
+            dom.createDiv.reset();
+            dom.append = jasmine.createSpy("append");
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            interact.say({ text: "This is some more text" });
+            expect(dom.showElement).not.toHaveBeenCalled();
+        });
+        it("should show the separator when new text is output if show_separator is set", function() {
+            world.getState = function(id) {
+                return id === "show_separator";
+            };
             interact.say({ text: "This is some text" });
             dom.createDiv.reset();
             dom.append = jasmine.createSpy("append");

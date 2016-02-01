@@ -235,7 +235,7 @@ var RifInteract = (function() {
             //console.log("show new separator " + this.separatorShown);
         },
         showSeparator: function () {
-            if (this.separatorShown) {
+            if (this.separatorShown && this.world.getState('show_separator')) {
                 //console.log("show separator " + this.separatorShown);
                 this.dom.showElement(this.separatorShown);
             }
