@@ -1,6 +1,7 @@
 var RifHtmlFormatter = (function () {
     
     var type = function () {
+        this.linkid = 0;
     };
 
     function createClickable(type, text, cssClass, click) {
@@ -9,6 +10,7 @@ var RifHtmlFormatter = (function () {
     
     type.prototype = {
         formatOutput: function(text, clickfactory, menu_callbacks, css_class) {
+            var self = this;
             text = text
                     .replace(/\{!/g, "<span class='keyword'>")
                     .replace(/!\}/g, "</span>");
@@ -36,6 +38,7 @@ var RifHtmlFormatter = (function () {
                     });
                 } else {
                     $(span).click(clickfactory(keyword));
+                    $(span).addClass("link" + self.linkid++);
                 }
             });
             return outerspan;

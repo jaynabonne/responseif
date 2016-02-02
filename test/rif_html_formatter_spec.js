@@ -17,21 +17,21 @@ describe("RifHtmlFormatter", function () {
             var node = formatter.formatOutput("this is some text", clickfactory);
             expect(node.html()).toBe("this is some text");
         });
-        it("returns a keyword as a keyword span", function () {
+        it("returns a keyword as a keyword span with a link class", function () {
             var node = formatter.formatOutput("{!Keyword!}", clickfactory);
-            expect(node.html()).toBe('<span class="keyword">Keyword</span>');
+            expect(node.html()).toBe('<span class="keyword link0">Keyword</span>');
         });
         it("returns an embedded keyword as a keyword span along with the normal text", function () {
             var node = formatter.formatOutput("This is a {!Keyword!} to click on.", clickfactory);
-            expect(node.html()).toBe('This is a <span class="keyword">Keyword</span> to click on.');
+            expect(node.html()).toBe('This is a <span class="keyword link0">Keyword</span> to click on.');
         });
         it("returns all embedded keywords as keyword spans along with the normal text", function () {
             var node = formatter.formatOutput("This is a {!Keyword!} to click on. This is another {!one!}.", clickfactory);
-            expect(node.html()).toBe('This is a <span class="keyword">Keyword</span> to click on. This is another <span class="keyword">one</span>.');
+            expect(node.html()).toBe('This is a <span class="keyword link0">Keyword</span> to click on. This is another <span class="keyword link1">one</span>.');
         });
         it("returns a keyword plus text as a keyword span with the correct text", function () {
             var node = formatter.formatOutput("{!This is the text|Keyword!}", clickfactory);
-            expect(node.html()).toBe('<span class="keyword">This is the text</span>');
+            expect(node.html()).toBe('<span class="keyword link0">This is the text</span>');
         });
         it("sets click handlers for the keyword spans", function () {
             var clickresult;
@@ -70,7 +70,7 @@ describe("RifHtmlFormatter", function () {
         });
         it("formats properly inside a div", function() {
             var node = formatter.formatOutput("<div>{!This is the text|Keyword!}</div>", clickfactory);
-            expect(node.html()).toBe('<div><span class="keyword">This is the text</span></div>');
+            expect(node.html()).toBe('<div><span class="keyword link0">This is the text</span></div>');
         });
         it("sets the class of the span if passed", function () {
             var node = formatter.formatOutput("this is some text", clickfactory, null, "aclass");
