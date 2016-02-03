@@ -11,6 +11,7 @@ var RifHtmlFormatter = (function () {
     type.prototype = {
         formatOutput: function(text, clickfactory, menu_callbacks, css_class) {
             var self = this;
+            var links = [];
             text = text
                     .replace(/\{!/g, "<span class='keyword'>")
                     .replace(/!\}/g, "</span>");
@@ -37,11 +38,13 @@ var RifHtmlFormatter = (function () {
                         callback(index);
                     });
                 } else {
+                    var cls = "link" + self.linkid++;
                     $(span).click(clickfactory(keyword));
-                    $(span).addClass("link" + self.linkid++);
+                    $(span).addClass(cls);
+                    links.push({selector: '.'+cls, keywords: keyword});
                 }
             });
-            return { node: outerspan };
+            return { node: outerspan, links: links };
         },
 
         formatMenu: function(options, menu_index) {

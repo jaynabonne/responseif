@@ -12,26 +12,32 @@ describe("RifHtmlFormatter", function () {
         it("returns an empty string when passed an empty string", function () {
             var formatted = formatter.formatOutput("", clickfactory);
             expect(formatted.node.html()).toBe("");
+            expect(formatted.links).toEqual([]);
         });
         it("returns text that contains no markup", function () {
             var formatted = formatter.formatOutput("this is some text", clickfactory);
             expect(formatted.node.html()).toBe("this is some text");
+            expect(formatted.links).toEqual([]);
         });
         it("returns a keyword as a keyword span with a link class", function () {
             var formatted = formatter.formatOutput("{!Keyword!}", clickfactory);
             expect(formatted.node.html()).toBe('<span class="keyword link0">Keyword</span>');
+            expect(formatted.links).toEqual([{selector: '.link0', keywords: 'Keyword'}]);
         });
         it("returns an embedded keyword as a keyword span along with the normal text", function () {
             var formatted = formatter.formatOutput("This is a {!Keyword!} to click on.", clickfactory);
             expect(formatted.node.html()).toBe('This is a <span class="keyword link0">Keyword</span> to click on.');
+            expect(formatted.links).toEqual([{selector: '.link0', keywords: 'Keyword'}]);
         });
         it("returns all embedded keywords as keyword spans along with the normal text", function () {
             var formatted = formatter.formatOutput("This is a {!Keyword!} to click on. This is another {!one!}.", clickfactory);
             expect(formatted.node.html()).toBe('This is a <span class="keyword link0">Keyword</span> to click on. This is another <span class="keyword link1">one</span>.');
+            expect(formatted.links).toEqual([{selector: '.link0', keywords: 'Keyword'},{selector: '.link1', keywords: 'one'}]);
         });
         it("returns a keyword plus text as a keyword span with the correct text", function () {
             var formatted = formatter.formatOutput("{!This is the text|Keyword!}", clickfactory);
             expect(formatted.node.html()).toBe('<span class="keyword link0">This is the text</span>');
+            expect(formatted.links).toEqual([{selector: '.link0', keywords: 'Keyword'}]);
         });
         it("sets click handlers for the keyword spans", function () {
             var clickresult;
@@ -71,6 +77,7 @@ describe("RifHtmlFormatter", function () {
         it("formats properly inside a div", function() {
             var formatted = formatter.formatOutput("<div>{!This is the text|Keyword!}</div>", clickfactory);
             expect(formatted.node.html()).toBe('<div><span class="keyword link0">This is the text</span></div>');
+            expect(formatted.links).toEqual([{selector: '.link0', keywords: 'Keyword'}]);
         });
         it("sets the class of the span if passed", function () {
             var formatted = formatter.formatOutput("this is some text", clickfactory, null, "aclass");
