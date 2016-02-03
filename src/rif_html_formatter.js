@@ -41,7 +41,7 @@ var RifHtmlFormatter = (function () {
                     $(span).addClass("link" + self.linkid++);
                 }
             });
-            return outerspan;
+            return { node: outerspan };
         },
 
         formatMenu: function(options, menu_index) {
