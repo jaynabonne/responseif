@@ -110,7 +110,7 @@ var RifInteract = (function() {
             }
 
             var formatted = this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
-            outputFormattedText.call(this, says, formatted);
+            outputFormattedText.call(this, says, formatted.node);
             resetMenuCallbacks.call(this);
         },
         showAutoHideText: function (formatted) {
