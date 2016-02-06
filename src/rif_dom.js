@@ -68,5 +68,9 @@ var RifDOM = (function(formatter) {
         element.animate(parameters, duration || 0);
     };
 
+    prototype.removeClass = function(selector, className) {
+        $(selector).removeClass(className);
+    };
+
     return type;
 })();
