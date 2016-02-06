@@ -307,7 +307,7 @@ describe("RifInteract", function () {
                 {
                     id: "B"
                 }
-            ]
+            ];
 
             expect(interact.expandResponseReferences(responses)).toEqual(responses);
         });
