@@ -1,3 +1,4 @@
+define(['rif_world'], function(RifWorld) {
 describe("RifWorld", function () {
     "use strict";
     var world;
@@ -201,4 +202,5 @@ describe("RifWorld", function () {
             expect(topics).toEqual(['topic1', 'topic3']);
         });
     });
+});
 });

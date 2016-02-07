@@ -1,3 +1,4 @@
+define('rif_engine', function() {
 describe('rif_engine', function() {
    "use strict";
     var engine;
@@ -26,4 +27,6 @@ describe('rif_engine', function() {
     it('should create an interact', function() {
         expect(engine.getInteract()).not.toBeNull();
     });
+});
+
 });

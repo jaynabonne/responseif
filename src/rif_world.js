@@ -1,13 +1,13 @@
-var RifWorld = (function() {
+define(['rif_expression'], function(RifExpression) {
     "use strict";
-    var RifWorld = function() {
+    var type = function() {
         this.values = {};
         this.children = {};
         this.pov = "player";
         this.persistentTopics = {};
     };
 
-    var proto = RifWorld.prototype;
+    var proto = type.prototype;
     proto.getValue = function(id) {
         return this.values[id];
     };
@@ -135,5 +135,5 @@ var RifWorld = (function() {
         }
     };
 
-    return RifWorld;
-})();
+    return type;
+});

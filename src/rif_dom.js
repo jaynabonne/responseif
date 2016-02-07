@@ -1,4 +1,4 @@
-var RifDOM = (function(formatter) {
+define([], function() {
     "use strict";
     var type = function(output) {
         this.output = output;
@@ -73,4 +73,4 @@ var RifDOM = (function(formatter) {
     };
 
     return type;
-})();
+});

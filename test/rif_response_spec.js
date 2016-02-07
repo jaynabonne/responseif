@@ -1,3 +1,4 @@
+define(['rif_response'], function(RifResponse) {
 describe("RifResponse", function () {
     "use strict";
     var responseLib;
@@ -639,4 +640,5 @@ describe("RifResponse", function () {
             expect(interact.say).toHaveBeenCalledWith({ text: "This is response 2" }, 'responder');
         });
     });
+});
 });

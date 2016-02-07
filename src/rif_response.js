@@ -1,4 +1,4 @@
-var RifResponse = (function () {
+define([], function () {
     "use strict";
     var type = function (world) {
         this.world = world;
@@ -415,4 +415,4 @@ var RifResponse = (function () {
     };
 
     return type;
-})();
+});

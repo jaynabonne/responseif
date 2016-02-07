@@ -1,3 +1,4 @@
+define(['rif_parse'], function(rifParse) {
 describe("rifParse", function () {
     "use strict";
     function token_pair(token, value) {
@@ -758,4 +759,5 @@ describe("rifParse", function () {
             }
         );
     });
+});
 });

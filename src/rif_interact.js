@@ -1,4 +1,4 @@
-var RifInteract = (function() {
+define([], function() {
     "use strict";
 
     function resetMenuCallbacks() {
@@ -271,4 +271,4 @@ var RifInteract = (function() {
         }
     };
     return type;
-}());
+});

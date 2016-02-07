@@ -1,4 +1,4 @@
-var rifLoad = (function() {
+define(['rif_tokenize'], function(rifTokenize) {
 
     var type = function(load_file) {
         this.load_file = load_file;
@@ -29,4 +29,4 @@ var rifLoad = (function() {
     };
 
     return type;
-})();
+});

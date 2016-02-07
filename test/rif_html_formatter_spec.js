@@ -1,3 +1,4 @@
+define(['rif_html_formatter'], function(RifHtmlFormatter) {
 describe("RifHtmlFormatter", function () {
     "use strict";
     var formatter;
@@ -98,4 +99,5 @@ describe("RifHtmlFormatter", function () {
             expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:17:0!}</div><div class="menuitem">{!Another menu entry|menu:17:1!}</div></div>');
         });
     });
+});
 });

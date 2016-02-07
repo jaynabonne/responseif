@@ -1,5 +1,4 @@
-var rifParse;
-rifParse = (function () {
+define([], function () {
     "use strict";
 
     var Parser = function(tokens) {
@@ -314,4 +313,4 @@ rifParse = (function () {
         var parser = new Parser(tokens);
         return parser.parse();
     };
-})();
+});

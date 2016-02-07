@@ -1,3 +1,4 @@
+define('rif_interact', function(RifInteract) {
 describe("RifInteract", function () {
     var output;
     var interact;
@@ -342,4 +343,6 @@ describe("RifInteract", function () {
             expect(interact.expandResponseReferences(responses)).toEqual(expected);
         });
     });
+});
+
 });

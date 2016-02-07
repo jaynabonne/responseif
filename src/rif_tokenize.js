@@ -1,4 +1,4 @@
-var rifTokenize = (function() {
+define([], function() {
     "use strict";
     
     function isAToken(part) {
@@ -67,4 +67,4 @@ var rifTokenize = (function() {
         }
         return result;
     }
-})();
+});

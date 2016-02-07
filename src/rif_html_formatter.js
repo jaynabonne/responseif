@@ -1,4 +1,4 @@
-var RifHtmlFormatter = (function () {
+define([], function () {
     
     var type = function () {
         this.linkid = 0;
@@ -57,4 +57,4 @@ var RifHtmlFormatter = (function () {
         }
     };
     return type;
-}());
+});

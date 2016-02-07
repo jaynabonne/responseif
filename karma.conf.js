@@ -10,29 +10,20 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'lib/*.js',
-      'src/rif_response.js',
-      'src/rif_tokenize.js',
-      'src/rif_expand.js',
-      'src/rif_expression.js',
-      'src/rif_load.js',
-      'src/rif_parse.js',
-      'src/rif_world.js',
-      'src/rif_html_formatter.js',
-      'src/rif_interact.js',
-      'src/rif_engine.js',
-      'test/*.js',
+      'lib/jquery-1.11.0.js',
+      {pattern: 'src/*.js', included: false},
+      {pattern: 'test/*spec.js', included: false},
       { pattern:  'data/*.txt',
         watched:  true,
         served:   true,
-        included: false }
+        included: false },
+      'test/test-main.js'
     ],
-
 
     // list of files to exclude
     exclude: [

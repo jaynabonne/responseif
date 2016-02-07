@@ -1,3 +1,4 @@
+define(['rif_expression'], function(RifExpression) {
 describe('RifExpression', function() {
     it('should return null for an empty expression', function() {
         var expression = RifExpression.compile("");
@@ -201,4 +202,5 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {'a spaced responder:variable': 1}, "a spaced responder")).toBe(1);
         expect(RifExpression.evaluate(expression, {'a spaced responder:variable': 0}, "a spaced responder")).toBe(0);
     })
+});
 });

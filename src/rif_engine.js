@@ -1,4 +1,5 @@
-var RifEngine = (function() {
+define(['rif_world', 'rif_load', 'rif_dom', 'rif_html_formatter', 'rif_expand', 'rif_parse', 'rif_interact', 'rif_response'],
+        function(RifWorld, RifLoad, RifDOM, RifHtmlFormatter, rifExpand, rifParse, RifInteract, RifResponse) {
     function loadRif(completion) {
         var self = this;
         this.load.loadTokens(this.rif_file, function (tokens) {
@@ -23,13 +24,12 @@ var RifEngine = (function() {
 
         self.rif_file = params.rif_file || "rif.txt";
         self.load_file = params.load_file || loadFile;
-        self.load = params.load || new rifLoad(self.load_file);
+        self.load = params.load || new RifLoad(self.load_file);
 
         self.world = params.world || new RifWorld();
         self.response = params.response || new RifResponse(self.world);
         self.formatter = params.formatter || new RifHtmlFormatter();
         self.dom = params.dom || new RifDOM(params.element);
-
     }
     var type = function(params, completion) {
         initFromParams.call(this, params);
@@ -48,4 +48,4 @@ var RifEngine = (function() {
         return this.interact;
     };
     return type;
-})();
+});

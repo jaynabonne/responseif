@@ -1,4 +1,4 @@
-var RifExpression = (function() {
+define([], function() {
     "use strict";
     function variable(expression) {
         return function (state, stack, prefix) {
@@ -304,4 +304,4 @@ var RifExpression = (function() {
             return stack.length === 1 ? stack.pop() : null;
         }
     };
-})();
+});

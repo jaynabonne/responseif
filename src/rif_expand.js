@@ -1,4 +1,4 @@
-var rifExpand = (function () {
+define([], function () {
     "use strict";
 
     var Iterator = function(tokens) {
@@ -101,4 +101,4 @@ var rifExpand = (function () {
         var result = expander.expand(new Iterator(tokens));
         completion(result);
     };
-})();
+});
