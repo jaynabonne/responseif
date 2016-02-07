@@ -2,7 +2,7 @@ function createTestEngine(callback) {
     var completed = false;
     runs(function() {
         var params = {
-            rif_file: 'sample_rif.txt',
+            rif_file: 'meek.txt',
             data_root: "base/data/",
             element: $('#output')
         };

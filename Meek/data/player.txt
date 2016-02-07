@@ -6,17 +6,26 @@
 					<div class="rose-row"><div class="rose-north">{+ROSE-NORTH+}</div></div>
 					<div class="rose-row"><div class="rose-west">{+ROSE-WEST+}</div><div class="rose-center">&nbsp;</div><div class="rose-east">{+ROSE-EAST+}</div></div>
 					<div class="rose-row"><div class="rose-south">{+ROSE-SOUTH+}</div></div>
-				  </div>
-				.autohides
+				  </div> .autohides
+
 	.response ROSE-NORTH=1 ROSE-SOUTH=1 ROSE-WEST=1 ROSE-EAST=1
 		.does .says <div class="rose-none">--</div>
 
+	.response MESSAGE-CONTENTS
+        .does
+            .says
+                <span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
+                M47-C communication disconnect. {!EAR!}.</span>
+
 	.response message
-		.does
+		.does 1
 			.says
 				The message is terse and to the point:<br>
-				<span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
-				M47-C communication disconnect. {!EAR!}.</span>
+				{+MESSAGE-CONTENTS+}
+		.does
+		    .says
+		        You review the message:<br>
+				{+MESSAGE-CONTENTS+} .autohides
 
 	.response USEx
 		.does .says There is nothing to do. .autohides
