@@ -14,11 +14,6 @@
 </body>
 <script src="/lib/require.js" data-main="/src/rif"></script>
 <script type="text/javascript">
-    define('config', [], function() {
-        return {
-            rif_file: 'helloworld.txt',
-            element: $('#output')
-        };
-    });
+    define('config', { rif_file: 'helloworld.txt', element: $('#output') });
 </script>
 </html>
