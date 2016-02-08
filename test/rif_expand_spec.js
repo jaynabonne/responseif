@@ -1,4 +1,4 @@
-define(['rif_expand'], function(rifExpand) {
+define(['rif/expand'], function(rifExpand) {
 describe("rifExpand", function () {
     "use strict";
     function token_pair(token, value) {

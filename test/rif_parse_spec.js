@@ -1,4 +1,4 @@
-define(['rif_parse'], function(rifParse) {
+define(['rif/parse'], function(rifParse) {
 describe("rifParse", function () {
     "use strict";
     function token_pair(token, value) {

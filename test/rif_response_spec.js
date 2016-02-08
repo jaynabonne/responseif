@@ -1,4 +1,4 @@
-define(['rif_response'], function(RifResponse) {
+define(['rif/response'], function(RifResponse) {
 describe("RifResponse", function () {
     "use strict";
     var responseLib;

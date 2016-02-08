@@ -1,4 +1,4 @@
-define(['rif_tokenize', 'rif_parse', 'rif_expand'] , function(rifTokenize, rifParse, rifExpand) {
+define(['rif/tokenize', 'rif/parse', 'rif/expand'] , function(rifTokenize, rifParse, rifExpand) {
     describe("loadTest", function () {
         it("should load data properly", function() {
             var rifSource = $.ajax({

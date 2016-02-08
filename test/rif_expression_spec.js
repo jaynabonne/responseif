@@ -1,4 +1,4 @@
-define(['rif_expression'], function(RifExpression) {
+define(['rif/expression'], function(RifExpression) {
 describe('RifExpression', function() {
     it('should return null for an empty expression', function() {
         var expression = RifExpression.compile("");

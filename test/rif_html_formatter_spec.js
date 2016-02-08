@@ -1,4 +1,4 @@
-define(['rif_html_formatter'], function(RifHtmlFormatter) {
+define(['rif/html_formatter'], function(RifHtmlFormatter) {
 describe("RifHtmlFormatter", function () {
     "use strict";
     var formatter;

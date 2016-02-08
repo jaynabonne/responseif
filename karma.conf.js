@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
       'lib/jquery-1.11.0.js',
       {pattern: 'src/*.js', included: false},
+      {pattern: 'src/rif/*.js', included: false},
       {pattern: 'test/*spec.js', included: false},
       { pattern:  'data/*.txt',
         watched:  true,

@@ -1,4 +1,4 @@
-define(['rif_load'], function (RifLoad) {
+define(['rif/load'], function (RifLoad) {
     describe('rif_load', function () {
         "use strict;"
         var load_file;

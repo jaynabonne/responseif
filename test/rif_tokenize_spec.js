@@ -1,4 +1,4 @@
-define(['rif_tokenize'], function(rifTokenize) {
+define(['rif/tokenize'], function(rifTokenize) {
 describe("rifTokenize", function () {
     "use strict";
     it("should return an empty array for empty input", function () {

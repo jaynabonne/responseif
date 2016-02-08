@@ -1,4 +1,4 @@
-define('rif_interact', function(RifInteract) {
+define('rif/interact', function(RifInteract) {
 describe("RifInteract", function () {
     var output;
     var interact;

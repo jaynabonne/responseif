@@ -1,4 +1,4 @@
-define(['rif_world'], function(RifWorld) {
+define(['rif/world'], function(RifWorld) {
 describe("RifWorld", function () {
     "use strict";
     var world;
