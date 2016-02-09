@@ -24,8 +24,8 @@
     .response LINKS
         .does
             .says
-                Created using <a href="https://github.com/jaynabonne/responseif/" target="_blank">ResponsIF</a>.
-                <i><a href="https://github.com/jaynabonne/responseif/tree/master/sample/thehaunting/data/sample.txt" target="_blank">(source)</a></i>
+                Created using <a href="https://github.com/jaynabonne/responsif/" target="_blank">ResponsIF</a>.
+                <i><a href="https://github.com/jaynabonne/responsif/tree/master/sample/thehaunting/data/sample.txt" target="_blank">(source)</a></i>
 
     .response HEADING
         .does
