@@ -153,19 +153,14 @@ define([], function() {
                 topics = topics.substring(0, index);
                 this.callTopicsForCaller(this.world.getState(caller), convertTopics(topics.split(" ")));
             } else {
-                console.log("topics=" + topics);
-                console.log("type=", typeof topics);
-                this.callTopics(convertTopics(topics.split(" ")));
+                this.call(convertTopics(topics.split(" ")));
             }
-        },
-        call: function(topics) {
-            this.callTopics(topics);
         },
         callTopicsForCaller: function (caller, topics) {
             var responders = this.world.getCurrentResponders(caller);
             this.callTopicsWithResponders(topics, responders, caller);
         },
-        callTopics: function(topics) {
+        call: function(topics) {
             this.callTopicsForCaller(this.world.getPOV(), topics);
         },
         getResponses: function (responders) {
@@ -180,15 +175,12 @@ define([], function() {
             this.response_lib.callTopics(this.getResponses(responders), topics, caller, this);
         },
         callActions: function(topics) {
-            //console.log("callActions");
             topics = convertTopics(topics);
             var actions = this.rif.actions;
             for (var actor in actions) {
                 if (actions.hasOwnProperty(actor)) {
                     var responses = {};
                     responses[actor] = actions[actor];
-                    //console.log("call actions for ", actor);
-                    //console.info(responses);
                     this.response_lib.callTopics(responses, topics, actor, this);
                 }
             }
@@ -215,12 +207,11 @@ define([], function() {
         sendCommand: function(topics) {
             this.hideSections();
             this.beforeCommand();
-            this.callTopics(topics);
+            this.call(topics);
             this.idleProcessing();
         },
         hideSeparator: function () {
             if (this.separatorShown) {
-                //console.log("hideSeparator " + this.separatorShown)
                 this.dom.removeElement(this.separatorShown, 1);
                 this.separatorShown = "";
             }
@@ -232,11 +223,9 @@ define([], function() {
             this.dom.append(div);
             this.separatorShown = '#'+separator;
             this.separatorId++;
-            //console.log("show new separator " + this.separatorShown);
         },
         showSeparator: function () {
             if (this.separatorShown && this.world.getState('show_separator')) {
-                //console.log("show separator " + this.separatorShown);
                 this.dom.showElement(this.separatorShown);
             }
         },
