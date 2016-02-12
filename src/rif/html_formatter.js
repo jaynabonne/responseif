@@ -4,10 +4,6 @@ define([], function () {
         this.linkid = 0;
     };
 
-    function createClickable(type, text, cssClass, click) {
-        return $("<" + type + ">", {class: cssClass}).html(text).click(click);
-    }
-    
     type.prototype = {
         formatOutput: function(text, clickfactory, menu_callbacks, css_class) {
             var self = this;
