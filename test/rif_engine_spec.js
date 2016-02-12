@@ -1,4 +1,4 @@
-define('rif/engine', function() {
+define(['rif/engine'], function(RifEngine) {
 describe('rif_engine', function() {
    "use strict";
     var engine;

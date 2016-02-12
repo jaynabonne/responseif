@@ -1,4 +1,4 @@
-define('rif/interact', function(RifInteract) {
+define(['rif/interact'], function(RifInteract) {
 describe("RifInteract", function () {
     var output;
     var interact;
@@ -9,6 +9,11 @@ describe("RifInteract", function () {
     var rif;
     var dom;
     var response_lib;
+
+    function setupFormatterOutput() {
+        formatter.formatOutput = jasmine.createSpy("formatOutput").andReturn({node: "text"});
+    }
+
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
         dom = {
@@ -21,7 +26,7 @@ describe("RifInteract", function () {
         };
         dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
-            formatOutput: function() { return "formattedText"; },
+            formatOutput: function() { return {node: "formattedText"}; },
             formatMenu: function() { return "formattedText"; }
         };
         world = {
@@ -48,7 +53,7 @@ describe("RifInteract", function () {
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should format with a class if specified", function() {
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            setupFormatterOutput();
             interact.say({ text: "This is some text", as: "aclass" }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("This is some text", jasmine.any(Function), jasmine.any(Object), "aclass");
         });
@@ -70,7 +75,7 @@ describe("RifInteract", function () {
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv2", 250);
         });
         it("replaces in-line markup with state values", function() {
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            setupFormatterOutput();
             world.getState = function(id, responder) {
                 if (id === "name") {
                     return "Ishmael";
@@ -87,7 +92,7 @@ describe("RifInteract", function () {
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael. Your name is mud. Your state is happy.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("replaces in-line markup with state values recursively", function() {
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            setupFormatterOutput();
             world.getState = function(id) {
                 if (id === "firstName") {
                     return "Ishmael";
@@ -127,14 +132,14 @@ describe("RifInteract", function () {
             }
         }
         it("should 'say' the individual pieces of text as a single string", function() {
+            setupFormatterOutput();
             response_lib.callTopics.andCallFake(fakeCall);
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("should handle multiple 'calls' markups", function() {
+            setupFormatterOutput();
             response_lib.callTopics.andCallFake(fakeCall);
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
             interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
@@ -147,7 +152,7 @@ describe("RifInteract", function () {
                 }
             }
             response_lib.callTopics.andCallFake(fakeCall);
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            setupFormatterOutput();
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
@@ -160,7 +165,7 @@ describe("RifInteract", function () {
                 }
             };
             response_lib.callTopics.andCallFake(fakeCall);
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            setupFormatterOutput();
             interact.say( { text: "My name is {=firstName=}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
@@ -178,7 +183,7 @@ describe("RifInteract", function () {
                 }
             };
             response_lib.callTopics.andCallFake(fakeCall);
-            formatter.formatOutput = jasmine.createSpy("formatOutput");
+            setupFormatterOutput();
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
