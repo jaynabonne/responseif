@@ -375,11 +375,12 @@ define([], function () {
     };
 
     proto.processGroups = function(groups, caller, interact, topics) {
-        for (var group in groups) {
-            if (groups.hasOwnProperty(group) && groups[group]) {
-                this.processGroup(groups[group], caller, interact, topics);
+        var self = this;
+        $.each(groups, function(index, group) {
+            if (group) {
+                self.processGroup(group, caller, interact, topics);
             }
-        }
+        });
     };
 
     proto.processResponses = function (candidates, caller, topics, interact) {
@@ -396,10 +397,8 @@ define([], function () {
         this.types = types;
     };
 
-    proto.callTopics = function(responders, topics, caller, interact) {
-        console.log("call topics:", topics);
+    proto.getCandidateResponses = function(responders, topics) {
         var candidates = [];
-        console.log("responders: ", responders);
         for (var responder in responders) {
             if (responders.hasOwnProperty(responder)) {
                 var responses = responders[responder];
@@ -408,6 +407,12 @@ define([], function () {
                 }
             }
         }
+        return candidates;
+    };
+
+    proto.callTopics = function(responders, topics, caller, interact) {
+
+        var candidates = this.getCandidateResponses(responders, topics);
         candidates = this.getPriorityResponses(candidates);
         console.log("candidates: ", candidates);
 
