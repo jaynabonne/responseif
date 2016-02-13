@@ -10,8 +10,12 @@ describe("RifInteract", function () {
     var dom;
     var response_lib;
 
+    function setupFormatterOutputWithLinks(links) {
+        formatter.formatOutput = jasmine.createSpy("formatOutput").andReturn({node: "formattedText", links: links});
+    }
+
     function setupFormatterOutput() {
-        formatter.formatOutput = jasmine.createSpy("formatOutput").andReturn({node: "text"});
+        setupFormatterOutputWithLinks([]);
     }
 
     beforeEach(function () {
@@ -22,7 +26,8 @@ describe("RifInteract", function () {
             append: function(div) {},
             getElementBySelector: jasmine.createSpy("getElementBySelector"),
             removeElement: jasmine.createSpy("removeElement"),
-            showElement: jasmine.createSpy("showElement")
+            showElement: jasmine.createSpy("showElement"),
+            removeClass: jasmine.createSpy('removeClass')
         };
         dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
@@ -46,6 +51,7 @@ describe("RifInteract", function () {
         };
         interact = new RifInteract(dom, formatter, world, response_lib, rif);
         appendSpy.reset();
+        setupFormatterOutput();
     });
     describe("say", function () {
         it("should output the text when called", function() {
@@ -53,7 +59,6 @@ describe("RifInteract", function () {
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should format with a class if specified", function() {
-            setupFormatterOutput();
             interact.say({ text: "This is some text", as: "aclass" }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("This is some text", jasmine.any(Function), jasmine.any(Object), "aclass");
         });
@@ -75,7 +80,6 @@ describe("RifInteract", function () {
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv2", 250);
         });
         it("replaces in-line markup with state values", function() {
-            setupFormatterOutput();
             world.getState = function(id, responder) {
                 if (id === "name") {
                     return "Ishmael";
@@ -92,7 +96,6 @@ describe("RifInteract", function () {
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael. Your name is mud. Your state is happy.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("replaces in-line markup with state values recursively", function() {
-            setupFormatterOutput();
             world.getState = function(id) {
                 if (id === "firstName") {
                     return "Ishmael";
@@ -132,13 +135,11 @@ describe("RifInteract", function () {
             }
         }
         it("should 'say' the individual pieces of text as a single string", function() {
-            setupFormatterOutput();
             response_lib.callTopics.andCallFake(fakeCall);
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
         it("should handle multiple 'calls' markups", function() {
-            setupFormatterOutput();
             response_lib.callTopics.andCallFake(fakeCall);
             interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael, but you're just Nemo.", jasmine.any(Function), jasmine.any(Object), undefined);
@@ -152,7 +153,6 @@ describe("RifInteract", function () {
                 }
             }
             response_lib.callTopics.andCallFake(fakeCall);
-            setupFormatterOutput();
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
@@ -165,7 +165,6 @@ describe("RifInteract", function () {
                 }
             };
             response_lib.callTopics.andCallFake(fakeCall);
-            setupFormatterOutput();
             interact.say( { text: "My name is {=firstName=}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
@@ -183,7 +182,6 @@ describe("RifInteract", function () {
                 }
             };
             response_lib.callTopics.andCallFake(fakeCall);
-            setupFormatterOutput();
             interact.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(formatter.formatOutput).toHaveBeenCalledWith("My name is Ishmael.", jasmine.any(Function), jasmine.any(Object), undefined);
         });
@@ -346,6 +344,37 @@ describe("RifInteract", function () {
                 }
             ];
             expect(interact.expandResponseReferences(responses)).toEqual(expected);
+        });
+    });
+    describe('hiding obsolete links', function() {
+        it('should remove a link after the next command', function() {
+            setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
+
+            interact.say({ text: "This is some text" }, 'responder');
+            expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
+
+            interact.sendCommand([{keyword: "topicA"}]);
+            expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
+        });
+        it('should remove multiple links after the next command', function() {
+            setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}]);
+
+            interact.say({ text: "This is some text" }, 'responder');
+
+            interact.sendCommand([{keyword: "topicA"}]);
+            expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeClass).toHaveBeenCalledWith('.link2', 'keyword');
+        });
+        it('should not remove a link if responder is still valid and keywords have a response', function() {
+            setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
+            world.getCurrentResponders = function() {
+                return ['responder'];
+            };
+
+            interact.say({ text: "This is some text" }, 'responder');
+
+            interact.sendCommand([{keyword: "topicA"}]);
+            expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
         });
     });
 });

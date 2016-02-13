@@ -34,6 +34,7 @@ define([], function() {
                 self.sendCommand(convertTopics(keywords.split(" ")));
             };
         };
+        this.links = [];
         resetMenuCallbacks.call(this);
     };
 
@@ -111,6 +112,9 @@ define([], function() {
 
             var formatted = this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
             outputFormattedText.call(this, says, formatted.node);
+            $.each(formatted.links, function(index, link) {
+                self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
+            });
             resetMenuCallbacks.call(this);
         },
         showAutoHideText: function (formatted) {
@@ -165,9 +169,12 @@ define([], function() {
         },
         getResponses: function (responders) {
             var responses = {};
+            if (!this.rif.responses)
+                return responses;
             var self = this;
             $.each(responders, function (index, value) {
-                responses[value] = self.expandResponseReferences(self.rif.responses[value]);
+                if (self.rif.responses[value])
+                    responses[value] = self.expandResponseReferences(self.rif.responses[value]);
             });
             return responses;
         },
@@ -209,6 +216,18 @@ define([], function() {
             this.beforeCommand();
             this.call(topics);
             this.idleProcessing();
+            this.hideObsoleteLinks();
+        },
+        hideObsoleteLinks: function() {
+            var self = this;
+            var responders = this.world.getCurrentResponders(this.world.getPOV());
+            this.links = this.links.filter(function(link) {
+                if (responders.indexOf(link.responder)) {
+                    self.dom.removeClass(link.selector, 'keyword');
+                    return false;
+                }
+                return true;
+            });
         },
         hideSeparator: function () {
             if (this.separatorShown) {
