@@ -48,7 +48,8 @@ describe("RifInteract", function () {
         };
         rif = {};
         response_lib = {
-            callTopics: jasmine.createSpy("callTopics")
+            callTopics: jasmine.createSpy('callTopics'),
+            getCandidateResponses: jasmine.createSpy('getCandidateResponses')
         };
         interact = new RifInteract(dom, formatter, world, response_lib, rif);
         appendSpy.reset();
@@ -350,6 +351,9 @@ describe("RifInteract", function () {
     describe('hiding obsolete links', function() {
         it('should remove a link after the next command', function() {
             setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
+            response_lib.getCandidateResponses = function(responders, topics) {
+                return [];
+            };
 
             interact.say({ text: "This is some text" }, 'responder');
             expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
@@ -360,6 +364,10 @@ describe("RifInteract", function () {
         });
         it('should remove multiple links after the next command', function() {
             setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}]);
+            response_lib.getCandidateResponses = function(responders, topics) {
+                return [];
+            };
+
 
             interact.say({ text: "This is some text" }, 'responder');
 
@@ -369,10 +377,17 @@ describe("RifInteract", function () {
             expect(dom.removeClass).toHaveBeenCalledWith('.link2', 'keyword');
             expect(dom.removeEvent).toHaveBeenCalledWith('.link2', 'click');
         });
-        it('should not remove a link if responder is still valid and keywords have a response', function() {
+        it('should not remove a link if topics still have a response', function() {
             setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
             world.getCurrentResponders = function() {
                 return ['responder'];
+            };
+
+            response_lib.getCandidateResponses = function(responders, topics) {
+                console.log("gCR with ", topics);
+                if (topics[0].keyword === 'Keyword1')
+                    return [{response: {}, score: '10000', responder: 'responder'}];
+                return [];
             };
 
             interact.say({ text: "This is some text" }, 'responder');

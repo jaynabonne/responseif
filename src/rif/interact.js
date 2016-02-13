@@ -221,8 +221,10 @@ define([], function() {
         hideObsoleteLinks: function() {
             var self = this;
             var responders = this.world.getCurrentResponders(this.world.getPOV());
+            var responses = this.getResponses(responders);
             this.links = this.links.filter(function(link) {
-                if (responders.indexOf(link.responder) == -1) {
+                var candidates = self.response_lib.getCandidateResponses(responses, convertTopics(link.keywords.split(' ')));
+                if (candidates.length === 0) {
                     self.dom.removeClass(link.selector, 'keyword');
                     self.dom.removeEvent(link.selector, 'click');
                     return false;
