@@ -27,7 +27,8 @@ describe("RifInteract", function () {
             getElementBySelector: jasmine.createSpy("getElementBySelector"),
             removeElement: jasmine.createSpy("removeElement"),
             showElement: jasmine.createSpy("showElement"),
-            removeClass: jasmine.createSpy('removeClass')
+            removeClass: jasmine.createSpy('removeClass'),
+            removeEvent: jasmine.createSpy('removeEvent')
         };
         dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
@@ -355,6 +356,7 @@ describe("RifInteract", function () {
 
             interact.sendCommand([{keyword: "topicA"}]);
             expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
         });
         it('should remove multiple links after the next command', function() {
             setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}]);
@@ -363,7 +365,9 @@ describe("RifInteract", function () {
 
             interact.sendCommand([{keyword: "topicA"}]);
             expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
             expect(dom.removeClass).toHaveBeenCalledWith('.link2', 'keyword');
+            expect(dom.removeEvent).toHaveBeenCalledWith('.link2', 'click');
         });
         it('should not remove a link if responder is still valid and keywords have a response', function() {
             setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
@@ -375,6 +379,7 @@ describe("RifInteract", function () {
 
             interact.sendCommand([{keyword: "topicA"}]);
             expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeEvent).not.toHaveBeenCalledWith('.link1', 'click');
         });
     });
 });

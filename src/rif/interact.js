@@ -222,8 +222,9 @@ define([], function() {
             var self = this;
             var responders = this.world.getCurrentResponders(this.world.getPOV());
             this.links = this.links.filter(function(link) {
-                if (responders.indexOf(link.responder)) {
+                if (responders.indexOf(link.responder) == -1) {
                     self.dom.removeClass(link.selector, 'keyword');
+                    self.dom.removeEvent(link.selector, 'click');
                     return false;
                 }
                 return true;

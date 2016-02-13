@@ -72,5 +72,9 @@ define([], function() {
         $(selector).removeClass(className);
     };
 
+    prototype.removeEvent = function(selector, event_name) {
+        $(selector).off(event_name);
+    };
+
     return type;
 });
