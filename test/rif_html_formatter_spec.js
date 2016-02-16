@@ -84,6 +84,11 @@ describe("RifHtmlFormatter", function () {
             var formatted = formatter.formatOutput("this is some text", clickfactory, null, "aclass");
             expect(formatted.node.hasClass('aclass')).toBeTruthy();
         });
+        it("returns a permanent keyword as a keyword span without a link class", function () {
+            var formatted = formatter.formatOutput("{!!Keyword!!}", clickfactory);
+            expect(formatted.node.html()).toBe('<span class="permanent-keyword">Keyword</span>');
+            expect(formatted.links).toEqual([]);
+        });
     });
     describe("formatMenu", function () {
         it("returns an empty menu for no menu items", function () {
