@@ -384,7 +384,6 @@ describe("RifInteract", function () {
             };
 
             response_lib.getCandidateResponses = function(responders, topics) {
-                console.log("gCR with ", topics);
                 if (topics[0].keyword === 'Keyword1')
                     return [{response: {}, score: '10000', responder: 'responder'}];
                 return [];

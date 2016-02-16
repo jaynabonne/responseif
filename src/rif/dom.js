@@ -47,7 +47,6 @@ define([], function() {
     };
 
     prototype.animate = function(selector, options, duration) {
-        console.log("options: ", options);
         if (!options) {
             console.log("no options specified");
             return;

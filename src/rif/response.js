@@ -265,7 +265,6 @@ define([], function () {
     };
 
     proto.processResponse = function (candidate, caller, interact, topics) {
-        console.log("processResponse: ", candidate);
         interact = interact || interact;
         var response = candidate.response;
         var responder = candidate.responder;
@@ -414,7 +413,6 @@ define([], function () {
 
         var candidates = this.getCandidateResponses(responders, topics);
         candidates = this.getPriorityResponses(candidates);
-        console.log("candidates: ", candidates);
 
         this.processResponses(candidates, caller, topics, interact);
     };
