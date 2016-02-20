@@ -4,39 +4,58 @@ define([], function () {
         this.linkid = 0;
     };
 
+    function makeMenuClick(callback, index) {
+        return function () {
+            callback(index);
+        };
+    }
+
+    function convertKeyword(span) {
+        var keyword = span.innerHTML;
+        var subindex = keyword.lastIndexOf("|");
+        if (subindex >= 0) {
+            span.innerHTML = keyword.substring(0, subindex);
+            keyword = keyword.substring(subindex + 1);
+        }
+        return keyword;
+    }
+
     type.prototype = {
-        processLinks: function(clickspans, menu_callbacks, clickfactory, links) {
+        processLinks: function(outerspan, keyword_class, menu_callbacks, clickfactory, links) {
             var self = this;
-            clickspans.each(function (id, span) {
-                var keyword = span.innerHTML;
-                var subindex = keyword.indexOf("|");
-                if (subindex >= 0) {
-                    span.innerHTML = keyword.substring(0, subindex);
-                    keyword = keyword.substring(subindex + 1);
-                }
+            var selector_class = 'pending-' + keyword_class
+            var selector = '.pending-' + keyword_class;
+            var clickspans = outerspan.find(selector);
+            var spans = clickspans.length;
+            // do "for" loop instead of the more natural "while" to constrain loop count.
+            for (var i = 0; i < spans; ++i) {
+                var span = clickspans[0];
+                var keyword = convertKeyword(span);
+                var jqSpan = $(span);
+                jqSpan.removeClass(selector_class);
+                jqSpan.addClass(keyword_class);
                 if (keyword.indexOf("menu:") === 0) {
                     var entry = keyword.substring(5);
                     var pieces = entry.split(":");
                     var callback = menu_callbacks[pieces[0]];
                     var index = parseInt(pieces[1]);
-                    $(span).click(function () {
-                        callback(index);
-                    });
+                    jqSpan.click(makeMenuClick(callback, index));
                 } else {
-                    $(span).click(clickfactory(keyword));
+                    jqSpan.click(clickfactory(keyword));
                     if (links) {
                         var cls = "link" + self.linkid++;
-                        $(span).addClass(cls);
+                        jqSpan.addClass(cls);
                         links.push({selector: '.' + cls, keywords: keyword});
                     }
                 }
-            });
+                clickspans = outerspan.find(selector);
+            }
         },
         formatOutput: function(text, clickfactory, menu_callbacks, css_class) {
             text = text
-                    .replace(/\{!!/g, "<span class='permanent-keyword'>")
+                    .replace(/\{!!/g, "<span class='pending-permanent-keyword'>")
                     .replace(/!!\}/g, "</span>")
-                    .replace(/\{!/g, "<span class='keyword'>")
+                    .replace(/\{!/g, "<span class='pending-keyword'>")
                     .replace(/!\}/g, "</span>");
 
             var outerspan = $("<span>");
@@ -46,8 +65,8 @@ define([], function () {
             outerspan.append(text);
 
             var links = [];
-            this.processLinks(outerspan.find(".permanent-keyword"), menu_callbacks, clickfactory);
-            this.processLinks(outerspan.find(".keyword"), menu_callbacks, clickfactory, links);
+            this.processLinks(outerspan, 'permanent-keyword', menu_callbacks, clickfactory);
+            this.processLinks(outerspan, 'keyword', menu_callbacks, clickfactory, links);
             return { node: outerspan, links: links };
         },
 

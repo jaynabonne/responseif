@@ -89,6 +89,11 @@ describe("RifHtmlFormatter", function () {
             expect(formatted.node.html()).toBe('<span class="permanent-keyword">Keyword</span>');
             expect(formatted.links).toEqual([]);
         });
+        it('formats nested links', function() {
+            var formatted = formatter.formatOutput("{!This is a long link with a nested {!section of text|keyword2!}.|keyword1!}", clickfactory);
+            expect(formatted.node.html()).toBe('<span class="keyword link0">This is a long link with a nested <span class="keyword link1">section of text</span>.</span>');
+            expect(formatted.links).toEqual([{selector: '.link0', keywords: 'keyword1'}, {selector: '.link1', keywords: 'keyword2'}]);
+        });
     });
     describe("formatMenu", function () {
         it("returns an empty menu for no menu items", function () {
