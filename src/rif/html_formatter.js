@@ -24,7 +24,7 @@ define([], function () {
         processLinks: function(outerspan, keyword_class, menu_callbacks, clickfactory, links) {
             var self = this;
             var selector_class = 'pending-' + keyword_class
-            var selector = '.pending-' + keyword_class;
+            var selector = '.' + selector_class;
             var clickspans = outerspan.find(selector);
             var spans = clickspans.length;
             // do "for" loop instead of the more natural "while" to constrain loop count.
