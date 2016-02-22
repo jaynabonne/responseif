@@ -168,6 +168,12 @@ define([], function () {
         moves.to = entry.value;
     };
 
+    Parser.prototype.parse_does_resets = function(actions, entry) {
+        this.index++;
+        var action = { resets: {}}
+        actions.push(action);
+    };
+
     Parser.prototype.parse_response_prompts = Parser.prototype.addString;
     Parser.prototype.parse_response_is = Parser.prototype.addString;
     Parser.prototype.parse_response_occurs = Parser.prototype.addInt;

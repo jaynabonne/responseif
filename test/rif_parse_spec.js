@@ -759,5 +759,26 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse resets", function() {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("resets"),
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        does: {
+                            common: [ { resets: { }  } ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
 });
 });
