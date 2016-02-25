@@ -609,7 +609,7 @@ describe("RifResponse", function () {
                 interact.addTopics = jasmine.createSpy("suggest");
                 var candidate = {
                     response: {
-                        does: { common: [ { adds: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } ] }
+                        does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } } ] }
                     },
                     score: 10000,
                     responder: "responder"};
@@ -620,7 +620,7 @@ describe("RifResponse", function () {
                 interact.addTopics = jasmine.createSpy("suggest");
                 var candidate = {
                     response: {
-                        does: { common: [ { adds: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], to: "aTarget" } ] }
+                        does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], to: "aTarget" } }] }
                     },
                     score: 10000,
                     responder: "responder"};

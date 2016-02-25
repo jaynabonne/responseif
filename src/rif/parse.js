@@ -105,9 +105,9 @@ define([], function () {
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
     Parser.prototype.parse_does_suggests = Parser.prototype.addDoesTopicList;
     Parser.prototype.parse_does_adds = function(actions, entry) {
-        var action = {adds: parseWeightedTopics(entry.value) };
+        var action = {adds: {keywords: parseWeightedTopics(entry.value) }};
         this.index++;
-        this.parseEntries(action, "parse_adds_");
+        this.parseEntries(action.adds, "parse_adds_");
         actions.push(action );
     };
     Parser.prototype.parse_adds_to = function(action, entry) {

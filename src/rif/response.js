@@ -183,85 +183,67 @@ define([], function () {
         return section;
     }
 
-    proto.processSays = function (action, response, responder, interact) {
-        if (action.says) {
-            interact.say(action.says, responder);
-        }
+    proto.process_says = function (action, context) {
+        context.interact.say(action.says, context.responder);
     };
 
-    proto.processSets = function (action, responder) {
-        if (action.sets) {
-            this.setState(action.sets, responder);
-        }
+    proto.process_sets = function (action, context) {
+        this.setState(action.sets, context.responder);
     };
 
-    proto.processUses = function (action, caller, responder, interact, topics) {
-        if (action.uses) {
-            var self = this;
-            if (action.uses.all) {
-                $.each(action.uses.all, function(index, child) {
-                    if (self.responseIsEligible(child, topics, responder)) {
-                        self.processResponse({response: child, responder: responder}, caller, interact, topics);
-                    }
-                });
-            }
-            if (action.uses.first) {
-                $.each(action.uses.first, function(index, child) {
-                    if (self.responseIsEligible(child, topics, responder)) {
-                        self.processResponse({response: child, responder: responder}, caller, interact, topics);
-                        return false;
-                    }
-                });
-            }
-            if (action.uses.random) {
-                var list = [];
-                $.each(action.uses.random, function(index, child) {
-                    if (self.responseIsEligible(child, topics, responder)) {
-                        list.push(child);
-                    }
-                });
-                if (list.length !== 0) {
-                    var index = this.world.getRandomInRange(0, list.length-1);
-                    self.processResponse({response: list[index], responder: responder}, caller, interact, topics);
+    proto.process_uses = function (action, context) {
+        var self = this;
+        if (action.uses.all) {
+            $.each(action.uses.all, function(index, child) {
+                if (self.responseIsEligible(child, context.topics, context.responder)) {
+                    self.processResponse({response: child, responder: context.responder}, context.caller, context.interact, context.topics);
                 }
+            });
+        }
+        if (action.uses.first) {
+            $.each(action.uses.first, function(index, child) {
+                if (self.responseIsEligible(child, context.topics, context.responder)) {
+                    self.processResponse({response: child, responder: context.responder}, context.caller, context.interact, context.topics);
+                    return false;
+                }
+            });
+        }
+        if (action.uses.random) {
+            var list = [];
+            $.each(action.uses.random, function(index, child) {
+                if (self.responseIsEligible(child, context.topics, context.responder)) {
+                    list.push(child);
+                }
+            });
+            if (list.length !== 0) {
+                var index = this.world.getRandomInRange(0, list.length-1);
+                self.processResponse({response: list[index], responder: context.responder}, context.caller, context.interact, context.topics);
             }
         }
     };
 
-    proto.processCalls = function (action, interact) {
-        if (action.calls) {
-            interact.call(action.calls);
-        }
+    proto.process_calls = function (action, context) {
+        context.interact.call(action.calls);
     };
 
-    proto.processAnimates = function (action, interact) {
-        if (action.animates) {
-            interact.animate(action.animates);
-        }
+    proto.process_animates = function (action, context) {
+        context.interact.animate(action.animates);
     };
 
-    proto.processInvokes = function (action, interact) {
-        if (action.invokes) {
-            interact.invoke(action.invokes);
-        }
+    proto.process_invokes = function (action, context) {
+        context.interact.invoke(action.invokes);
     };
 
-    proto.processMoves = function(action, responder) {
-        if (action.moves) {
-            this.world.setParent(action.moves.target || responder, action.moves.to);
-        }
+    proto.process_moves = function(action, context) {
+        this.world.setParent(action.moves.target || context.responder, action.moves.to);
     };
 
-    proto.processSuggests = function (action, interact) {
-        if (action.suggests) {
-            interact.suggest(action.suggests);
-        }
+    proto.process_suggests = function (action, context) {
+        context.interact.suggest(action.suggests);
     };
 
-    proto.processAdds = function (action, responder, interact) {
-        if (action.adds) {
-            interact.addTopics(action.adds, action.to || responder);
-        }
+    proto.process_adds = function (action, context) {
+        context.interact.addTopics(action.adds.keywords, action.adds.to || context.responder);
     };
 
     proto.processResponse = function (candidate, caller, interact, topics) {
@@ -270,18 +252,18 @@ define([], function () {
         var responder = candidate.responder;
         incrementResponseRunCount(response);
         var section = getCurrentSection(response);
+        var context = {
+            responder: responder,
+            interact: interact,
+            caller: caller,
+            topics: topics
+        };
         if (section) {
             var self = this;
             $.each(section, function(index, action) {
-                self.processSays(action, response, responder, interact);
-                self.processSets(action, responder);
-                self.processUses(action, caller, responder, interact, topics);
-                self.processCalls(action, interact);
-                self.processAnimates(action, interact);
-                self.processInvokes(action, interact);
-                self.processMoves(action, responder);
-                self.processSuggests(action, interact);
-                self.processAdds(action, responder, interact);
+                $.each(action, function(key) {
+                    self['process_'+key](action, context);
+                });
             });
         }
     };

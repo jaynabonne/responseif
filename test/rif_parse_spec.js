@@ -401,9 +401,9 @@ describe("rifParse", function () {
                     {
                         does: {
                             common: [
-                                { adds: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}] },
-                                { adds: [{keyword: "topic4"}, {keyword: "topic5"}], to: "someone" },
-                                { adds: [{keyword: "topic6", weight: 50}, {keyword: "topic7", weight: 90}] }
+                                { adds: {keywords: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}]} },
+                                { adds: {keywords: [{keyword: "topic4"}, {keyword: "topic5"}], to: "someone"} },
+                                { adds: {keywords: [{keyword: "topic6", weight: 50}, {keyword: "topic7", weight: 90}]} }
                             ]
                         }
                     }
