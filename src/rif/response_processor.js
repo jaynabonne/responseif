@@ -35,14 +35,14 @@ define(['./response_core'], function (RifResponseCore) {
         if (action.uses.all) {
             $.each(action.uses.all, function(index, child) {
                 if (RifResponseCore.responseIsEligible(child, context.topics, context.responder, self.world)) {
-                    self.processResponse({response: child, responder: context.responder}, context.caller, context.interact, context.topics);
+                    self.processResponseContext(child, context);
                 }
             });
         }
         if (action.uses.first) {
             $.each(action.uses.first, function(index, child) {
                 if (RifResponseCore.responseIsEligible(child, context.topics, context.responder, self.world)) {
-                    self.processResponse({response: child, responder: context.responder}, context.caller, context.interact, context.topics);
+                    self.processResponseContext(child, context);
                     return false;
                 }
             });
@@ -56,7 +56,7 @@ define(['./response_core'], function (RifResponseCore) {
             });
             if (list.length !== 0) {
                 var index = this.world.getRandomInRange(0, list.length-1);
-                self.processResponse({response: list[index], responder: context.responder}, context.caller, context.interact, context.topics);
+                self.processResponseContext(list[index], context);
             }
         }
     };
@@ -85,17 +85,9 @@ define(['./response_core'], function (RifResponseCore) {
         context.interact.addTopics(action.adds.keywords, action.adds.to || context.responder);
     };
 
-    proto.processResponse = function (candidate, caller, interact, topics) {
-        var response = candidate.response;
-        var responder = candidate.responder;
+    proto.processResponseContext = function(response, context) {
         incrementResponseRunCount(response);
         var section = getCurrentSection(response);
-        var context = {
-            responder: responder,
-            interact: interact,
-            caller: caller,
-            topics: topics
-        };
         if (section) {
             var self = this;
             $.each(section, function(index, action) {
@@ -104,6 +96,17 @@ define(['./response_core'], function (RifResponseCore) {
                 });
             });
         }
+    };
+
+    proto.processResponse = function (candidate, caller, interact, topics) {
+        var context = {
+            responder: candidate.responder,
+            interact: interact,
+            caller: caller,
+            topics: topics
+        };
+
+        this.processResponseContext(candidate.response, context);
     };
 
     return type;

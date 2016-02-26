@@ -113,8 +113,8 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     proto.processGroup = function(group, caller, interact, topics) {
         group.sort(orderCompare);
 
-        var self = this;
-        group.forEach(function(response) { self.processor.processResponse(response, caller, interact, topics); });
+        var processor = this.processor;
+        group.forEach(function(response) { processor.processResponse(response, caller, interact, topics); });
     };
 
     function addPrompt(items, candidate) {
@@ -131,10 +131,10 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     }
 
     proto.processMenuResponses = function(prompt, prompts, caller, interact, topics) {
-        var self = this;
+        var processor = this.processor;
         prompts.forEach(function (candidate) {
             if (candidate.response.prompts === prompt) {
-                self.processor.processResponse(candidate, caller, interact, topics);
+                processor.processResponse(candidate, caller, interact, topics);
             }
         });
     };
