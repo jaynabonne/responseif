@@ -3,7 +3,6 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     var type = function (world) {
         this.world = world;
         this.types = [];
-        this.processor = new RifResponseProcessor(world);
     };
 
     var PriorityResponseGetter = (function () {
@@ -113,8 +112,8 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     proto.processGroup = function(group, caller, interact, topics) {
         group.sort(orderCompare);
 
-        var processor = this.processor;
-        group.forEach(function(response) { processor.processResponse(response, caller, interact, topics); });
+        var processor = new RifResponseProcessor(caller, interact, topics, this.world);
+        group.forEach(function(response) { processor.processResponse(response); });
     };
 
     function addPrompt(items, candidate) {
@@ -131,10 +130,10 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     }
 
     proto.processMenuResponses = function(prompt, prompts, caller, interact, topics) {
-        var processor = this.processor;
+        var processor = new RifResponseProcessor(caller, interact, topics, this.world);
         prompts.forEach(function (candidate) {
             if (candidate.response.prompts === prompt) {
-                processor.processResponse(candidate, caller, interact, topics);
+                processor.processResponse(candidate);
             }
         });
     };
