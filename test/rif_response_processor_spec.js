@@ -287,5 +287,24 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             expect(interact.suggest).toHaveBeenCalledWith(["topicA", "topicB", "topicC"]);
         });
     });
+    describe("addTopics", function () {
+        it("should add the topics to the responder if a target is not specified", function() {
+            interact.addTopics = jasmine.createSpy("suggest");
+            var response = {
+                does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } } ] }
+            };
+            processor.processResponse(response, 'responder');
+
+            expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "responder");
+        });
+        it("should add the topics to the specified target", function() {
+            interact.addTopics = jasmine.createSpy("suggest");
+            var response = {
+                does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], to: "aTarget" } }] }
+            };
+            processor.processResponse(response, 'responder');
+            expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "aTarget");
+        });
+    });
 
 });
