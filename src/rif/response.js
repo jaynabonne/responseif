@@ -7,7 +7,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     var proto = type.prototype;
 
-    proto.addIfHasScore = function (response, topics, candidates, responder) {
+    function addIfHasScore(response, topics, candidates, responder) {
         var score = RifResponseCore.computeScore(response.matches, topics);
         if (score > 0) {
             candidates.push({response: response, score: score, responder: responder});
@@ -19,7 +19,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
             if (response.selects !== undefined) {
                 this.addResponses(response.selects, topics, candidates, responder);
             } else {
-                this.addIfHasScore(response, topics, candidates, responder);
+                addIfHasScore(response, topics, candidates, responder);
             }
         }
     };
@@ -35,9 +35,9 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
         return this.addResponses(responses, topics, [], responder);
     };
 
-    proto.getPriorityResponses = function (candidates) {
+    function getPriorityResponses(candidates) {
         return new RifPriorityResponseGetter(candidates).results;
-    };
+    }
 
     function groupCandidates(candidates, prompts) {
         var groups = { };
@@ -56,13 +56,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
     }
 
     function orderCompare(a, b) {
-        var orderA = a.response.orders || 1;
-        var orderB = b.response.orders || 1;
-        return orderA < orderB
-                ? -1
-                : orderA === orderB
-                    ? 0
-                    : 1;
+        return (a.response.orders || 1) - (b.response.orders || 1);
     }
 
     proto.processGroup = function(group, caller, interact, topics) {
@@ -164,7 +158,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
     proto.callTopics = function(responders, topics, caller, interact) {
 
         var candidates = this.getCandidateResponses(responders, topics);
-        candidates = this.getPriorityResponses(candidates);
+        candidates = getPriorityResponses(candidates);
 
         this.processResponses(candidates, caller, topics, interact);
     };
