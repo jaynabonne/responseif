@@ -1,49 +1,9 @@
-define(['./response_core','./response_processor'], function (RifResponseCore, RifResponseProcessor) {
+define(['./response_core','./response_processor','./priority_response_getter'], function (RifResponseCore, RifResponseProcessor, RifPriorityResponseGetter) {
     "use strict";
     var type = function (world) {
         this.world = world;
         this.types = [];
     };
-
-    var PriorityResponseGetter = (function () {
-        var type = function (candidates) {
-            this.reset(-1);
-            this.addPriorityResponses(candidates);
-        };
-
-        var proto = type.prototype;
-
-        proto.reset = function (score) {
-            this.results = [];
-            this.score = score;
-        };
-
-        proto.updateScore = function (score) {
-            if (score > this.score) {
-                this.reset(score);
-            }
-        };
-
-        proto.addResponse = function (response) {
-            if (response.score === this.score) {
-                this.results.push(response);
-            }
-        };
-
-        proto.addPriorityResponse = function (response) {
-            this.updateScore(response.score);
-            this.addResponse(response);
-        };
-
-        proto.addPriorityResponses = function (candidates) {
-            var self = this;
-            candidates.forEach(function(response) {
-                self.addPriorityResponse(response)
-            });
-        };
-
-        return type;
-    }());
 
     var proto = type.prototype;
 
@@ -76,7 +36,7 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     };
 
     proto.getPriorityResponses = function (candidates) {
-        return new PriorityResponseGetter(candidates).results;
+        return new RifPriorityResponseGetter(candidates).results;
     };
 
     function groupCandidates(candidates, prompts) {
