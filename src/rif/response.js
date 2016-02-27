@@ -12,7 +12,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
         if (score > 0) {
             candidates.push({response: response, score: score, responder: responder});
         }
-    };
+    }
 
     proto.addResponse = function (response, topics, candidates, responder) {
         if (RifResponseCore.responseIsEligible(response, topics, responder, this.world)) {
@@ -59,12 +59,10 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
         return (a.response.orders || 1) - (b.response.orders || 1);
     }
 
-    proto.processGroup = function(group, caller, interact, topics) {
+    function processGroup(group, processor) {
         group.sort(orderCompare);
-
-        var processor = new RifResponseProcessor(caller, interact, topics, this.world);
         group.forEach(function(candidate) { processor.processResponse(candidate.response, candidate.responder); });
-    };
+    }
 
     function addPrompt(items, candidate) {
         var prompt = candidate.response.prompts;
@@ -79,64 +77,61 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
         return items;
     }
 
-    proto.processMenuResponses = function(prompt, prompts, caller, interact, topics) {
-        var processor = new RifResponseProcessor(caller, interact, topics, this.world);
+    function processMenuResponses(prompt, prompts, processor) {
         prompts.forEach(function (candidate) {
             if (candidate.response.prompts === prompt) {
                 processor.processResponse(candidate.response, candidate.responder);
             }
         });
-    };
+    }
 
-    proto.runMenu = function(prompts, caller, interact, topics) {
-        var self = this;
+    function runMenu(prompts, processor, interact) {
         var items = getMenuItems(prompts);
         interact.choose(items, function (which) {
             if (which !== -1) {
-                self.processMenuResponses(items[which], prompts, caller, interact, topics);
+                processMenuResponses(items[which], prompts, processor);
             }
         });
-    };
+    }
 
     function forcesPrompt(response) {
         return response.forcesprompt === undefined || response.forcesprompt;
     }
 
-    proto.processPrompts = function (prompts, caller, interact, topics) {
+    function processPrompts(prompts, processor, interact) {
         if (prompts.length === 1 && !forcesPrompt(prompts[0].response)) {
-            this.processGroup(prompts, caller, interact, topics);
+            processGroup(prompts, processor);
         } else if (prompts.length > 0) {
-            this.runMenu(prompts, caller, interact, topics);
+            runMenu(prompts, processor, interact);
         }
-    };
+    }
 
-    proto.processDefinedGroups = function(groups, caller, interact, topics) {
-        var self = this;
-        this.types.forEach(function (type) {
+    function processDefinedGroups(groups, processor, types) {
+        types.forEach(function (type) {
             if (groups.hasOwnProperty(type)) {
-                self.processGroup(groups[type], caller, interact, topics);
+                processGroup(groups[type], processor);
                 groups[type] = undefined;
             }
         });
-    };
+    }
 
-    proto.processGroups = function(groups, caller, interact, topics) {
-        var self = this;
+    function processGroups(groups, processor) {
         $.each(groups, function(index, group) {
             if (group) {
-                self.processGroup(group, caller, interact, topics);
+                processGroup(group, processor);
             }
         });
-    };
+    }
 
     proto.processResponses = function (candidates, caller, topics, interact) {
-        var self = this;
         var prompts = [];
         var groups = groupCandidates(candidates, prompts);
 
-        this.processDefinedGroups(groups, caller, interact, topics);
-        this.processGroups(groups, caller, interact, topics);
-        this.processPrompts(prompts, caller, interact, topics);
+        var processor = new RifResponseProcessor(caller, interact, topics, this.world);
+
+        processDefinedGroups(groups, processor, this.types);
+        processGroups(groups, processor);
+        processPrompts(prompts, processor, interact);
     };
 
     proto.setTypes = function(types) {
