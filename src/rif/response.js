@@ -47,10 +47,6 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
 
     var proto = type.prototype;
 
-    proto.responseIsEligible = function(response, topics, responder) {
-        return RifResponseCore.responseIsEligible(response, topics, responder, this.world);
-    };
-
     proto.addIfHasScore = function (response, topics, candidates, responder) {
         var score = RifResponseCore.computeScore(response.matches, topics);
         if (score > 0) {
@@ -59,7 +55,7 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     };
 
     proto.addResponse = function (response, topics, candidates, responder) {
-        if (this.responseIsEligible(response, topics, responder)) {
+        if (RifResponseCore.responseIsEligible(response, topics, responder, this.world)) {
             if (response.selects !== undefined) {
                 this.addResponses(response.selects, topics, candidates, responder);
             } else {
@@ -194,15 +190,14 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
     };
 
     proto.getCandidateResponses = function(responders, topics) {
+        var self = this;
         var candidates = [];
-        for (var responder in responders) {
-            if (responders.hasOwnProperty(responder)) {
-                var responses = responders[responder];
-                if (responses) {
-                    candidates = candidates.concat(this.selectResponses(responses, topics, responder));
-                }
+        $.each(responders, function(responder) {
+            var responses = responders[responder];
+            if (responses) {
+                candidates = candidates.concat(self.selectResponses(responses, topics, responder));
             }
-        }
+        });
         return candidates;
     };
 
