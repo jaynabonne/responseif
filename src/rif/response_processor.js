@@ -38,14 +38,14 @@ define(['./response_core'], function (RifResponseCore) {
         if (action.uses.all) {
             $.each(action.uses.all, function(index, child) {
                 if (RifResponseCore.responseIsEligible(child, self.topics, responder, self.world)) {
-                    self.processAResponse(child, responder);
+                    self.processResponse(child, responder);
                 }
             });
         }
         if (action.uses.first) {
             $.each(action.uses.first, function(index, child) {
                 if (RifResponseCore.responseIsEligible(child, self.topics, responder, self.world)) {
-                    self.processAResponse(child, responder);
+                    self.processResponse(child, responder);
                     return false;
                 }
             });
@@ -59,7 +59,7 @@ define(['./response_core'], function (RifResponseCore) {
             });
             if (list.length !== 0) {
                 var index = this.world.getRandomInRange(0, list.length-1);
-                self.processAResponse(list[index], responder);
+                self.processResponse(list[index], responder);
             }
         }
     };
@@ -88,7 +88,7 @@ define(['./response_core'], function (RifResponseCore) {
         this.interact.addTopics(action.adds.keywords, action.adds.to || responder);
     };
 
-    proto.processAResponse = function(response, responder) {
+    proto.processResponse = function(response, responder) {
         incrementResponseRunCount(response);
         var section = getCurrentSection(response);
         if (section) {
@@ -99,10 +99,6 @@ define(['./response_core'], function (RifResponseCore) {
                 });
             });
         }
-    };
-
-    proto.processResponse = function (candidate) {
-        this.processAResponse(candidate.response, candidate.responder);
     };
 
     return type;

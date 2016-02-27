@@ -113,7 +113,7 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
         group.sort(orderCompare);
 
         var processor = new RifResponseProcessor(caller, interact, topics, this.world);
-        group.forEach(function(response) { processor.processResponse(response); });
+        group.forEach(function(candidate) { processor.processResponse(candidate.response, candidate.responder); });
     };
 
     function addPrompt(items, candidate) {
@@ -133,7 +133,7 @@ define(['./response_core','./response_processor'], function (RifResponseCore, Ri
         var processor = new RifResponseProcessor(caller, interact, topics, this.world);
         prompts.forEach(function (candidate) {
             if (candidate.response.prompts === prompt) {
-                processor.processResponse(candidate);
+                processor.processResponse(candidate.response, candidate.responder);
             }
         });
     };
