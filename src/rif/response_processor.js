@@ -88,6 +88,10 @@ define(['./response_core'], function (RifResponseCore) {
         this.interact.addTopics(action.adds.keywords, action.adds.to || responder);
     };
 
+    proto.process_resets = function (action, responder, response) {
+        response.run = 0;
+    };
+
     proto.processResponse = function(response, responder) {
         incrementResponseRunCount(response);
         var section = getCurrentSection(response);
@@ -95,7 +99,7 @@ define(['./response_core'], function (RifResponseCore) {
             var self = this;
             $.each(section, function(index, action) {
                 $.each(action, function(key) {
-                    self['process_'+key](action, responder);
+                    self['process_'+key](action, responder, response);
                 });
             });
         }

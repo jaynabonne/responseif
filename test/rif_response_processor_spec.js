@@ -306,5 +306,25 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "aTarget");
         });
     });
-
+    describe("resets", function () {
+        it("should reset the current response", function() {
+            interact.say = jasmine.createSpy("say");
+            var response = {
+                does: {
+                    1: [
+                        { says: { text: "Hello world!" }}
+                    ],
+                    2: [
+                        { resets: {} }
+                    ]
+                }
+            };
+            processor.processResponse(response, 'responder');
+            expect(interact.say.callCount).toBe(1);
+            processor.processResponse(response, 'responder');
+            expect(interact.say.callCount).toBe(1);
+            processor.processResponse(response, 'responder');
+            expect(interact.say.callCount).toBe(2);
+        });
+    });
 });
