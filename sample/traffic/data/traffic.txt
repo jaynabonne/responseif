@@ -1,0 +1,30 @@
+.move traffic light .to corner
+.move player .to corner
+
+.actions traffic light
+    .response
+        .does 1 .says <br>The traffic light turns red.
+        .does 4 .says <br>The traffic light turns green.
+        .does 10 .says <br>The traffic light turns yellow.
+        .does 11 .resets
+.end
+
+.responses player
+    .response Wait
+        .does
+            .uses random
+                .response
+                    .does .says You twiddle your thumbs a bit.
+                .response
+                    .does .says You look around, but there's nothing to see.
+                .response
+                    .does .says A passing car catches your eye, but only for a moment.
+                .response
+                    .does .says The world passes you by.
+            .end
+.end
+
+.actions UI
+    .response
+        .does
+            .says <br>{!Wait!}
