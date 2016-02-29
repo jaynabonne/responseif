@@ -88,7 +88,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { someObject: [{}] } );
+        expect(rif.responses).toEqual( { someObject: [{ id : 0}] } );
     });
     it("should parse a response set with two responses", function () {
         var rif = rifParse(
@@ -99,7 +99,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { someObject: [{}, {}] } );
+        expect(rif.responses).toEqual( { someObject: [{id : 0}, {id : 1}] } );
     });
     it("should parse actions", function () {
         var rif = rifParse(
@@ -110,7 +110,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.actions).toEqual( { someObject: [{}, {}] } );
+        expect(rif.actions).toEqual( { someObject: [{id : 0}, {id : 1}] } );
     });
     it("should parse response occurs", function () {
         var rif = rifParse(
@@ -121,7 +121,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{occurs: 42}] } );
+        expect(rif.responses).toEqual( { anObject: [{id : 0, occurs: 42}] } );
     });
     it("should parse response matches", function () {
         var rif = rifParse(
@@ -132,7 +132,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
+        expect(rif.responses).toEqual( { anObject: [{id : 0, matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
     });
     it("should parse response matches as the response token value", function () {
         var rif = rifParse(
@@ -142,7 +142,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
+        expect(rif.responses).toEqual( { anObject: [{id : 0, matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] }] });
     });
     it("should parse response matches with weights", function () {
         var rif = rifParse(
@@ -153,7 +153,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{matches: [{keyword: "topicA", weight: 50}, {keyword: "topicB"}, {keyword: "topicC", weight: 75}] }] });
+        expect(rif.responses).toEqual( { anObject: [{id : 0, matches: [{keyword: "topicA", weight: 50}, {keyword: "topicB"}, {keyword: "topicC", weight: 75}] }] });
     });
     it("should parse response needs", function () {
         var rif = rifParse(
@@ -165,7 +165,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{needs: ["some expression", "some other expression"]}] } );
+        expect(rif.responses).toEqual( { anObject: [{id : 0, needs: ["some expression", "some other expression"]}] } );
     });
     it("should parse response prompts", function () {
         var rif = rifParse(
@@ -176,7 +176,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{prompts: "A response prompt"}] } );
+        expect(rif.responses).toEqual( { anObject: [{id : 0, prompts: "A response prompt"}] } );
     });
     it("should parse response forceprompts", function () {
         var rif = rifParse(
@@ -192,9 +192,9 @@ describe("rifParse", function () {
             ]
         );
         expect(rif.responses).toEqual( { anObject: [
-            {forcesprompt: true},
-            {forcesprompt: false},
-            {forcesprompt: true}
+            {id : 0, forcesprompt: true},
+            {id : 1, forcesprompt: false},
+            {id : 2, forcesprompt: true}
         ] } );
     });
     it("should parse response is", function () {
@@ -205,7 +205,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{is: "something"}] } );
+        expect(rif.responses).toEqual( { anObject: [{id : 0, is: "something"}] } );
     });
     it("should parse response orders", function () {
         var rif = rifParse([
@@ -215,7 +215,7 @@ describe("rifParse", function () {
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{orders: 99}] } );
+        expect(rif.responses).toEqual( { anObject: [{id : 0, orders: 99}] } );
     });
     it("should parse response does says", function () {
         var rif = rifParse(
@@ -231,6 +231,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { says: { text: "some text to display for this response" } } ]
                         }
@@ -254,6 +255,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { says: { text: "some text to display for this response", into: "someelement" } } ]
                         }
@@ -266,10 +268,10 @@ describe("rifParse", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
-                response(),
-                does(),
-                says("some text to display for this response"),
-                as("someclass"),
+                    response(),
+                        does(),
+                            says("some text to display for this response"),
+                                as("someclass"),
                 end()
             ]
         );
@@ -277,8 +279,9 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
-                            common: [ { says: { text: "some text to display for this response", as: "someclass" } } ]
+                            common: [ {says: { text: "some text to display for this response", as: "someclass" } } ]
                         }
                     }
                 ]
@@ -300,6 +303,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { says: { text: "this text should autohide", autohides: true } } ]
                         }
@@ -325,6 +329,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [
                                 { sets: {expression: "expression1"} },
@@ -351,6 +356,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { calls: [{keyword: "call1"}, {keyword: "call2"}, {keyword: "call3"}] } ]
                         }
@@ -373,6 +379,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { suggests: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}] } ]
                         }
@@ -399,6 +406,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [
                                 { adds: {keywords: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}]} },
@@ -430,6 +438,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { says: { text: "some text in the common case"} } ],
                             2: [ { says: { text: "some text to display for this response" } } ],
@@ -454,6 +463,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         selects: []
                     }
                 ]
@@ -480,9 +490,10 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         selects: [
-                            { does: { common: [ {says: { text: "some text"} } ] } },
-                            { does: { common: [ {says: { text: "some more text"} } ] } }
+                            { id : 1,  does: { common: [ {says: { text: "some text"} } ] } },
+                            { id : 2, does: { common: [ {says: { text: "some more text"} } ] } }
                         ]
                     }
                 ]
@@ -511,12 +522,13 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ {
                                 uses: {
                                     first: [
-                                        {does: {common: [ {says: {text: "some text"} } ] } },
-                                        {does: {common: [ {says: {text: "some more text"} } ] } }
+                                        { id : 1, does: {common: [ {says: {text: "some text"} } ] } },
+                                        { id : 2, does: {common: [ {says: {text: "some more text"} } ] } }
                                     ]
                                 }
                             } ]
@@ -547,12 +559,13 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ {
                                 uses: {
                                     random: [
-                                        { does: { common: [ {says: { text: "some text"} } ] } },
-                                        { does: { common: [ {says: { text: "some more text"} } ] } }
+                                        { id : 1, does: { common: [ {says: { text: "some text"} } ] } },
+                                        { id : 2, does: { common: [ {says: { text: "some more text"} } ] } }
                                     ]
                                 }
                             } ]
@@ -583,12 +596,13 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ {
                                 uses: {
                                     all: [
-                                        { does: { common: [ {says: { text: "some text"} } ] } },
-                                        { does: { common: [ {says: { text: "some more text"} } ] } }
+                                        { id : 1, does: { common: [ {says: { text: "some text"} } ] } },
+                                        { id : 2, does: { common: [ {says: { text: "some more text"} } ] } }
                                     ]
                                 }
                             } ]
@@ -644,6 +658,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { animates: { selector: "aselector", transitions: [{to: "properties", lasting: 1000}] }  } ]
                         }
@@ -665,6 +680,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { invokes: "a function body"  } ]
                         }
@@ -687,6 +703,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { moves: { target: "player", to: "room" }  } ]
                         }
@@ -711,6 +728,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { moves: { target: "player", to: "room" }  } ]
                         }
@@ -772,6 +790,7 @@ describe("rifParse", function () {
             {
                 anObject: [
                     {
+                        id : 0,
                         does: {
                             common: [ { resets: { }  } ]
                         }

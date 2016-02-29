@@ -5,6 +5,7 @@ define([], function () {
         this.tokens = tokens;
         this.rif = {responses:{}};
         this.index = 0;
+        this.nextId = 0;
     };
 
     Parser.prototype.parseEntries = function(target, prefix) {
@@ -216,6 +217,7 @@ define([], function () {
         if (value !== '') {
             response.matches = parseMatches(value);
         }
+        response.id = this.nextId++;
         this.parseEntries(response, "parse_response_");
         return response;
     };
