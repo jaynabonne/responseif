@@ -1,0 +1,36 @@
+@import url(http://fonts.googleapis.com/css?family=Cantarell);
+body {
+    background-color: #101010;
+    color: #c0c0c0;
+    overflow-y: scroll;
+}
+
+div#holder {
+    width:90%;
+    height:90%;
+}
+
+div#output {
+    width:95%; 
+    font-size:14pt; 
+    padding-top:0px;
+    padding-bottom:0px;
+    display:block;
+    font-family:'Cantarell', Georgia, serif;
+}
+
+span.keyword {color:#f0f020; cursor:pointer;}
+
+.menu {
+}
+
+.menuitem {
+    cursor:pointer;
+}
+.menuitem:before {
+    content: "\bb\a0";
+}
+
+.section {
+    margin-top: 6px;
+}

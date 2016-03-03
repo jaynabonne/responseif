@@ -1,0 +1,135 @@
+.actions UI
+    .response
+        .does
+            .says {!Generate!} .autohides
+.end
+
+.responses player
+    .response Generate
+        .does
+            .says {+SENTENCE+}.
+
+    .response SENTENCE
+        .does .says {+NOUN_PHRASE+} {+VERB_PHRASE+}
+
+    .response NOUN_PHRASE
+        .does
+            .uses random
+                .response .does .says {+ARTICLE+} {+ADJECTIVE+} {+SIMPLE_NOUN+}
+                .response .does .says {+PROPER_NOUN+}
+            .end
+
+    .response VERB_PHRASE
+        .does
+            .uses random
+                .response .does .says {+SIMPLE_VERB+} {+ADVERB+}
+                .response .does .says gives {+NOUN_PHRASE+} to {+NOUN_PHRASE+}
+                .response .does .says takes {+NOUN_PHRASE+} from {+NOUN_PHRASE+}
+                .response .does .says likes {+NOUN_PHRASE+}
+                .response .does .says whispers to {+NOUN_PHRASE+}
+                .response .does .says says "{+SENTENCE+}" to {+NOUN_PHRASE+}
+                .response .does .says writes "{+SENTENCE+}" on {+NOUN_PHRASE+}
+            .end
+
+    .response PROPER_NOUN
+        .does
+            .uses random
+                .response .does .says Anita
+                .response .does .says Todd
+                .response .does .says Chris
+                .response .does .says Jessica
+                .response .does .says Billy
+                .response .does .says Jane
+                .response .does .says Tommy
+                .response .does .says Jack
+                .response .does .says Jill
+                .response .does .says Mary
+                .response .does .says Joey
+                .response .does .says Carla
+                .response .does .says Larry
+            .end
+
+    .response SIMPLE_NOUN
+        .does
+            .uses random
+                .response .does .says cat
+                .response .does .says mouse
+                .response .does .says flower
+                .response .does .says car
+                .response .does .says book
+                .response .does .says house
+                .response .does .says tree
+                .response .does .says mountain
+                .response .does .says dog
+                .response .does .says bicycle
+                .response .does .says table
+                .response .does .says chair
+                .response .does .says street
+                .response .does .says lawn
+                .response .does .says garden
+                .response .does .says lake
+                .response .does .says river
+            .end
+
+    .response ARTICLE
+        .does
+            .says the
+
+    .response ADJECTIVE
+        .does
+            .uses random
+                .response .does .says
+                .response .does .says happy
+                .response .does .says sad
+                .response .does .says peppy
+                .response .does .says lethargic
+                .response .does .says gross
+                .response .does .says lovely
+                .response .does .says green
+                .response .does .says lively
+                .response .does .says weird
+                .response .does .says brown
+                .response .does .says strange
+                .response .does .says complacent
+                .response .does .says benevolent
+                .response .does .says evil
+                .response .does .says diminutive
+                .response .does .says peaceful
+            .end
+
+    .response SIMPLE_VERB
+        .does
+            .uses random
+                .response .does .says laughs
+                .response .does .says cries
+                .response .does .says dances
+                .response .does .says sleeps
+                .response .does .says laughs
+                .response .does .says sings
+                .response .does .says runs
+                .response .does .says watches
+                .response .does .says speaks
+                .response .does .says plays
+                .response .does .says works
+                .response .does .says walks
+                .response .does .says chuckles
+                .response .does .says snickers
+            .end
+
+    .response ADVERB
+        .does
+            .uses random
+                .response .does .says
+                .response .does .says quickly
+                .response .does .says quietly
+                .response .does .says loudly
+                .response .does .says sheepishly
+                .response .does .says painfully
+                .response .does .says reproachfully
+                .response .does .says wistfully
+                .response .does .says sadly
+                .response .does .says happily
+                .response .does .says in a frightened way
+            .end
+.end
+
