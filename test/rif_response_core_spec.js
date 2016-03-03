@@ -40,11 +40,31 @@ define(['rif/response_core'], function(rifResponseCore) {
     describe("responseIsEligible", function () {
         var world;
         beforeEach(function () {
-            world = {};
+            world = {
+                runs: { },
+                getResponseRuns : function(id) {
+                    return this.runs[id] || 0;
+                },
+                setResponseRuns : function(id, runs) {
+                    this.runs[id] = runs;
+                }
+            };
         });
 
         it("returns true for a simple response", function () {
             expect(rifResponseCore.responseIsEligible({}, [], "aresponder", world)).toEqual(true);
+        });
+        it('gets its run count from the world if not yet set', function() {
+            world.setResponseRuns(1, 3);
+            var response = { id: 1 };
+            rifResponseCore.responseIsEligible(response, [], "aresponder", world);
+            expect(response.run).toBe(3);
+        });
+        it('does not get its run count from the world if already set', function() {
+            world.setResponseRuns(1, 3);
+            var response = { run: 5, id: 1 };
+            rifResponseCore.responseIsEligible(response, [], "aresponder", world);
+            expect(response.run).toBe(5);
         });
         it("returns false if the run equals or exceeds its occurs count", function () {
             var response = { run: 5, occurs: 5 };
@@ -67,11 +87,11 @@ define(['rif/response_core'], function(rifResponseCore) {
         });
         it("returns false if required topics are not present", function () {
             var response = { matches: [{keyword: "*atopic"}] };
-            expect(rifResponseCore.responseIsEligible(response, [{keyword: "btopics"}])).toEqual(false);
+            expect(rifResponseCore.responseIsEligible(response, [{keyword: "btopics"}], 'aresponder', world)).toEqual(false);
         });
         it("returns false if topics score is not positive", function () {
             var response = { matches: [{keyword: "atopic"}] };
-            expect(rifResponseCore.responseIsEligible(response, [{keyword: "btopics"}])).toEqual(false);
+            expect(rifResponseCore.responseIsEligible(response, [{keyword: "btopics"}], 'aresponder', world)).toEqual(false);
         });
         it("passes the responder as state prefix if passed", function () {
             world.getState = function(id, responder) { return id === "somestate" && responder === "aresponder"; };

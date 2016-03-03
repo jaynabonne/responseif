@@ -21,8 +21,9 @@ define(['./response_core'], function (RifResponseCore) {
         return section;
     }
 
-    function incrementResponseRunCount(response) {
-        response.run = (response.run || 0) + 1;
+    function incrementResponseRunCount(response, world) {
+        response.run = (response.run || world.getResponseRuns(response.id)) + 1;
+        world.setResponseRuns(response.id, response.run);
     }
 
     proto.process_says = function (action, responder) {
@@ -93,7 +94,7 @@ define(['./response_core'], function (RifResponseCore) {
     };
 
     proto.processResponse = function(response, responder) {
-        incrementResponseRunCount(response);
+        incrementResponseRunCount(response, this.world);
         var section = getCurrentSection(response);
         if (section) {
             var self = this;

@@ -3,9 +3,12 @@ define([], function () {
 
     var core = {};
 
-    function hasRunAndOccurs(response) { return response.occurs !== undefined && response.run !== undefined; }
+    function hasRunAndOccurs(response) { return response.occurs !== undefined; }
 
-    function responseCountValid(response) { return !hasRunAndOccurs(response) || response.run < response.occurs; }
+    function responseCountValid(response, world) {
+        response.run = response.run || world.getResponseRuns(response.id);
+        return !hasRunAndOccurs(response) || response.run < response.occurs;
+    }
 
     function hasTopics(response) { return response.matches !== undefined; }
 
@@ -77,7 +80,7 @@ define([], function () {
     };
 
     core.responseIsEligible = function(response, topics, responder, world) {
-        return responseCountValid(response) &&
+        return responseCountValid(response, world) &&
             responseNeedsAreMet(response, responder, world) &&
             responseRequiredTopicsAreDefined(response, topics) &&
             this.computeScore(response.matches, topics) > 0;

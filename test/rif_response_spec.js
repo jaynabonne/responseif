@@ -6,7 +6,13 @@ describe("RifResponse", function () {
     var world;
     beforeEach(function () {
         interact = {};
-        world = {};
+        world = {
+            getResponseRuns: function(id) {
+                return 0;
+            },
+            setResponseRuns: function(id, runs) {
+            }
+        };
         responseLib = new RifResponse(world);
     });
 
@@ -19,7 +25,7 @@ describe("RifResponse", function () {
             var responses = [{a: 1}, {b: 2}, {c: 3}];
             var topics = [];
             var candidates = responseLib.selectResponses(responses, topics);
-            expect(candidates).toEqual([{response: {a: 1}, score: 10000}, {response: {b: 2}, score: 10000},{response: {c: 3}, score: 10000}]);
+            expect(candidates).toEqual([{response: {a: 1, run: 0}, score: 10000}, {response: {b: 2, run: 0}, score: 10000},{response: {c: 3, run: 0}, score: 10000}]);
         });
         it("returns the responder in the responses if passed", function () {
             var response = {a: 1};

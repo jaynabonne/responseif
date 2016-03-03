@@ -4,8 +4,39 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     var processor;
     beforeEach(function() {
         interact  = {};
-        world = {};
+        world = {
+            getResponseRuns: function(id) {
+                return 0;
+            },
+            setResponseRuns: jasmine.createSpy('setResponseRuns')
+        };
         processor = new RifResponseProcessor('caller', interact, [], world);
+    });
+    describe('run count management', function() {
+        it('loads the run count if not yet set', function() {
+            world.getResponseRuns = function(id) {
+                return 3;
+            };
+            var response = {id:1};
+            processor.processResponse(response, 'responder');
+            expect(response.run).toBe(4);
+        });
+        it('increments and saves the run count each time it is run', function() {
+            var response = {id:101};
+
+            processor.processResponse(response, 'responder');
+            expect(response.run).toBe(1);
+            expect(world.setResponseRuns).toHaveBeenCalledWith(101, 1);
+
+            processor.processResponse(response, 'responder');
+            expect(response.run).toBe(2);
+            expect(world.setResponseRuns).toHaveBeenCalledWith(101, 2);
+
+            processor.processResponse(response, 'responder');
+            expect(response.run).toBe(3);
+            expect(world.setResponseRuns).toHaveBeenCalledWith(101, 3);
+
+        });
     });
     describe("says", function () {
         beforeEach(function() {
