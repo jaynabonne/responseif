@@ -2,6 +2,7 @@ define(['./expression'], function(RifExpression) {
     "use strict";
     var type = function() {
         this.values = {};
+        this.runs = {};
         this.children = {};
         this.pov = "player";
         this.persistentTopics = {};
@@ -133,6 +134,14 @@ define(['./expression'], function(RifExpression) {
                 currentTopics.splice(i, 1);
             }
         }
+    };
+
+    proto.getResponseRuns = function(id) {
+        return this.runs[id] || 0;
+    };
+
+    proto.setResponseRuns = function(id, runs) {
+        this.runs[id] = runs;
     };
 
     return type;

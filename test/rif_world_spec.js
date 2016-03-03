@@ -202,5 +202,20 @@ describe("RifWorld", function () {
             expect(topics).toEqual(['topic1', 'topic3']);
         });
     });
+    describe('get and set response runs', function() {
+        it('should return 0 for response runs when not set', function() {
+            expect(world.getResponseRuns(314)).toBe(0);
+        });
+        it('should return response runs set for a response', function() {
+            world.setResponseRuns(314, 42);
+            expect(world.getResponseRuns(314)).toBe(42);
+        });
+        it('should return response runs set for multiple responses', function() {
+            world.setResponseRuns(314, 42);
+            world.setResponseRuns(315, 56);
+            expect(world.getResponseRuns(314)).toBe(42);
+            expect(world.getResponseRuns(315)).toBe(56);
+        });
+    });
 });
 });
