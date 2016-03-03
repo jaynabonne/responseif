@@ -8,7 +8,8 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             getResponseRuns: function(id) {
                 return 0;
             },
-            setResponseRuns: jasmine.createSpy('setResponseRuns')
+            setResponseRuns: jasmine.createSpy('setResponseRuns'),
+            addPersistentTopics: jasmine.createSpy('addPersistentTopics')
         };
         processor = new RifResponseProcessor('caller', interact, [], world);
     });
@@ -320,21 +321,19 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("addTopics", function () {
         it("should add the topics to the responder if a target is not specified", function() {
-            interact.addTopics = jasmine.createSpy("suggest");
             var response = {
                 does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } } ] }
             };
             processor.processResponse(response, 'responder');
 
-            expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "responder");
+            expect(world.addPersistentTopics).toHaveBeenCalledWith("responder", [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
         });
         it("should add the topics to the specified target", function() {
-            interact.addTopics = jasmine.createSpy("suggest");
             var response = {
                 does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], to: "aTarget" } }] }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.addTopics).toHaveBeenCalledWith([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "aTarget");
+            expect(world.addPersistentTopics).toHaveBeenCalledWith("aTarget", [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
         });
     });
     describe("resets", function () {
