@@ -1,3 +1,7 @@
+.define
+    string .response .does .says .<value> .sets not FIRST_WORD
+.enddef
+
 .actions UI
     .response
         .does
@@ -7,7 +11,10 @@
 .responses player
     .response Generate
         .does
-            .says {+SENTENCE+}.
+            .says {+BEGIN+} {+SENTENCE+}.
+
+    .response BEGIN
+        .does .sets FIRST_WORD
 
     .response SENTENCE
         .does .says {+NOUN_PHRASE+} {+VERB_PHRASE+}
@@ -15,121 +22,124 @@
     .response NOUN_PHRASE
         .does
             .uses random
-                .response .does .says {+ARTICLE+} {+ADJECTIVE+} {+SIMPLE_NOUN+}
-                .response .does .says {+PROPER_NOUN+}
+                .string {+ARTICLE+} {+ADJECTIVE+} {+SIMPLE_NOUN+}
+                .string {+PROPER_NOUN+}
             .end
 
     .response VERB_PHRASE
         .does
             .uses random
-                .response .does .says {+SIMPLE_VERB+} {+ADVERB+}
-                .response .does .says gives {+NOUN_PHRASE+} to {+NOUN_PHRASE+}
-                .response .does .says takes {+NOUN_PHRASE+} from {+NOUN_PHRASE+}
-                .response .does .says likes {+NOUN_PHRASE+}
-                .response .does .says whispers to {+NOUN_PHRASE+}
-                .response .does .says says "{+SENTENCE+}" to {+NOUN_PHRASE+}
-                .response .does .says writes "{+SENTENCE+}" on {+NOUN_PHRASE+}
+                .string {+SIMPLE_VERB+} {+ADVERB+}
+                .string gives {+NOUN_PHRASE+} to {+NOUN_PHRASE+}
+                .string takes {+NOUN_PHRASE+} from {+NOUN_PHRASE+}
+                .string likes {+NOUN_PHRASE+}
+                .string whispers to {+NOUN_PHRASE+}
+                .string says "{+SENTENCE+}" to {+NOUN_PHRASE+}
+                .string writes "{+SENTENCE+}" on {+NOUN_PHRASE+}
             .end
 
     .response PROPER_NOUN
         .does
             .uses random
-                .response .does .says Anita
-                .response .does .says Todd
-                .response .does .says Chris
-                .response .does .says Jessica
-                .response .does .says Billy
-                .response .does .says Jane
-                .response .does .says Tommy
-                .response .does .says Jack
-                .response .does .says Jill
-                .response .does .says Mary
-                .response .does .says Joey
-                .response .does .says Carla
-                .response .does .says Larry
+                .string Anita
+                .string Todd
+                .string Chris
+                .string Jessica
+                .string Billy
+                .string Jane
+                .string Tommy
+                .string Jack
+                .string Jill
+                .string Mary
+                .string Joey
+                .string Carla
+                .string Larry
             .end
 
     .response SIMPLE_NOUN
         .does
             .uses random
-                .response .does .says cat
-                .response .does .says mouse
-                .response .does .says flower
-                .response .does .says car
-                .response .does .says book
-                .response .does .says house
-                .response .does .says tree
-                .response .does .says mountain
-                .response .does .says dog
-                .response .does .says bicycle
-                .response .does .says table
-                .response .does .says chair
-                .response .does .says street
-                .response .does .says lawn
-                .response .does .says garden
-                .response .does .says lake
-                .response .does .says river
+                .string cat
+                .string mouse
+                .string flower
+                .string car
+                .string book
+                .string house
+                .string tree
+                .string mountain
+                .string dog
+                .string bicycle
+                .string table
+                .string chair
+                .string street
+                .string lawn
+                .string garden
+                .string lake
+                .string river
             .end
 
     .response ARTICLE
         .does
-            .says the
+            .uses first
+                .string The .needs FIRST_WORD
+                .string the
+            .end
 
     .response ADJECTIVE
         .does
             .uses random
-                .response .does .says
-                .response .does .says happy
-                .response .does .says sad
-                .response .does .says peppy
-                .response .does .says lethargic
-                .response .does .says gross
-                .response .does .says lovely
-                .response .does .says green
-                .response .does .says lively
-                .response .does .says weird
-                .response .does .says brown
-                .response .does .says strange
-                .response .does .says complacent
-                .response .does .says benevolent
-                .response .does .says evil
-                .response .does .says diminutive
-                .response .does .says peaceful
+                .string
+                .string happy
+                .string sad
+                .string peppy
+                .string lethargic
+                .string gross
+                .string lovely
+                .string green
+                .string lively
+                .string weird
+                .string brown
+                .string strange
+                .string complacent
+                .string benevolent
+                .string evil
+                .string diminutive
+                .string peaceful
             .end
 
     .response SIMPLE_VERB
         .does
             .uses random
-                .response .does .says laughs
-                .response .does .says cries
-                .response .does .says dances
-                .response .does .says sleeps
-                .response .does .says laughs
-                .response .does .says sings
-                .response .does .says runs
-                .response .does .says watches
-                .response .does .says speaks
-                .response .does .says plays
-                .response .does .says works
-                .response .does .says walks
-                .response .does .says chuckles
-                .response .does .says snickers
+                .string laughs
+                .string cries
+                .string dances
+                .string sleeps
+                .string laughs
+                .string sings
+                .string runs
+                .string watches
+                .string speaks
+                .string plays
+                .string works
+                .string walks
+                .string chuckles
+                .string snickers
             .end
 
     .response ADVERB
         .does
             .uses random
-                .response .does .says
-                .response .does .says quickly
-                .response .does .says quietly
-                .response .does .says loudly
-                .response .does .says sheepishly
-                .response .does .says painfully
-                .response .does .says reproachfully
-                .response .does .says wistfully
-                .response .does .says sadly
-                .response .does .says happily
-                .response .does .says in a frightened way
+                .string
+                .string quickly
+                .string quietly
+                .string loudly
+                .string sheepishly
+                .string painfully
+                .string reproachfully
+                .string wistfully
+                .string sadly
+                .string happily
+                .string in a frightened way
             .end
 .end
 
