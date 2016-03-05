@@ -36,6 +36,7 @@
                 .string whispers to {+NOUN_PHRASE+}
                 .string says "{+SENTENCE+}" to {+NOUN_PHRASE+}
                 .string writes "{+SENTENCE+}" on {+NOUN_PHRASE+}
+                .string helps {+NOUN_PHRASE+}
             .end
 
     .response PROPER_NOUN
@@ -88,7 +89,6 @@
     .response ADJECTIVE
         .does
             .uses random
-                .string
                 .string happy
                 .string sad
                 .string peppy
