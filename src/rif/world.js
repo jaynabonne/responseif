@@ -123,6 +123,7 @@ define(['./expression'], function(RifExpression) {
     };
 
     proto.addPersistentTopics = function(actor, topics) {
+        this.removePersistentTopics(actor, topics);
         var currentTopics = this.getPersistentTopics(actor);
         this.persistentTopics[actor] = currentTopics.concat(topics);
     };

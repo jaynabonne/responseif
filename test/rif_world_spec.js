@@ -201,6 +201,20 @@ describe("RifWorld", function () {
             var topics = world.getPersistentTopics('actor');
             expect(topics).toEqual([{keyword: 'topic1'}, {keyword: 'topic3'}]);
         });
+        it('should not duplicate existing topics', function() {
+            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
+            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
+            var topics = world.getPersistentTopics('actor');
+            expect(topics).toEqual([{keyword: 'atopic'}]);
+
+        });
+        it('should update weights for existing topics', function() {
+            world.addPersistentTopics('actor', [{keyword: 'atopic', weight: 20}]);
+            world.addPersistentTopics('actor', [{keyword: 'atopic', weight: 40}]);
+            var topics = world.getPersistentTopics('actor');
+            expect(topics).toEqual([{keyword: 'atopic', weight: 40}]);
+
+        });
     });
     describe('get and set response runs', function() {
         it('should return 0 for response runs when not set', function() {
