@@ -128,9 +128,10 @@ define(['./expression'], function(RifExpression) {
     };
 
     proto.removePersistentTopics = function(actor, topics) {
+        var keywords = topics.map(function(value) { return value.keyword; });
         var currentTopics = this.getPersistentTopics('actor');
         for(var i = currentTopics.length - 1; i >= 0; i--) {
-            if(topics.indexOf(currentTopics[i]) != -1) {
+            if(keywords.indexOf(currentTopics[i].keyword) != -1) {
                 currentTopics.splice(i, 1);
             }
         }

@@ -185,21 +185,21 @@ describe("RifWorld", function () {
             expect(topics).toEqual([]);
         });
         it('can add and then get a topic', function() {
-            world.addPersistentTopics('actor', ['atopic']);
+            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
             var topics = world.getPersistentTopics('actor');
-            expect(topics).toEqual(['atopic']);
+            expect(topics).toEqual([{keyword: 'atopic'}]);
         });
         it('can add sequential topic', function() {
-            world.addPersistentTopics('actor', ['atopic']);
-            world.addPersistentTopics('actor', ['btopic']);
+            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
+            world.addPersistentTopics('actor', [{keyword: 'btopic'}]);
             var topics = world.getPersistentTopics('actor');
-            expect(topics).toEqual(['atopic', 'btopic']);
+            expect(topics).toEqual([{keyword: 'atopic'}, {keyword: 'btopic'}]);
         });
         it('can remove topic', function() {
-            world.addPersistentTopics('actor', ['topic1', 'topic2', 'topic3', 'topic4']);
-            world.removePersistentTopics('actor', ['topic2', 'topic4']);
+            world.addPersistentTopics('actor', [{keyword: 'topic1'}, {keyword: 'topic2'}, {keyword: 'topic3'}, {keyword: 'topic4'}]);
+            world.removePersistentTopics('actor', [{keyword: 'topic2'}, {keyword: 'topic4'}]);
             var topics = world.getPersistentTopics('actor');
-            expect(topics).toEqual(['topic1', 'topic3']);
+            expect(topics).toEqual([{keyword: 'topic1'}, {keyword: 'topic3'}]);
         });
     });
     describe('get and set response runs', function() {
