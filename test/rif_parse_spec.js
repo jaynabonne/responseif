@@ -371,7 +371,7 @@ describe("rifParse", function () {
                 responses("anObject"),
                     response(),
                         does(),
-                            token_pair("suggests","topic1 topic2 topic3"),
+                            token_pair("suggests","topic1=30 topic2 topic3=70"),
                 end()
             ]
         );
@@ -381,7 +381,13 @@ describe("rifParse", function () {
                     {
                         id : 0,
                         does: {
-                            common: [ { suggests: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}] } ]
+                            common: [
+                                { suggests: { keywords: [
+                                    { keyword: "topic1", weight: 30 },
+                                    { keyword: "topic2" },
+                                    { keyword: "topic3", weight: 70 }
+                                ] } }
+                            ]
                         }
                     }
                 ]

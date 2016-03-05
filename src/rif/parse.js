@@ -104,7 +104,12 @@ define([], function () {
 
     Parser.prototype.parse_does_calls = Parser.prototype.addDoesTopicList;
     Parser.prototype.parse_does_invokes = Parser.prototype.addDoesString;
-    Parser.prototype.parse_does_suggests = Parser.prototype.addDoesTopicList;
+    Parser.prototype.parse_does_suggests = function(actions, entry) {
+        var action = {suggests: {keywords: parseWeightedTopics(entry.value) }};
+        this.index++;
+        this.parseEntries(action.adds, "parse_suggests_");
+        actions.push(action );
+    };
     Parser.prototype.parse_does_adds = function(actions, entry) {
         var action = {adds: {keywords: parseWeightedTopics(entry.value) }};
         this.index++;
