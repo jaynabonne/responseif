@@ -254,6 +254,10 @@ define([], function() {
                 }
             } else if (ch === '"') {
                 in_string = true;
+                if (part !== '') {
+                    parts.push(part);
+                    part = '';
+                }
             } else if (part !== '' && (isSpace(ch) != isSpace(part[0]) || isIdentifier(ch) != isIdentifier(part[0]))) {
                 parts.push(part);
                 part = '';
@@ -285,6 +289,7 @@ define([], function() {
 
     return {
         compile: function(expression, prefix) {
+            //console.log("compile", expression);
             var context = {
                 expressions: [],
                 operators: [],
@@ -296,6 +301,7 @@ define([], function() {
             return context.expressions;
         },
         evaluate: function(compiled_expression, parameters, prefix) {
+            //console.log("evaluate", compiled_expression);
             var stack = [];
             prefix = prefix || '';
             $.each(compiled_expression, function(index, value) {

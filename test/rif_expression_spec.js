@@ -196,11 +196,15 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("a spaced variable");
         expect(RifExpression.evaluate(expression, {'a spaced variable': 1}, "responder")).toBe(1);
         expect(RifExpression.evaluate(expression, {'a spaced variable': 0}, "responder")).toBe(0);
-    })
+    });
     it('should support a responder with a space in the name', function() {
         var expression = RifExpression.compile(":variable");
         expect(RifExpression.evaluate(expression, {'a spaced responder:variable': 1}, "a spaced responder")).toBe(1);
         expect(RifExpression.evaluate(expression, {'a spaced responder:variable': 0}, "a spaced responder")).toBe(0);
-    })
+    });
+    it('should support equality check for a string', function() {
+        var expression = RifExpression.compile('variable="foo"');
+        expect(RifExpression.evaluate(expression, {variable: 'foo'})).toBe(1);
+    });
 });
 });
