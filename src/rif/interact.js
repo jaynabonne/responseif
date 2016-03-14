@@ -199,8 +199,8 @@ define([], function() {
             });
         },
         invoke: function(body) {
-            var f = new Function(body);
-            f();
+            var f = new Function("world", "interact", body);
+            f(this.world, this);
         },
         hideSections: function () {
             if (this.sectionsToHide.length != 0) {

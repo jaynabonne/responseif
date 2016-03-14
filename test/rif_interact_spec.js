@@ -212,10 +212,13 @@ describe("RifInteract", function () {
     });
     describe("invoke", function () {
         it("should invoke the function", function() {
-            global_variable = 0;
-            interact.invoke("global_variable=10");
-            expect(global_variable).toBe(10);
-            delete global_variable;
+            global_world = 0;
+            global_interact = 0;
+            interact.invoke("global_world = world; global_interact = interact;");
+            expect(global_world).toBe(world);
+            expect(global_interact).toBe(interact);
+            delete global_world;
+            delete global_interact;
         });
     });
     describe("sendCommand", function() {
