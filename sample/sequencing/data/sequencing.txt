@@ -1,0 +1,48 @@
+.responses UI
+    .response START
+        .does
+            .says
+                Strength: <span id="strength-line"></span><br>
+                Harry can count! He says,"<span id="sequence-value"></span>."<br>
+                <span id="description"></span>
+
+    .response less-strength
+        .needs strength>4
+        .does
+            .sets strength=strength-1
+
+    .response more-strength
+        .needs strength<10
+        .does
+            .sets strength=strength+1
+
+    .response one    .does  .sets value .to two
+    .response two    .does  .sets value .to three
+    .response three  .does  .sets value .to one
+
+    .response description
+        .does
+            .uses first
+                .response
+                    .needs value="one"
+                    .does .says "One is the loneliest number that you'll ever do."
+                .response
+                    .needs value="two"
+                    .does .says "Two can be as bad as one. It's the loneliest number since the number one."
+                .response
+                    .does .says (Yet another song performed by Three Dog Night.)
+            .end
+.end
+
+.actions UI
+    .response
+        .does
+            .says {!<b>-</b>|less-strength!} {=strength=} {!<b>+</b>|more-strength!} ({=10-strength=}) .into #strength-line
+            .says {!{=value=}!} .into #sequence-value
+            .says {+description+} .into #description
+.end
+
+.set strength=4
+.set value .to one
+
+.move UI .to everywhere
