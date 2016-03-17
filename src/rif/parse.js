@@ -195,7 +195,7 @@ define([], function () {
             if (fields.length === 1) {
                 matches.push({keyword: fields[0]});
             } else {
-                matches.push({keyword: fields[0], weight: parseInt(fields[1])});
+                matches.push({keyword: fields[0], weight: parseFloat(fields[1])/100.0});
             }
         });
         return matches;

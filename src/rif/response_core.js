@@ -40,7 +40,7 @@ define([], function () {
     }
 
     function getTopicWeight(topic) {
-        return topic.weight || 100;
+        return topic.weight || 1;
     }
 
     function computeTopicScore(topic, topics) {
@@ -76,7 +76,7 @@ define([], function () {
     }
 
     core.computeScore = function(response_topics, topics) {
-        return (!response_topics || response_topics.length === 0) ? 10000 : doComputeScore(response_topics, topics);
+        return (!response_topics || response_topics.length === 0) ? 1 : doComputeScore(response_topics, topics);
     };
 
     core.responseIsEligible = function(response, topics, responder, world) {

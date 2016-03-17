@@ -149,11 +149,11 @@ describe("rifParse", function () {
             [
                 responses("anObject"),
                     response(),
-                        token_pair("matches","topicA=50 topicB topicC=75"),
+                        token_pair("matches","topicA=50.5 topicB topicC=75"),
                 end()
             ]
         );
-        expect(rif.responses).toEqual( { anObject: [{id : 0, matches: [{keyword: "topicA", weight: 50}, {keyword: "topicB"}, {keyword: "topicC", weight: 75}] }] });
+        expect(rif.responses).toEqual( { anObject: [{id : 0, matches: [{keyword: "topicA", weight: 0.505}, {keyword: "topicB"}, {keyword: "topicC", weight: 0.75}] }] });
     });
     it("should parse response needs", function () {
         var rif = rifParse(
@@ -383,9 +383,9 @@ describe("rifParse", function () {
                         does: {
                             common: [
                                 { suggests: { keywords: [
-                                    { keyword: "topic1", weight: 30 },
+                                    { keyword: "topic1", weight: 0.3 },
                                     { keyword: "topic2" },
-                                    { keyword: "topic3", weight: 70 }
+                                    { keyword: "topic3", weight: 0.7 }
                                 ] } }
                             ]
                         }
@@ -417,7 +417,7 @@ describe("rifParse", function () {
                             common: [
                                 { adds: {keywords: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}]} },
                                 { adds: {keywords: [{keyword: "topic4"}, {keyword: "topic5"}], to: "someone"} },
-                                { adds: {keywords: [{keyword: "topic6", weight: 50}, {keyword: "topic7", weight: 90}]} }
+                                { adds: {keywords: [{keyword: "topic6", weight: 0.5}, {keyword: "topic7", weight: 0.9}]} }
                             ]
                         }
                     }

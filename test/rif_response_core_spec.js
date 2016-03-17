@@ -1,15 +1,15 @@
 define(['rif/response_core'], function(rifResponseCore) {
     describe("computeScore", function () {
-        it("returns 10000 if response topics is undefined", function () {
+        it("returns 1 if response topics is undefined", function () {
             var topics = [],
                 score = rifResponseCore.computeScore(undefined, topics);
-            expect(score).toEqual(10000);
+            expect(score).toEqual(1);
         });
-        it("returns 10000 if response topics is empty", function () {
+        it("returns 1 if response topics is empty", function () {
             var response_topics = [],
                 topics = [],
                 score = rifResponseCore.computeScore(response_topics, topics);
-            expect(score).toEqual(10000);
+            expect(score).toEqual(1);
         });
         it("returns 0 if response topic doesn't match any topics", function () {
             var response_topics = [{keyword:"atopic"}],
@@ -17,23 +17,23 @@ define(['rif/response_core'], function(rifResponseCore) {
                 score = rifResponseCore.computeScore(response_topics, topics);
             expect(score).toEqual(0);
         });
-        it("returns 10000 if response topic matches any topic", function () {
+        it("returns 1 if response topic matches any topic", function () {
             var response_topics = [{keyword:"atopic"}],
                 topics = [{keyword:"atopic"}],
                 score = rifResponseCore.computeScore(response_topics, topics);
-            expect(score).toEqual(10000);
+            expect(score).toEqual(1);
         });
         it("returns higher score for multiple matching topics", function() {
             var response_topics = [{keyword:"atopic"}, {keyword:"btopic"}],
                 topics = [{keyword:"atopic"}, {keyword:"btopic"}, {keyword:"ctopic"}],
                 score = rifResponseCore.computeScore(response_topics, topics);
-            expect(score).toEqual(20000);
+            expect(score).toEqual(2);
         });
         it("returns the right score for required topics", function () {
             var response_topics = [{keyword:"*atopic"}, {keyword:"btopic"}],
                 topics = [{keyword:"atopic"}, {keyword:"btopic"}],
                 score = rifResponseCore.computeScore(response_topics, topics);
-            expect(score).toEqual(20000);
+            expect(score).toEqual(2);
         });
     });
 
