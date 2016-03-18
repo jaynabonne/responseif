@@ -176,7 +176,7 @@ define([], function () {
 
     Parser.prototype.parse_does_resets = function(actions, entry) {
         this.index++;
-        var action = { resets: {}}
+        var action = { resets: {} };
         actions.push(action);
     };
 
@@ -186,6 +186,11 @@ define([], function () {
     Parser.prototype.parse_response_orders = Parser.prototype.addInt;
     Parser.prototype.parse_response_needs = Parser.prototype.addMultiString;
     Parser.prototype.parse_response_forcesprompt = Parser.prototype.setFlag;
+
+    Parser.prototype.parse_response_weights = function(target, entry) {
+        this.index++;
+        target[entry.token] = entry.value;
+    };
 
     function parseWeightedTopics(matches_value) {
         var values = matches_value.split(" ");
