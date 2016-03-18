@@ -85,7 +85,7 @@ define([], function () {
         return responseCountValid(response, world) &&
             responseNeedsAreMet(response, responder, world) &&
             responseRequiredTopicsAreDefined(response, topics) &&
-            this.computeScore(response, topics) > 0;
+            this.computeScore(response, topics, responder, world) > 0;
     };
 
     return core;
