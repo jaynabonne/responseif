@@ -77,7 +77,8 @@ define([], function () {
 
     core.computeScore = function(response, topics) {
         var response_topics = response.matches;
-        return (!response_topics || response_topics.length === 0) ? 1 : doComputeScore(response_topics, topics);
+        var score = (!response_topics || response_topics.length === 0) ? 1 : doComputeScore(response_topics, topics);
+        return response.weights === undefined ? score : response.weights;
     };
 
     core.responseIsEligible = function(response, topics, responder, world) {
