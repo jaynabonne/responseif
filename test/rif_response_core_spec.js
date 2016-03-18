@@ -1,48 +1,57 @@
 define(['rif/response_core'], function(rifResponseCore) {
     describe("computeScore", function () {
+        var world;
+        beforeEach(function() {
+            world =  {
+                getState: jasmine.createSpy('getState').andCallFake(function(id, responder) {
+                    return parseFloat(id);
+                })
+            };
+        });
         it("returns 1 if response topics is undefined", function () {
-            expect(rifResponseCore.computeScore({}, [])).toEqual(1);
+            expect(rifResponseCore.computeScore({}, [], 'responder', world)).toEqual(1);
         });
         it("returns 1 if response topics is empty", function () {
             var response_topics = [],
                 topics = [],
-                score = rifResponseCore.computeScore({matches: response_topics}, topics);
+                response = {matches: response_topics},
+                score = rifResponseCore.computeScore(response, topics, 'responder', world);
             expect(score).toEqual(1);
         });
         it("returns 0 if response topic doesn't match any topics", function () {
             var response_topics = [{keyword:"atopic"}],
                 topics = [{keyword:"btopic"}],
-                score = rifResponseCore.computeScore({matches: response_topics}, topics);
+                score = rifResponseCore.computeScore({matches: response_topics}, 'responder', world);
             expect(score).toEqual(0);
         });
         it("returns 1 if response topic matches any topic", function () {
             var response_topics = [{keyword:"atopic"}],
                 topics = [{keyword:"atopic"}],
-                score = rifResponseCore.computeScore({matches: response_topics}, topics);
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(1);
         });
         it("returns higher score for multiple matching topics", function() {
             var response_topics = [{keyword:"atopic"}, {keyword:"btopic"}],
                 topics = [{keyword:"atopic"}, {keyword:"btopic"}, {keyword:"ctopic"}],
-                score = rifResponseCore.computeScore({matches: response_topics}, topics);
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(2);
         });
         it("returns the right score for required topics", function () {
             var response_topics = [{keyword:"*atopic"}, {keyword:"btopic"}],
                 topics = [{keyword:"atopic"}, {keyword:"btopic"}],
-                score = rifResponseCore.computeScore({matches: response_topics}, topics);
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(2);
         });
         it("computes the score based on explicit weights", function () {
             var response_topics = [{keyword:"atopic", weight: 0.2}],
                 topics = [{keyword:"atopic", weight: 0.9}],
-                score = rifResponseCore.computeScore({matches: response_topics}, topics);
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(0.2*0.9);
         });
         it("scales the score by the response weight", function () {
             var response_topics = [{keyword:"atopic"}],
                 topics = [{keyword:"atopic"}],
-                score = rifResponseCore.computeScore({matches: response_topics, weights: 0.6}, topics);
+                score = rifResponseCore.computeScore({matches: response_topics, weights: "0.6"}, topics, 'responder', world);
             expect(score).toEqual(0.6);
         });
     });

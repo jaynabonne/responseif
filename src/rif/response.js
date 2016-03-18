@@ -7,8 +7,8 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     var proto = type.prototype;
 
-    function addIfHasScore(response, topics, candidates, responder) {
-        var score = RifResponseCore.computeScore(response, topics);
+    function addIfHasScore(response, topics, candidates, responder, world) {
+        var score = RifResponseCore.computeScore(response, topics, responder, world);
         if (score > 0) {
             candidates.push({response: response, score: score, responder: responder});
         }
@@ -19,7 +19,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
             if (response.selects !== undefined) {
                 this.addResponses(response.selects, topics, candidates, responder);
             } else {
-                addIfHasScore(response, topics, candidates, responder);
+                addIfHasScore(response, topics, candidates, responder, this.world);
             }
         }
     };
