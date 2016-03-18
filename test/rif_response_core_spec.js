@@ -66,7 +66,10 @@ define(['rif/response_core'], function(rifResponseCore) {
                 },
                 setResponseRuns : function(id, runs) {
                     this.runs[id] = runs;
-                }
+                },
+                getState: jasmine.createSpy('getState').andCallFake(function(id, responder) {
+                    return parseFloat(id);
+                })
             };
         });
 
@@ -120,6 +123,10 @@ define(['rif/response_core'], function(rifResponseCore) {
         it("passes the responder as state prefix if passed (negative)", function () {
             world.getState = function(id, responder) { return id === "!somestate" && responder === "aresponder"; };
             var response = { needs: ["!somestate"] };
+            expect(rifResponseCore.responseIsEligible(response, [], "aresponder", world)).toEqual(true);
+        });
+        it('properly works with response weights', function() {
+            var response = { weights: '0.5' };
             expect(rifResponseCore.responseIsEligible(response, [], "aresponder", world)).toEqual(true);
         });
     });
