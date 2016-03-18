@@ -75,7 +75,8 @@ define([], function () {
         return true;
     }
 
-    core.computeScore = function(response_topics, topics) {
+    core.computeScore = function(response, topics) {
+        var response_topics = response.matches;
         return (!response_topics || response_topics.length === 0) ? 1 : doComputeScore(response_topics, topics);
     };
 
@@ -83,7 +84,7 @@ define([], function () {
         return responseCountValid(response, world) &&
             responseNeedsAreMet(response, responder, world) &&
             responseRequiredTopicsAreDefined(response, topics) &&
-            this.computeScore(response.matches, topics) > 0;
+            this.computeScore(response, topics) > 0;
     };
 
     return core;

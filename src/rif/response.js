@@ -8,7 +8,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
     var proto = type.prototype;
 
     function addIfHasScore(response, topics, candidates, responder) {
-        var score = RifResponseCore.computeScore(response.matches, topics);
+        var score = RifResponseCore.computeScore(response, topics);
         if (score > 0) {
             candidates.push({response: response, score: score, responder: responder});
         }
