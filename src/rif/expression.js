@@ -1,4 +1,4 @@
-define([], function() {
+define(['rif/fuzzy'], function(RifFuzzy) {
     "use strict";
     function variable(expression) {
         return function (state, stack, prefix) {
@@ -37,22 +37,14 @@ define([], function() {
             precedence: 1,
             unary: true,
             execute: function (state, stack) {
-                var value = stack.pop();
-                if (value === undefined) {
-                    value = 0.0;
-                }
-                stack.push(1.0-value);
+                stack.push(RifFuzzy.not(stack.pop()));
             }
         },
         'unary un': {
             precedence: 1,
             unary: true,
             execute: function (state, stack) {
-                var value = stack.pop();
-                if (value === undefined) {
-                    value = 0.0;
-                }
-                stack.push(0.0-value);
+                stack.push(RifFuzzy.un(stack.pop()));
             }
         },
         'unary -': {
@@ -92,7 +84,7 @@ define([], function() {
             execute: function (state, stack) {
                 var second = stack.pop();
                 var first = stack.pop();
-                stack.push(first > second ? first : 0.0);
+                stack.push(RifFuzzy.mod(first, second));
             }
         },
         'rem': {
@@ -100,7 +92,7 @@ define([], function() {
             execute: function (state, stack) {
                 var second = stack.pop();
                 var first = stack.pop();
-                stack.push(first < second ? first : 1.0);
+                stack.push(RifFuzzy.rem(first, second));
             }
         },
         '+': {
@@ -119,7 +111,7 @@ define([], function() {
         'difference': {
             precedence: 4,
             execute: function (state, stack) {
-                stack.push(Math.abs(stack.pop()-stack.pop()));
+                stack.push(RifFuzzy.difference(stack.pop(), stack.pop()));
             }
         },
         '>': {
@@ -153,7 +145,7 @@ define([], function() {
         'equals': {
             precedence: 7,
             execute: function (state, stack) {
-                stack.push(1.0 - Math.abs(stack.pop()-stack.pop()));
+                stack.push(RifFuzzy.equals(stack.pop(), stack.pop()));
             }
         },
         '=': {
@@ -180,21 +172,19 @@ define([], function() {
         'and': {
             precedence: 11,
             execute: function (state, stack) {
-                stack.push(Math.min(stack.pop(), stack.pop()));
+                stack.push(RifFuzzy.and(stack.pop(), stack.pop()));
             }
         },
         'or': {
             precedence: 12,
             execute: function (state, stack) {
-                stack.push(Math.max(stack.pop(), stack.pop()));
+                stack.push(RifFuzzy.or(stack.pop(), stack.pop()));
             }
         },
         'xor': {
             precedence: 12,
             execute: function (state, stack) {
-                var a = stack.pop();
-                var b = stack.pop();
-                stack.push(Math.max(Math.min(1.0-a, b), Math.min(a,1.0-b)));
+                stack.push(RifFuzzy.xor(stack.pop(), stack.pop()));
             }
         }
     };
