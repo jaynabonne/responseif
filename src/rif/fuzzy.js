@@ -29,6 +29,12 @@ define([], function() {
         },
         difference: function(a, b) {
             return Math.min(Math.abs(a-b), 1.0);
+        },
+        more: function(value, increment) {
+            return value + (1 - value)*increment/2;
+        },
+        less: function(value, increment) {
+            return value + (-1 - value)*increment/2;
         }
     }
 });

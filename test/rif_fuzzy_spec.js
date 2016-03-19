@@ -119,6 +119,22 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                 expect(RifFuzzy.difference(0.6, -0.8)).toBe(1.0);
             });
         });
+        describe('more', function() {
+            it('should return a larger value than the parameter', function() {
+                expect(RifFuzzy.more(0.3, 0.5)).toBeGreaterThan(0.3);
+            });
+            it('should not return a value larger than 1', function() {
+                expect(RifFuzzy.more(1, 0.5)).toBe(1);
+            });
+        });
+        describe('less', function() {
+            it('should return a smaller value than the parameter', function() {
+                expect(RifFuzzy.less(0.3, 0.5)).toBeLessThan(0.3);
+            });
+            it('should not return a value smaller than -1', function() {
+                expect(RifFuzzy.less(-1, 0.5)).toBe(-1);
+            });
+        });
     });
 });
 
