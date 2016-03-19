@@ -13,10 +13,16 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile("314");
         expect(RifExpression.evaluate(expression, {})).toBe(314);
     });
-    it('should compile a logical negation', function() {
+    it('should compile a logical negation (not)', function() {
         var expression = RifExpression.compile("not variable");
         expect(RifExpression.evaluate(expression, {variable: 1})).toBe(0);
         expect(RifExpression.evaluate(expression, {variable: 0})).toBe(1);
+    });
+    it('should compile an "un" expression', function() {
+        var expression = RifExpression.compile("un variable");
+        expect(RifExpression.evaluate(expression, {variable: 1})).toBe(-1);
+        expect(RifExpression.evaluate(expression, {variable: 0})).toBe(0);
+        expect(RifExpression.evaluate(expression, {variable: -1})).toBe(1);
     });
     it('should compile a logical negation with a constant', function() {
         var expression = RifExpression.compile("not 1");

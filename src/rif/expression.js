@@ -44,6 +44,17 @@ define([], function() {
                 stack.push(1.0-value);
             }
         },
+        'unary un': {
+            precedence: 1,
+            unary: true,
+            execute: function (state, stack) {
+                var value = stack.pop();
+                if (value === undefined) {
+                    value = 0.0;
+                }
+                stack.push(0.0-value);
+            }
+        },
         'unary -': {
             precedence: 2,
             unary: true,
