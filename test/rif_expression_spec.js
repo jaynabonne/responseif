@@ -24,6 +24,16 @@ describe('RifExpression', function() {
         expect(RifExpression.evaluate(expression, {variable: 0})).toBe(0);
         expect(RifExpression.evaluate(expression, {variable: -1})).toBe(1);
     });
+    it('should compile a "more" expression)', function() {
+        var expression = RifExpression.compile("more variable");
+        expect(RifExpression.evaluate(expression, {variable: 0.4})).toBeGreaterThan(0.4);
+        expect(RifExpression.evaluate(expression, {variable: -0.4})).toBeGreaterThan(-0.4);
+    });
+    it('should compile a "less" expression)', function() {
+        var expression = RifExpression.compile("less variable");
+        expect(RifExpression.evaluate(expression, {variable: 0.4})).toBeLessThan(0.4);
+        expect(RifExpression.evaluate(expression, {variable: -0.4})).toBeLessThan(-0.4);
+    });
     it('should compile a logical negation with a constant', function() {
         var expression = RifExpression.compile("not 1");
         expect(RifExpression.evaluate(expression, {})).toBe(0);
