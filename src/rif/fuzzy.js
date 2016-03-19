@@ -2,6 +2,10 @@ define([], function() {
     function defineValue(a) {
         return a || 0.0;
     }
+    function stepToward(value, target, increment) {
+        increment = increment || 0.6;
+        return value + (target - value)*increment/2;
+    }
     return {
         not: function(a) {
             return Math.min(1.0 - defineValue(a), 1.0);
@@ -31,10 +35,10 @@ define([], function() {
             return Math.min(Math.abs(a-b), 1.0);
         },
         more: function(value, increment) {
-            return value + (1 - value)*increment/2;
+            return stepToward(value, 1, increment);
         },
         less: function(value, increment) {
-            return value + (-1 - value)*increment/2;
+            return stepToward(value, -1, increment);
         }
     }
 });

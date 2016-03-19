@@ -126,6 +126,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
             it('should not return a value larger than 1', function() {
                 expect(RifFuzzy.more(1, 0.5)).toBe(1);
             });
+            it('should default if no increment is passed', function() {
+                expect(RifFuzzy.more(0)).toBe(0.3);
+            });
         });
         describe('less', function() {
             it('should return a smaller value than the parameter', function() {
@@ -133,6 +136,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
             });
             it('should not return a value smaller than -1', function() {
                 expect(RifFuzzy.less(-1, 0.5)).toBe(-1);
+            });
+            it('should default if no increment is passed', function() {
+                expect(RifFuzzy.less(0)).toBe(-0.3);
             });
         });
     });

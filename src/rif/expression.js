@@ -1,6 +1,5 @@
 define(['rif/fuzzy'], function(RifFuzzy) {
     "use strict";
-    var more_or_less_increment = 0.6;
 
     function variable(expression) {
         return function (state, stack, prefix) {
@@ -53,14 +52,14 @@ define(['rif/fuzzy'], function(RifFuzzy) {
             precedence: 1,
             unary: true,
             execute: function (state, stack) {
-                stack.push(RifFuzzy.more(stack.pop(), more_or_less_increment));
+                stack.push(RifFuzzy.more(stack.pop()));
             }
         },
         'unary less': {
             precedence: 1,
             unary: true,
             execute: function (state, stack) {
-                stack.push(RifFuzzy.less(stack.pop(), more_or_less_increment));
+                stack.push(RifFuzzy.less(stack.pop()));
             }
         },
         'unary -': {
