@@ -29,17 +29,17 @@ describe("RifWorld", function () {
         beforeEach(function () {
             world.setValue = jasmine.createSpy("setValue");
         });
-        it("should invoke the setValue with true for a bare id", function() {
+        it("should invoke the setValue with 1 for a bare id", function() {
             world.setState({expression: "somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", true);
+            expect(world.setValue).toHaveBeenCalledWith("somestate", 1.0);
             world.setState({expression: ":somestate"}, 'responder');
-            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", true);
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 1.0);
         });
-        it("should invoke setValue with false for a negated id", function() {
+        it("should invoke setValue with 0 for a negated id", function() {
             world.setState({expression: "not somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", false);
+            expect(world.setValue).toHaveBeenCalledWith("somestate", 0.0);
             world.setState({expression: "not :somestate"}, 'responder');
-            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", false);
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.0);
         });
         it("should set an explicit value", function() {
             world.setState({expression: "somestate=678"});
@@ -57,9 +57,9 @@ describe("RifWorld", function () {
                 {expression:"astring", to:"not visited"}
             ]};
             world.addRif(rif);
-            expect(world.getValue("somestate")).toBe(true);
+            expect(world.getValue("somestate")).toBe(1);
             expect(world.getValue("somevar")).toBe(314);
-            expect(world.getValue("visited")).toBe(false);
+            expect(world.getValue("visited")).toBe(0);
             expect(world.getValue("astring")).toBe("not visited");
         });
         it("set parents of objects in the 'moves' array", function() {

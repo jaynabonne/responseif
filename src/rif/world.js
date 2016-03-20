@@ -25,6 +25,20 @@ define(['./expression'], function(RifExpression) {
         }
         return responder + expression;
     }
+    var set_matchers = [
+        {
+            regex: /^not\s+(.+)$/,
+            handler: function(world, matches, responder) {
+                world.setValue(getTarget(matches[1], responder), 0.0);
+            }
+        },
+        {
+            regex: /^(.+)$/,
+            handler: function(world, matches, responder) {
+                world.setValue(getTarget(matches[1], responder), 1.0);
+            }
+        }
+    ];
     proto.setState = function(state, responder) {
         var expression = state.expression;
         if (state.to !== undefined) {
@@ -35,15 +49,21 @@ define(['./expression'], function(RifExpression) {
                 var value = expression.substring(index + 1);
                 var variable = expression.substring(0, index);
                 this.setValue(getTarget(variable, responder), this.getState(value, responder));
-            } else if (expression.slice(0, 4) === "not ") {
-                this.setValue(getTarget(expression.substr(4), responder), false);
             } else {
-                this.setValue(getTarget(expression, responder), true);
+                var self = this;
+                $.each(set_matchers, function(index, matcher) {
+                    var matches = matcher.regex.exec(expression);
+                    if (matches) {
+                        matcher.handler(self, matches, responder);
+                        return false;
+                    }
+                })
             }
         }
     };
 
     proto.addRif = function(rif) {
+        this.rif = rif;
         var self = this;
         if (rif.sets) {
             $.each(rif.sets, function(index, value) {
