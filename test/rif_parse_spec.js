@@ -841,6 +841,29 @@ describe("rifParse", function () {
         });
     });
 
+    it("should parse adjusts", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("adjusts", "variable"),
+                            token_pair("toward", "target"),
+                            token_pair("stepping", "increment"),
+            ]
+        );
+        expect(rif.responses.anObject[0]).toEqual({
+            id: 0,
+            does: {
+                common: [
+                    {
+                        adjusts: { variable: 'variable', toward: 'target', stepping: 'increment'}
+                    }
+                ]
+            }
+        });
+    });
+
     it("should parse weights", function () {
         var rif = rifParse(
             [

@@ -135,7 +135,7 @@ define([], function () {
     Parser.prototype.parse_transition_lasting = function(transition, entry) {
         transition.lasting = parseInt(entry.value);
         this.index++;
-    }
+    };
     Parser.prototype.parse_does_uses = function(actions, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
@@ -163,7 +163,7 @@ define([], function () {
 
     Parser.prototype.parse_does_moves = function(actions, entry) {
         this.index++;
-        var action = { moves: {}}
+        var action = { moves: {}};
         action.moves.target = entry.value;
         this.parseMoveAttributes(action.moves);
         actions.push(action);
@@ -179,6 +179,16 @@ define([], function () {
         var action = { resets: {} };
         actions.push(action);
     };
+
+    Parser.prototype.parse_does_adjusts = function(actions, entry) {
+        this.index++;
+        var action = { adjusts: { variable: entry.value } };
+        this.parseEntries(action.adjusts, "parse_adjusts_");
+        actions.push(action );
+    };
+
+    Parser.prototype.parse_adjusts_toward = Parser.prototype.addString;
+    Parser.prototype.parse_adjusts_stepping = Parser.prototype.addString;
 
     Parser.prototype.parse_response_prompts = Parser.prototype.addString;
     Parser.prototype.parse_response_is = Parser.prototype.addString;
