@@ -2,11 +2,8 @@ define([], function() {
     function defineValue(a) {
         return a || 0.0;
     }
-    function stepToward(value, target, increment) {
-        increment = increment || 0.6;
-        return value + (target - value)*increment/2;
-    }
-    return {
+
+    var fuzzy = {
         not: function(a) {
             return Math.min(1.0 - defineValue(a), 1.0);
         },
@@ -34,11 +31,21 @@ define([], function() {
         difference: function(a, b) {
             return Math.min(Math.abs(a-b), 1.0);
         },
+        adjust: function (value, target, increment) {
+            value = defineValue(value);
+            increment = increment || 0.6;
+            var new_value = value + (target - value)*increment/2;
+            if (Math.abs(target-new_value) < 0.005) {
+                new_value = target;
+            }
+            return new_value;
+        },
         more: function(value, increment) {
-            return stepToward(defineValue(value), 1, increment);
+            return fuzzy.adjust(value, 1, increment);
         },
         less: function(value, increment) {
-            return stepToward(defineValue(value), -1, increment);
+            return fuzzy.adjust(value, -1, increment);
         }
-    }
+    };
+    return fuzzy;
 });

@@ -119,6 +119,20 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                 expect(RifFuzzy.difference(0.6, -0.8)).toBe(1.0);
             });
         });
+        describe('adjust', function() {
+            it('should return a value closer to the target value than the parameter', function() {
+                expect(RifFuzzy.adjust(0.3, 1, 0.5)).toBeGreaterThan(0.3);
+            });
+            it('should not adjust beyond the target', function() {
+                expect(RifFuzzy.adjust(1, 1, 0.5)).toBe(1);
+            });
+            it('should treat an undefined value as 0', function() {
+                expect(RifFuzzy.adjust(undefined, 1, 0.5)).toBe(0.25);
+            });
+            it('should clamp to the target value when arbitrarily close', function() {
+                expect(RifFuzzy.adjust(0.994, 1, 0.5)).toBe(1);
+            });
+        });
         describe('more', function() {
             it('should return a larger value than the parameter', function() {
                 expect(RifFuzzy.more(0.3, 0.5)).toBeGreaterThan(0.3);
