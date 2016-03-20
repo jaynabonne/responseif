@@ -41,11 +41,25 @@ describe("RifWorld", function () {
             world.setState({expression: "not :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.0);
         });
-        it("should invoke setValue with -1 for an 'un' id", function() {
+        it("should invoke setValue with -1 for a 'un id'", function() {
             world.setState({expression: "un somestate"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", -1.0);
             world.setState({expression: "un :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -1.0);
+        });
+        it("should invoke setValue with 'more' value for 'more id'", function() {
+            world.getState = function() { return 0.5; };
+            world.setState({expression: "more somestate"});
+            expect(world.setValue).toHaveBeenCalledWith("somestate", 0.65);
+            world.setState({expression: "more :somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.65);
+        });
+        it("should invoke setValue with 'less' value for 'more id'", function() {
+            world.getState = function() { return -0.5; };
+            world.setState({expression: "less somestate"});
+            expect(world.setValue).toHaveBeenCalledWith("somestate", -0.65);
+            world.setState({expression: "less :somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -0.65);
         });
         it("should set an explicit value", function() {
             world.setState({expression: "somestate=678"});

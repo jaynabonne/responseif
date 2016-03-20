@@ -1,4 +1,4 @@
-define(['./expression'], function(RifExpression) {
+define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
     "use strict";
     var type = function() {
         this.values = {};
@@ -36,6 +36,20 @@ define(['./expression'], function(RifExpression) {
             regex: /^un\s+(.+)$/,
             handler: function(world, matches, responder) {
                 world.setValue(getTarget(matches[1], responder), -1.0);
+            }
+        },
+        {
+            regex: /^more\s+(.+)$/,
+            handler: function(world, matches, responder) {
+                var target = getTarget(matches[1], responder);
+                world.setValue(target, RifFuzzy.more(world.getState(target)));
+            }
+        },
+        {
+            regex: /^less\s+(.+)$/,
+            handler: function(world, matches, responder) {
+                var target = getTarget(matches[1], responder);
+                world.setValue(target, RifFuzzy.less(world.getState(target)));
             }
         },
         {
