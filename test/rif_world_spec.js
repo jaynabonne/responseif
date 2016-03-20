@@ -41,6 +41,12 @@ describe("RifWorld", function () {
             world.setState({expression: "not :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.0);
         });
+        it("should invoke setValue with -1 for an 'un' id", function() {
+            world.setState({expression: "un somestate"});
+            expect(world.setValue).toHaveBeenCalledWith("somestate", -1.0);
+            world.setState({expression: "un :somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -1.0);
+        });
         it("should set an explicit value", function() {
             world.setState({expression: "somestate=678"});
             expect(world.setValue).toHaveBeenCalledWith("somestate", 678);

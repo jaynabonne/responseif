@@ -33,6 +33,12 @@ define(['./expression'], function(RifExpression) {
             }
         },
         {
+            regex: /^un\s+(.+)$/,
+            handler: function(world, matches, responder) {
+                world.setValue(getTarget(matches[1], responder), -1.0);
+            }
+        },
+        {
             regex: /^(.+)$/,
             handler: function(world, matches, responder) {
                 world.setValue(getTarget(matches[1], responder), 1.0);
