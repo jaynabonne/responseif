@@ -35,10 +35,10 @@ define([], function() {
             return Math.min(Math.abs(a-b), 1.0);
         },
         more: function(value, increment) {
-            return stepToward(value, 1, increment);
+            return stepToward(defineValue(value), 1, increment);
         },
         less: function(value, increment) {
-            return stepToward(value, -1, increment);
+            return stepToward(defineValue(value), -1, increment);
         }
     }
 });
