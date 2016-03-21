@@ -1,4 +1,4 @@
-define(['./response_core'], function (RifResponseCore) {
+define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
     "use strict";
     var type = function(caller, interact, topics, world) {
         this.caller = caller;
@@ -91,6 +91,15 @@ define(['./response_core'], function (RifResponseCore) {
 
     proto.process_resets = function (action, responder, response) {
         response.run = 0;
+    };
+
+    proto.process_adjusts = function (action, responder, response) {
+        var adjusts = action.adjusts;
+        var value = this.world.getState(adjusts.variable, responder);
+        var target = this.world.getState(adjusts.toward, responder);
+        var increment = this.world.getState(adjusts.stepping, responder);
+        var new_value = RifFuzzy.adjust(value, target, increment);
+        this.world.setState(adjusts.variable+'='+new_value, responder);
     };
 
     proto.processResponse = function(response, responder) {

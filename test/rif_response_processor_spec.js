@@ -357,4 +357,43 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             expect(interact.say.callCount).toBe(2);
         });
     });
+    describe("adjusts", function () {
+        var values = {
+            var1: 0.3,
+            target: 1,
+            increment: 0.5
+        };
+        beforeEach(function() {
+            world.getState = function(id, responder) {
+                return values[id];
+            };
+            world.setState = jasmine.createSpy('setState');
+        });
+        it("should adjust the specified variable", function() {
+            world.setParent = jasmine.createSpy("setParent");
+            var response = {
+                does: {
+                    common: [
+                        {
+                            adjusts: {
+                                variable: 'var1',
+                                toward: 'target',
+                                stepping: 'increment'
+                            }
+                        }
+                    ]
+                }
+            };
+            processor.processResponse(response, 'responder');
+            expect(world.setState).toHaveBeenCalledWith('var1=0.475', 'responder');
+        });
+        it("should set the responder parent if no target is specified", function() {
+            world.setParent = jasmine.createSpy("setParent");
+            var response = {
+                does: { common: [ { moves: { target: "", to: "room"} } ] }
+            };
+            processor.processResponse(response, 'responder');
+            expect(world.setParent).toHaveBeenCalledWith("responder", "room");
+        });
+    });
 });
