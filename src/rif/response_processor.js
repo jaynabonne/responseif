@@ -99,7 +99,7 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
         var target = this.world.getState(adjusts.toward, responder);
         var increment = this.world.getState(adjusts.stepping, responder);
         var new_value = RifFuzzy.adjust(value, target, increment);
-        this.world.setState(adjusts.variable+'='+new_value, responder);
+        this.world.setState({expression: adjusts.variable+'='+new_value}, responder);
     };
 
     proto.processResponse = function(response, responder) {

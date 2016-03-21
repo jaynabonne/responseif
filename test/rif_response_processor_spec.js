@@ -385,7 +385,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(world.setState).toHaveBeenCalledWith('var1=0.475', 'responder');
+            expect(world.setState).toHaveBeenCalledWith({expression: 'var1=0.475'}, 'responder');
         });
         it("should set the responder parent if no target is specified", function() {
             world.setParent = jasmine.createSpy("setParent");
