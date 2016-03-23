@@ -242,14 +242,6 @@ define([], function () {
         return response;
     };
 
-    Parser.prototype.parse_object = function () {
-        var value = this.currentPair().value;
-        var rif = this.rif;
-        rif.objects = rif.objects || {};
-        rif.objects[value] = {};
-        this.index++;
-    };
-
     Parser.prototype.parseResponseGroup = function() {
         var responses = [];
         while (this.index < this.tokens.length) {
