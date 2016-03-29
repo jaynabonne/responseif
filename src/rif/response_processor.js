@@ -93,6 +93,10 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
         response.run = 0;
     };
 
+    proto.process_clears = function (action) {
+        this.interact.clear(action.clears);
+    };
+
     proto.process_adjusts = function (action, responder, response) {
         var adjusts = action.adjusts;
         var value = this.world.getState(adjusts.variable, responder);
@@ -111,8 +115,7 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
                 $.each(action, function(key) {
                     self['process_'+key](action, responder, response);
                 });
-            });
-        }
+            });}
     };
 
     return type;

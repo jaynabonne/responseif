@@ -357,6 +357,16 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             expect(interact.say.callCount).toBe(2);
         });
     });
+    describe("clears", function () {
+        it("should clear the screen", function() {
+            interact.clear = jasmine.createSpy("clear");
+            var response = {
+                does: { common: [ { clears: {} } ] }
+            };
+            processor.processResponse(response, 'responder');
+            expect(interact.clear).toHaveBeenCalledWith({});
+        });
+    });
     describe("adjusts", function () {
         var values = {
             var1: 0.3,
