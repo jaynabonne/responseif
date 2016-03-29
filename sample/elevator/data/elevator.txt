@@ -28,20 +28,21 @@
         .does
             .says The indicator above the door says "{+FLOOR_INDICATOR>"elevator"+}".
 
-.end
-
-.responses first floor
     .response button
         .prompts Press button
         .does
             .uses first
-                .response .needs :button pressed
+                .response .needs first floor:button pressed
                     .does .says The {!button!} is already lit.
                 .response
                     .does .says You press the button, and it lights up.
-                    .sets :button pressed
+                    .sets first floor:button pressed
             .end
 
+.end
+
+
+.responses first floor
     .response FLOOR_INDICATOR .does .says {=:indicator=}
 
     .response DOOR_STATUS

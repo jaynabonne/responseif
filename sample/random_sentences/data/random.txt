@@ -11,10 +11,8 @@
 .responses player
     .response Generate
         .does
-            .says {+BEGIN+} {+SENTENCE+}.
-
-    .response BEGIN
-        .does .sets FIRST_WORD
+            .sets FIRST_WORD
+            .says {+SENTENCE+}.
 
     .response SENTENCE
         .does .says {+NOUN_PHRASE+} {+VERB_PHRASE+}
