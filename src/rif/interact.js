@@ -202,6 +202,9 @@ define([], function() {
             var f = new Function("world", "interact", body);
             f(this.world, this);
         },
+        clear: function() {
+          this.dom.clear();
+        },
         hideSections: function () {
             if (this.sectionsToHide.length != 0) {
                 var self = this;

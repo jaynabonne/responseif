@@ -28,7 +28,8 @@ describe("RifInteract", function () {
             removeElement: jasmine.createSpy("removeElement"),
             showElement: jasmine.createSpy("showElement"),
             removeClass: jasmine.createSpy('removeClass'),
-            removeEvent: jasmine.createSpy('removeEvent')
+            removeEvent: jasmine.createSpy('removeEvent'),
+            clear: jasmine.createSpy('clear')
         };
         dom.createDiv.andReturn({ append: appendSpy});
         formatter = {
@@ -219,6 +220,12 @@ describe("RifInteract", function () {
             expect(global_interact).toBe(interact);
             delete global_world;
             delete global_interact;
+        });
+    });
+    describe("clear", function () {
+        it("should clear the output div", function() {
+            interact.clear({});
+            expect(dom.clear).toHaveBeenCalled();
         });
     });
     describe("sendCommand", function() {
