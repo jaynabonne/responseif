@@ -1,0 +1,53 @@
+.set break .to <div style='font-size:6pt;'><br></div>
+
+.move player .to room
+.move apple .to room
+.move table .to room
+.move door .to room
+
+.actions UI
+    .response
+        .does
+            .says {+ROLLCALL+} .into #local
+            .says {+INVENTORY+} .into #inventory
+.end
+
+.responses player
+    .response START
+        .does
+            .says Hello, world!
+.end
+
+.responses apple
+    .response ROLLCALL
+        .does
+            .says {!Apple|apple!}
+    .response apple
+        .does
+            .says This is a nice juicy apple.
+    .response apple
+        .prompts Eat apple
+        .does
+            .says You eat the apple. Yum!
+            .moves apple .to nowhere
+.end
+
+.responses table
+    .response ROLLCALL
+        .does
+            .says {!Table|table!}
+    .response table
+        .does
+            .says There is a table in the corner.
+.end
+
+.responses door
+    .response ROLLCALL
+        .does
+            .says {!Exit door|door!}
+    .response door
+        .prompts Go out the door
+        .does
+            .says You leave the room.
+            .moves player .to hallway
+.end

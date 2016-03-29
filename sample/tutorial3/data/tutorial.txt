@@ -1,0 +1,12 @@
+.responses player
+    .response START
+        .does .says Harry can {!count!}. He says, "<span id="counter">one</span>."
+
+    .response count
+        .occurs 3
+        .does 1 .says one, two .into #counter
+        .does 2 .says one, two, three .into #counter
+        .does 3
+		    .says one, two, three, four .into #counter
+            .says But that's as high as he can go.
+.end

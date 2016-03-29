@@ -1,0 +1,24 @@
+.set player:race .to Elf
+.set player:health=7
+.set player:max health=10
+.set player:strength=8
+.set player:gold=0
+
+.responses player
+    .response START
+        .does
+            .says Welcome to the underground.
+            .says {+STATUS+} .into #status
+
+    .response STATUS
+        .does
+            .says Race: {=:race=}<br>
+                  Health: {=:health=}/{=:max health=}<br>
+                  Strength: {=:strength=}<br>
+                  Gold: {=:gold=}
+.end
+
+.actions ui
+    .response
+        .does .says {+STATUS+} .into #status
+.end

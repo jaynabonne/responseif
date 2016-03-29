@@ -1,0 +1,128 @@
+.move player .to arena
+.move sword .to player
+.set sword:equipped
+
+.set ogre:max hits=10
+.set orc:max hits=15
+.set elf:max hits=8
+.set scorpion:max hits=9
+.set dog:max hits=11
+
+.actions ui
+    .response
+        .does
+            .says {+ENEMY_NAME+}<br>{+ENEMY_HEALTH+} .into #enemy
+            .says Equipped: {+EQUIPPED+} .into #inventory
+.end
+
+.responses sword
+    .response EQUIPPED
+        .needs :equipped
+        .does .says Sword
+    .response ATTACK
+        .needs :equipped
+        .does
+            .uses random
+                .response .does .calls STAB
+                .response .does .calls SLASH
+            .end
+.end
+
+.responses arena
+    .response ENTER
+        .does
+            .says You enter the arena. The walls are lined with banners stretching from ceiling to floor, each depicting a hideous creature.
+                    You can make out an {!ogre!}, an {!orc!}, a {!dark elf!}, a {!scorpion!}, and a {!rabid dog!}.
+
+    .response ogre
+        .needs ogre:parent <> "arena"
+        .does
+            .selects all
+                .response
+                    .does
+                        .says The red banner has a picture of a large ogre brandishing an impressive mace.
+
+                .response
+                    .prompts Touch banner
+                    .does
+                        .says The banner glows brightly! The image begins to move and then, beyond belief, steps out of the banner. {!The ogre squares off to attack you.|ATTACK ogre!}
+                        .moves ogre .to arena
+                        .sets ogre:hits=ogre:max hits
+
+            .end
+
+    .response orc
+        .does
+            .says A blue banner shows a menacing orc.
+
+    .response dark elf
+        .does
+            .says A pointy-eared elf in severe robes adorns a tall green banner.
+
+    .response scorpion
+        .does
+            .says A royal purple banner shows a giant scorpion, with sharp tail curved over and pointing forward aggressively.
+
+    .response rabid dog
+        .does
+            .says
+
+.end
+
+.responses player
+    .response START
+        .does
+            .calls ENTER
+.end
+
+
+.actions ogre
+    .response
+        .needs ogre:parent="arena"
+        .does
+            .says The ogre attacks you but misses.
+.end
+
+.responses ogre
+    .response ENEMY_NAME .does .says Ogre
+    .response ENEMY_HEALTH .does .says {=:hits=}/{=:max hits=}
+
+    .response PLAYER_ATTACKED
+        .needs :hits <= 0
+        .does
+            .says The ogre dies! Its body slowly fades, reappearing on the banner.
+            .moves ogre .to nowhere
+
+    .response SLASH
+        .does
+            .uses random
+                .response
+                    .does
+                        .says You slash at the ogre, but it dodges your attack.
+                .response
+                    .does
+                        .says You slash at the ogre with your sword and hit for some damage.
+                        .sets :hits=:hits-2
+                .response
+                    .does
+                        .says You slash at the ogre and connect for a critical hit.
+                        .sets :hits=:hits/2 and :hits-3
+            .end
+            .calls PLAYER_ATTACKED
+    .response STAB
+        .does
+            .uses random
+                .response
+                    .does
+                        .says You try to stab the ogre, but it moves out of the way.
+                .response
+                    .does
+                        .says You stab at the ogre with your sword and hit for some damage.
+                        .sets :hits=:hits-1
+                .response
+                    .does
+                        .says You stab at the ogre and connect for a critical hit.
+                        .sets :hits=:hits/4 and :hits-2
+            .end
+            .calls PLAYER_ATTACKED
+.end
