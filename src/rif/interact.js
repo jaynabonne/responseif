@@ -203,7 +203,9 @@ define([], function() {
             f(this.world, this);
         },
         clear: function() {
-          this.dom.clear();
+            this.hideSections();
+            this.dom.clear();
+            this.links = [];
         },
         hideSections: function () {
             if (this.sectionsToHide.length != 0) {

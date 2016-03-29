@@ -75,5 +75,9 @@ define([], function() {
         $(selector).off(event_name);
     };
 
+    prototype.clear = function() {
+        this.output.empty();
+    };
+
     return type;
 });
