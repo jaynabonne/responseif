@@ -174,11 +174,15 @@ define([], function () {
         moves.to = entry.value;
     };
 
-    Parser.prototype.parse_does_resets = function(actions, entry) {
+    function add_simple_action(actions, entry) {
         this.index++;
-        var action = { resets: {} };
+        var action = { };
+        action[entry.token] = {};
         actions.push(action);
-    };
+    }
+
+    Parser.prototype.parse_does_resets = add_simple_action;
+    Parser.prototype.parse_does_clears = add_simple_action;
 
     Parser.prototype.parse_does_adjusts = function(actions, entry) {
         this.index++;

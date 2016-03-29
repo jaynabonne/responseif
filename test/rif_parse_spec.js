@@ -848,6 +848,28 @@ describe("rifParse", function () {
         });
     });
 
+    it("should parse clears", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            token_pair("clears"),
+            ]
+        );
+        expect(rif.responses.anObject[0]).toEqual({
+            id: 0,
+            does: {
+                common: [
+                    {
+                        clears: {}
+                    }
+                ]
+            }
+        });
+    });
+
+
     it("should parse weights", function () {
         var rif = rifParse(
             [
