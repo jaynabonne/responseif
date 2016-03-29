@@ -1,0 +1,23 @@
+.--------------------------------
+.- Controller corridor responses
+.--------------------------------
+
+.responses controller corridor
+	.response LOOK
+		.does
+			.says This is a section of corridor outside the controller rooms.
+	.response
+		.selects
+			.response ROSE-WEST HALLWAY
+				.prompts Go up the corridor
+				.does
+					.says You move along the passage to the mining nexus.
+					.moves-player-west-to hallway
+			.response ROSE-EAST PROCESSING_CENTER
+				.prompts Go to the processing center
+				.does
+					.says You enter the processing center.
+					.moves-player-east-to processing center
+		.end
+.end
+

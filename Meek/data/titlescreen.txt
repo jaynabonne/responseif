@@ -34,8 +34,6 @@
 				.animates #introdream2 .fade-in .lasting 1000
 				.animates #introdream .to { "opacity": 1 } .lasting 1000
 				.sets intro_saw_dream
-                .invokes
-                    $("#introdream span").removeClass("keyword")
 				.calls INTRODONE
 
 	.response INTRORAIN
@@ -45,8 +43,6 @@
 			.says but there is no rain. .into #introrain2
 			.animates #introrain2 .expand-and-fade-in
 			.sets intro_saw_rain
-			.invokes
-				$("#introrain span").removeClass("keyword")
 			.calls INTRODONE
 	.response INTROWIND
 		.occurs 1
@@ -55,8 +51,6 @@
 			.says but there is no wind. .into #introwind2
 			.animates #introwind2 .expand-and-fade-in
 			.sets intro_saw_wind
-			.invokes
-				$("#introwind span").removeClass("keyword")
 			.calls INTRODONE
 		
 	.response INTRODONE

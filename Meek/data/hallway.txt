@@ -1,0 +1,26 @@
+.--------------------
+.- Hallway responses
+.--------------------
+.responses hallway
+	.response LOOK
+		.does .says You're in the main corridor. {!One direction leads to the mining nexus|MINING_NEXUS!}, {!and the other leads toward the controller rooms and the processing center.|CONTROLLER_CORRIDOR!}
+	.response
+		.selects
+			.response MINING_NEXUS
+				.does .says The mining nexus is a large cavern where the mining tunnels originate, leading off to underground depths. .autohides
+			.response ROSE-WEST MINING_NEXUS
+				.prompts Go to the mining nexus
+				.does
+					.says You move along the passage to the {!!mining nexus|MINING_NEXUS_MEMORY!!}.
+					.moves-player-west-to mining nexus
+				.orders 2
+			.response ROSE-EAST CONTROLLER_CORRIDOR
+				.prompts Go toward the processing center
+				.does
+					.says You head toward the processing center. The first stop along the corridor is a junction leading off
+					to two rooms, each containing a controller.
+					.moves-player-east-to controller corridor
+				.orders 2
+		.end
+.end
+

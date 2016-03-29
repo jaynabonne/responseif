@@ -17,6 +17,13 @@
                 <span style="font-family:'Courier New'; font-size:12pt;">Directive, status immediate<br>
                 M47-C communication disconnect. {!EAR!}.</span>
 
+	.response .matches EAR
+	    .does
+            .uses random
+                .response .does .says "Evaluate and repair." .autohides
+                .response .does .says "Evaluate and repair." That's your job. .autohides
+            .end
+
 	.response message
 		.does 1
 			.says

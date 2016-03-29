@@ -1,0 +1,60 @@
+.-------------------
+.- Alcove responses
+.-------------------
+
+.responses alcove
+	.response LOOK
+        .does
+            .says {!Your alcove is small, barely large enough for you.|ALCOVE_SIZE!} {!There's a door|door!}, and {!there's also a port on the wall beside you|port!}.
+    .response ALCOVE_SIZE .does .says But it's all you need. You're not very large. .autohides
+    .response port
+        .does 1
+            .says {!You're currently connected to the port|PORT_AUTO_CONNECT!}. {!Some ports are for communications or diagnostics|YOUR_PORTS_USE!}. {!This one keeps you fed|ENERGY_PORT!}.
+        .does
+            .says  .autohides
+    .response YOUR_PORTS_USE
+        .does
+            .says Being a {!maintenance cog|MAINTENANCE_COG!}, you often need to connect to ports to diagnose problems.
+    .response MAINTENANCE_COG
+        .does
+            .says Speaking of maintanence, it seems you have {!a crisis|CRISIS!} to attend to! .autohides
+    .response CRISIS
+        .does
+            .says You remember that message that woke you... {+message+}
+    .response PORT_AUTO_CONNECT
+        .occurs 1
+        .does
+            .says You automatically connect to your {!energy port|ENERGY_PORT!} when you enter your alcove. .autohides
+    .response ENERGY_PORT
+        .occurs 1
+        .does
+            .says Mobile cogs have their own dedicated power supplies, but you still need an occasional charge. .autohides
+	.response ENTER
+		.occurs 1
+		.does
+			.says
+				{=break=}
+				<div id="wakeup">{!An incoming message wakens you.|message!} {!The conversations of the Others are muted and overlapping, but there's an unmistakable undercurrent of irritation.|theothers!}</div>			.animates #wakeup .fade-in .lasting 3000
+
+	.response ROSE-NORTH
+		.prompts Exit your alcove
+		.does
+			.uses first
+				.response
+					.needs door_open
+					.does
+                        .says Motors engage, wheels turn, and you slowly roll out of your alcove into the hallway.
+						.moves-player-north-to hallway
+				.response
+					.does .says {!You can't move while your alcove door is closed.|door!} .autohides
+			.end
+
+	.response ALCOVE-DOOR-OPENS
+		.orders 10
+		.occurs 1
+		.does .says As the door disappears into the wall, you discover that the hallway outside is crowded with small machines.
+		Rather than streaming up and down the corridor in their usual work patterns, a large group of them is gathered around,
+		watching and waiting intently for you.
+
+	.door-open-close-response *USE
+.end

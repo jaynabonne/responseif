@@ -1,0 +1,46 @@
+.-----------------
+.- Door responses
+.-----------------
+
+.define door-open-close-response
+	.response .<value>
+		.selects
+			.response
+				.needs not door_open
+				.prompts Open the alcove door
+				.does
+					.sets door_open
+					.calls ALCOVE-DOOR-OPENS
+
+			.response
+				.needs door_open
+				.prompts Close the alcove door
+				.does
+					.sets not door_open
+					.calls ALCOVE-DOOR-CLOSES
+		.end
+.enddef
+
+.responses door-base
+	.response *door
+		.selects
+			.response
+				.needs not door_open
+				.does .says The alcove door is closed. .autohides
+			.response
+				.needs door_open
+				.does .says The alcove door is open. .autohides
+		.end
+	.response ALCOVE-DOOR-OPENS
+		.does .says {!You trigger the door, and it slides open.|door!}
+	.response ALCOVE-DOOR-CLOSES
+		.does .says {!You trigger the door, and it slides shut.|door!}
+.end
+
+.responses inner-door
+	.reference door-base
+.end
+
+.responses outer-door
+	.reference door-base
+.end

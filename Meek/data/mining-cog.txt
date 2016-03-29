@@ -1,0 +1,16 @@
+.-----------------------
+.- Mining bot responses
+.-----------------------
+
+.actions mining-bot
+	.response
+		.occurs 1
+		.needs door-open
+		.does 
+			.sets mining-bot.saw-player
+			.says Spying you, one of the mining robots slides forward. "Help us." The voice drowns out the low-level chatter of the Others. "It's all stopped. Fix it."
+.end
+
+.responses mining-bot
+.end
+

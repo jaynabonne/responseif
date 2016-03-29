@@ -1,0 +1,7 @@
+
+.-------------------------
+.- Mining nexus responses
+.-------------------------
+
+.responses mining nexus
+.end
