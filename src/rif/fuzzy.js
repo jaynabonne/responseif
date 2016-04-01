@@ -33,8 +33,8 @@ define([], function() {
         },
         adjust: function (value, target, increment) {
             value = defineValue(value);
-            increment = increment || 0.6;
-            var new_value = value + (target - value)*increment/2;
+            increment = increment || 0.5;
+            var new_value = value + (target - value)*increment;
             if (Math.abs(target-new_value) < 0.005) {
                 new_value = target;
             }

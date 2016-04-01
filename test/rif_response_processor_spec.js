@@ -369,7 +369,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("adjusts", function () {
         var values = {
-            var1: 0.3,
+            var1: 0.0,
             target: 1,
             increment: 0.5
         };
@@ -395,7 +395,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(world.setState).toHaveBeenCalledWith({expression: 'var1=0.475'}, 'responder');
+            expect(world.setState).toHaveBeenCalledWith({expression: 'var1=0.5'}, 'responder');
         });
         it("should set the responder parent if no target is specified", function() {
             world.setParent = jasmine.createSpy("setParent");

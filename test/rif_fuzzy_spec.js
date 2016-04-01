@@ -127,7 +127,7 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                 expect(RifFuzzy.adjust(1, 1, 0.5)).toBe(1);
             });
             it('should treat an undefined value as 0', function() {
-                expect(RifFuzzy.adjust(undefined, 1, 0.5)).toBe(0.25);
+                expect(RifFuzzy.adjust(undefined, 1, 0.5)).toBe(0.5);
             });
             it('should clamp to the target value when arbitrarily close', function() {
                 expect(RifFuzzy.adjust(0.994, 1, 0.5)).toBe(1);
@@ -141,10 +141,10 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                 expect(RifFuzzy.more(1, 0.5)).toBe(1);
             });
             it('should default if no increment is passed', function() {
-                expect(RifFuzzy.more(0)).toBe(0.3);
+                expect(RifFuzzy.more(0)).toBe(0.5);
             });
             it('should treat undefined as 0', function() {
-                expect(RifFuzzy.more(undefined, 0.5)).toBe(0.25);
+                expect(RifFuzzy.more(undefined, 0.5)).toBe(0.5);
             });
         });
         describe('less', function() {
@@ -155,10 +155,10 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                 expect(RifFuzzy.less(-1, 0.5)).toBe(-1);
             });
             it('should default if no increment is passed', function() {
-                expect(RifFuzzy.less(0)).toBe(-0.3);
+                expect(RifFuzzy.less(0)).toBe(-0.5);
             });
             it('should treat undefined as 0', function() {
-                expect(RifFuzzy.less(undefined, 0.5)).toBe(-0.25);
+                expect(RifFuzzy.less(undefined, 0.5)).toBe(-0.5);
             });
         });
     });

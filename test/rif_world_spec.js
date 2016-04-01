@@ -50,16 +50,16 @@ describe("RifWorld", function () {
         it("should invoke setValue with a greater value for 'more id'", function() {
             world.getState = function() { return 0.5; };
             world.setState({expression: "more somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", 0.65);
+            expect(world.setValue).toHaveBeenCalledWith("somestate", 0.75);
             world.setState({expression: "more :somestate"}, 'responder');
-            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.65);
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.75);
         });
         it("should invoke setValue with a lesser value for 'less id'", function() {
             world.getState = function() { return -0.5; };
             world.setState({expression: "less somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", -0.65);
+            expect(world.setValue).toHaveBeenCalledWith("somestate", -0.75);
             world.setState({expression: "less :somestate"}, 'responder');
-            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -0.65);
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -0.75);
         });
         it("should set an explicit value", function() {
             world.setState({expression: "somestate=678"});
