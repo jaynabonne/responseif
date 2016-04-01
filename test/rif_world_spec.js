@@ -30,57 +30,69 @@ describe("RifWorld", function () {
             world.setValue = jasmine.createSpy("setValue");
         });
         it("should invoke the setValue with 1 for a bare id", function() {
-            world.setState({expression: "somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", 1.0);
+            world.setState({expression: "somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 1.0);
             world.setState({expression: ":somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 1.0);
+            world.setState({expression: "aresponder:somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", 1.0);
         });
         it("should invoke setValue with 0 for a negated id", function() {
-            world.setState({expression: "not somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", 0.0);
+            world.setState({expression: "not somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.0);
             world.setState({expression: "not :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.0);
+            world.setState({expression: "not aresponder:somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", 0.0);
         });
         it("should invoke setValue with -1 for 'un id'", function() {
-            world.setState({expression: "un somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", -1.0);
+            world.setState({expression: "un somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -1.0);
             world.setState({expression: "un :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -1.0);
+            world.setState({expression: "un aresponder:somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", -1.0);
         });
         it("should invoke setValue with a greater value for 'more id'", function() {
             world.getState = function() { return 0.5; };
-            world.setState({expression: "more somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", 0.75);
+            world.setState({expression: "more somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.75);
             world.setState({expression: "more :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 0.75);
+            world.setState({expression: "more aresponder:somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", 0.75);
         });
         it("should invoke setValue with a lesser value for 'less id'", function() {
             world.getState = function() { return -0.5; };
-            world.setState({expression: "less somestate"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", -0.75);
+            world.setState({expression: "less somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -0.75);
             world.setState({expression: "less :somestate"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", -0.75);
+            world.setState({expression: "less aresponder:somestate"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", -0.75);
         });
         it("should set an explicit value", function() {
-            world.setState({expression: "somestate=678"});
-            expect(world.setValue).toHaveBeenCalledWith("somestate", 678);
+            world.setState({expression: "somestate=678"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 678);
             world.setState({expression: ":somestate=678"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 678);
+            world.setState({expression: "aresponder:somestate=678"}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", 678);
         });
     });
     describe("addRif", function() {
         it("sets variables from the 'sets' array", function() {
             var rif = { sets: [
-                {expression:"somestate"},
-                {expression:"somevar=314"},
-                {expression:"not visited"},
-                {expression:"astring", to:"not visited"}
+                {expression:"responder:somestate"},
+                {expression:"responder:somevar=314"},
+                {expression:"not responder:visited"},
+                {expression:"responder:astring", to:"not visited"}
             ]};
             world.addRif(rif);
-            expect(world.getValue("somestate")).toBe(1);
-            expect(world.getValue("somevar")).toBe(314);
-            expect(world.getValue("visited")).toBe(0);
-            expect(world.getValue("astring")).toBe("not visited");
+            expect(world.getValue("responder:somestate")).toBe(1);
+            expect(world.getValue("responder:somevar")).toBe(314);
+            expect(world.getValue("responder:visited")).toBe(0);
+            expect(world.getValue("responder:astring")).toBe("not visited");
         });
         it("set parents of objects in the 'moves' array", function() {
             var rif = {moves: [{target: "object1", to: "parent1"}, {target: "object2", to: "parent2"}]};

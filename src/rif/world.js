@@ -20,10 +20,12 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
         return RifExpression.evaluate(RifExpression.compile(id), this.values, responder);
     };
     function getTarget(expression, responder){
-        if (expression[0] !== ':') {
-            return expression;
+        if (expression[0] === ':') {
+            return responder + expression;
+        } else if (expression.indexOf(':') === -1) {
+            return responder + ':' + expression;
         }
-        return responder + expression;
+        return expression;
     }
     var set_matchers = [
         {
