@@ -1,3 +1,5 @@
+.define increments .sets .<value> = .<value> +1 .enddef
+.define decrements .sets .<value> = .<value> -1 .enddef
 .responses UI
     .response START
         .does
@@ -9,12 +11,12 @@
     .response less-strength
         .needs strength>4
         .does
-            .sets strength=strength-1
+            .decrements strength
 
     .response more-strength
         .needs strength<10
         .does
-            .sets strength=strength+1
+            .increments strength
 
     .response one    .does  .sets value .to two
     .response two    .does  .sets value .to three
@@ -42,7 +44,7 @@
             .says {+description+} .into #description
 .end
 
-.set strength=4
-.set value .to one
+.set UI:strength=4
+.set UI:value .to one
 
 .move UI .to everywhere
