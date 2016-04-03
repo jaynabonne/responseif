@@ -46,7 +46,7 @@
 .- World set up
 .---------------
 
-.set break .to <span style='font-size:6pt;'>&nbsp;</span>
+.set break: .to <span style='font-size:6pt;'>&nbsp;</span>
 
 .move inner-door .to alcove
 .move outer-door .to hallway
