@@ -64,7 +64,7 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
     proto.setState = function(state, responder) {
         var expression = state.expression;
         if (state.to !== undefined) {
-            this.setValue(expression, state.to);
+            this.setValue(getTarget(expression, responder), state.to);
         } else {
             var index = expression.indexOf("=");
             if (index != -1) {

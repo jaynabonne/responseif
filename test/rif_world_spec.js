@@ -79,6 +79,11 @@ describe("RifWorld", function () {
             world.setState({expression: "aresponder:somestate=678"}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("aresponder:somestate", 678);
         });
+        it("should properly use responder-relative paths when 'to' is specfied", function() {
+            world.setState({expression: 'somestate', to: 'newvalue'}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", "newvalue");
+        })
+
     });
     describe("addRif", function() {
         it("sets variables from the 'sets' array", function() {
