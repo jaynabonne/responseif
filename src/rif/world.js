@@ -13,7 +13,7 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
         return this.values[id];
     };
     proto.setValue = function(id, value) {
-        //console.log("set value", id, "to", value);
+        //console.log("set value", "'"+id+"'", "to", "'"+value+"'");
         this.values[id] = value;
     };
     proto.getState = function(id, responder) {
@@ -69,7 +69,7 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
             var index = expression.indexOf("=");
             if (index != -1) {
                 var value = expression.substring(index + 1);
-                var variable = expression.substring(0, index);
+                var variable = expression.substring(0, index).trim();
                 this.setValue(getTarget(variable, responder), this.getState(value, responder));
             } else {
                 var self = this;

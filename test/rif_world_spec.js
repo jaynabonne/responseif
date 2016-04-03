@@ -82,7 +82,11 @@ describe("RifWorld", function () {
         it("should properly use responder-relative paths when 'to' is specfied", function() {
             world.setState({expression: 'somestate', to: 'newvalue'}, 'responder');
             expect(world.setValue).toHaveBeenCalledWith("responder:somestate", "newvalue");
-        })
+        });
+        it('should properly handle spaces', function() {
+            world.setState({expression: ' somestate = 3 '}, 'responder');
+            expect(world.setValue).toHaveBeenCalledWith("responder:somestate", 3);
+        });
 
     });
     describe("addRif", function() {
