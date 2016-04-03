@@ -6,6 +6,8 @@ define(['rif/fuzzy'], function(RifFuzzy) {
             var id = expression;
             if (id[0] === ':') {
                 id = prefix + id;
+            } else if (id.indexOf(':') === -1) {
+                id = prefix + ':' + id;
             }
             stack.push(state[id]);
         };
