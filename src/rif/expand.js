@@ -48,9 +48,10 @@ define([], function () {
         for (var i = 0; i < tokens.length; ++i) {
             var token_pair = tokens[i];
             if (token_pair.token === "<value>") {
-                var last_pair = new_tokens[i-1];
+                var last = new_tokens.length-1;
+                var last_pair = new_tokens[last];
                 var new_value = joinStrings(joinStrings(last_pair.value, value), token_pair.value);
-                new_tokens[i-1] = {token: last_pair.token, value: new_value};
+                new_tokens[last] = {token: last_pair.token, value: new_value};
             } else {
                 new_tokens.push(token_pair);
             }

@@ -177,6 +177,33 @@ describe("rifExpand", function () {
             }
         );
     });
+    it("should append consecutive value to the result", function() {
+        var tokens = rifExpand(
+            [
+                token_pair("tokenA", "valueA"),
+                define("somedef"),
+                token_pair("tokenNew", "somevalue"),
+                token_pair("<value>", "values_value"),
+                token_pair("<value>", "next_values_value"),
+                enddef(),
+                token_pair("tokenB", "valueB"),
+                token_pair("somedef", "repvalue"),
+                token_pair("tokenC", "valueC"),
+                token_pair("somedef", "repvalue2"),
+            ],
+            function(tokens) {
+                expect(tokens).toEqual(
+                    [
+                        token_pair("tokenA", "valueA"),
+                        token_pair("tokenB", "valueB"),
+                        token_pair("tokenNew", "somevalue repvalue values_value repvalue next_values_value"),
+                        token_pair("tokenC", "valueC"),
+                        token_pair("tokenNew", "somevalue repvalue2 values_value repvalue2 next_values_value"),
+                    ]
+                );
+            }
+        );
+    });
     it("should replace a recursive definition in the result", function() {
         var tokens = rifExpand(
             [
