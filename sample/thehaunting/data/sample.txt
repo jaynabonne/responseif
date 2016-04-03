@@ -1,4 +1,4 @@
-.set break .to <div style='font-size:6pt;'><br></div>
+.set break: .to <div style='font-size:6pt;'><br></div>
 
 .define fades-in
 	.to {"opacity": 0.0}
@@ -18,7 +18,7 @@
             .says {+LINKS+} .into #links-bar
             .says
                  {+HEADING+}
-                 {=break=}
+                 {=break:=}
             .calls INTRO
 
     .response LINKS
@@ -57,15 +57,15 @@
         .does
             .says
                 <div id="events"><i>Mom, I need you. Where are you?</i>
-                {=break=}
+                {=break:=}
                 The question comes and goes quickly. You know where she is.
                 You will never talk with her again, never hug her or kiss her lightly on the cheek as you bid your goodbyes.
                 She'll never smile at you again.
-                {=break=}
+                {=break:=}
                 The funeral had brought the family together, but you couldn't bring
                 yourself to stand with them. You remained off at a distance, alone and in silence. Afterwards, they went their
                 separate ways, back to their homes and their loved ones and their lives, leaving you to your solitude.
-                {=break=}
+                {=break:=}
                 In your despair and grief, you were drawn back to {!this place!}, the place you had lived as a child.</div>
             .fades-in-output #events
 
@@ -87,11 +87,11 @@
                     Oh, the summer days spent here! You can see Billy and Tommy and Mary riding the swings, sliding down
                     the slide. You blink, and they're gone, vanished like ghosts. The swing floats idly in the wind.
                     There's no one there but you.
-                    {=break=}
+                    {=break:=}
                     The playground, the benches, the fences along the backs of
                     the houses - they all seem so much smaller than you remember. They had been an integral part of
                     your life. Now you remember them, but they no longer know you. Time has separated you.
-                    {=break=}
+                    {=break:=}
                     Beyond the playground is a small {!foot bridge!}, its old, weathered wood beginning to crack and splinter.
                 </div>
             .fades-in-output #playground
@@ -116,7 +116,7 @@
                     the dullness of the halogen-tinted night. You stand out front and look. Someone else lives there.
                     Someone else is making memories. It doesn't belong to you any more; you no longer belong there.
                     You are the stranger.
-                    {=break=}
+                    {=break:=}
                     Wherever you look, you can see fleeting glimpses of motion. Little
                     scenes tucked away in your memories play out, appearing and disappearing before you can really see
                     them. The {!phantoms!} toy with you, answering your yearnings with teases, offering you no relief
@@ -130,7 +130,7 @@
             .says
                 <div id="phantoms">
                     <i>Quit haunting me!</i>
-                    {=break=}
+                    {=break:=}
                     You turn away and quickly make your way back toward the bridge. A sudden {!motion!} forces you from your thoughts.
                 </div>
             .fades-in-output #phantoms
@@ -191,10 +191,10 @@
                 <div id="man">
                     You don't stray from your path; he doesn't stray from his. You exhale a sigh as he passes through
                     you. He shivers for a moment and lets out a low curse.
-                    {=break=}
+                    {=break:=}
                     "What the hell was that?" he asks quietly to no one in particular as he draws his coat more tightly
                     around himself and continues along the path to the bridge.
-                    {=break=}
+                    {=break:=}
                     {!Without looking!}, you feel him go, his footsteps fading until there is silence again.
                 </div>
             .fades-in-output #man
@@ -217,7 +217,7 @@
                     You moan again, a little more deeply this time, your anguish taking voice. All around you is
                     darkness and emptiness. You are a stranger in this world. It no longer belongs to you, and you no
                     longer belong here.
-                    {=break=}
+                    {=break:=}
                     <i>{!The End!}</i>
                 </div>
             .fades-in-output #moan
