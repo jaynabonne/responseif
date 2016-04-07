@@ -220,39 +220,39 @@ describe("RifWorld", function () {
         });
     });
 
-    describe('PersistentTopics', function() {
+    describe('Add and Remove Topics', function() {
         it('returns an empty array if no topics have been set', function() {
-            var topics = world.getPersistentTopics('actor');
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([]);
         });
         it('can add and then get a topic', function() {
-            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
-            var topics = world.getPersistentTopics('actor');
+            world.addTopics('actor', [{keyword: 'atopic'}]);
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic'}]);
         });
         it('can add sequential topic', function() {
-            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
-            world.addPersistentTopics('actor', [{keyword: 'btopic'}]);
-            var topics = world.getPersistentTopics('actor');
+            world.addTopics('actor', [{keyword: 'atopic'}]);
+            world.addTopics('actor', [{keyword: 'btopic'}]);
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic'}, {keyword: 'btopic'}]);
         });
         it('can remove topic', function() {
-            world.addPersistentTopics('actor', [{keyword: 'topic1'}, {keyword: 'topic2'}, {keyword: 'topic3'}, {keyword: 'topic4'}]);
-            world.removePersistentTopics('actor', [{keyword: 'topic2'}, {keyword: 'topic4'}]);
-            var topics = world.getPersistentTopics('actor');
+            world.addTopics('actor', [{keyword: 'topic1'}, {keyword: 'topic2'}, {keyword: 'topic3'}, {keyword: 'topic4'}]);
+            world.removeTopics('actor', [{keyword: 'topic2'}, {keyword: 'topic4'}]);
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'topic1'}, {keyword: 'topic3'}]);
         });
         it('should not duplicate existing topics', function() {
-            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
-            world.addPersistentTopics('actor', [{keyword: 'atopic'}]);
-            var topics = world.getPersistentTopics('actor');
+            world.addTopics('actor', [{keyword: 'atopic'}]);
+            world.addTopics('actor', [{keyword: 'atopic'}]);
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic'}]);
 
         });
         it('should update weights for existing topics', function() {
-            world.addPersistentTopics('actor', [{keyword: 'atopic', weight: 20}]);
-            world.addPersistentTopics('actor', [{keyword: 'atopic', weight: 40}]);
-            var topics = world.getPersistentTopics('actor');
+            world.addTopics('actor', [{keyword: 'atopic', weight: 20}]);
+            world.addTopics('actor', [{keyword: 'atopic', weight: 40}]);
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic', weight: 40}]);
 
         });

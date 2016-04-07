@@ -160,19 +160,19 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     };
 
-    proto.getPersistentTopics = function(actor) {
+    proto.getTopics = function(actor) {
         return this.persistentTopics[actor] || [];
     };
 
-    proto.addPersistentTopics = function(actor, topics) {
-        this.removePersistentTopics(actor, topics);
-        var currentTopics = this.getPersistentTopics(actor);
+    proto.addTopics = function(actor, topics) {
+        this.removeTopics(actor, topics);
+        var currentTopics = this.getTopics(actor);
         this.persistentTopics[actor] = currentTopics.concat(topics);
     };
 
-    proto.removePersistentTopics = function(actor, topics) {
+    proto.removeTopics = function(actor, topics) {
         var keywords = topics.map(function(value) { return value.keyword; });
-        var currentTopics = this.getPersistentTopics('actor');
+        var currentTopics = this.getTopics('actor');
         for(var i = currentTopics.length - 1; i >= 0; i--) {
             if(keywords.indexOf(currentTopics[i].keyword) != -1) {
                 currentTopics.splice(i, 1);
