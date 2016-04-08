@@ -5,7 +5,7 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
         this.runs = {};
         this.children = {};
         this.pov = "player";
-        this.persistentTopics = {};
+        this.topics = {};
     };
 
     var proto = type.prototype;
@@ -161,13 +161,13 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
     };
 
     proto.getTopics = function(actor) {
-        return this.persistentTopics[actor] || [];
+        return this.topics[actor] || [];
     };
 
     proto.addTopics = function(actor, topics) {
         this.removeTopics(actor, topics);
         var currentTopics = this.getTopics(actor);
-        this.persistentTopics[actor] = currentTopics.concat(topics);
+        this.topics[actor] = currentTopics.concat(topics);
     };
 
     proto.removeTopics = function(actor, topics) {
