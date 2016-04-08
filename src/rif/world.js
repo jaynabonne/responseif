@@ -1,4 +1,4 @@
-define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
+define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, RifFuzzy, RifTopicStrategy) {
     "use strict";
     var type = function() {
         this.values = {};
@@ -161,14 +161,26 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
     };
 
     proto.getCluster = function(actor, cluster_id) {
+        cluster_id = cluster_id || 'longterm';
         if (this.topics[actor] === undefined) {
-            this.topics[actor] = [];
+            this.topics[actor] = {};
         }
-        return this.topics[actor];
+        var topics = this.topics[actor];
+        if (topics[cluster_id] === undefined) {
+            topics[cluster_id] = [];
+        }
+        return topics[cluster_id];
     };
 
     proto.getTopics = function(actor) {
-        return this.getCluster(actor);
+        if (!this.topics[actor]) {
+            return [];
+        }
+        var topics = [];
+        $.each(this.topics[actor], function(index, cluster) {
+            topics = RifTopicStrategy.mergeTopics(topics, cluster);
+        });
+        return topics;
     };
 
     function addTopicsToCluster(cluster, topics) {
@@ -184,14 +196,14 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
         }
     }
 
-    proto.addTopics = function(actor, topics) {
-        var cluster = this.getCluster(actor);
-        removeTopicsFromCluster(cluster, topics)
+    proto.addTopics = function(actor, topics, cluster_id) {
+        var cluster = this.getCluster(actor, cluster_id);
+        removeTopicsFromCluster(cluster, topics);
         addTopicsToCluster(cluster, topics);
     };
 
-    proto.removeTopics = function(actor, topics) {
-        removeTopicsFromCluster(this.getCluster('actor'), topics);
+    proto.removeTopics = function(actor, topics, cluster_id) {
+        removeTopicsFromCluster(this.getCluster('actor', cluster_id), topics);
     };
 
     proto.getResponseRuns = function(id) {

@@ -254,7 +254,15 @@ describe("RifWorld", function () {
             world.addTopics('actor', [{keyword: 'atopic', weight: 40}]);
             var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic', weight: 40}]);
+        });
+        it('should keep separate weights for different topic clusters', function() {
+            world.addTopics('actor', [{keyword: 'atopic', weight: 20}], 'longterm');
+            world.addTopics('actor', [{keyword: 'atopic', weight: 40}], 'shortterm');
 
+            expect(world.getTopics('actor')).toEqual([{keyword: 'atopic', weight: 40}]);
+
+            world.removeTopics('actor', [{keyword: 'atopic'}], 'shortterm');
+            expect(world.getTopics('actor')).toEqual([{keyword: 'atopic', weight: 20}]);
         });
     });
     describe('get and set response runs', function() {
