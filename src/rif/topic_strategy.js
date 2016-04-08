@@ -1,8 +1,8 @@
-define([], function() {
+define(['rif/fuzzy'], function(RifFuzzy) {
     "use strict";
-    var service = { };
+    var strategy = { };
 
-    service.mergeCurrentTopics = function(called, current) {
+    strategy.mergeTopics = function(called, current) {
         var merged = called.slice();
         $.each(current, function(index, value) {
             var keyword = value.keyword;
@@ -21,5 +21,15 @@ define([], function() {
         });
         return merged;
     };
-    return service;
+
+    strategy.decayTopics = function(topics) {
+        var new_topics = [];
+        $.each(topics, function(index, topic) {
+            var new_topic = $.extend({}, topic);
+            new_topic.weight = RifFuzzy.adjust(new_topic.weight, 0, 0.2);
+            new_topics.push(new_topic);
+        });
+        return new_topics;
+    };
+    return strategy;
 });
