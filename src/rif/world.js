@@ -160,24 +160,38 @@ define(['./expression','./fuzzy'], function(RifExpression, RifFuzzy) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     };
 
-    proto.getTopics = function(actor) {
-        return this.topics[actor] || [];
+    proto.getCluster = function(actor, cluster_id) {
+        if (this.topics[actor] === undefined) {
+            this.topics[actor] = [];
+        }
+        return this.topics[actor];
     };
 
+    proto.getTopics = function(actor) {
+        return this.getCluster(actor);
+    };
+
+    function addTopicsToCluster(cluster, topics) {
+        cluster.push.apply(cluster, topics);
+    }
+
+    function removeTopicsFromCluster(cluster, topics) {
+        var keywords = topics.map(function(value) { return value.keyword; });
+        for (var i = cluster.length - 1; i >= 0; i--) {
+            if (keywords.indexOf(cluster[i].keyword) != -1) {
+                cluster.splice(i, 1);
+            }
+        }
+    }
+
     proto.addTopics = function(actor, topics) {
-        this.removeTopics(actor, topics);
-        var currentTopics = this.getTopics(actor);
-        this.topics[actor] = currentTopics.concat(topics);
+        var cluster = this.getCluster(actor);
+        removeTopicsFromCluster(cluster, topics)
+        addTopicsToCluster(cluster, topics);
     };
 
     proto.removeTopics = function(actor, topics) {
-        var keywords = topics.map(function(value) { return value.keyword; });
-        var currentTopics = this.getTopics('actor');
-        for(var i = currentTopics.length - 1; i >= 0; i--) {
-            if(keywords.indexOf(currentTopics[i].keyword) != -1) {
-                currentTopics.splice(i, 1);
-            }
-        }
+        removeTopicsFromCluster(this.getCluster('actor'), topics);
     };
 
     proto.getResponseRuns = function(id) {
