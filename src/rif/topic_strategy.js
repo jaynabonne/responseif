@@ -2,9 +2,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     "use strict";
     var strategy = { };
 
-    strategy.mergeTopics = function(called, current) {
-        var merged = called.slice();
-        $.each(current, function(index, value) {
+    strategy.mergeTopics = function(a, b) {
+        var merged = a.slice();
+        $.each(b, function(index, value) {
             var keyword = value.keyword;
             var i = 0;
             for (; i < merged.length; ++i) {
@@ -20,6 +20,10 @@ define(['rif/fuzzy'], function(RifFuzzy) {
             }
         });
         return merged;
+    };
+
+    strategy.mergeCurrentTopics = function(called, current) {
+        return this.mergeTopics(called, current);
     };
 
     strategy.decayTopics = function(topics) {

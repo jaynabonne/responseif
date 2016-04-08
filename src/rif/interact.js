@@ -1,4 +1,4 @@
-define([], function() {
+define(['./topic_strategy'], function(RifTopicStrategy) {
     "use strict";
 
     function resetMenuCallbacks() {
@@ -179,7 +179,8 @@ define([], function() {
             return responses;
         },
         callTopicsWithResponders: function(topics, responders, caller) {
-            this.response_lib.callTopics(this.getResponses(responders), topics, caller, this);
+            var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getTopics(caller));
+            this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this);
         },
         callActions: function(topics) {
             topics = convertTopics(topics);
@@ -188,7 +189,8 @@ define([], function() {
                 if (actions.hasOwnProperty(actor)) {
                     var responses = {};
                     responses[actor] = actions[actor];
-                    this.response_lib.callTopics(responses, topics, actor, this);
+                    var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getTopics(actor));
+                    this.response_lib.callTopics(responses, merged_topics, actor, this);
                 }
             }
         },

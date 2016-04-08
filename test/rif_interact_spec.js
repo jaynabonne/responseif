@@ -45,6 +45,9 @@ describe("RifInteract", function () {
             },
             getPOV: function() {
                 return "player";
+            },
+            getTopics: function(caller) {
+                return [];
             }
         };
         rif = {};
@@ -194,12 +197,27 @@ describe("RifInteract", function () {
             interact.call([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "player", interact);
         });
+        it("should include the current actor topics", function () {
+            world.getTopics = function(caller) {
+                return (caller === 'player') ? [{keyword: 'topicD'}] : [];
+            };
+            interact.call([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}, {keyword:"topicD"}], "player", interact);
+        });
     });
     describe("callActions", function () {
         it("should call the passed topics", function () {
-            rif.actions = { actor: "responses"};
+            rif.actions = {actor: "responses"};
             interact.callActions(["topicA", "topicB", "topicC"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "actor", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "actor", interact);
+        });
+        it("should include the current actor topics", function () {
+            world.getTopics = function (caller) {
+                return (caller === 'actor') ? [{keyword: 'topicD'}] : [];
+            };
+            rif.actions = {actor: "responses"};
+            interact.callActions(["ACT"]);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT"}, {keyword: "topicD"}], "actor", interact);
         });
     });
     describe("animate", function () {
@@ -305,7 +323,7 @@ describe("RifInteract", function () {
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(dom.removeElement).toHaveBeenCalledWith("#separator0", 1);
         });
-});
+    });
     describe("choose", function() {
         it("should auto-hide the menu on next command", function() {
             dom.removeElement = jasmine.createSpy("removeElement");
