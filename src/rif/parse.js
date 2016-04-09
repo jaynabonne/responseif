@@ -212,7 +212,7 @@ define([], function () {
         $.each(values, function (index, value) {
             var fields = value.split("=");
             if (fields.length === 1) {
-                matches.push({keyword: fields[0]});
+                matches.push({keyword: fields[0], weight: 1});
             } else {
                 matches.push({keyword: fields[0], weight: parseFloat(fields[1])/100.0});
             }

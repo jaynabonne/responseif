@@ -52,7 +52,7 @@ describe("rifParse", function () {
     it("should return an empty result for an empty input", function () {
         expect(rifParse([])).toEqual({responses: {}});
     });
-    it("should parse an empty response set", function () {
+    it("should parse an empty response group", function () {
         var rif = rifParse(
             [
                 responses("someObject"),
@@ -61,7 +61,7 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual({someObject: []});
     });
-    it("should parse multiple response sets", function () {
+    it("should parse multiple response groups", function () {
         var rif = rifParse(
             [
                 responses("anObject"),
@@ -75,7 +75,7 @@ describe("rifParse", function () {
                 anotherObject: []
             });
     });
-    it("should parse a response set with one response", function () {
+    it("should parse a response group with one response", function () {
         var rif = rifParse(
             [
                 responses("someObject"),
@@ -85,7 +85,7 @@ describe("rifParse", function () {
         );
         expect(rif.responses).toEqual({someObject: [{id: 0}]});
     });
-    it("should parse a response set with two responses", function () {
+    it("should parse a response group with two responses", function () {
         var rif = rifParse(
             [
                 responses("someObject"),
@@ -130,7 +130,7 @@ describe("rifParse", function () {
         expect(rif.responses).toEqual({
             anObject: [{
                 id: 0,
-                matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]
+                matches: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}]
             }]
         });
     });
@@ -145,7 +145,7 @@ describe("rifParse", function () {
         expect(rif.responses).toEqual({
             anObject: [{
                 id: 0,
-                matches: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]
+                matches: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}]
             }]
         });
     });
@@ -161,7 +161,7 @@ describe("rifParse", function () {
         expect(rif.responses).toEqual({
             anObject: [{
                 id: 0,
-                matches: [{keyword: "topicA", weight: 0.505}, {keyword: "topicB"}, {keyword: "topicC", weight: 0.75}]
+                matches: [{keyword: "topicA", weight: 0.505}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 0.75}]
             }]
         });
     });
@@ -370,7 +370,7 @@ describe("rifParse", function () {
                     {
                         id: 0,
                         does: {
-                            common: [{calls: [{keyword: "call1"}, {keyword: "call2"}, {keyword: "call3"}]}]
+                            common: [{calls: [{keyword: "call1", weight: 1}, {keyword: "call2", weight: 1}, {keyword: "call3", weight: 1}]}]
                         }
                     }
                 ]
@@ -398,7 +398,7 @@ describe("rifParse", function () {
                                     suggests: {
                                         keywords: [
                                             {keyword: "topic1", weight: 0.3},
-                                            {keyword: "topic2"},
+                                            {keyword: "topic2", weight: 1},
                                             {keyword: "topic3", weight: 0.7}
                                         ]
                                     }
@@ -431,8 +431,8 @@ describe("rifParse", function () {
                         id: 0,
                         does: {
                             common: [
-                                {adds: {keywords: [{keyword: "topic1"}, {keyword: "topic2"}, {keyword: "topic3"}]}},
-                                {adds: {keywords: [{keyword: "topic4"}, {keyword: "topic5"}], to: "someone"}},
+                                {adds: {keywords: [{keyword: "topic1", weight: 1}, {keyword: "topic2", weight: 1}, {keyword: "topic3", weight: 1}]}},
+                                {adds: {keywords: [{keyword: "topic4", weight: 1}, {keyword: "topic5", weight: 1}], to: "someone"}},
                                 {adds: {keywords: [{keyword: "topic6", weight: 0.5}, {keyword: "topic7", weight: 0.9}]}}
                             ]
                         }

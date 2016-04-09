@@ -322,18 +322,18 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     describe("addTopics", function () {
         it("should add the topics to the responder if a target is not specified", function() {
             var response = {
-                does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } } ] }
+                does: { common: [ { adds: {keywords: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}] } } ] }
             };
             processor.processResponse(response, 'responder');
 
-            expect(world.addTopics).toHaveBeenCalledWith("responder", [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
+            expect(world.addTopics).toHaveBeenCalledWith("responder", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}]);
         });
         it("should add the topics to the specified target", function() {
             var response = {
-                does: { common: [ { adds: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], to: "aTarget" } }] }
+                does: { common: [ { adds: {keywords: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], to: "aTarget" } }] }
             };
             processor.processResponse(response, 'responder');
-            expect(world.addTopics).toHaveBeenCalledWith("aTarget", [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
+            expect(world.addTopics).toHaveBeenCalledWith("aTarget", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}]);
         });
     });
     describe("resets", function () {
