@@ -86,7 +86,7 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
     };
 
     proto.process_adds = function (action, responder) {
-        this.world.addTopics(action.adds.to || responder, action.adds.keywords);
+        this.world.addTopics(action.adds.actor || responder, action.adds.keywords, action.adds.cluster);
     };
 
     proto.process_resets = function (action, responder, response) {

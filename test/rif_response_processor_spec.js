@@ -326,14 +326,21 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             };
             processor.processResponse(response, 'responder');
 
-            expect(world.addTopics).toHaveBeenCalledWith("responder", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}]);
+            expect(world.addTopics).toHaveBeenCalledWith("responder", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], undefined);
         });
         it("should add the topics to the specified target", function() {
             var response = {
-                does: { common: [ { adds: {keywords: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], to: "aTarget" } }] }
+                does: { common: [ { adds: {keywords: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], actor: "aTarget" } }] }
             };
             processor.processResponse(response, 'responder');
-            expect(world.addTopics).toHaveBeenCalledWith("aTarget", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}]);
+            expect(world.addTopics).toHaveBeenCalledWith("aTarget", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], undefined);
+        });
+        it("should add the topics to the specified cluster", function() {
+            var response = {
+                does: { common: [ { adds: {keywords: [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], cluster: "clusterA" } }] }
+            };
+            processor.processResponse(response, 'responder');
+            expect(world.addTopics).toHaveBeenCalledWith("responder", [{keyword: "topicA", weight: 1}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 1}], "clusterA");
         });
     });
     describe("resets", function () {

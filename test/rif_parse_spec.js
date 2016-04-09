@@ -419,8 +419,10 @@ describe("rifParse", function () {
                 does(),
                 token_pair("adds", "topic1 topic2 topic3"),
                 token_pair("adds", "topic4 topic5"),
-                token_pair("to", "someone"),
+                token_pair("for", "someone"),
                 token_pair("adds", "topic6=50 topic7=90"),
+                token_pair("adds", "topicA"),
+                token_pair("to", "clusterA"),
                 end()
             ]
         );
@@ -432,8 +434,9 @@ describe("rifParse", function () {
                         does: {
                             common: [
                                 {adds: {keywords: [{keyword: "topic1", weight: 1}, {keyword: "topic2", weight: 1}, {keyword: "topic3", weight: 1}]}},
-                                {adds: {keywords: [{keyword: "topic4", weight: 1}, {keyword: "topic5", weight: 1}], to: "someone"}},
-                                {adds: {keywords: [{keyword: "topic6", weight: 0.5}, {keyword: "topic7", weight: 0.9}]}}
+                                {adds: {keywords: [{keyword: "topic4", weight: 1}, {keyword: "topic5", weight: 1}], actor: "someone"}},
+                                {adds: {keywords: [{keyword: "topic6", weight: 0.5}, {keyword: "topic7", weight: 0.9}]}},
+                                {adds: {keywords: [{keyword: "topicA", weight: 1}], cluster: "clusterA"}}
                             ]
                         }
                     }

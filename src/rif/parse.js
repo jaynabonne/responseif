@@ -117,7 +117,11 @@ define([], function () {
         actions.push(action );
     };
     Parser.prototype.parse_adds_to = function(action, entry) {
-        action.to = entry.value;
+        action.cluster = entry.value;
+        this.index++;
+    };
+    Parser.prototype.parse_adds_for = function(action, entry) {
+        action.actor = entry.value;
         this.index++;
     };
     Parser.prototype.parse_does_animates = function(actions, entry) {
