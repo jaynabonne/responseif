@@ -124,6 +124,20 @@ define([], function () {
         action.actor = entry.value;
         this.index++;
     };
+    Parser.prototype.parse_does_removes = function(actions, entry) {
+        var action = {removes: {keywords: parseWeightedTopics(entry.value) }};
+        this.index++;
+        this.parseEntries(action.removes, "parse_removes_");
+        actions.push(action );
+    };
+    Parser.prototype.parse_removes_from = function(action, entry) {
+        action.cluster = entry.value;
+        this.index++;
+    };
+    Parser.prototype.parse_removes_for = function(action, entry) {
+        action.actor = entry.value;
+        this.index++;
+    };
     Parser.prototype.parse_does_animates = function(actions, entry) {
         var action = {animates: { selector: entry.value, transitions: [] } };
         this.index++;

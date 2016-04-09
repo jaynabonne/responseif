@@ -445,6 +445,38 @@ describe("rifParse", function () {
         );
     });
 
+    it("should parse response removes", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                response(),
+                does(),
+                token_pair("removes", "topic1 topic2 topic3"),
+                token_pair("removes", "topic4 topic5"),
+                token_pair("for", "someone"),
+                token_pair("removes", "topicA"),
+                token_pair("from", "clusterA"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        id: 0,
+                        does: {
+                            common: [
+                                {removes: {keywords: [{keyword: "topic1", weight: 1}, {keyword: "topic2", weight: 1}, {keyword: "topic3", weight: 1}]}},
+                                {removes: {keywords: [{keyword: "topic4", weight: 1}, {keyword: "topic5", weight: 1}], actor: "someone"}},
+                                {removes: {keywords: [{keyword: "topicA", weight: 1}], cluster: "clusterA"}}
+                            ]
+                        }
+                    }
+                ]
+            }
+        );
+    });
+
     it("should parse response does for other slots", function () {
         var rif = rifParse(
             [
