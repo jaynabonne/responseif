@@ -172,7 +172,7 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
         return topics[cluster_id];
     };
 
-    proto.getTopics = function(actor) {
+    proto.getCurrentTopics = function(actor) {
         if (!this.topics[actor]) {
             return [];
         }

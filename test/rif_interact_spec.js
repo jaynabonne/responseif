@@ -46,7 +46,7 @@ describe("RifInteract", function () {
             getPOV: function() {
                 return "player";
             },
-            getTopics: function(caller) {
+            getCurrentTopics: function(caller) {
                 return [];
             }
         };
@@ -198,7 +198,7 @@ describe("RifInteract", function () {
             expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "player", interact);
         });
         it("should include the current actor topics", function () {
-            world.getTopics = function(caller) {
+            world.getCurrentTopics = function(caller) {
                 return (caller === 'player') ? [{keyword: 'topicD'}] : [];
             };
             interact.call([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
@@ -212,7 +212,7 @@ describe("RifInteract", function () {
             expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "actor", interact);
         });
         it("should include the current actor topics", function () {
-            world.getTopics = function (caller) {
+            world.getCurrentTopics = function (caller) {
                 return (caller === 'actor') ? [{keyword: 'topicD'}] : [];
             };
             rif.actions = {actor: "responses"};

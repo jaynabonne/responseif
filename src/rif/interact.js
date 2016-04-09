@@ -179,7 +179,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             return responses;
         },
         callTopicsWithResponders: function(topics, responders, caller) {
-            var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getTopics(caller));
+            var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(caller));
             this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this);
         },
         callActions: function(topics) {
@@ -189,7 +189,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 if (actions.hasOwnProperty(actor)) {
                     var responses = {};
                     responses[actor] = actions[actor];
-                    var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getTopics(actor));
+                    var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(actor));
                     this.response_lib.callTopics(responses, merged_topics, actor, this);
                 }
             }
