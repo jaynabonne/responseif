@@ -82,7 +82,7 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
     };
 
     proto.process_suggests = function (action) {
-        this.interact.suggest(action.suggests);
+        this.interact.suggestTopics(action.suggests);
     };
 
     proto.process_adds = function (action, responder) {
