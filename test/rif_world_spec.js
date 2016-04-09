@@ -221,38 +221,43 @@ describe("RifWorld", function () {
     });
 
     describe('Add and Remove Topics', function() {
-        it('returns an empty array if no topics have been set', function() {
-            var topics = world.getCurrentTopics('actor');
+        it('getTopics returns an empty array if no topics have been set', function() {
+            var topics = world.getTopics('actor', 'cluster');
             expect(topics).toEqual([]);
         });
         it('can add and then get a topic', function() {
             world.addTopics('actor', [{keyword: 'atopic'}]);
-            var topics = world.getCurrentTopics('actor');
+            var topics = world.getTopics('actor');
+            expect(topics).toEqual([{keyword: 'atopic'}]);
+        });
+        it('should default to "persistent" for an unspecified cluster', function() {
+            world.addTopics('actor', [{keyword: 'atopic'}]);
+            var topics = world.getTopics('actor', 'persistent');
             expect(topics).toEqual([{keyword: 'atopic'}]);
         });
         it('can add sequential topic', function() {
             world.addTopics('actor', [{keyword: 'atopic'}]);
             world.addTopics('actor', [{keyword: 'btopic'}]);
-            var topics = world.getCurrentTopics('actor');
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic'}, {keyword: 'btopic'}]);
         });
         it('can remove topic', function() {
             world.addTopics('actor', [{keyword: 'topic1'}, {keyword: 'topic2'}, {keyword: 'topic3'}, {keyword: 'topic4'}]);
             world.removeTopics('actor', [{keyword: 'topic2'}, {keyword: 'topic4'}]);
-            var topics = world.getCurrentTopics('actor');
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'topic1'}, {keyword: 'topic3'}]);
         });
         it('should not duplicate existing topics', function() {
             world.addTopics('actor', [{keyword: 'atopic'}]);
             world.addTopics('actor', [{keyword: 'atopic'}]);
-            var topics = world.getCurrentTopics('actor');
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic'}]);
 
         });
         it('should update weights for existing topics', function() {
             world.addTopics('actor', [{keyword: 'atopic', weight: 20}]);
             world.addTopics('actor', [{keyword: 'atopic', weight: 40}]);
-            var topics = world.getCurrentTopics('actor');
+            var topics = world.getTopics('actor');
             expect(topics).toEqual([{keyword: 'atopic', weight: 40}]);
         });
         it('should keep separate weights for different topic clusters', function() {

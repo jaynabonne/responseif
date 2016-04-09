@@ -160,8 +160,8 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     };
 
-    proto.getCluster = function(actor, cluster_id) {
-        cluster_id = cluster_id || 'longterm';
+    proto.getTopics = function(actor, cluster_id) {
+        cluster_id = cluster_id || 'persistent';
         if (this.topics[actor] === undefined) {
             this.topics[actor] = {};
         }
@@ -197,13 +197,13 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
     }
 
     proto.addTopics = function(actor, topics, cluster_id) {
-        var cluster = this.getCluster(actor, cluster_id);
+        var cluster = this.getTopics(actor, cluster_id);
         removeTopicsFromCluster(cluster, topics);
         addTopicsToCluster(cluster, topics);
     };
 
     proto.removeTopics = function(actor, topics, cluster_id) {
-        removeTopicsFromCluster(this.getCluster('actor', cluster_id), topics);
+        removeTopicsFromCluster(this.getTopics('actor', cluster_id), topics);
     };
 
     proto.getResponseRuns = function(id) {
