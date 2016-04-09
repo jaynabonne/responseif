@@ -33,7 +33,7 @@
 		.does
 			.uses first
 				.response
-					.needs door_open
+					.needs door_open:
 					.does
                         .says Motors engage, wheels turn, and you slowly roll out of your alcove into the hallway.
 						.moves-player-north-to hallway

@@ -6,17 +6,17 @@
 	.response .<value>
 		.selects
 			.response
-				.needs not door_open
+				.needs not door_open:
 				.prompts Open the alcove door
 				.does
-					.sets door_open
+					.sets door_open:
 					.calls ALCOVE-DOOR-OPENS
 
 			.response
-				.needs door_open
+				.needs door_open:
 				.prompts Close the alcove door
 				.does
-					.sets not door_open
+					.sets not door_open:
 					.calls ALCOVE-DOOR-CLOSES
 		.end
 .enddef
@@ -25,10 +25,10 @@
 	.response *door
 		.selects
 			.response
-				.needs not door_open
+				.needs not door_open:
 				.does .says The alcove door is closed. .autohides
 			.response
-				.needs door_open
+				.needs door_open:
 				.does .says The alcove door is open. .autohides
 		.end
 	.response ALCOVE-DOOR-OPENS
