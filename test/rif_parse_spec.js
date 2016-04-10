@@ -45,6 +45,10 @@ describe("rifParse", function () {
         return token_pair("uses", type);
     }
 
+    function model(actor) {
+        return token_pair("model", actor);
+    }
+
     function end() {
         return token_pair("end");
     }
@@ -914,6 +918,26 @@ describe("rifParse", function () {
             ]
         );
         expect(rif.responses.anObject[0]).toEqual({ id: 0, weights: 'weight string'});
+    });
+    describe('model', function() {
+        it('should parse an empty model', function() {
+            var rif = rifParse(
+                [
+                    model('actor'),
+                    end()
+                ]
+            );
+            expect(rif.model.actor).toEqual({});
+        });
+        it('should default to "standard" if no actor is specified', function() {
+            var rif = rifParse(
+                [
+                    model(),
+                    end()
+                ]
+            );
+            expect(rif.model.standard).toEqual({});
+        });
     });
 });
 });

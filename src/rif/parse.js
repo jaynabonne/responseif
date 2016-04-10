@@ -305,6 +305,30 @@ define([], function () {
         rif.sets.push(this.parseSetExpression(expression));
     };
 
+    Parser.prototype.parse_model = function() {
+        var actor = this.currentPair().value || 'standard';
+        this.index++;
+        var rif = this.rif;
+        rif.model = rif.model || [];
+        rif.model[actor] = this.parseModel();
+    };
+
+    Parser.prototype.parseModel = function() {
+        var model = {};
+        while (this.index < this.tokens.length) {
+            var pair = this.currentPair();
+            var token = pair.token;
+            if (token === "end") {
+                this.index++;
+                break;
+            } else {
+                console.log('parse_responses(' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or model phrase)');
+                break;
+            }
+        }
+        return model;
+    };
+
     Parser.prototype.parse_listener = function() {
         var listener = this.currentPair().value;
         var rif = this.rif;
