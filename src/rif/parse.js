@@ -313,14 +313,32 @@ define([], function () {
         rif.model[actor] = this.parseModel();
     };
 
+    Parser.prototype.parse_model_cluster = function(model, pair) {
+        var cluster = {};
+        this.index++;
+        this.parseEntries(cluster, 'parse_model_cluster_');
+        model.clusters[pair.value] = cluster;
+    };
+
+    Parser.prototype.parse_model_cluster_scale = Parser.prototype.addString;
+    Parser.prototype.parse_model_cluster_decay = Parser.prototype.addString;
+
     Parser.prototype.parseModel = function() {
-        var model = {};
+        var prefix = 'parse_model_';
+
+        var model = {
+            clusters: {}
+        };
+
         while (this.index < this.tokens.length) {
             var pair = this.currentPair();
             var token = pair.token;
             if (token === "end") {
                 this.index++;
                 break;
+            } else if (this[prefix + pair.token]) {
+                this[prefix + pair.token].call(this, model, pair);
+                this.index++;
             } else {
                 console.log('parse_responses(' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or model phrase)');
                 break;

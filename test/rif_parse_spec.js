@@ -927,7 +927,9 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.actor).toEqual({});
+            expect(rif.model.actor).toEqual({
+                clusters: {}
+            });
         });
         it('should default to "standard" if no actor is specified', function() {
             var rif = rifParse(
@@ -936,7 +938,47 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.standard).toEqual({});
+            expect(rif.model.standard).toEqual({
+                clusters: {}
+            });
+        });
+        it('should allow defining a cluster', function() {
+            var rif = rifParse(
+                [
+                    model('actor'),
+                        token_pair('cluster', 'clustername'),
+                    end()
+                ]
+            );
+            expect(rif.model.actor).toEqual({
+                clusters: {clustername: {}}
+            });
+        });
+        it('should parse a cluster scale', function() {
+            var rif = rifParse(
+                [
+                    model('actor'),
+                        token_pair('cluster', 'clustername'),
+                            token_pair('scale', 'expression'),
+                    end()
+                ]
+            );
+            expect(rif.model.actor).toEqual({
+                clusters: {clustername: { scale: 'expression'}}
+            });
+        });
+        it('should parse a cluster decay', function() {
+            var rif = rifParse(
+                [
+                    model('actor'),
+                        token_pair('cluster', 'clustername'),
+                            token_pair('decay', 'expression'),
+                    end()
+                ]
+            );
+            expect(rif.model.actor).toEqual({
+                clusters: {clustername: { decay: 'expression'}}
+            });
         });
     });
 });
