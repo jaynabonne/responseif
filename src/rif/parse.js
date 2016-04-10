@@ -338,7 +338,6 @@ define([], function () {
                 break;
             } else if (this[prefix + pair.token]) {
                 this[prefix + pair.token].call(this, model, pair);
-                this.index++;
             } else {
                 console.log('parse_responses(' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or model phrase)');
                 break;

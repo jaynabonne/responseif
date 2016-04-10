@@ -980,6 +980,24 @@ describe("rifParse", function () {
                 clusters: {clustername: { decaying: 'expression'}}
             });
         });
+        it('should parse multiple clusters', function() {
+            var rif = rifParse(
+                [
+                    model('actor'),
+                    token_pair('cluster', 'cluster1'),
+                        token_pair('decaying', 'exp1'),
+                    token_pair('cluster', 'cluster2'),
+                        token_pair('decaying', 'exp2'),
+                    end()
+                ]
+            );
+            expect(rif.model.actor).toEqual({
+                clusters: {
+                    cluster1: { decaying: 'exp1'},
+                    cluster2: { decaying: 'exp2'}
+                }
+            });
+        });
     });
 });
 });
