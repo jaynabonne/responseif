@@ -959,12 +959,12 @@ describe("rifParse", function () {
                 [
                     model('actor'),
                         token_pair('cluster', 'clustername'),
-                            token_pair('scale', 'expression'),
+                            token_pair('scaling', 'expression'),
                     end()
                 ]
             );
             expect(rif.model.actor).toEqual({
-                clusters: {clustername: { scale: 'expression'}}
+                clusters: {clustername: { scaling: 'expression'}}
             });
         });
         it('should parse a cluster decay', function() {
@@ -972,12 +972,12 @@ describe("rifParse", function () {
                 [
                     model('actor'),
                         token_pair('cluster', 'clustername'),
-                            token_pair('decay', 'expression'),
+                            token_pair('decaying', 'expression'),
                     end()
                 ]
             );
             expect(rif.model.actor).toEqual({
-                clusters: {clustername: { decay: 'expression'}}
+                clusters: {clustername: { decaying: 'expression'}}
             });
         });
     });
