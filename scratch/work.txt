@@ -1,0 +1,479 @@
+2016-04-10
+
+.model actor
+    .cluster persistent .scale 0.9
+    .cluster transient .decay 0.4
+    .trait happy .decaying 0.3 .toward <expression>
+.end
+
+.model another actor .use actor
+
+----------------------------------------
+
+2016-04-09
+
+.add <topics> .to <cluster> .for <responder>
+.remove <topics> .from <cluster> .for <responder>
+
+.adds <topics> [.to <responder>] [.in <long-term>] [.decaying [.toward target] [.stepping step]]
+.removes <topics> [.from <long-term>]
+
+----------------------------------------
+
+2016-04-07
+
+.adds <topics> [.to <long-term>] [.decaying [.toward target] [.stepping step]]
+.removes <topics> [.from <long-term>]
+
+.suggests topics
+
+----------------------------------------
+
+2016-04-05
+
+.uses first
+.uses all
+.uses random
+.uses best
+
+Same for selects?
+
+-----
+
+Can we handle the case of multiple similar topics? Consider a case where people are discussing movies. A person may have
+memories of various movies, but only one gets chosen at a time to be mentioned.
+
+I've seen:
+- Star Wars
+- Close Encounters
+- 2001
+- Something's Gotta Give
+- The Mummy
+- Stargate
+
+The topic would be "movie". There could be related topics like "science fiction" or "comedy". (topics = movies, comedy)
+But what is the way to rank the movies in order to discuss one of them?
+
+One criteria is how much the person liked the movie. Weightings?
+
+Another might be how much the person thinks the movie would appeal to the people in the discussion.
+
+Tom <==> comedies
+movies comedies <==> Something's Gotta Give
+
+So: movies + Tom => movies + comedy => Something's Gotta Give
+
+-----
+Internal responses, with topics cascading to topics.
+
+----------------------------------------
+
+2016-04-04
+
+Each topic has:
+    - keyword
+    - weight
+    - decay
+    - decay target
+
+Combining topics
+    - Do we keep multiple influences? Or combine topics?
+
+k: keyword, w: 100, d: 0.2, dt: 0   -> decays
+k: keyword, w: 80, d: 0.0, dt: 0    -> doesn't
+
+----------------------------------------
+
+2016-04-02
+
+merging weights:
+
+100 90 80
+    100 90 => 145
+        145 80 => 185
+80 90 100
+    90 80 => 130
+        130 100 => 180
+
+80 100 90
+    80 100 => 140
+        140 90 => 185
+
+50 100 10
+    50 100 => 125
+        125 10 => 130
+
+10 100 50
+    10 100 => 105
+        105 50 => 130
+
+10 50 100
+    10 50 => 55
+        55 100 => 127
+
+Incoming: III
+Long term: LLL
+Short term: SSS
+
+Given all three, how to combine? Which takes precedence?
+
+- The final value should be no less than any of the input values. "max" satisfies that.
+
+During response handling: merge topics with responder long and short term topics (or topics with "current topics")
+During action handling: merge actor current topics
+
+
+----------------------------------------
+
+2016-04-01
+Attribute paths.
+
+Current:
+    - absolute attribute
+        open
+        happy
+        shared
+
+    - relative to current responder
+        :happy
+        :health
+
+    bare name (no leading colon) = absolute attribute
+    colon-prefixed: relative to current responder
+
+Proposed 1:
+
+    - relative to current responder
+        happy   ->      :responder:happy
+        open    ->      :responder:open
+        emotions:sad -> :responder:emotions:sad
+
+    - absolute, fully specified
+
+    :responder:attribute
+        :king:name
+
+    - relative, part of whole
+
+        ::attribute   = attribute of top-level component (:: is empty version of :responder:)
+
+    - absolute, partially specified (attribute of top-level object). Same as bare name if single level deep.
+
+        ::name
+
+Proposed 2:
+
+    - relative to current responder
+        happy               -> responder:happy
+        open                -> responder:open
+        shared              -> responder:shared
+        :shared             -> responder:shared
+        :emotions:sad       -> responder:emotions:sad
+        :thoughts:goals:win -> responder:thoughts:goal:win
+
+    - absolute
+        responder:attribute
+
+    - part of whole, parent component attribute
+        ::attribute
+
+
+----------------------------------------
+
+Actions can be "introspective", modifying internal state based on internal state. This could be based on rules or direct internal "suggests".
+This can give a character complex, constantly-changing internal state, based on *self feedback*.
+
+"Multiple I's" all vying for attention?
+
+Should topic and emotion decay be more built in? Set up rules to follow, and the engine does it?
+
+Current::
+Emotional state: variables with value -1 to 1, coming in as response weights.
+Thoughts, ideas: topics with value 0 to 1 (?), coming in as initial response scores.
+Facts: world state with whatever values, coming in as response needs.
+
+Is there overlap? Combination? Can world state be a response weight? Can a topic be a need? Are they all the same thing, or are they inherently
+different and should be kept that way?
+
+----------------------------------------
+
+.response
+    .does
+        .recalls .translating a .to b .and c .to d .and e .to
+        .forwards .translating a .to b .and c .to d .and e .to
+        .echoes .translating a .to b .and c .to d .and e .to
+        .repeats .translating a .to b .and c .to d .and e .to
+
+----------------------------------------
+
+.responses door-proxy
+.end
+
+.component door-proxy .part-of door
+.component door-proxy .of door
+
+'door-proxy' uses 'door' as its responder. (impersonates?)
+
+That may be sufficient, but do we want to be able to specify either "component" or "master" attributes?
+
+----------------------------------------
+Actions that default "say" (without an "into") should only allow the text on screen if the actor is also a current pov responder.
+No screaming from the other end of the building.
+
+----------------------------------------
+
+
+Use for topics:
+
+- short term topics
+- long term topics
+- goals
+- memories
+- instinct, built-in behaviors for survival, hunger, etc.
+- moods
+- fears, phobias
+- thoughts
+
+memories can be both topics and state (generally)
+
+sleepy => return to room
+
+door shutting -> event = topic
+door being in the shut state -> state
+
+----------------------------------------
+World:
+	- rif
+	- states
+	- parents/children
+	- POV
+	- actor data model
+		- transient topics
+		- persistent topics
+
+Topics:
+	- keyword
+	- weight
+	- decay rate (?) [ could make "transient" vs "persistent" more continuous ]
+	- new
+
+----------------------------------------
+.# Set boolean true
+.sets someflag
+
+.# Set boolean false
+.sets not someflag
+.sets !someflag
+
+.# needs true
+.needs someflag
+
+.# needs false
+.needs !someflag
+.needs not someflag
+
+.# needs multiple flags
+.needs someflag someotherflag
+.needs someflag and someotherflag
+.needs someflag !someotherflag
+.needs someflag and not someotherflag
+.needs someflag or someotherflag
+
+.# misc needs
+
+.needs someflag or (thisflag and not thatflag)
+.needs x > 1 and y < 100
+
+and:
+    x > 1
+    y < 100
+
+    not x and y
+
+    x and y not
+
+.sets not open
+.sets happy
+.sets not happy
+.sets very happy  => .sets happy=very
+.sets somewhat happy => sets happy=somewhat
+.sets more happy
+.sets less happy
+
+.set break .to .text <span style='font-size:6pt;'>&nbsp;</span>
+.set break=<span style='font-size:6pt;'>&nbsp;</span>
+.set break .to <span style='font-size:6pt;'>&nbsp;</span>
+
+.set y .to x+1
+.set y=x+1
+
+
+=================================================================================
+
+mining bot
+
+inputs		door_open player:parent saw_player
+outputs 	GREET_PLAYER PLEAD_WITH_PLAYER FOLLOW_PLAYER
+
+not door open, player:parent="alcove"  -> nothing
+door_open, player:parent="alcove, not saw player -> GREET_PLAYER
+
+=================================================================================
+
+extremely   -1.4
+
+very        -1.2
+
+unhappy     -1
+
+mostly      -0.8
+
+fairly      -0.6
+
+somewhat    -0.4
+
+slightly    -0.2
+
+--------    0       not (happy or unhappy)
+
+slightly    0.2
+
+somewhat    0.4
+
+fairly      0.6
+
+mostly      0.8
+
+happy       1
+
+very        1.2
+
+extremely   1.4
+
+=================================================================================
+
+trigger
+stimulus
+incentive
+motivation
+motive
+impetus
+impulse
+fillip
+catalyst
+cause
+
+long term topics
+permanent topics
+persisting
+motivations
+goals
+
+short term topics
+transient topics
+
+.adds permanent
+
+motivation 
+inspiration
+reason
+idea
+concept
+inclination
+knowledge
+
+inform
+convey
+notify
+transmit
+dispatch
+conduct
+announce
+disclose
+declare
+impart
+proclaim
+
+dissuade
+discourage
+
+forget
+dismiss
+
+.favors happy
+
+.prefers happy
+
+.biases happy
+
+.affinity happy
+
+.wants happy
+
+.weights happy and content
+
+.weighs happy
+
+.scales sad and wet
+
+
+.add .transient 
+.add .permanent
+
+.add-permanent
+.adds-permanent-topic  foo .to responder
+.add-transient-topic 
+
+.adds .permanent foo bar baz .to responder
+.removes .permanent bix .from responder
+
+.adds .topic foo bar baz .to responder
+.removes .topic bix .from responder
+
+.add .topic foo=50 .to responder
+.add foo=50 .to responder
+ 
+.suggests ceiling
+.suggests walls .to blah
+
+.remember foo bar 
+.remembers foo bar
+.remembers bix .by responder
+
+.forgets bar
+.forgets bar .by responder
+
+.says Press any key to continue .into #some_div .as prompt_class
+
+# phone call
+.connects hotel room .to mary
+
+.set traffic light:state .to green
+.actions traffic light
+	.response
+		.does 3
+			.says The traffic light turns yellow.
+			.sets :state .to yellow
+		.does 6
+			.says The traffic light turns red.
+			.sets :state .to red
+		.does 12
+			.says The traffic light turns green.
+			.sets :state .to green
+			.resets
+.end
+
+===========================================================
+Stimulus-response S-curve
+
+End-weighted Addition
+
+NewValue = CurrentValue + (MaxValue - CurrentValue)*Increment/(MaxValue-MinValue)
+
+==> NewValue = CurrentValue + (1-CurrentValue)*Increment
+
+End-weighted Subtraction
+
+NewValue = CurrentValue - (MaxValue - CurrentValue)*Decrement/(MaxValue-MinValue)
+
+==> NewValue = CurrentValue - (1-CurrentValue)*Decrement
