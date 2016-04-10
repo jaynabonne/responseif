@@ -221,6 +221,11 @@ describe("RifWorld", function () {
     });
 
     describe('Add and Remove Topics', function() {
+        var rif;
+        beforeEach(function() {
+            rif = {};
+            world.addRif(rif);
+        });
         it('getTopics returns an empty array if no topics have been set', function() {
             var topics = world.getTopics('actor', 'cluster');
             expect(topics).toEqual([]);
@@ -255,19 +260,33 @@ describe("RifWorld", function () {
 
         });
         it('should update weights for existing topics', function() {
-            world.addTopics('actor', [{keyword: 'atopic', weight: 20}]);
-            world.addTopics('actor', [{keyword: 'atopic', weight: 40}]);
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.2}]);
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.4}]);
             var topics = world.getTopics('actor');
-            expect(topics).toEqual([{keyword: 'atopic', weight: 40}]);
+            expect(topics).toEqual([{keyword: 'atopic', weight: 0.4}]);
         });
         it('should keep separate weights for different topic clusters', function() {
-            world.addTopics('actor', [{keyword: 'atopic', weight: 20}], 'longterm');
-            world.addTopics('actor', [{keyword: 'atopic', weight: 40}], 'shortterm');
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.2}], 'longterm');
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.4}], 'shortterm');
 
-            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 40}]);
+            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.4}]);
 
             world.removeTopics('actor', [{keyword: 'atopic'}], 'shortterm');
-            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 20}]);
+            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.2}]);
+        });
+        xit('should use the model scaling', function() {
+            rif.model = {
+                actor: {
+                    clusters: {
+                        longterm: {
+                            scaling: 0.75
+                        }
+                    }
+                }
+            };
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.8}], 'longterm');
+
+            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.6}]);
         });
     });
     describe('get and set response runs', function() {

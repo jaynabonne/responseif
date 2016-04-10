@@ -176,8 +176,10 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
         if (!this.topics[actor]) {
             return [];
         }
+        var model = this.rif.model ? this.rif.model[actor] : undefined;
         var topics = [];
-        $.each(this.topics[actor], function(index, cluster) {
+        $.each(this.topics[actor], function(cluster_id, cluster) {
+            //var model_cluster = model.clusters[cluster_id];
             topics = RifTopicStrategy.mergeTopics(topics, cluster);
         });
         return topics;

@@ -120,18 +120,18 @@ describe("RifInteract", function () {
         it("should invoke 'call' on the interact for a topic", function() {
             var says = { text: "My name is {+NAME+}." };
             interact.say(says, 'responder');
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME"}], "player", jasmine.any(Object));
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME", weight: 1.0}], "player", jasmine.any(Object));
         });
         it("should invoke 'call' on the interact for a caller-targeted topic", function() {
             world.getState.andReturn("responder");
             var says = { text: "My name is {+NAME>\"responder\"+}." };
             interact.say(says, 'responder');
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME"}], "responder", jasmine.any(Object));
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME", weight: 1.0}], "responder", jasmine.any(Object));
         });
         it("should invoke 'call' on the interact for multiple topic", function() {
             var says = { text: "My name is {+FIRST NAME+}." };
             interact.say(says, 'responder');
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"FIRST"}, {keyword:"NAME"}], "player", jasmine.any(Object));
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"FIRST", weight: 1.0}, {keyword:"NAME", weight: 1.0}], "player", jasmine.any(Object));
         });
         function fakeCall(responses, topics) {
             if (topics[0].keyword == "NAME") {
@@ -194,30 +194,30 @@ describe("RifInteract", function () {
     });
     describe("call", function () {
         it("should call the passed topics", function () {
-            interact.call([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}], "player", interact);
+            interact.call([{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}]);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}], "player", interact);
         });
         it("should include the current actor topics", function () {
             world.getCurrentTopics = function(caller) {
-                return (caller === 'player') ? [{keyword: 'topicD'}] : [];
+                return (caller === 'player') ? [{keyword: 'topicD', weight: 1.0}] : [];
             };
-            interact.call([{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA"}, {keyword:"topicB"}, {keyword:"topicC"}, {keyword:"topicD"}], "player", interact);
+            interact.call([{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}]);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}, {keyword:"topicD", weight: 1.0}], "player", interact);
         });
     });
     describe("callActions", function () {
         it("should call the passed topics", function () {
             rif.actions = {actor: "responses"};
             interact.callActions(["topicA", "topicB", "topicC"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}], "actor", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}], "actor", interact);
         });
         it("should include the current actor topics", function () {
             world.getCurrentTopics = function (caller) {
-                return (caller === 'actor') ? [{keyword: 'topicD'}] : [];
+                return (caller === 'actor') ? [{keyword: 'topicD', weight: 1.0}] : [];
             };
             rif.actions = {actor: "responses"};
             interact.callActions(["ACT"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT"}, {keyword: "topicD"}], "actor", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact);
         });
     });
     describe("animate", function () {

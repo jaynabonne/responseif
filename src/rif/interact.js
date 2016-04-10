@@ -7,7 +7,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
     }
 
     function convertTopics(topics) {
-        return topics.map(function(value) { return {keyword: value} });
+        return topics.map(function(value) { return {keyword: value, weight: 1.0} });
     }
 
     var type = function (dom, formatter, world, response_lib, rif) {
