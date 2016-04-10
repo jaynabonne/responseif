@@ -16,6 +16,17 @@ define(['rif/topic_strategy'], function(RifTopicStrategy) {
                 {keyword: 'keyword2', weight: 0.5}
             ]);
         });
+        it('should scale new topics if a scale is passed', function() {
+            var merged = RifTopicStrategy.mergeTopics(
+                [{keyword: 'keyword1', weight: 1}],
+                [{keyword: 'keyword2', weight: 0.5}],
+                0.5
+            );
+            expect(merged).toEqual([
+                {keyword: 'keyword1', weight: 1},
+                {keyword: 'keyword2', weight: 0.25}
+            ]);
+        });
         it('should not replace topic with topic having lower value', function() {
             var merged = RifTopicStrategy.mergeTopics(
                 [{keyword: 'keyword1', weight: 0.6}],

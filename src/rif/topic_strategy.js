@@ -2,21 +2,24 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     "use strict";
     var strategy = { };
 
-    strategy.mergeTopics = function(a, b) {
+    strategy.mergeTopics = function(a, b, scale) {
+        scale = scale || 1.0;
         var merged = a.slice();
         $.each(b, function(index, value) {
             var keyword = value.keyword;
             var i = 0;
+            var scaled_weight = value.weight*scale;
+            var new_topic = { keyword: keyword, weight: scaled_weight};
             for (; i < merged.length; ++i) {
                 if (merged[i].keyword === keyword) {
-                    if (merged[i].weight < value.weight) {
-                        merged[i] = value;
+                    if (merged[i].weight < scaled_weight) {
+                        merged[i] = new_topic;
                     }
                     break;
                 }
             }
             if (i === merged.length) {
-                merged.push(value);
+                merged.push(new_topic);
             }
         });
         return merged;
