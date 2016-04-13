@@ -274,19 +274,19 @@ describe("RifWorld", function () {
             world.removeTopics('actor', [{keyword: 'atopic'}], 'shortterm');
             expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.2}]);
         });
-        xit('should use the model scaling', function() {
+        it('should use the model scaling', function() {
             rif.model = {
                 actor: {
                     clusters: {
                         longterm: {
-                            scaling: 0.75
+                            scaling: 0.25
                         }
                     }
                 }
             };
-            world.addTopics('actor', [{keyword: 'atopic', weight: 0.8}], 'longterm');
+            world.addTopics('actor', [{keyword: 'atopic', weight: 2}], 'longterm');
 
-            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.6}]);
+            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.5}]);
         });
     });
     describe('get and set response runs', function() {

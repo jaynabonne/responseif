@@ -179,8 +179,8 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
         var model = this.rif.model ? this.rif.model[actor] : undefined;
         var topics = [];
         $.each(this.topics[actor], function(cluster_id, cluster) {
-            //var model_cluster = model.clusters[cluster_id];
-            topics = RifTopicStrategy.mergeTopics(topics, cluster);
+            var model_cluster = model ? model.clusters[cluster_id] : undefined;
+            topics = RifTopicStrategy.mergeTopics(topics, cluster, model_cluster ? model_cluster.scaling || 1 : 1);
         });
         return topics;
     };
