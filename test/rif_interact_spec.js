@@ -231,13 +231,13 @@ describe("RifInteract", function () {
     });
     describe("invoke", function () {
         it("should invoke the function", function() {
-            global_world = 0;
-            global_interact = 0;
-            interact.invoke("global_world = world; global_interact = interact;");
-            expect(global_world).toBe(world);
-            expect(global_interact).toBe(interact);
-            delete global_world;
-            delete global_interact;
+            world.api = jasmine.createSpy('api');
+            interact.other_api = jasmine.createSpy('other_api');
+
+            interact.invoke('world.api(responder); interact.other_api();', 'aresponder');
+
+            expect(world.api).toHaveBeenCalledWith('aresponder');
+            expect(interact.other_api).toHaveBeenCalledWith();
         });
     });
     describe("clear", function () {

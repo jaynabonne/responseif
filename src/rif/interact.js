@@ -200,9 +200,9 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 self.dom.animate(animates.selector, transition.to, transition.lasting);
             });
         },
-        invoke: function(body) {
-            var f = new Function("world", "interact", body);
-            f(this.world, this);
+        invoke: function(body, responder) {
+            var f = new Function('world', 'interact', 'responder', body);
+            f(this.world, this, responder);
         },
         clear: function() {
             this.hideSections();
