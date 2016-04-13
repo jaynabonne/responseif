@@ -73,8 +73,8 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
         this.interact.animate(action.animates);
     };
 
-    proto.process_invokes = function (action) {
-        this.interact.invoke(action.invokes);
+    proto.process_invokes = function (action, responder) {
+        this.interact.invoke(action.invokes, responder);
     };
 
     proto.process_moves = function(action, responder) {

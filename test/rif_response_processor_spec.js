@@ -288,7 +288,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 does: { common: [ { invokes: "some function body" } ] }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.invoke).toHaveBeenCalledWith("some function body");
+            expect(interact.invoke).toHaveBeenCalledWith('some function body', 'responder');
         });
     });
     describe("moves", function () {
