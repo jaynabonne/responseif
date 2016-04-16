@@ -36,5 +36,10 @@ define(['rif/model'], function(RifModel) {
             model.addTopics('cluster_id', [{keyword: 'atopic', weight: 0.9}]);
             expect(model.getTopics('cluster_id')).toEqual([{keyword: 'atopic', weight: 0.9}]);
         });
+        it('should not update an existing topic weight if the new one is less', function() {
+            model.addTopics('cluster_id', [{keyword: 'atopic', weight: 0.9}]);
+            model.addTopics('cluster_id', [{keyword: 'atopic', weight: 0.6}]);
+            expect(model.getTopics('cluster_id')).toEqual([{keyword: 'atopic', weight: 0.9}]);
+        });
     });
 });
