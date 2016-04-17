@@ -1,8 +1,37 @@
+2016-04-16
+
+Combining weights:
+
+- When adding weight to cluster, take the max weight of new and any existing.
+- When combining weights, adjust weight toward 2 (?).
+
+current = current + (2-current)*(new/2)
+
+This works well, as it doesn't matter which order you add the weights!
+
+
+----------------------------------------
+
+2016-04-13
+
+.suggests -> .implies
+.perceives
+
+.model actor
+    .cluster persistent .scaling 0.9
+    .cluster transient .decaying 0.4
+    .infers transient
+    .trait happy .decaying 0.3 .toward <expression>
+.end
+
+
+----------------------------------------
+
 2016-04-10
 
 .model actor
-    .cluster persistent .scale 0.9
-    .cluster transient .decay 0.4
+    .cluster persistent .scaling 0.9
+    .cluster transient .decaying 0.4
     .trait happy .decaying 0.3 .toward <expression>
 .end
 
