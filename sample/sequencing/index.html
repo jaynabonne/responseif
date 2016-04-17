@@ -4,17 +4,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Sequencing - ResponsIF Sample</title>
     <link rel="stylesheet" href="style.css" type="text/css">
-    <script type="text/javascript" src="/lib/jquery-1.11.0.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 </head>
 <body>
     <div id="holder">
         <div id="spacer"></div>
         <div id="output"></div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../src/rif"></script>
+    <script type="text/javascript">
+        define('config', { rif_file: 'sequencing.txt', element: $('#output') });
+    </script>
 </body>
-<script src="/lib/require.js" data-main="/src/rif"></script>
-<script type="text/javascript">
-    define('config', { rif_file: 'sequencing.txt', element: $('#output') });
-</script>
 </html>

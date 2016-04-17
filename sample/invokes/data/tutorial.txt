@@ -1,0 +1,9 @@
+.responses player
+    .response START
+        .does
+            .invokes
+                var agent = navigator.userAgent;
+                var version = navigator.appVersion;
+                interact.say({ text: "Your browser version is " + version + "."}, responder);
+                interact.say({ text: "The agent is " + agent + "."}, responder);
+.end
