@@ -278,7 +278,8 @@ define([], function () {
                 this.index++;
                 break;
             } else {
-                console.log('parse_responses(' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or new ".response")');
+                console.log('parse_responses(line: ' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or new ".response")');
+                alert('parse_responses(line: ' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or new ".response")');
                 break;
             }
         }
@@ -339,7 +340,8 @@ define([], function () {
             } else if (this[prefix + pair.token]) {
                 this[prefix + pair.token].call(this, model, pair);
             } else {
-                console.log('parse_responses(' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or model phrase)');
+                console.log('parse_responses(line: ' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or model phrase)');
+                alert('parse_responses(line: ' + this.line + '): Unexpected token ".' + token + '" (expected ".end" or model phrase)');
                 break;
             }
         }
@@ -385,7 +387,8 @@ define([], function () {
             if (this[attribute]) {
                 this[attribute]();
             } else {
-                console.log("parse(" + this.line + "): no handler for token " + token);
+                console.log("parse(line: " + this.line + "): no handler for token " + token);
+                alert("parse(line: " + this.line + "): no handler for token " + token);
                 break;
             }
         }
