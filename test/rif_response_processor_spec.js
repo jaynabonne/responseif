@@ -347,6 +347,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
         it("should reset the current response", function() {
             interact.say = jasmine.createSpy("say");
             var response = {
+                id: 314,
                 does: {
                     1: [
                         { says: { text: "Hello world!" }}
@@ -358,8 +359,10 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             };
             processor.processResponse(response, 'responder');
             expect(interact.say.callCount).toBe(1);
+            expect(world.setResponseRuns).not.toHaveBeenCalledWith(314, 0);
             processor.processResponse(response, 'responder');
             expect(interact.say.callCount).toBe(1);
+            expect(world.setResponseRuns).toHaveBeenCalledWith(314, 0);
             processor.processResponse(response, 'responder');
             expect(interact.say.callCount).toBe(2);
         });

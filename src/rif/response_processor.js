@@ -91,6 +91,7 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
 
     proto.process_resets = function (action, responder, response) {
         response.run = 0;
+        this.world.setResponseRuns(response.id, response.run);
     };
 
     proto.process_clears = function (action) {
