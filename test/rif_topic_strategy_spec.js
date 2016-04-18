@@ -1,4 +1,36 @@
 define(['rif/topic_strategy'], function(RifTopicStrategy) {
+    describe('mergeTopicsInto', function() {
+        it('should not change the original topic is the new topics array is empty', function() {
+            var topic = { keyword: 'akeyword', weight: 0.9};
+            RifTopicStrategy.mergeTopicsInto(topic, []);
+            expect(topic).toEqual({ keyword: 'akeyword', weight: 0.9});
+        });
+        it('should update the topic weight for a new topic with a greater weight', function() {
+            var topic = { keyword: 'akeyword', weight: 0.4};
+            var new_topic = { keyword: 'akeyword', weight: 0.7};
+            RifTopicStrategy.mergeTopicsInto(topic, [new_topic]);
+            expect(topic).toEqual({ keyword: 'akeyword', weight: 0.7});
+        });
+        it('should not update the topic weight for a new topic with a lesser weight', function() {
+            var topic = { keyword: 'akeyword', weight: 0.4};
+            var new_topic = { keyword: 'akeyword', weight: 0.2};
+            RifTopicStrategy.mergeTopicsInto(topic, [new_topic]);
+            expect(topic).toEqual({ keyword: 'akeyword', weight: 0.4});
+        });
+        it('should not update the topic weight for a topic with a different keyword', function() {
+            var topic = { keyword: 'akeyword', weight: 0.4};
+            var new_topic = { keyword: 'bkeyword', weight: 0.9};
+            RifTopicStrategy.mergeTopicsInto(topic, [new_topic]);
+            expect(topic).toEqual({ keyword: 'akeyword', weight: 0.4});
+        });
+        it('should update the topic further on in the topics array', function() {
+            var topic = { keyword: 'akeyword', weight: 0.4};
+            var new_topic = { keyword: 'bkeyword', weight: 0.8};
+            var new_topic2 = { keyword: 'akeyword', weight: 0.9};
+            RifTopicStrategy.mergeTopicsInto(topic, [new_topic, new_topic2]);
+            expect(topic).toEqual({ keyword: 'akeyword', weight: 0.9});
+        });
+    });
     describe('mergeTopics', function() {
         it('should return an empty array for empty inputs', function() {
             expect(RifTopicStrategy.mergeTopics([], [])).toEqual([]);

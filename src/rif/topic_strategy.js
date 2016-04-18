@@ -2,6 +2,14 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     "use strict";
     var strategy = { };
 
+    strategy.mergeTopicsInto = function(topic, new_topics) {
+        $.each(new_topics, function(index, new_topic) {
+            if (new_topic.keyword === topic.keyword && new_topic.weight > topic.weight) {
+                topic.weight = new_topic.weight;
+            }
+        });
+    };
+
     strategy.mergeTopics = function(a, b, scale) {
         scale = scale || 1.0;
         var merged = a.slice();
