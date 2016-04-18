@@ -1,4 +1,4 @@
-define([], function() {
+define(['./topic_strategy'], function(RifTopicStrategy) {
     var type = function() {
         this.clusters = {};
     };
@@ -12,17 +12,11 @@ define([], function() {
     };
     proto.addTopics = function(cluster_id, topics) {
         var cluster = this.clusters[cluster_id] || [];
-        $.each(topics, function(index, topic) {
-            for (var i = 0; i < cluster.length; ++i) {
-                var cluster_topic = cluster[i];
-                if (cluster_topic.keyword === topic.keyword) {
-                    cluster_topic.weight = Math.max(cluster_topic.weight, topic.weight);
-                    return;
-                }
-            }
-            cluster.push(topic);
-        });
-        this.clusters[cluster_id] = cluster;
+        topics = topics.slice(0);
+        for (var i = 0; i < cluster.length; ++i) {
+            RifTopicStrategy.mergeTopicsInto(cluster[i], topics);
+        }
+        this.clusters[cluster_id] = cluster.concat(topics);
     };
     proto.removeTopics = function(cluster_id, topics) {
         var cluster = this.clusters[cluster_id];

@@ -2,33 +2,43 @@ define(['rif/topic_strategy'], function(RifTopicStrategy) {
     describe('mergeTopicsInto', function() {
         it('should not change the original topic is the new topics array is empty', function() {
             var topic = { keyword: 'akeyword', weight: 0.9};
-            RifTopicStrategy.mergeTopicsInto(topic, []);
+            var topics = [];
+            RifTopicStrategy.mergeTopicsInto(topic, topics);
             expect(topic).toEqual({ keyword: 'akeyword', weight: 0.9});
+            expect(topics).toEqual([]);
         });
         it('should update the topic weight for a new topic with a greater weight', function() {
             var topic = { keyword: 'akeyword', weight: 0.4};
             var new_topic = { keyword: 'akeyword', weight: 0.7};
-            RifTopicStrategy.mergeTopicsInto(topic, [new_topic]);
+            var topics = [new_topic];
+            RifTopicStrategy.mergeTopicsInto(topic, topics);
             expect(topic).toEqual({ keyword: 'akeyword', weight: 0.7});
+            expect(topics).toEqual([]);
         });
         it('should not update the topic weight for a new topic with a lesser weight', function() {
             var topic = { keyword: 'akeyword', weight: 0.4};
             var new_topic = { keyword: 'akeyword', weight: 0.2};
-            RifTopicStrategy.mergeTopicsInto(topic, [new_topic]);
+            var topics = [new_topic];
+            RifTopicStrategy.mergeTopicsInto(topic, topics);
             expect(topic).toEqual({ keyword: 'akeyword', weight: 0.4});
+            expect(topics).toEqual([]);
         });
         it('should not update the topic weight for a topic with a different keyword', function() {
             var topic = { keyword: 'akeyword', weight: 0.4};
             var new_topic = { keyword: 'bkeyword', weight: 0.9};
-            RifTopicStrategy.mergeTopicsInto(topic, [new_topic]);
+            var topics = [new_topic];
+            RifTopicStrategy.mergeTopicsInto(topic, topics);
             expect(topic).toEqual({ keyword: 'akeyword', weight: 0.4});
+            expect(topics).toEqual([new_topic]);
         });
         it('should update the topic further on in the topics array', function() {
             var topic = { keyword: 'akeyword', weight: 0.4};
             var new_topic = { keyword: 'bkeyword', weight: 0.8};
             var new_topic2 = { keyword: 'akeyword', weight: 0.9};
-            RifTopicStrategy.mergeTopicsInto(topic, [new_topic, new_topic2]);
+            var topics = [new_topic, new_topic2];
+            RifTopicStrategy.mergeTopicsInto(topic, topics);
             expect(topic).toEqual({ keyword: 'akeyword', weight: 0.9});
+            expect(topics).toEqual([new_topic]);
         });
     });
     describe('mergeTopics', function() {

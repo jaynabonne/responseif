@@ -3,11 +3,14 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     var strategy = { };
 
     strategy.mergeTopicsInto = function(topic, new_topics) {
-        $.each(new_topics, function(index, new_topic) {
-            if (new_topic.keyword === topic.keyword && new_topic.weight > topic.weight) {
-                topic.weight = new_topic.weight;
+        for (var i = 0; i < new_topics.length; ++i) {
+            var new_topic = new_topics[i];
+            if (new_topic.keyword === topic.keyword) {
+                topic.weight = Math.max(new_topic.weight, topic.weight);
+                new_topics.splice(i, 1);
+                return;
             }
-        });
+        }
     };
 
     strategy.mergeTopics = function(a, b, scale) {
