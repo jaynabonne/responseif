@@ -13,6 +13,25 @@ define(['rif/fuzzy'], function(RifFuzzy) {
         }
     };
 
+    function scale_weight(weight, new_weight) {
+        return weight + (2-weight)*(new_weight/2);
+    }
+
+    strategy.mergeClusterInto = function(topics, cluster) {
+        var cluster_weight = cluster.weight || 1;
+        $.each(cluster.topics, function(index, cluster_topic) {
+            var weight = cluster_topic.weight*cluster_weight;
+            $.each(topics, function (i, topic) {
+                if (topic.keyword === cluster_topic.keyword) {
+                    weight = scale_weight(weight, topic.weight);
+                    topics.splice(i, 1);
+                    return false;
+                }
+            });
+            topics.push({ keyword: cluster_topic.keyword, weight: weight} );
+        });
+    };
+
     strategy.mergeTopics = function(a, b, scale) {
         scale = scale || 1.0;
         var merged = a.slice();

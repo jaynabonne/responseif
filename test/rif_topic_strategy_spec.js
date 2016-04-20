@@ -41,6 +41,32 @@ define(['rif/topic_strategy'], function(RifTopicStrategy) {
             expect(topics).toEqual([new_topic]);
         });
     });
+    describe('mergeClusterInto', function() {
+        it('should return the original topics unchanged if the cluster is empty', function() {
+            var topics = [{keyword: 'keyword', weight: 1}];
+            var cluster = { topics: [] };
+            RifTopicStrategy.mergeClusterInto(topics, cluster);
+            expect(topics).toEqual([{keyword: 'keyword', weight: 1}]);
+        });
+        it('should merge the cluster topics into the running topics', function() {
+            var topics = [{keyword: 'keyword', weight: 1}];
+            var cluster = { topics: [{keyword: 'ckeyword', weight: 0.9}] };
+            RifTopicStrategy.mergeClusterInto(topics, cluster);
+            expect(topics).toEqual([{keyword: 'keyword', weight: 1}, {keyword: 'ckeyword', weight: 0.9}]);
+        });
+        it('should scale the cluster topics by the cluster weight', function() {
+            var topics = [{keyword: 'keyword', weight: 1}];
+            var cluster = { topics: [{keyword: 'ckeyword', weight: 0.8}], weight: 0.5 };
+            RifTopicStrategy.mergeClusterInto(topics, cluster);
+            expect(topics).toEqual([{keyword: 'keyword', weight: 1}, {keyword: 'ckeyword', weight: 0.4}]);
+        });
+        it('should combine matching keywords in a more positive way', function() {
+            var topics = [{keyword: 'keyword', weight: 1}];
+            var cluster = { topics: [{keyword: 'keyword', weight: 0.8}] };
+            RifTopicStrategy.mergeClusterInto(topics, cluster);
+            expect(topics).toEqual([{keyword: 'keyword', weight: 1.4}]);
+        });
+    });
     describe('mergeTopics', function() {
         it('should return an empty array for empty inputs', function() {
             expect(RifTopicStrategy.mergeTopics([], [])).toEqual([]);
