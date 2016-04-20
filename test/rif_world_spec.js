@@ -274,12 +274,12 @@ describe("RifWorld", function () {
             world.removeTopics('actor', [{keyword: 'atopic'}], 'shortterm');
             expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.2}]);
         });
-        it('should use the model scaling', function() {
+        it('should use the cluster weight', function() {
             rif.model = {
                 actor: {
                     clusters: {
                         longterm: {
-                            scaling: 0.25
+                            weight: 0.25
                         }
                     }
                 }

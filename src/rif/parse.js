@@ -321,7 +321,7 @@ define([], function () {
         model.clusters[pair.value] = cluster;
     };
 
-    Parser.prototype.parse_model_cluster_scaling = Parser.prototype.addString;
+    Parser.prototype.parse_model_cluster_weight = Parser.prototype.addString;
     Parser.prototype.parse_model_cluster_decaying = Parser.prototype.addString;
 
     Parser.prototype.parseModel = function() {
