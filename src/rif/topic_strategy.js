@@ -17,9 +17,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
         return weight + (2-weight)*(new_weight/2);
     }
 
-    strategy.mergeClusterInto = function(topics, cluster) {
-        var cluster_weight = cluster.weight || 1;
-        $.each(cluster.topics, function(index, cluster_topic) {
+    strategy.mergeClusterInto = function(topics, cluster, cluster_model) {
+        var cluster_weight = (cluster_model && cluster_model.weight) ? cluster_model.weight : 1;
+        $.each(cluster, function(index, cluster_topic) {
             var weight = cluster_topic.weight*cluster_weight;
             $.each(topics, function (i, topic) {
                 if (topic.keyword === cluster_topic.keyword) {
