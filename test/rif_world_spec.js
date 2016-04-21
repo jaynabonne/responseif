@@ -269,7 +269,7 @@ describe("RifWorld", function () {
             world.addTopics('actor', [{keyword: 'atopic', weight: 0.2}], 'longterm');
             world.addTopics('actor', [{keyword: 'atopic', weight: 0.4}], 'shortterm');
 
-            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.4}]);
+            expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.56}]);
 
             world.removeTopics('actor', [{keyword: 'atopic'}], 'shortterm');
             expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.2}]);

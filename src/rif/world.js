@@ -176,11 +176,10 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
         if (!this.topics[actor]) {
             return [];
         }
-        var model = this.rif.model ? this.rif.model[actor] : undefined;
+        var model = this.rif.model ? this.rif.model[actor] : {clusters: {}};
         var topics = [];
         $.each(this.topics[actor], function(cluster_id, cluster) {
-            var model_cluster = model ? model.clusters[cluster_id] : undefined;
-            topics = RifTopicStrategy.mergeTopics(topics, cluster, model_cluster ? model_cluster.weight || 1 : 1);
+            RifTopicStrategy.mergeClusterInto(topics, cluster, model.clusters[cluster_id]);
         });
         return topics;
     };
