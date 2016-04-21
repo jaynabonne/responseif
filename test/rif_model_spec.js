@@ -1,6 +1,6 @@
 define(['rif/model'], function(RifModel) {
     "use strict";
-    var model
+    var model;
     describe("rifModel", function () {
         beforeEach(function() {
             model = new RifModel();
