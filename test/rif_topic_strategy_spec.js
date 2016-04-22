@@ -116,33 +116,27 @@ define(['rif/topic_strategy'], function(RifTopicStrategy) {
         });
     });
     describe('decayTopics', function() {
-        it('should set create a new array with topic weights decayed toward 0 for a single item', function() {
+        it('should set decay toward 0 for a single item', function() {
             var topics = [ { keyword: 'keyword1', weight: 1}];
-            var new_topics = RifTopicStrategy.decayTopics(topics);
-            expect(new_topics).toEqual( [
+            RifTopicStrategy.decayTopics(topics);
+            expect(topics).toEqual( [
                 {keyword: 'keyword1', weight: 0.8}
             ]);
         });
         it('should set create a new array with topic weights decayed toward 0 for multiple items', function() {
             var topics = [ { keyword: 'keyword1', weight: 1}, { keyword: 'keyword2', weight: 0.8}];
-            var new_topics = RifTopicStrategy.decayTopics(topics);
-            expect(new_topics).toEqual( [
+            RifTopicStrategy.decayTopics(topics);
+            expect(topics).toEqual( [
                 {keyword: 'keyword1', weight: 0.8},
                 {keyword: 'keyword2', weight: 0.64}
             ]);
         });
         it('should not change topics with weight 0', function() {
             var topics = [ { keyword: 'keyword1', weight: 0}];
-            var new_topics = RifTopicStrategy.decayTopics(topics);
-            expect(new_topics).toEqual( [
+            RifTopicStrategy.decayTopics(topics);
+            expect(topics).toEqual( [
                 {keyword: 'keyword1', weight: 0}
             ]);
-        });
-        it('should not modify the original topic objects', function() {
-            var topics = [ { keyword: 'keyword1', weight: 1}, { keyword: 'keyword2', weight: 0.8}];
-            var new_topics = RifTopicStrategy.decayTopics(topics);
-            expect(topics[0].weight).toBe(1);
-            expect(topics[1].weight).toBe(0.8);
         });
     });
 });

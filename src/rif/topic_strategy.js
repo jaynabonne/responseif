@@ -60,13 +60,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     };
 
     strategy.decayTopics = function(topics) {
-        var new_topics = [];
         $.each(topics, function(index, topic) {
-            var new_topic = $.extend({}, topic);
-            new_topic.weight = RifFuzzy.adjust(new_topic.weight, 0, 0.2);
-            new_topics.push(new_topic);
+            topic.weight = RifFuzzy.adjust(topic.weight, 0, 0.2);
         });
-        return new_topics;
     };
     return strategy;
 });
