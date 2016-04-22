@@ -223,7 +223,7 @@ describe("RifWorld", function () {
     describe('Add and Remove Topics', function() {
         var rif;
         beforeEach(function() {
-            rif = {};
+            rif = { model: {} };
             world.addRif(rif);
         });
         it('getTopics returns an empty array if no topics have been set', function() {

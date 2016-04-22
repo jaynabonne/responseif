@@ -54,7 +54,7 @@ describe("rifParse", function () {
     }
 
     it("should return an empty result for an empty input", function () {
-        expect(rifParse([])).toEqual({responses: {}});
+        expect(rifParse([])).toEqual({responses: {}, model: {}});
     });
     it("should parse an empty response group", function () {
         var rif = rifParse(
