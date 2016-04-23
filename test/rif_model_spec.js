@@ -58,7 +58,7 @@ define(['rif/model'], function(RifModel) {
             });
             it('should use the cluster model weight, if there is one', function() {
                 model.addTopics('cluster1', [{keyword: 'atopic', weight: 0.8}]);
-                var rif_model = { cluster1 : { weight: 0.5}}
+                var rif_model = { cluster1 : { weight: 0.5}};
                 expect(model.getCurrentTopics(rif_model)).toEqual([{keyword: 'atopic', weight: 0.4}]);
             });
         });

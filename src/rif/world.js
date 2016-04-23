@@ -1,11 +1,11 @@
-define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, RifFuzzy, RifTopicStrategy) {
+define(['./expression','./fuzzy','./topic_strategy', './model'], function(RifExpression, RifFuzzy, RifTopicStrategy, RifModel) {
     "use strict";
     var type = function() {
         this.values = {};
         this.runs = {};
         this.children = {};
         this.pov = "player";
-        this.topics = {};
+        this.models = {};
     };
 
     var proto = type.prototype;
@@ -160,51 +160,40 @@ define(['./expression','./fuzzy','./topic_strategy'], function(RifExpression, Ri
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     };
 
+    proto.getModel = function(actor) {
+        if (!this.models[actor]) {
+            this.models[actor]  = new RifModel;
+        }
+        return this.models[actor];
+    };
+
+    function effectiveClusterId(clusterId) {
+        return clusterId || 'persistent';
+    }
+
     proto.getTopics = function(actor, cluster_id) {
-        cluster_id = cluster_id || 'persistent';
-        if (this.topics[actor] === undefined) {
-            this.topics[actor] = {};
-        }
-        var topics = this.topics[actor];
-        if (topics[cluster_id] === undefined) {
-            topics[cluster_id] = [];
-        }
-        return topics[cluster_id];
+        var model = this.getModel(actor);
+
+        return model.getTopics(effectiveClusterId(cluster_id));
     };
 
     proto.getCurrentTopics = function(actor) {
-        if (!this.topics[actor]) {
+        if (!this.models[actor]) {
             return [];
         }
-        var model = this.rif.model[actor] || {clusters: {}};
-        var topics = [];
-        $.each(this.topics[actor], function(cluster_id, cluster) {
-            RifTopicStrategy.mergeClusterInto(topics, cluster, model.clusters[cluster_id]);
-        });
-        return topics;
+        var model = this.getModel(actor);
+        var rif_model = this.rif.model[actor] || {clusters: {}};
+        return model.getCurrentTopics(rif_model.clusters);
     };
 
-    function addTopicsToCluster(cluster, topics) {
-        cluster.push.apply(cluster, topics);
-    }
-
-    function removeTopicsFromCluster(cluster, topics) {
-        var keywords = topics.map(function(value) { return value.keyword; });
-        for (var i = cluster.length - 1; i >= 0; i--) {
-            if (keywords.indexOf(cluster[i].keyword) != -1) {
-                cluster.splice(i, 1);
-            }
-        }
-    }
-
     proto.addTopics = function(actor, topics, cluster_id) {
-        var cluster = this.getTopics(actor, cluster_id);
-        removeTopicsFromCluster(cluster, topics);
-        addTopicsToCluster(cluster, topics);
+        var model = this.getModel(actor);
+        model.addTopics(effectiveClusterId(cluster_id), topics);
     };
 
     proto.removeTopics = function(actor, topics, cluster_id) {
-        removeTopicsFromCluster(this.getTopics('actor', cluster_id), topics);
+        var model = this.getModel(actor);
+        model.removeTopics(effectiveClusterId(cluster_id), topics);
     };
 
     proto.getResponseRuns = function(id) {

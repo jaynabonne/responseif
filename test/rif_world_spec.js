@@ -253,10 +253,10 @@ describe("RifWorld", function () {
             expect(topics).toEqual([{keyword: 'topic1'}, {keyword: 'topic3'}]);
         });
         it('should not duplicate existing topics', function() {
-            world.addTopics('actor', [{keyword: 'atopic'}]);
-            world.addTopics('actor', [{keyword: 'atopic'}]);
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.5}]);
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.8}]);
             var topics = world.getTopics('actor');
-            expect(topics).toEqual([{keyword: 'atopic'}]);
+            expect(topics).toEqual([{keyword: 'atopic', weight: 0.8}]);
 
         });
         it('should update weights for existing topics', function() {
