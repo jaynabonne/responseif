@@ -4,8 +4,13 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
     };
     var proto = type.prototype;
 
-    proto.getCurrentTopics = function() {
-        return [];
+    proto.getCurrentTopics = function(rif_model) {
+        rif_model = rif_model || {};
+        var topics = [];
+        $.each(this.clusters, function(index, cluster) {
+            RifTopicStrategy.mergeClusterInto(topics, cluster, rif_model[index]);
+        });
+        return topics;
     };
     proto.getTopics = function(cluster_id) {
         return this.clusters[cluster_id] || [];

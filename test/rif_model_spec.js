@@ -5,9 +5,6 @@ define(['rif/model'], function(RifModel) {
         beforeEach(function() {
             model = new RifModel();
         });
-        it('should default to having no current topics', function() {
-            expect(model.getCurrentTopics()).toEqual([]);
-        });
         it('should default to having no topics for a cluster id', function() {
             expect(model.getTopics('cluster_id')).toEqual([]);
         });
@@ -40,6 +37,30 @@ define(['rif/model'], function(RifModel) {
             model.addTopics('cluster_id', [{keyword: 'atopic', weight: 0.9}]);
             model.addTopics('cluster_id', [{keyword: 'atopic', weight: 0.6}]);
             expect(model.getTopics('cluster_id')).toEqual([{keyword: 'atopic', weight: 0.9}]);
+        });
+        describe('getCurrentTopics', function() {
+            it('should default to having no current topics', function() {
+                expect(model.getCurrentTopics()).toEqual([]);
+            });
+            it('should return a topic assigned to a cluster', function() {
+                model.addTopics('cluster1', [{keyword: 'atopic', weight: 1}]);
+                expect(model.getCurrentTopics()).toEqual([{keyword: 'atopic', weight: 1}]);
+            });
+            it('should return topics assigned to multiple clusters', function() {
+                model.addTopics('cluster1', [{keyword: 'atopic', weight: 1}]);
+                model.addTopics('cluster2', [{keyword: 'btopic', weight: 0.8}]);
+                expect(model.getCurrentTopics()).toEqual([{keyword: 'atopic', weight: 1}, {keyword: 'btopic', weight: 0.8}]);
+            });
+            it('should combine topics with the same keyword in a positive way', function() {
+                model.addTopics('cluster1', [{keyword: 'atopic', weight: 0.2}]);
+                model.addTopics('cluster2', [{keyword: 'atopic', weight: 0.4}]);
+                expect(model.getCurrentTopics()).toEqual([{keyword: 'atopic', weight: 0.56}]);
+            });
+            it('should use the cluster model weight, if there is one', function() {
+                model.addTopics('cluster1', [{keyword: 'atopic', weight: 0.8}]);
+                var rif_model = { cluster1 : { weight: 0.5}}
+                expect(model.getCurrentTopics(rif_model)).toEqual([{keyword: 'atopic', weight: 0.4}]);
+            });
         });
     });
 });
