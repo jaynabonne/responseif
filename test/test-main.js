@@ -14,7 +14,7 @@ Object.keys(window.__karma__.files).forEach(function(file) {
 
 require.config({
     paths: {
-        'jquery': '../lib/jquery-1.11.0',
+        'jquery': '../lib/jquery',
         'jquery-ui': '../lib/jquery-ui'
     },
     // Karma serves files under /base, which is the basePath from your config file
