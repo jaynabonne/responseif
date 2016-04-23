@@ -182,7 +182,7 @@ define(['./expression','./fuzzy','./topic_strategy', './model'], function(RifExp
             return [];
         }
         var model = this.getModel(actor);
-        var rif_model = this.rif.model[actor] || {clusters: {}};
+        var rif_model = this.rif.models[actor] || {clusters: {}};
         return model.getCurrentTopics(rif_model.clusters);
     };
 
@@ -194,6 +194,17 @@ define(['./expression','./fuzzy','./topic_strategy', './model'], function(RifExp
     proto.removeTopics = function(actor, topics, cluster_id) {
         var model = this.getModel(actor);
         model.removeTopics(effectiveClusterId(cluster_id), topics);
+    };
+
+    proto.updateModels = function() {
+        if (!this.rif)
+            return;
+        var self = this;
+        $.each(this.rif.models, function(actor, rif_model) {
+            if (self.models[actor]) {
+                self.models[actor].update(rif_model.clusters);
+            }
+        });
     };
 
     proto.getResponseRuns = function(id) {

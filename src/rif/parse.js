@@ -3,7 +3,7 @@ define([], function () {
 
     var Parser = function(tokens) {
         this.tokens = tokens;
-        this.rif = {responses:{}, model: {}};
+        this.rif = {responses:{}, models: {}};
         this.index = 0;
         this.nextId = 0;
     };
@@ -310,7 +310,7 @@ define([], function () {
         var actor = this.currentPair().value || 'standard';
         this.index++;
         var rif = this.rif;
-        rif.model[actor] = this.parseModel();
+        rif.models[actor] = this.parseModel();
     };
 
     Parser.prototype.parse_model_cluster = function(model, pair) {

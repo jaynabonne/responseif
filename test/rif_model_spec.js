@@ -62,5 +62,16 @@ define(['rif/model'], function(RifModel) {
                 expect(model.getCurrentTopics(rif_model)).toEqual([{keyword: 'atopic', weight: 0.4}]);
             });
         });
+        describe('update', function() {
+            it('should apply cluster decays', function() {
+                model.addTopics('cluster1', [{keyword: 'atopic', weight: 0.8}]);
+                expect(model.getTopics('cluster1')).toEqual([{keyword: 'atopic', weight: 0.8}]);
+
+                var rif_model = { cluster1 : { decaying: 0.5}};
+                model.update(rif_model);
+
+                expect(model.getTopics('cluster1')).toEqual([{keyword: 'atopic', weight: 0.4}]);
+            });
+        });
     });
 });

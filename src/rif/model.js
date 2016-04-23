@@ -36,5 +36,14 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             }
         }
     };
+
+    proto.update = function(rif_model) {
+        var self = this;
+        $.each(rif_model, function(id, cluster_model) {
+            if (self.clusters[id] && cluster_model.decaying) {
+                RifTopicStrategy.decayTopics(self.clusters[id], cluster_model.decaying);
+            }
+        });
+    };
     return type;
 });

@@ -54,7 +54,7 @@ describe("rifParse", function () {
     }
 
     it("should return an empty result for an empty input", function () {
-        expect(rifParse([])).toEqual({responses: {}, model: {}});
+        expect(rifParse([])).toEqual({responses: {}, models: {}});
     });
     it("should parse an empty response group", function () {
         var rif = rifParse(
@@ -927,7 +927,7 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.actor).toEqual({
+            expect(rif.models.actor).toEqual({
                 clusters: {}
             });
         });
@@ -938,7 +938,7 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.standard).toEqual({
+            expect(rif.models.standard).toEqual({
                 clusters: {}
             });
         });
@@ -950,7 +950,7 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.actor).toEqual({
+            expect(rif.models.actor).toEqual({
                 clusters: {clustername: {}}
             });
         });
@@ -963,7 +963,7 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.actor).toEqual({
+            expect(rif.models.actor).toEqual({
                 clusters: {clustername: { weight: 'expression'}}
             });
         });
@@ -976,7 +976,7 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.actor).toEqual({
+            expect(rif.models.actor).toEqual({
                 clusters: {clustername: { decaying: 'expression'}}
             });
         });
@@ -991,7 +991,7 @@ describe("rifParse", function () {
                     end()
                 ]
             );
-            expect(rif.model.actor).toEqual({
+            expect(rif.models.actor).toEqual({
                 clusters: {
                     cluster1: { decaying: 'exp1'},
                     cluster2: { decaying: 'exp2'}

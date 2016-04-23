@@ -59,9 +59,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
         return this.mergeTopics(called, current);
     };
 
-    strategy.decayTopics = function(topics) {
+    strategy.decayTopics = function(topics, decay) {
         $.each(topics, function(index, topic) {
-            topic.weight = RifFuzzy.adjust(topic.weight, 0, 0.2);
+            topic.weight = RifFuzzy.adjust(topic.weight, 0, decay);
         });
     };
     return strategy;

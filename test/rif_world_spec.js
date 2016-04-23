@@ -223,7 +223,7 @@ describe("RifWorld", function () {
     describe('Add and Remove Topics', function() {
         var rif;
         beforeEach(function() {
-            rif = { model: {} };
+            rif = { models: {} };
             world.addRif(rif);
         });
         it('getTopics returns an empty array if no topics have been set', function() {
@@ -275,7 +275,7 @@ describe("RifWorld", function () {
             expect(world.getCurrentTopics('actor')).toEqual([{keyword: 'atopic', weight: 0.2}]);
         });
         it('should use the cluster weight', function() {
-            rif.model = {
+            rif.models = {
                 actor: {
                     clusters: {
                         longterm: {
@@ -302,6 +302,26 @@ describe("RifWorld", function () {
             world.setResponseRuns(315, 56);
             expect(world.getResponseRuns(314)).toBe(42);
             expect(world.getResponseRuns(315)).toBe(56);
+        });
+    });
+    describe('updateModels', function() {
+        it('should apply cluster decay', function() {
+            var rif = {
+                models: {
+                    actor: {
+                        clusters: {
+                            acluster: {
+                                decaying: 0.5
+                            }
+                        }
+                    }
+                }
+            };
+            world.addRif(rif);
+            world.addTopics('actor', [{keyword: 'atopic', weight: 0.8}], 'acluster');
+            expect(world.getTopics('actor', 'acluster')).toEqual([{keyword: 'atopic', weight: 0.8}]);
+            world.updateModels();
+            expect(world.getTopics('actor', 'acluster')).toEqual([{keyword: 'atopic', weight: 0.4}]);
         });
     });
 });
