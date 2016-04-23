@@ -48,7 +48,8 @@ describe("RifInteract", function () {
             },
             getCurrentTopics: function(caller) {
                 return [];
-            }
+            },
+            updateModels: jasmine.createSpy('updateModels')
         };
         rif = {};
         response_lib = {
@@ -256,6 +257,10 @@ describe("RifInteract", function () {
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(interact.idleProcessing).toHaveBeenCalledWith();
         });
+        it('should update the world models', function() {
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(world.updateModels).toHaveBeenCalled();
+        })
     });
     describe("sendCommand separator support", function() {
         it("should add a hidden separator div before the command if text was output previously", function() {

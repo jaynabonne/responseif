@@ -223,6 +223,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             this.beforeCommand();
             this.call(topics);
             this.idleProcessing();
+            this.world.updateModels();
             this.hideObsoleteLinks();
         },
         hideObsoleteLinks: function() {
