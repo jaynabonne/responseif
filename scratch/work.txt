@@ -1,3 +1,13 @@
+2016-04-24
+
+.model actor
+    .cluster persistent .weight 0.9
+    .cluster transient .decaying 0.4 .suggestible
+    .trait happy .decaying 0.3 .toward <expression>
+.end
+
+----------------------------------------
+
 2016-04-16
 
 Combining weights:
@@ -8,7 +18,6 @@ Combining weights:
 current = current + (2-current)*(new/2)
 
 This works well, as it doesn't matter which order you add the weights!
-
 
 ----------------------------------------
 

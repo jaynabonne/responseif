@@ -322,6 +322,7 @@ define([], function () {
 
     Parser.prototype.parse_model_cluster_weight = Parser.prototype.addString;
     Parser.prototype.parse_model_cluster_decaying = Parser.prototype.addString;
+    Parser.prototype.parse_model_cluster_suggestible = Parser.prototype.setFlag;
 
     Parser.prototype.parseModel = function() {
         var prefix = 'parse_model_';

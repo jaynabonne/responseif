@@ -954,7 +954,7 @@ describe("rifParse", function () {
                 clusters: {clustername: {}}
             });
         });
-        it('should parse a cluster scale', function() {
+        it('should parse a cluster weight', function() {
             var rif = rifParse(
                 [
                     model('actor'),
@@ -978,6 +978,19 @@ describe("rifParse", function () {
             );
             expect(rif.models.actor).toEqual({
                 clusters: {clustername: { decaying: 'expression'}}
+            });
+        });
+        it('should parse a cluster suggestible state', function() {
+            var rif = rifParse(
+                [
+                    model('actor'),
+                        token_pair('cluster', 'clustername'),
+                            token_pair('suggestible'),
+                    end()
+                ]
+            );
+            expect(rif.models.actor).toEqual({
+                clusters: {clustername: { suggestible: true }}
             });
         });
         it('should parse multiple clusters', function() {
