@@ -311,12 +311,12 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("suggests", function () {
         it("should suggest the topics", function() {
-            interact.suggestTopics = jasmine.createSpy("suggestTopics");
+            world.suggestTopics = jasmine.createSpy("suggestTopics");
             var response = {
-                does: { common: [ { suggests: {keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}] } } ] }
+                does: { common: [ { suggests: {keywords: [{keyword: "topicA", weight: 0.8}, {keyword: "topicB", weight: 0.9}] } } ] }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.suggestTopics).toHaveBeenCalledWith({keywords: [{keyword: "topicA"}, {keyword: "topicB"}, {keyword: "topicC"}]});
+            expect(world.suggestTopics).toHaveBeenCalledWith({keywords: [{keyword: "topicA", weight: 0.8}, {keyword: "topicB", weight: 0.9}]});
         });
     });
     describe("addTopics", function () {
