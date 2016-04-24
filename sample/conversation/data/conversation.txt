@@ -1,0 +1,30 @@
+.set break: .to <div style='font-size:6pt;'>&nbsp;</div>
+
+.move player .to room
+.move Jeeves .to room
+
+.responses player
+    .response START
+        .does
+            .invokes
+                function convertTopics(topics) {
+                    return topics.map(function(value) { return {keyword: value, weight: 1.0} });
+                }
+                var input = $('#topic-input');
+                input.keyup(function(e) {
+                    if (e.keyCode === 13) {
+                        var value = input.val();
+                        if (value.length > 0) {
+                            interact.sendCommand(convertTopics(value.toLowerCase().split(" ")));
+                            input.val('');
+                        }
+                    }
+                });
+            .says "This begins the interview of {!Jeeves!}, butler to the late {!Mr. Wilder!} who was {!murdered|murder!} on the {!10th of March!}. A Wednesday, if that's relevant, and it might be."
+.end
+
+.responses Jeeves
+    .response hello
+        .does .says Jeeves eyes you. "Hello yourself."
+.end
+

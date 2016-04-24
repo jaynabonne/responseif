@@ -1,0 +1,16 @@
+Axes:
+
+happy
+wistful/melancholy
+
+mischievous
+serious
+
+angry
+annoyed
+rational
+
+curious
+confused
+
+deceitful
