@@ -316,7 +316,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 does: { common: [ { suggests: {keywords: [{keyword: "topicA", weight: 0.8}, {keyword: "topicB", weight: 0.9}] } } ] }
             };
             processor.processResponse(response, 'responder');
-            expect(world.suggestTopics).toHaveBeenCalledWith('responder', {keywords: [{keyword: "topicA", weight: 0.8}, {keyword: "topicB", weight: 0.9}]});
+            expect(world.suggestTopics).toHaveBeenCalledWith('responder', [{keyword: "topicA", weight: 0.8}, {keyword: "topicB", weight: 0.9}]);
         });
     });
     describe("addTopics", function () {
