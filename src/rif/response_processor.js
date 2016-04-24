@@ -81,8 +81,8 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
         this.world.setParent(action.moves.target || responder, action.moves.to);
     };
 
-    proto.process_suggests = function (action) {
-        this.world.suggestTopics(action.suggests);
+    proto.process_suggests = function (action, responder) {
+        this.world.suggestTopics(responder, action.suggests);
     };
 
     proto.process_adds = function (action, responder) {

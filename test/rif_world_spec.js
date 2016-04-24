@@ -325,7 +325,7 @@ describe("RifWorld", function () {
         });
     });
     describe('suggestTopics', function() {
-        it('should assign topics to those clusters with suggestible attribute', function() {
+        it('should suggest topics to self', function() {
             var rif = {
                 models: {
                     actor: {
@@ -339,8 +339,51 @@ describe("RifWorld", function () {
             };
             world.addRif(rif);
 
-            world.suggestTopics([{keyword: 'atopic', weight: 0.75}]);
+            world.suggestTopics('actor', [{keyword: 'atopic', weight: 0.75}]);
             expect(world.getTopics('actor', 'acluster')).toEqual([{keyword: 'atopic', weight: 0.75}]);
+        });
+        it('should suggest topics only to local responders', function() {
+            var rif = {
+                models: {
+                    actor: {
+                        clusters: {
+                            acluster: {
+                                suggestible: true
+                            }
+                        }
+                    },
+                    npc1 : {
+                        clusters: {
+                            bcluster: {
+                                suggestible: true
+                            }
+                        }
+                    },
+                    npc2 : {
+                        clusters: {
+                            ccluster: {
+                                suggestible: true
+                            }
+                        }
+                    },
+                    parent : {
+                        clusters: {
+                            dcluster: {
+                                suggestible: true
+                            }
+                        }
+                    }
+                }
+            };
+            world.addRif(rif);
+            world.setParent('actor', 'parent');
+            world.setParent('npc1', 'parent');
+
+            world.suggestTopics('actor', [{keyword: 'atopic', weight: 0.75}]);
+            expect(world.getTopics('actor', 'acluster')).toEqual([{keyword: 'atopic', weight: 0.75}]);
+            expect(world.getTopics('npc1', 'bcluster')).toEqual([{keyword: 'atopic', weight: 0.75}]);
+            expect(world.getTopics('npc2', 'ccluster')).toEqual([]);
+            expect(world.getTopics('parent', 'dcluster')).toEqual([{keyword: 'atopic', weight: 0.75}]);
         });
     });
 });

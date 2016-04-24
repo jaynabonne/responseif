@@ -205,11 +205,15 @@ define(['./expression','./fuzzy','./topic_strategy', './model'], function(RifExp
         });
     };
 
-    proto.suggestTopics = function(topics) {
+    proto.suggestTopics = function(actor, topics) {
         var self = this;
-        $.each(this.rif.models, function(actor, rif_model) {
-            var model = self.getModel(actor);
-            model.suggestTopics(topics, rif_model.clusters);
+        var responders = this.getCurrentResponders(actor);
+        $.each(responders, function(index, responder) {
+            var rif_model = self.rif.models[responder];
+            if (rif_model) {
+                var model = self.getModel(responder);
+                model.suggestTopics(topics, rif_model.clusters);
+            }
         });
     };
 
