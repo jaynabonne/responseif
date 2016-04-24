@@ -73,5 +73,19 @@ define(['rif/model'], function(RifModel) {
                 expect(model.getTopics('cluster1')).toEqual([{keyword: 'atopic', weight: 0.4}]);
             });
         });
+        describe('suggestTopics', function() {
+            it('should add topics to suggestible clusters', function() {
+                var rif_model = { cluster1 : { suggestible: true}};
+                model.suggestTopics([{keyword: 'stopic', weight: 0.9}], rif_model);
+
+                expect(model.getTopics('cluster1')).toEqual([{keyword: 'stopic', weight: 0.9}]);
+            });
+            it('should not add topics to non-suggestible clusters', function() {
+                var rif_model = { cluster1 : { }};
+                model.suggestTopics([{keyword: 'stopic', weight: 0.9}], rif_model);
+
+                expect(model.getTopics('cluster1')).toEqual([]);
+            });
+        });
     });
 });

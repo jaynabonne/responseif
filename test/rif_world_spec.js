@@ -324,5 +324,24 @@ describe("RifWorld", function () {
             expect(world.getTopics('actor', 'acluster')).toEqual([{keyword: 'atopic', weight: 0.4}]);
         });
     });
+    describe('suggestTopics', function() {
+        it('should assign topics to those clusters with suggestible attribute', function() {
+            var rif = {
+                models: {
+                    actor: {
+                        clusters: {
+                            acluster: {
+                                suggestible: true
+                            }
+                        }
+                    }
+                }
+            };
+            world.addRif(rif);
+
+            world.suggestTopics([{keyword: 'atopic', weight: 0.75}]);
+            expect(world.getTopics('actor', 'acluster')).toEqual([{keyword: 'atopic', weight: 0.75}]);
+        });
+    });
 });
 });

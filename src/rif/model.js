@@ -45,5 +45,13 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             }
         });
     };
+
+    proto.suggestTopics = function(topics, rif_model) {
+        var self = this;
+        $.each(rif_model, function(id, cluster_model) {
+            if (cluster_model.suggestible)
+                self.addTopics(id, topics);
+        });
+    };
     return type;
 });

@@ -197,13 +197,19 @@ define(['./expression','./fuzzy','./topic_strategy', './model'], function(RifExp
     };
 
     proto.updateModels = function() {
-        if (!this.rif)
-            return;
         var self = this;
         $.each(this.rif.models, function(actor, rif_model) {
             if (self.models[actor]) {
                 self.models[actor].update(rif_model.clusters);
             }
+        });
+    };
+
+    proto.suggestTopics = function(topics) {
+        var self = this;
+        $.each(this.rif.models, function(actor, rif_model) {
+            var model = self.getModel(actor);
+            model.suggestTopics(topics, rif_model.clusters);
         });
     };
 
