@@ -34,3 +34,9 @@ span.keyword, span.permanent-keyword {color:#f0f020; cursor:pointer;}
 .section {
     margin-top: 6px;
 }
+
+#topic-input {
+    background-color: black;
+    border: solid 1px #665533;
+    width: 400px;
+}

@@ -1,9 +1,26 @@
 .set break: .to <div style='font-size:6pt;'>&nbsp;</div>
 
 .move player .to room
-.move Jeeves .to room
+.move butler .to room
+
+.set butler:name .to Jeeves
+
+.move ui .to everywhere
 
 .responses player
+    .response START
+        .does
+            .says "This begins the interview of {!{=butler:name=}|butler!}, butler to the late {!Mr. Wilder!} who was {!murdered|murder!} on the {!10th of March!}. A Wednesday, if that's relevant, and it might be."
+.end
+
+.responses butler
+    .response hello hi
+        .does 1 .says {=name=} eyes you. "Hello yourself."
+        .does 2 .says Eyebrows raise. "Are you ok?"
+        .does .says {=name=} ignores your irrelevant blathering.
+.end
+
+.responses ui
     .response START
         .does
             .invokes
@@ -20,11 +37,4 @@
                         }
                     }
                 });
-            .says "This begins the interview of {!Jeeves!}, butler to the late {!Mr. Wilder!} who was {!murdered|murder!} on the {!10th of March!}. A Wednesday, if that's relevant, and it might be."
 .end
-
-.responses Jeeves
-    .response hello
-        .does .says Jeeves eyes you. "Hello yourself."
-.end
-
