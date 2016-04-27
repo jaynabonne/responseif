@@ -18,7 +18,8 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
         function loadFile(name, completion) {
             $.ajax({
                 url: self.data_root + name,
-                cache: false
+                cache: false,
+                dataType: 'text'
             }).done(completion);
         }
 
