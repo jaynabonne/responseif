@@ -61,7 +61,8 @@ define([], function () {
     }
 
     function stateNeedIsMet(id, responder, world) {
-        return world.getState(id, responder || "");
+        var state = world.getState(id, responder || "");
+        return state && !(state < 0.5);
     }
 
     function responseNeedsAreMet(response, responder, world) {
