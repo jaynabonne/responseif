@@ -1,3 +1,111 @@
+2016-04-30
+
+Is there a more specific way to signify this? Do we want to key age of a topic on something other than its decayed
+weight (like a timestamp or game cycle index of some sort)?
+
+--------
+
+Each responder has state. That state can be "meta-state", that is "state about state". So, for example, if Mary is
+happy and Joe sees it, Joe can store state locally that Mary is happy. This is Joe's "model of reality", which is
+based on observation. It is not peeking directly into Mary's "happy" state but is rather an inferred state set based
+on what is suggested by Mary's responses. (That is one approach - is there a way to have things happen automatically?)
+
+----------------------------------------
+
+2016-04-29
+
+Can we manipulate "events" instead of just topics? That is, something like
+"Door opens"  (door:opens)
+"Alice says <topic1 topic2>" (Alice:says:topic1, Alice:says:topic2)
+
+This allows response to specific characters saying things as opposed to just topics in general.
+
+Do we need to be able to parse to pick out pieces (like "Alice" or "Alice:says")?
+
+How long would specific things remain in context?
+- Suggested topics
+- "Events"
+
+--------
+
+We want to be able to respond to topics differently depending on "age" (or, more generally, the current weight), where
+as the weight decreases, different responses come into play.
+
+Bob says, "Would you like a drink?"
+
+Immediate response: "That would be great. Thanks!"
+Slight delay: "By the way, I would definitely like a drink."
+Longer delay: "You asked before about wanting a drink. I'd like to take you up on your offer."
+
+We need to match based on topic weight. That can be done to some extent using .weights (assuming the decaying value is
+available as a weight - add topics to some checks?). Assume the topic is "DRINK":
+
+.response
+    .weights DRINK
+    .does .says "That would be great. Thanks!"
+
+.response
+    .weights DRINK equals 0.8
+    .does .says "By the way, I would definitely like a drink."
+
+.response
+    .weights DRINK equals 0.6
+    .does .says "You asked before about wanting a drink. I'd like to take you up on your offer."
+
+DRINK = 1
+    1.0
+    0.8
+    0.6
+DRINK = 0.9
+    0.9
+    0.9
+    0.7
+DRINK = 0.8
+    0.8
+    1.0
+    0.8
+DRINK = 0.7
+    0.7
+    0.9
+    0.9
+DRINK = 0.6
+    0.6
+    0.8
+    1.0
+DRINK = 0.5
+    0.5
+    0.7
+    0.9
+DRINK = 0.3
+    0.3
+    0.5
+    0.7
+
+DRINK and DRINK equals 0.4
+
+
+----------------------------------------
+
+2016-04-27
+
+Room/LOOK: You are in a large room.
+Apple/LOOK: There is an apple on the table.
+Elf/ACT: "Try it," the elf says. "Try to take the apple."
+
+V
+You are in a large room. There is an apple on the table.
+"Try it," the elf says. "Try to take the apple."
+
+Possible break strategy:
+1) Break after each riff cycle.
+2) Break after each action.
+3) Don't break for responses to action calls.
+4) Don't break for responses to normal calls.
+
+Probably still won't work...
+
+----------------------------------------
+
 2016-04-24
 
 .model actor
