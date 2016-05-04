@@ -101,8 +101,8 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
     proto.process_adjusts = function (action, responder, response) {
         var adjusts = action.adjusts;
         var value = this.world.getState(adjusts.variable, responder);
-        var target = this.world.getState(adjusts.toward, responder);
-        var increment = this.world.getState(adjusts.stepping, responder);
+        var target = this.world.getState(adjusts.toward || "0", responder);
+        var increment = this.world.getState(adjusts.stepping || "0.2", responder);
         var new_value = RifFuzzy.adjust(value, target, increment);
         this.world.setState({expression: adjusts.variable+'='+new_value}, responder);
     };
