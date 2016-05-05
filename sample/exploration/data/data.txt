@@ -1,0 +1,61 @@
+.move thingy .to room
+.move player .to room
+.move UI .to everywhere
+
+.responses thingy
+    .response START
+        .does
+            .sets un state
+            .sets target
+
+    .response DISPLAY
+        .does .says {+RED_LIGHT+}{+GREEN_LIGHT+}
+
+    .response RED_LIGHT
+        .weights target
+        .does .says <div class="red-light">#</div>
+
+    .response RED_LIGHT
+        .weights un target
+        .does .says <div class="off-light">#</div>
+
+    .response GREEN_LIGHT
+        .weights un target
+        .does .says <div class="green-light">#</div>
+    .response GREEN_LIGHT
+        .weights target
+        .does .says <div class="off-light">#</div>
+.end
+
+.actions thingy
+    .response
+        .weights 0.8
+        .does
+            .adjusts state .toward target .stepping 0.6
+    .response
+        .weights state
+        .needs target
+        .does .sets un target
+              .says Let's go down... .autohides
+    .response
+        .weights un state
+        .needs un target
+        .does .sets target
+              .says Let's go up... .autohides
+.end
+
+.responses player
+    .response Wait
+.end
+
+.responses UI
+    .response START
+        .does .says <div id="display"></div><div id="status">xxx</div> {!Wait!}
+.end
+
+.actions UI
+    .response
+        .does
+            .says {+DISPLAY+} .into #display
+            .says State:{=thingy:state=}, Target:{=thingy:target=} .into #status
+.end
