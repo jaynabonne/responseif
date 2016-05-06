@@ -157,7 +157,7 @@ define([], function () {
     Parser.prototype.parse_does_uses = function(actions, entry) {
         this.index++;
         var responses = this.parseResponseGroup();
-        if (entry.value === "first" || entry.value === "random" || entry.value === "all") {
+        if (entry.value === "first" || entry.value === "random" || entry.value === "all" || entry.value === "best") {
             var action = { uses: {}};
             action.uses[entry.value] = responses;
             actions.push(action);

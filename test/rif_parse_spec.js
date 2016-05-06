@@ -673,6 +673,43 @@ describe("rifParse", function () {
             }
         );
     });
+    it("should parse a response 'uses best'", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                    response(),
+                        does(),
+                            uses("best"),
+                                response(),
+                                    does(),
+                                        says("some text"),
+                                response(),
+                                    does(),
+                                        says("some more text"),
+                            end(),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        id: 0,
+                        does: {
+                            common: [{
+                                uses: {
+                                    best: [
+                                        {id: 1, does: {common: [{says: {text: "some text"}}]}},
+                                        {id: 2, does: {common: [{says: {text: "some more text"}}]}}
+                                    ]
+                                }
+                            }]
+                        }
+                    }
+                ]
+            }
+        );
+    });
     it("should parse a variable being set", function () {
         var rif = rifParse(
             [
