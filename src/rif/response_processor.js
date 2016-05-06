@@ -119,5 +119,81 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
             });}
     };
 
+    function orderCompare(a, b) {
+        return (a.response.orders || 1) - (b.response.orders || 1);
+    }
+
+    function processGroup(group, processor) {
+        group.sort(orderCompare);
+        group.forEach(function(candidate) { processor.processResponse(candidate.response, candidate.responder); });
+    }
+
+    function addPrompt(items, candidate) {
+        var prompt = candidate.response.prompts;
+        if (items.indexOf(prompt) === -1) {
+            items.push(prompt);
+        }
+    }
+
+    function getMenuItems(prompts) {
+        var items = [];
+        prompts.forEach(function (candidate) { addPrompt(items, candidate); });
+        return items;
+    }
+
+    function processMenuResponses(prompt, prompts, processor) {
+        prompts.forEach(function (candidate) {
+            if (candidate.response.prompts === prompt) {
+                processor.processResponse(candidate.response, candidate.responder);
+            }
+        });
+    }
+
+    function runMenu(prompts, processor, interact) {
+        var items = getMenuItems(prompts);
+        interact.choose(items, function (which) {
+            if (which !== -1) {
+                processMenuResponses(items[which], prompts, processor);
+            }
+        });
+    }
+
+    function forcesPrompt(response) {
+        return response.forcesprompt === undefined || response.forcesprompt;
+    }
+
+    function processPrompts(prompts, processor, interact) {
+        if (prompts.length === 1 && !forcesPrompt(prompts[0].response)) {
+            processGroup(prompts, processor);
+        } else if (prompts.length > 0) {
+            runMenu(prompts, processor, interact);
+        }
+    }
+
+    function processDefinedGroups(groups, processor, types) {
+        types.forEach(function (type) {
+            if (groups.hasOwnProperty(type)) {
+                processGroup(groups[type], processor);
+                groups[type] = undefined;
+            }
+        });
+    }
+
+    function processGroups(groups, processor) {
+        $.each(groups, function(index, group) {
+            if (group) {
+                processGroup(group, processor);
+            }
+        });
+    }
+
+    proto.processResponses = function(candidates, processor, interact, types) {
+        var candidate_groups = RifResponseCore.groupCandidates(candidates);
+
+        processDefinedGroups(candidate_groups.groups, processor, types);
+        processGroups(candidate_groups.groups, processor);
+        processPrompts(candidate_groups.prompts, processor, interact);
+    };
+
     return type;
 });
