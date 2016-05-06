@@ -1,0 +1,56 @@
+.move simple .to room
+.move player .to room
+.move UI .to everywhere
+
+.responses simple
+    .response START
+        .does
+            .sets not on
+            .sets un target
+
+    .response DISPLAY
+        .does .says {+LIGHT+}
+
+    .response LIGHT
+        .weights target
+        .does .says <div class="on-light">#</div>
+
+    .response LIGHT
+        .weights 0.1
+        .does .says <div class="off-light">#</div>
+.end
+
+.actions simple
+    .response
+        .weights 0.2
+        .does
+            .adjusts on .toward target .stepping 0.1
+    .response
+        .weights un on
+        .needs un target
+        .does .sets target
+              .says The light turns on... .autohides
+    .response
+        .weights on
+        .needs target
+        .does .sets un target
+              .says The light turns off... .autohides
+.end
+
+.responses player
+    .response Wait
+.end
+
+.responses UI
+    .response START
+        .does .says <div id="display"></div><div id="status">xxx</div> {!Wait!}
+.end
+
+.actions UI
+    .response
+        .does
+            .says {+DISPLAY+} .into #display
+            .says on:{=simple:on=}<br>
+                  target:{=simple:target=}<br>
+                  .into #status
+.end
