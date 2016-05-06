@@ -16,12 +16,16 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return this.clusters[cluster_id] || [];
     };
     proto.addTopics = function(cluster_id, topics) {
+        var self = this;
         var cluster = this.clusters[cluster_id] || [];
         topics = topics.slice(0);
         for (var i = 0; i < cluster.length; ++i) {
             RifTopicStrategy.mergeTopicsInto(cluster[i], topics);
         }
-        this.clusters[cluster_id] = cluster.concat(topics);
+        $.each(topics, function(index, topic) {
+            cluster.push($.extend({}, topic));
+        });
+        self.clusters[cluster_id] = cluster;
     };
     proto.removeTopics = function(cluster_id, topics) {
         var cluster = this.clusters[cluster_id];
