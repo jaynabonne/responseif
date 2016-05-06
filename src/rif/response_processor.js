@@ -193,6 +193,7 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
     };
 
     proto.processResponses = function(candidates, types) {
+        types = types || [];
         var candidate_groups = RifResponseCore.groupCandidates(candidates);
 
         this.processDefinedGroups(candidate_groups.groups, types);

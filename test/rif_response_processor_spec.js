@@ -416,4 +416,105 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             expect(world.setParent).toHaveBeenCalledWith("responder", "room");
         });
     });
+
+    describe("processResponses", function () {
+        describe("general", function () {
+            it("increments the response run count by one", function () {
+                var candidate = { response: { }, score: 1 };
+                var candidates = [candidate];
+                processor.processResponses(candidates);
+                expect(candidate.response.run).toBe(1);
+                processor.processResponses(candidates);
+                expect(candidate.response.run).toBe(2);
+            });
+            it("groups responses by type", function () {
+                var output = "";
+                interact.say = function(says) { output += says.text; };
+                var candidates = [
+                    { response: { is:"c", does: { common: [ {says: { text: "C!"} } ] } }, score: 1 },
+                    { response: { is:"b", does: { common: [ {says: { text: "B!"} } ] } }, score: 1 },
+                    { response: { is:"a", does: { common: [ {says: { text:  "A!"} } ] } }, score: 1 },
+                    { response: { is:"b", does: {common: [ {says: { text:  "B again!"} } ] } }, score: 1 }
+                ];
+                processor.processResponses(candidates, ["a","b","c"]);
+                expect(output).toEqual("A!B!B again!C!");
+            });
+            it("orders responses", function () {
+                var output = "";
+                interact.say = function(says) { output += says.text; };
+                var candidates = [
+                    { response: { orders:99, does: { common: [ {says: { text: "C!"} } ] } }, score: 1 },
+                    { response: { does: { common: [ {says: { text: "B!"} } ] } }, score: 1 },
+                    { response: { orders:10, does: { common: [ {says: { text:  "A!"} } ] } }, score: 1 },
+                    { response: { does: {common: [ {says: { text:  "B again!"} } ] } }, score: 1 }
+                ];
+                processor.processResponses(candidates, ["a","b","c"]);
+                expect(output).toEqual("B!B again!A!C!");
+            });
+        });
+        describe("prompts", function () {
+            it("shows prompts in a menu", function () {
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = {response: {prompts: "Go north"}, score: 1};
+                var candidate2 = {response: {prompts: "Go south"}, score: 1};
+                processor.processResponses([candidate1, candidate2]);
+                expect(interact.choose).toHaveBeenCalledWith(["Go north", "Go south"], jasmine.any(Function));
+            });
+            it("processes a single prompt as a normal response if forcesprompt is false", function () {
+                interact.say = jasmine.createSpy("say");
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = { response: { prompts: "Go north", forcesprompt: false, does: { common: [ { says: { text: "something" } } ] } }, score: 1 };
+                processor.processResponses([candidate1]);
+                expect(interact.choose).not.toHaveBeenCalled();
+                expect(interact.say).toHaveBeenCalled();
+            });
+            it("processes a single prompt as a prompt if 'forcesprompt' is not set", function () {
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = { response: { prompts: "Go north"}, score: 1 };
+                processor.processResponses([candidate1]);
+                expect(interact.choose).toHaveBeenCalledWith(["Go north"], jasmine.any(Function));
+            });
+            it("passes a callback function to be invoked when an item is chosen", function () {
+                interact.choose = jasmine.createSpy("choose");
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: { text: "North" } } ] } }, score: 1, responder: 'responder' };
+                var candidate2 = { response: { prompts: "Go south", does: { common: [ { says: { text: "South" } } ] }  }, score: 1, responder: 'responder' };
+                processor.processResponses([candidate1, candidate2]);
+                var callback = interact.choose.mostRecentCall.args[1];
+                callback(1);
+                expect(interact.say).toHaveBeenCalledWith({text: "South"}, 'responder');
+            });
+            it("does nothing if the menu callback is called with -1", function () {
+                interact.choose = jasmine.createSpy("choose");
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: { text: "North" } } ] } }, score: 1 };
+                var candidate2 = { response: { prompts: "Go south", does: { common: [ { says: { text: "South" } } ] }  }, score: 1 };
+                processor.processResponses([candidate1, candidate2]);
+                var callback = interact.choose.mostRecentCall.args[1];
+                callback(-1);
+                expect(interact.say).not.toHaveBeenCalled();
+            });
+            it ("combines multiple responses with the same prompt under one menu choice", function () {
+                interact.choose = jasmine.createSpy("choose");
+                var candidate1 = { response: { prompts: "prompt1" }, score: 1 };
+                var candidate2 = { response: { prompts: "prompt1" }, score: 1 };
+                var candidate3 = { response: { prompts: "prompt2" }, score: 1 };
+                processor.processResponses([candidate1, candidate2, candidate3]);
+                expect(interact.choose).toHaveBeenCalledWith(["prompt1", "prompt2"], jasmine.any(Function));
+            });
+            it ("executes multiple responses with the same prompt when chosen", function () {
+                interact.choose = jasmine.createSpy("choose");
+                interact.say = jasmine.createSpy("say");
+                var candidate1 = {response: {prompts: "prompt1", does: {common: [ {says: { text: "North" } } ] } }, score: 1, responder: 'responder'};
+                var candidate2 = {response: {prompts: "prompt1", does: {common: [ {says: { text: "North2" } } ] } }, score: 1, responder: 'responder'};
+                var candidate3 = {response: {prompts: "prompt2", does: {common: [ {says: { text: "South" } } ] } }, score: 1, responder: 'responder'};
+                processor.processResponses([candidate1, candidate2, candidate3]);
+                var callback = interact.choose.mostRecentCall.args[1];
+                callback(0);
+                expect(interact.say.callCount).toEqual(2);
+                expect(interact.say.argsForCall[0]).toEqual([{ text: "North" }, 'responder']);
+                expect(interact.say.argsForCall[1]).toEqual([{ text: "North2" }, 'responder']);
+            });
+        });
+    });
 });
