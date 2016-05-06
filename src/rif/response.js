@@ -9,7 +9,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     proto.processResponses = function (candidates, caller, topics, interact) {
         var processor = new RifResponseProcessor(caller, interact, topics, this.world);
-        processor.processResponses(candidates, processor, interact, this.types);
+        processor.processResponses(candidates, this.types);
     };
 
     proto.setTypes = function(types) {
