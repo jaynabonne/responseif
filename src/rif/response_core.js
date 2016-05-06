@@ -106,13 +106,13 @@ define([], function () {
                 addIfHasScore(response, topics, candidates, responder, world);
             }
         }
-    };
+    }
 
     function addResponses(responses, topics, candidates, responder, world) {
         var boundAdd = function (response) { addResponse(response, topics, candidates, responder, world); };
         responses.forEach(boundAdd);
         return candidates;
-    };
+    }
 
     core.selectResponses = function(responses, topics, responder, world) {
         return addResponses(responses, topics, [], responder, world);
