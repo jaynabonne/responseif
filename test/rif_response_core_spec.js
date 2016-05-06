@@ -140,4 +140,98 @@ define(['rif/response_core'], function(rifResponseCore) {
             expect(rifResponseCore.responseIsEligible(response, [], "aresponder", world)).toEqual(true);
         });
     });
+    describe("selectResponses", function () {
+        var world;
+        beforeEach(function() {
+            world =  {
+                getResponseRuns: function(id) {
+                    return 0;
+                }
+            };
+        });
+        it("returns an empty list for no input", function () {
+            var candidates = rifResponseCore.selectResponses([], [], "", world);
+            expect(candidates).toEqual([]);
+        });
+        it("returns all simple responses with score 1", function () {
+            var responses = [{a: 1}, {b: 2}, {c: 3}];
+            var topics = [];
+            var candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([
+                {response: {a: 1, run: 0}, score: 1, responder: "responder"},
+                {response: {b: 2, run: 0}, score: 1, responder: "responder"},
+                {response: {c: 3, run: 0}, score: 1, responder: "responder"}
+            ]);
+        });
+        it("returns the responder in the responses if passed", function () {
+            var response = {a: 1};
+            var responder = { a: 314 };
+            var candidates = rifResponseCore.selectResponses([response], [], responder, world);
+            expect(candidates).toEqual([{response: response, score: 1, responder: responder}]);
+        });
+
+        it("returns responses that match a topic", function () {
+            var response1 = {a: 1, matches: [{keyword: "atopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
+                response3 = {c: 3, matches: [{keyword: "atopic"}]},
+                responses = [response1, response2, response3],
+                topics = [{keyword: "atopic"}],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([{response: response1, score: 1, responder: "responder"}, {response: response3, score: 1, responder: "responder"}]);
+        });
+        it("returns responses that match one of multiple topics", function () {
+            var response1 = {a: 1, matches: [{keyword: "atopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
+                response3 = {c: 3, matches: [{keyword: "atopic"}]},
+                response4 = {d: 4, matches: [{keyword: "ctopic"}]},
+                responses = [response1, response2, response3, response4],
+                topics = [{keyword: "btopic"}, {keyword: "ctopic"}],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([{response: response2, score: 1, responder: "responder"}, {response: response4, score: 1, responder: "responder"}]);
+        });
+        it("returns a higher score for more matched topics", function () {
+            var response1 = {a: 1, matches: [{keyword: "atopic"}, {keyword: "btopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
+                responses = [response1, response2],
+                topics = [{keyword: "atopic"}, {keyword: "btopic"}],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([{response: response1, score: 2, responder: "responder"}, {response: response2, score: 1, responder: "responder"}]);
+        });
+        it("returns responses whose count does not exceed maxcount", function () {
+            var response1 = {a: 1, occurs: 10},
+                response2 = {b: 2, run: 4, occurs: 4 },
+                response3 = {c: 3},
+                response4 = {d: 4, run: 5 },
+                responses = [response1, response2, response3, response4],
+                topics = [],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([{response: response1, score: 1, responder: "responder"}, {response: response3, score: 1, responder: "responder"}, {response: response4, score: 1, responder: "responder"}]);
+        });
+        it("returns the right score for a required topic", function () {
+            var response1 = {a: 1, matches: [{keyword: "*atopic"}]},
+                responses = [response1],
+                topics = [{keyword: "atopic"}],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([{response: response1, score: 1, responder: "responder"}]);
+        });
+        it("returns eligible child responses", function () {
+            var response1 = {a: 1, matches: [{keyword: "atopic"}]},
+                response2 = {b: 2, matches: [{keyword: "btopic"}]},
+                response3 = {c: 3},
+                response4 = {d: 4, run: 4, occurs: 4 },
+                parentresponse = { selects: [response1, response2, response3, response4] },
+                responses = [parentresponse],
+                topics = [{keyword: "atopic"}],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([{response: response1, score: 1, responder: "responder"}, {response: response3, score: 1, responder: "responder"}]);
+        });
+        it("does not return eligible child responses if the parent is ineligible", function () {
+            var response1 = {a: 1},
+                parentresponse = { matches:[{keyword: "*atopic"}], selects: [response1] },
+                responses = [parentresponse],
+                topics = [],
+                candidates = rifResponseCore.selectResponses(responses, topics, "responder", world);
+            expect(candidates).toEqual([]);
+        });
+    });
 });

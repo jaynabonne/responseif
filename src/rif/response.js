@@ -7,34 +7,6 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     var proto = type.prototype;
 
-    function addIfHasScore(response, topics, candidates, responder, world) {
-        var score = RifResponseCore.computeScore(response, topics, responder, world);
-        if (score > 0) {
-            candidates.push({response: response, score: score, responder: responder});
-        }
-    }
-
-    proto.addResponse = function (response, topics, candidates, responder) {
-        if (RifResponseCore.responseIsEligible(response, topics, responder, this.world)) {
-            if (response.selects !== undefined) {
-                this.addResponses(response.selects, topics, candidates, responder);
-            } else {
-                addIfHasScore(response, topics, candidates, responder, this.world);
-            }
-        }
-    };
-
-    proto.addResponses = function (responses, topics, candidates, responder) {
-        var self = this;
-        var boundAdd = function (response) { self.addResponse(response, topics, candidates, responder); };
-        responses.forEach(boundAdd);
-        return candidates;
-    };
-
-    proto.selectResponses = function(responses, topics, responder) {
-        return this.addResponses(responses, topics, [], responder);
-    };
-
     function getPriorityResponses(candidates) {
         return new RifPriorityResponseGetter(candidates).results;
     }
@@ -139,12 +111,12 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
     };
 
     proto.getCandidateResponses = function(responders, topics) {
-        var self = this;
+        var world = this.world;
         var candidates = [];
         $.each(responders, function(responder) {
             var responses = responders[responder];
             if (responses) {
-                candidates = candidates.concat(self.selectResponses(responses, topics, responder));
+                candidates = candidates.concat(RifResponseCore.selectResponses(responses, topics, responder, world));
             }
         });
         return candidates;

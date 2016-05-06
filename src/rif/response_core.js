@@ -91,5 +91,32 @@ define([], function () {
             this.computeScore(response, topics, responder, world) > 0;
     };
 
+    function addIfHasScore(response, topics, candidates, responder, world) {
+        var score = core.computeScore(response, topics, responder, world);
+        if (score > 0) {
+            candidates.push({response: response, score: score, responder: responder});
+        }
+    }
+
+    function addResponse(response, topics, candidates, responder, world) {
+        if (core.responseIsEligible(response, topics, responder, world)) {
+            if (response.selects !== undefined) {
+                addResponses(response.selects, topics, candidates, responder, world);
+            } else {
+                addIfHasScore(response, topics, candidates, responder, world);
+            }
+        }
+    };
+
+    function addResponses(responses, topics, candidates, responder, world) {
+        var boundAdd = function (response) { addResponse(response, topics, candidates, responder, world); };
+        responses.forEach(boundAdd);
+        return candidates;
+    };
+
+    core.selectResponses = function(responses, topics, responder, world) {
+        return addResponses(responses, topics, [], responder, world);
+    };
+
     return core;
 });
