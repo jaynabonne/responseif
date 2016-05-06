@@ -1,4 +1,5 @@
 define(['rif/response_core'], function(rifResponseCore) {
+    "use strict";
     describe("computeScore", function () {
         var world;
         beforeEach(function() {
@@ -234,4 +235,33 @@ define(['rif/response_core'], function(rifResponseCore) {
             expect(candidates).toEqual([]);
         });
     });
+    describe('groupCandidates', function() {
+        it('should return no groups or prompts by default', function() {
+            var candidate_groups = rifResponseCore.groupCandidates([]);
+            expect(candidate_groups.groups).toEqual({});
+            expect(candidate_groups.prompts).toEqual([]);
+        });
+        it('should return responses sorted by groups', function() {
+            var candidate1 = { response: { is: 'typeA'}};
+            var candidate2 = { response: { is: 'typeB'}};
+            var candidate_groups = rifResponseCore.groupCandidates([candidate1, candidate2]);
+            expect(candidate_groups.groups).toEqual({ typeA: [candidate1], typeB: [candidate2]});
+            expect(candidate_groups.prompts).toEqual([]);
+        });
+        it('should use group "general" if none specified', function() {
+            var candidate1 = { response: { is: 'typeA'}};
+            var candidate2 = { response: { }};
+            var candidate_groups = rifResponseCore.groupCandidates([candidate1, candidate2]);
+            expect(candidate_groups.groups).toEqual({ typeA: [candidate1], general: [candidate2]});
+            expect(candidate_groups.prompts).toEqual([]);
+        });
+        it('should group candidates with prompts into prompts list', function() {
+            var candidate1 = { response: { is: 'typeA'}};
+            var candidate2 = { response: { is: 'typeB', prompts: 'a prompt'}};
+            var candidate_groups = rifResponseCore.groupCandidates([candidate1, candidate2]);
+            expect(candidate_groups.groups).toEqual({ typeA: [candidate1] });
+            expect(candidate_groups.prompts).toEqual([candidate2]);
+        });
+    });
+
 });

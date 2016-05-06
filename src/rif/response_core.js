@@ -118,5 +118,24 @@ define([], function () {
         return addResponses(responses, topics, [], responder, world);
     };
 
+    core.groupCandidates = function(candidates) {
+        var candidate_groups =  {
+            groups: {},
+            prompts: []
+        };
+        candidates.forEach(function (candidate) {
+            if (candidate.response.prompts) {
+                candidate_groups.prompts.push(candidate);
+            } else {
+                var type = candidate.response.is || "general";
+                if (!candidate_groups.groups[type]) {
+                    candidate_groups.groups[type] = [];
+                }
+                candidate_groups.groups[type].push(candidate);
+            }
+        });
+        return candidate_groups;
+    };
+
     return core;
 });

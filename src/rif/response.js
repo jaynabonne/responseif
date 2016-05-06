@@ -7,22 +7,6 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     var proto = type.prototype;
 
-    function groupCandidates(candidates, prompts) {
-        var groups = { };
-        candidates.forEach(function (candidate) {
-            if (candidate.response.prompts) {
-                prompts.push(candidate);
-            } else {
-                var type = candidate.response.is || "default";
-                if (!groups[type]) {
-                    groups[type] = [];
-                }
-                groups[type].push(candidate);
-            }
-        });
-        return groups;
-    }
-
     function orderCompare(a, b) {
         return (a.response.orders || 1) - (b.response.orders || 1);
     }
@@ -92,14 +76,13 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
     }
 
     proto.processResponses = function (candidates, caller, topics, interact) {
-        var prompts = [];
-        var groups = groupCandidates(candidates, prompts);
+        var candidate_groups = RifResponseCore.groupCandidates(candidates);
 
         var processor = new RifResponseProcessor(caller, interact, topics, this.world);
 
-        processDefinedGroups(groups, processor, this.types);
-        processGroups(groups, processor);
-        processPrompts(prompts, processor, interact);
+        processDefinedGroups(candidate_groups.groups, processor, this.types);
+        processGroups(candidate_groups.groups, processor);
+        processPrompts(candidate_groups.prompts, processor, interact);
     };
 
     proto.setTypes = function(types) {
