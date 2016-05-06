@@ -261,6 +261,32 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
         });
 
     });
+    describe("uses best", function() {
+        it("processes the child responses with the best score", function() {
+            interact.say = jasmine.createSpy("say");
+            world.getState = function(id) { return  parseFloat(id);};
+            var response1 = { weights: "0.9", does: { common: [ { says: {text: "Text 1"} } ] } };
+            var response2 = { weights: "0.4", does: { common: [ { says: {text: "Text 2"} } ] } };
+            var response3 = { weights: "0.9", does: { common: [ { says: {text: "Text 3"} } ] } };
+            var response = {
+                does: {
+                    common: [ {
+                        uses: {
+                            best: [
+                                response1,
+                                response2,
+                                response3
+                            ]
+                        }
+                    } ]
+                }
+            };
+            processor.processResponse(response, 'responder');
+            expect(interact.say.callCount).toEqual(2);
+            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
+            expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
+        });
+    });
     describe("calls", function () {
         it("should call the specified topics", function() {
             interact.call = jasmine.createSpy("call");

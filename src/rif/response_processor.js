@@ -1,4 +1,4 @@
-define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
+define(['./response_core','./priority_response_getter', './fuzzy'], function (RifResponseCore, RifPriorityResponseGetter, RifFuzzy) {
     "use strict";
     var type = function(caller, interact, topics, world) {
         this.caller = caller;
@@ -62,6 +62,10 @@ define(['./response_core', './fuzzy'], function (RifResponseCore, RifFuzzy) {
                 var index = this.world.getRandomInRange(0, list.length-1);
                 self.processResponse(list[index], responder);
             }
+        }
+        if (action.uses.best){
+            var candidates = RifResponseCore.selectResponses(action.uses.best, this.topics, responder, this.world);
+            this.processResponses(RifPriorityResponseGetter.getPriorityResponses(candidates));
         }
     };
 
