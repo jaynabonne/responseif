@@ -49,6 +49,12 @@ define(['rif/response_core'], function(rifResponseCore) {
                 score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(0.2*0.9);
         });
+        it("computes the score correctly for a zero weight", function () {
+            var response_topics = [{keyword:"atopic", weight: 0}],
+                topics = [{keyword:"atopic", weight: 0.9}],
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
+            expect(score).toEqual(0);
+        });
         it("scales the score by the response weight", function () {
             var response_topics = [{keyword:"atopic", weight: 0.8}],
                 topics = [{keyword:"atopic"}],

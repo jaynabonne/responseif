@@ -40,7 +40,7 @@ define([], function () {
     }
 
     function getTopicWeight(topic) {
-        return topic.weight || 1;
+        return (topic.weight === undefined) ? 1 : topic.weight;
     }
 
     function computeTopicScore(topic, topics) {
