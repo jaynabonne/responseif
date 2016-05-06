@@ -262,7 +262,32 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
 
     });
     describe("uses best", function() {
-        it("processes the child responses with the best score", function() {
+        it("processes the first child response with the best score", function() {
+            interact.say = jasmine.createSpy("say");
+            world.getState = function(id) { return  parseFloat(id);};
+            var response1 = { weights: "0.9", does: { common: [ { says: {text: "Priority"} } ] } };
+            var response2 = { weights: "0.4", does: { common: [ { says: {text: "Not priority"} } ] } };
+            var response3 = { weights: "0.9", does: { common: [ { says: {text: "Next Priority"} } ] } };
+            var response = {
+                does: {
+                    common: [ {
+                        uses: {
+                            best: [
+                                response1,
+                                response2,
+                                response3
+                            ]
+                        }
+                    } ]
+                }
+            };
+            processor.processResponse(response, 'responder');
+            expect(interact.say.callCount).toEqual(1);
+            expect(interact.say.argsForCall[0]).toEqual([{ text: "Priority" }, 'responder']);
+        });
+    });
+    describe("uses priority", function() {
+        it("processes the child responses with the best scores", function() {
             interact.say = jasmine.createSpy("say");
             world.getState = function(id) { return  parseFloat(id);};
             var response1 = { weights: "0.9", does: { common: [ { says: {text: "Text 1"} } ] } };
@@ -272,7 +297,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 does: {
                     common: [ {
                         uses: {
-                            best: [
+                            priority: [
                                 response1,
                                 response2,
                                 response3

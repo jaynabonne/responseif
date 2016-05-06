@@ -63,9 +63,14 @@ define(['./response_core','./priority_response_getter', './fuzzy'], function (Ri
                 self.processResponse(list[index], responder);
             }
         }
-        if (action.uses.best){
-            var candidates = RifResponseCore.selectResponses(action.uses.best, this.topics, responder, this.world);
-            this.processResponses(RifPriorityResponseGetter.getPriorityResponses(candidates));
+        if (action.uses.best || action.uses.priority){
+            var candidates = RifResponseCore.selectResponses(action.uses.best || action.uses.priority, this.topics, responder, this.world);
+
+            var priority_responses = RifPriorityResponseGetter.getPriorityResponses(candidates);
+            if (action.uses.best && priority_responses.length > 1) {
+                priority_responses = [priority_responses[0]];
+            }
+            this.processResponses(priority_responses);
         }
     };
 
