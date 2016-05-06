@@ -1,10 +1,10 @@
 define([], function () {
-    var type = function (candidates) {
+    var Type = function (candidates) {
         this.reset(-1);
         this.addPriorityResponses(candidates);
     };
 
-    var proto = type.prototype;
+    var proto = Type.prototype;
 
     proto.reset = function (score) {
         this.results = [];
@@ -35,5 +35,9 @@ define([], function () {
         });
     };
 
-    return type;
+    return {
+        getPriorityResponses : function(candidates) {
+            return new Type(candidates).results;
+        }
+    }
 });

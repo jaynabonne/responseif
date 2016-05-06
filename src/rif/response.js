@@ -7,10 +7,6 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     var proto = type.prototype;
 
-    function getPriorityResponses(candidates) {
-        return new RifPriorityResponseGetter(candidates).results;
-    }
-
     function groupCandidates(candidates, prompts) {
         var groups = { };
         candidates.forEach(function (candidate) {
@@ -125,7 +121,7 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
     proto.callTopics = function(responders, topics, caller, interact) {
 
         var candidates = this.getCandidateResponses(responders, topics);
-        candidates = getPriorityResponses(candidates);
+        candidates = RifPriorityResponseGetter.getPriorityResponses(candidates);
 
         this.processResponses(candidates, caller, topics, interact);
     };
