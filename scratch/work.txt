@@ -1,3 +1,33 @@
+2016-05-04
+
+        .does .uses best
+
+
+.actions thingy
+    .response
+        .does
+            .adjusts state .toward target .stepping 0.6
+            .says state={=state=}, target={=target=}
+    .response
+        .does .uses best
+            .response
+                .weights state
+                .needs target
+                .does .sets un target
+                      .says Let's go down...
+                      .says Now: state={=state=}, target={=target=}
+            .response
+                .weights un state
+                .needs un target
+                .does .sets target
+                      .says Let's go up...
+                      .says Now: state={=state=}, target={=target=}
+.end
+
+
+
+---------------------------------------
+
 2016-04-30
 
 Is there a more specific way to signify this? Do we want to key age of a topic on something other than its decayed
