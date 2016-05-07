@@ -41,3 +41,11 @@ span.keyword {color:#f0f020; cursor:pointer;}
 .off-light {
     color: #222;
 }
+
+#simple {
+    float: left;
+}
+
+#topical {
+    float: right;
+}

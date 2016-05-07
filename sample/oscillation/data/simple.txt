@@ -1,0 +1,48 @@
+.move simple .to room
+
+.responses simple
+    .response START
+        .does
+            .sets not on
+            .sets un target
+            .says <div id="simple"><div id="simple-display"></div><div id="simple-status">xxx</div></div>
+
+    .response SIMPLE_DISPLAY
+        .does .says {+LIGHT+}
+
+    .response SIMPLE_STATUS
+        .does .says on:{=on=}<br>target:{=target=}<br>
+
+    .response LIGHT
+        .weights target
+        .does .says <div class="on-light">#</div>
+
+    .response LIGHT
+        .weights 0.1
+        .does .says <div class="off-light">#</div>
+.end
+
+.actions simple
+    .response
+        .does
+            .adjusts on .toward target .stepping 0.1
+
+    .response
+        .does .uses best
+            .response
+                .weights un on
+                .needs un target and un on
+                .does .sets target
+                      .says The light turns on... .autohides
+            .response
+                .weights on
+                .needs target and on
+                .does .sets un target
+                      .says The light turns off... .autohides
+        .end
+
+    .response
+        .does
+            .says {+SIMPLE_DISPLAY+} .into #simple-display
+            .says {+SIMPLE_STATUS+} .into #simple-status
+.end

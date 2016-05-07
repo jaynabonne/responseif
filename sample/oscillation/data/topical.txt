@@ -1,0 +1,38 @@
+.move topical .to room
+
+.model topical
+    .cluster permanent .weight 0.5
+    .cluster transient .decaying 0.4
+.end
+
+.responses topical
+    .response START
+        .does
+            .adds PERM .to permanent
+            .sets not on
+            .sets un target
+            .says <div id="topical"><div id="topical-display"></div><div id="topical-status">xxx</div></div>
+.end
+
+.actions topical
+    .response
+        .does
+            .says Hello .into #topical-display
+            .says Goodbye .into #topical-status
+    .response
+        .does .uses best
+            .response PERM
+                .does .says Perm .into #topical-status
+                      .adds PERM2 .to transient
+            .response PERM2
+                .does
+                    .says Perm2 .into #topical-status
+                    .adds PERM3 .to transient
+            .response PERM3
+                .does
+                    .says Perm3 .into #topical-status
+            .response
+                .weights 0.2
+                .does .says Default .into #topical-status
+        .end
+.end
