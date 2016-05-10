@@ -158,14 +158,14 @@ describe("rifParse", function () {
             [
                 responses("anObject"),
                 response(),
-                token_pair("matches", "topicA=50.5 topicB topicC=75"),
+                token_pair("matches", "topicA=0.5 topicB topicC=0.75"),
                 end()
             ]
         );
         expect(rif.responses).toEqual({
             anObject: [{
                 id: 0,
-                matches: [{keyword: "topicA", weight: 0.505}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 0.75}]
+                matches: [{keyword: "topicA", weight: 0.5}, {keyword: "topicB", weight: 1}, {keyword: "topicC", weight: 0.75}]
             }]
         });
     });
@@ -387,7 +387,7 @@ describe("rifParse", function () {
                 responses("anObject"),
                 response(),
                 does(),
-                token_pair("suggests", "topic1=30 topic2 topic3=70"),
+                token_pair("suggests", "topic1=0.3 topic2 topic3=0.7"),
                 end()
             ]
         );
@@ -424,7 +424,7 @@ describe("rifParse", function () {
                 token_pair("adds", "topic1 topic2 topic3"),
                 token_pair("adds", "topic4 topic5"),
                 token_pair("for", "someone"),
-                token_pair("adds", "topic6=50 topic7=90"),
+                token_pair("adds", "topic6=0.5 topic7=0.9"),
                 token_pair("adds", "topicA"),
                 token_pair("to", "clusterA"),
                 end()
