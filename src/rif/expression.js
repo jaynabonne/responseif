@@ -217,8 +217,15 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     function compileNext(part, context) {
         if (part === '(' ) {
             //console.log("left paren");
+            context.pending_expressions.push(context.current);
+            context.current = {
+                operators: [],
+                lastWasOperand: false
+            };
         } else if ( part === ')') {
             //console.log("right paren");
+            pushRemainingOperators(context);
+            context.current = context.pending_expressions.pop();
         } else {
             var operator = getOperator(part, context);
             if (operator) {
@@ -326,7 +333,8 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                 current: {
                     operators: [],
                     lastWasOperand: false
-                }
+                },
+                pending_expressions: []
             };
             compileParts(splitExpression(expression), context);
             pushRemainingOperators(context);

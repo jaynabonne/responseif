@@ -233,5 +233,9 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('2+(3*5)');
         expect(RifExpression.evaluate(expression, {}, "responder")).toBe(17);
     });
+    it('should support proper parentheses around an expression with altered precedence', function() {
+        var expression = RifExpression.compile('2*(3+5)');
+        expect(RifExpression.evaluate(expression, {}, "responder")).toBe(16);
+    });
 });
 });
