@@ -237,5 +237,9 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('2*(3+5)');
         expect(RifExpression.evaluate(expression, {}, "responder")).toBe(16);
     });
+    it('should support proper parentheses when nested', function() {
+        var expression = RifExpression.compile('8/(30 % (20-6))');
+        expect(RifExpression.evaluate(expression, {}, "responder")).toBe(4);
+    });
 });
 });
