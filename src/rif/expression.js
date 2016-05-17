@@ -22,17 +22,17 @@ define(['rif/fuzzy'], function(RifFuzzy) {
 
     function pushOperator(context, operator) {
         if (!operator.unary) {
-            while (context.operators.length !== 0 && context.operators.slice(-1)[0].precedence <= operator.precedence) {
-                context.expressions.push(context.operators.pop());
+            while (context.current.operators.length !== 0 && context.current.operators.slice(-1)[0].precedence <= operator.precedence) {
+                context.expressions.push(context.current.operators.pop());
             }
         }
-        context.operators.push(operator);
-        context.lastWasOperand = false;
+        context.current.operators.push(operator);
+        context.current.lastWasOperand = false;
     }
 
     function pushOperand(context, operand) {
         context.expressions.push({ execute: operand });
-        context.lastWasOperand = true;
+        context.current.lastWasOperand = true;
     }
 
     var operators = {
@@ -208,7 +208,7 @@ define(['rif/fuzzy'], function(RifFuzzy) {
 
     function getOperator(part, context) {
         var op_id = part.toLowerCase();
-        if (!context.lastWasOperand) {
+        if (!context.current.lastWasOperand) {
             op_id = "unary " + op_id;
         }
         return operators[op_id];
@@ -306,8 +306,8 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     }
 
     function pushRemainingOperators(context) {
-        while (context.operators.length !== 0) {
-            context.expressions.push(context.operators.pop());
+        while (context.current.operators.length !== 0) {
+            context.expressions.push(context.current.operators.pop());
         }
     }
 
@@ -322,9 +322,11 @@ define(['rif/fuzzy'], function(RifFuzzy) {
             //console.log("compile", expression);
             var context = {
                 expressions: [],
-                operators: [],
-                lastWasOperand: false,
-                prefix: prefix
+                prefix: prefix,
+                current: {
+                    operators: [],
+                    lastWasOperand: false
+                }
             };
             compileParts(splitExpression(expression), context);
             pushRemainingOperators(context);
