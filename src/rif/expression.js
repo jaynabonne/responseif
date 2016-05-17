@@ -225,7 +225,10 @@ define(['rif/fuzzy'], function(RifFuzzy) {
         } else if ( part === ')') {
             //console.log("right paren");
             pushRemainingOperators(context);
-            context.current = context.pending_expressions.pop();
+            if (context.pending_expressions.length > 0)
+                context.current = context.pending_expressions.pop();
+            else
+                console.log("Error: unbalanced parentheses");
         } else {
             var operator = getOperator(part, context);
             if (operator) {

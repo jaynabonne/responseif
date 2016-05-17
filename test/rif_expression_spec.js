@@ -241,5 +241,9 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('8/(30 % (20-6))');
         expect(RifExpression.evaluate(expression, {}, "responder")).toBe(4);
     });
+    it('should do something reasonable with unbalanced parentheses', function() {
+        var expression = RifExpression.compile('8*(3+5))');
+        expect(RifExpression.evaluate(expression, {}, "responder")).toBe(64);
+    });
 });
 });
