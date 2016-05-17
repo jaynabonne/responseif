@@ -215,13 +215,22 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     }
 
     function compileNext(part, context) {
-        var operator = getOperator(part, context);
-        if (operator) {
-            pushOperator(context, operator);
-        } else if (isNaN(part) && part[0] !== '"') {
-            pushOperand(context, variable(part, context));
+        if (part === '(' ) {
+
+        } else if ( part === ')') {
+
         } else {
-            pushOperand(context, constant(part));
+            var operator = getOperator(part, context);
+            if (operator) {
+                //console.log("push operator", part);
+                pushOperator(context, operator);
+            } else if (isNaN(part) && part[0] !== '"') {
+                //console.log("push variable", part);
+                pushOperand(context, variable(part, context));
+            } else {
+                //console.log("push console", part);
+                pushOperand(context, constant(part));
+            }
         }
     }
 

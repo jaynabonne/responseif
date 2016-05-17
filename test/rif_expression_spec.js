@@ -221,5 +221,9 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('variable="foo"');
         expect(RifExpression.evaluate(expression, {'responder:variable': 'foo'}, "responder")).toBe(1);
     });
+    it('should support parentheses around a bare value', function() {
+        var expression = RifExpression.compile('(3)');
+        expect(RifExpression.evaluate(expression, {}, "responder")).toBe(3);
+    });
 });
 });
