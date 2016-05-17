@@ -225,5 +225,13 @@ describe('RifExpression', function() {
         var expression = RifExpression.compile('(3)');
         expect(RifExpression.evaluate(expression, {}, "responder")).toBe(3);
     });
+    it('should support proper parentheses around a simple expression', function() {
+        var expression = RifExpression.compile('(3+5)');
+        expect(RifExpression.evaluate(expression, {}, "responder")).toBe(8);
+    });
+    it('should support proper parentheses around an expression with unaltered precedence', function() {
+        var expression = RifExpression.compile('2+(3*5)');
+        expect(RifExpression.evaluate(expression, {}, "responder")).toBe(17);
+    });
 });
 });

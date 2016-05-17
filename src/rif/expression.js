@@ -216,9 +216,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
 
     function compileNext(part, context) {
         if (part === '(' ) {
-
+            //console.log("left paren");
         } else if ( part === ')') {
-
+            //console.log("right paren");
         } else {
             var operator = getOperator(part, context);
             if (operator) {
@@ -285,6 +285,9 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                     parts.push(part);
                     part = '';
                 }
+            } else if (ch === '(' || ch === ')') {
+                parts.push(part);
+                part = '';
             } else if (part !== '' && (isSpace(ch) != isSpace(part[0]) || isIdentifier(ch) != isIdentifier(part[0]))) {
                 parts.push(part);
                 part = '';
