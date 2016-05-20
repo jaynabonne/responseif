@@ -111,6 +111,25 @@ describe("rifParse", function () {
         );
         expect(rif.actions).toEqual({someObject: [{id: 0}, {id: 1}]});
     });
+    it("should parse setup", function () {
+        var rif = rifParse(
+            [
+                token_pair('setup', 'aresponder'),
+                    says("some text to display for this response"),
+            ]
+        );
+        expect(rif.setup).toEqual([{
+            responder: 'aresponder',
+            responses: [
+                {
+                    id: 0,
+                    does: {
+                        common: [{says: {text: "some text to display for this response"}}]
+                    }
+                }
+            ]
+        }]);
+    });
     it("should parse response occurs", function () {
         var rif = rifParse(
             [

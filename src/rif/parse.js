@@ -256,14 +256,17 @@ define([], function () {
         response.selects = this.parseResponseGroup();
     };
 
+    Parser.prototype.create_response = function() {
+        return { id: this.nextId++ };
+    };
+
     Parser.prototype.parse_response = function() {
         var value = this.currentPair().value;
         this.index++;
-        var response = {};
+        var response = this.create_response();
         if (value !== '') {
             response.matches = parseMatches(value);
         }
-        response.id = this.nextId++;
         this.parseEntries(response, "parse_response_");
         return response;
     };
@@ -301,6 +304,15 @@ define([], function () {
     };
 
     Parser.prototype.parse_actions = Parser.prototype.parse_responses;
+
+    Parser.prototype.parse_setup = function() {
+        var responder = this.currentPair().value;
+        var response = this.create_response();
+        this.parse_response_does(response, {});
+        var rif = this.rif;
+        rif.setup = rif.setup || [];
+        rif.setup.push({ responder: responder, responses: [response]});
+    };
 
     Parser.prototype.parse_set = function() {
         var expression = this.currentPair().value;
