@@ -834,7 +834,7 @@ describe("rifParse", function () {
                 does(),
                 invokes("a function body")
             ]
-        )
+        );
         expect(rif.responses).toEqual(
             {
                 anObject: [

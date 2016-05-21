@@ -48,5 +48,8 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
     type.prototype.getInteract = function() {
         return this.interact;
     };
+    type.prototype.start = function() {
+        this.interact.sendCommand([{keyword:"START"}]);
+    };
     return type;
 });
