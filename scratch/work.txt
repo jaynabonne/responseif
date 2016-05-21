@@ -1,3 +1,98 @@
+2016-05-19
+
+.setup player
+    .sets happy
+    .moves .to room
+    .uses all
+        .response
+
+    .end
+.end
+
+---------------------------------------
+
+2016-05-17
+
+1 + 2 => 1 2 +
+
+2 * 3 => 2 3 *
+
+2 * 3 + 1 => 2 3 * 1 +
+
+1 + 2 * 3 => 1 2 3 * +
+
+1 * (2 + 3) => 1 2 3 + * = 1 [2 3 + ] *
+
+1 * (2 mod (3 + 4)) => 1 2 3 4 + mod *
+
+1 * (2 mod (3 + 4) + 8) => 1 2 3 4 + mod 8 +
+
+
+---------------------------------------
+
+2016-05-15
+
+Topics often don't seem enough. For example, it's odd to have a topic like "Tom_is_happy" or "butler_killed_mr_wilson".
+We're almost getting into the realm of "facts".
+
+Noun: Tom
+Verb: is
+State: happy
+-> happy("Tom") or is_happy("Tom")
+-> happy["Tom"] or is_happy["Tom"]
+-> happy[Tom] or is_happy[Tom]
+-> happy{Tom} or is_happy{Tom}
+
+Noun: butler
+Verb: killed
+Object: Mr. Wilson
+-> killed("butler", "Mr. Wilson")
+-> killed["butler", "Mr. Wilson"]
+-> killed[butler, Mr. Wilson]
+
+Noun: Jane
+Verb: loves
+Object: somebody
+-> loves("Jane", "somebody")
+-> loves(Jane, somebody)
+-> loves["Jane", "somebody"]
+-> loves "Jane" "somebody"
+-> loves[Jane, somebody]
+
+Colonel Mustard in the library with the wrench
+-> clue_killed["Colonel Mustard", "library", "wrench"]
+-> clue_killed[Colonel Mustard, library, wrench]
+
+
+.state happy
+.relation killed
+.relation loves
+.relation clue_killed .arity 3
+
+.sets happy is equivalent to .sets happy(<responder>)
+.sets happy["Jane"]
+.sets happy{Jane}
+
+happy(Tom) { happy: { Tom: 1.0 } }
+happy(Jane) { happy: { Jane: 1.0 } }
+
+happy(Tom) then
+happy(Jane) { happy: { Tom: 1.0, Jane: 1.0 } }
+
+killed(Tom, John)
+
+kissed(Mary) is equivalent to kissed(<responder>, Mary) [or kissed(Mary, <responder>)?]
+
+"Facts" are stored in each responder. Each responder has own set of facts based on what has been set and on suggestions.
+
+I don't know if it's necessary to have full inference (or any) at this point. Responses handle that mostly, for now.
+The main thing is to allow a representation for things beyond just topics.
+
+topic(family)
+topic(murder)
+
+---------------------------------------
+
 2016-05-04
 
         .does .uses best
