@@ -8,7 +8,7 @@
 					<div class="rose-row"><div class="rose-south">{+ROSE-SOUTH+}</div></div>
 				  </div> .autohides
 
-	.response ROSE-NORTH=1 ROSE-SOUTH=1 ROSE-WEST=1 ROSE-EAST=1
+	.response ROSE-NORTH=0.01 ROSE-SOUTH=0.01 ROSE-WEST=0.01 ROSE-EAST=0.01
 		.does .says <div class="rose-none">--</div>
 
 	.response MESSAGE-CONTENTS
@@ -37,19 +37,19 @@
 	.response USEx
 		.does .says There is nothing to do. .autohides
 
-	.response TALK=1
+	.response TALK=0.01
 		.does .says Talk! .autohides
 
-	.response door=50
+	.response door=0.5
 		.does
 			.says The door is a distant memory now.
 
-	.response ALCOVE-DOOR-OPENS=10
+	.response ALCOVE-DOOR-OPENS=0.1
 		.does
 			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now open.|door!}
 			.says {!Your alcove door now registers as being open.|door!}
 
-	.response ALCOVE-DOOR-CLOSES=10
+	.response ALCOVE-DOOR-CLOSES=0.1
 		.does
 			.says 1 {!You trigger the door to your alcove. It registers on your screen that it's now closed.|door!}
 			.says {!Your alcove door now registers as being closed.|door!}
