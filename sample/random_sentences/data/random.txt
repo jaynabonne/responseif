@@ -1,5 +1,5 @@
-.define
-    string .response .does .says .<value> .sets not FIRST_WORD
+.define string
+	.response .does .says .<value> .sets not FIRST_WORD
 .enddef
 
 .actions UI
