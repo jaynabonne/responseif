@@ -22,7 +22,7 @@ define(['rif/response_core'], function(rifResponseCore) {
         it("returns 0 if response topic doesn't match any topics", function () {
             var response_topics = [{keyword:"atopic"}],
                 topics = [{keyword:"btopic"}],
-                score = rifResponseCore.computeScore({matches: response_topics}, 'responder', world);
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(0);
         });
         it("returns 1 if response topic matches any topic", function () {
@@ -40,6 +40,12 @@ define(['rif/response_core'], function(rifResponseCore) {
         it("returns the right score for required topics", function () {
             var response_topics = [{keyword:"*atopic"}, {keyword:"btopic"}],
                 topics = [{keyword:"atopic"}, {keyword:"btopic"}],
+                score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
+            expect(score).toEqual(2);
+        });
+        it("returns the right score for required called topics", function () {
+            var response_topics = [{keyword:"atopic"}, {keyword:"btopic"}],
+                topics = [{keyword:"*atopic"}, {keyword:"*btopic"}],
                 score = rifResponseCore.computeScore({matches: response_topics}, topics, 'responder', world);
             expect(score).toEqual(2);
         });

@@ -53,9 +53,10 @@ define([], function () {
     }
 
     function doComputeScore(response_topics, topics) {
+        var base_topics = topics.map(extractTopic);
         var score = 0;
         for (var i = 0; i < response_topics.length; ++i) {
-            score += computeTopicScore(extractTopic(response_topics[i]), topics);
+            score += computeTopicScore(extractTopic(response_topics[i]), base_topics);
         }
         return score;
     }
