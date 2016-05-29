@@ -289,7 +289,18 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             return new_responses;
         },
         runSetups: function() {
+            var setups = this.rif.setup;
+            if (!setups) {
+                return;
+            }
+            var self = this;
 
+            $.each(setups, function(index, setup) {
+                var responders = {};
+                responders[setup.responder] = setup.responses;
+
+                self.response_lib.callTopics( responders, [], '', self );
+            });
         }
     };
     return type;

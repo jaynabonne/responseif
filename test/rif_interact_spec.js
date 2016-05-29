@@ -4,7 +4,6 @@ describe("RifInteract", function () {
     var interact;
     var appendSpy;
     var formatter;
-    var responseLib;
     var world;
     var rif;
     var dom;
@@ -427,6 +426,24 @@ describe("RifInteract", function () {
             interact.sendCommand([{keyword: "topicA"}]);
             expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
             expect(dom.removeEvent).not.toHaveBeenCalledWith('.link1', 'click');
+        });
+    });
+    describe('runSetups', function() {
+        it('should run the setup responses', function() {
+            var response = {
+                id: 0,
+                does: {
+                    common: [{says: {text: "Hello world!"}}]
+                }
+            };
+            rif.setup = [
+                {
+                    responder: 'aresponder',
+                    responses: [ response ]
+                }
+            ];
+            interact.runSetups();
+            expect(response_lib.callTopics).toHaveBeenCalledWith({aresponder: [response]}, [], '', interact);
         });
     });
 });
