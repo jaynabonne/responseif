@@ -243,6 +243,7 @@ describe('RifExpression', function() {
     });
     it('should do something reasonable with unbalanced parentheses', function() {
         var expression = RifExpression.compile('8*(3+5))');
+        console.log("(NOTE: The previous error output is expected)");
         expect(RifExpression.evaluate(expression, {}, "responder")).toBe(64);
     });
 });
