@@ -287,6 +287,9 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var new_responses = [];
             this.addResponseReferences(responses, new_responses);
             return new_responses;
+        },
+        runSetups: function() {
+
         }
     };
     return type;

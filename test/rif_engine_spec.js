@@ -27,12 +27,19 @@ describe('rif_engine', function() {
     it('should create an interact', function() {
         expect(engine.getInteract()).not.toBeNull();
     });
+    it('should run rif setups', function() {
+        var interact = engine.getInteract();
+        spyOn(interact, 'runSetups');
+        engine.start();
+        expect(interact.runSetups).toHaveBeenCalled();
+    });
     it('should start', function() {
         var interact = engine.getInteract();
         spyOn(interact, 'sendCommand');
         engine.start();
-        expect(interact.sendCommand).toHaveBeenCalledWith([{keyword:"START"}])
+        expect(interact.sendCommand).toHaveBeenCalledWith([{keyword:"START"}]);
     });
+
 });
 
 });
