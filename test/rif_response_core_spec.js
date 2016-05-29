@@ -152,6 +152,14 @@ define(['rif/response_core'], function(rifResponseCore) {
             var response = { weights: '0.5' };
             expect(rifResponseCore.responseIsEligible(response, [], "aresponder", world)).toEqual(true);
         });
+        it('returns true if required called topic is present in what is matched', function() {
+            var response = { matches: [{keyword: "atopic"}] };
+            expect(rifResponseCore.responseIsEligible(response, [{keyword: "*atopic"}], 'aresponder', world)).toEqual(true);
+        });
+        it('returns false if required called topic is not present in what is matched', function() {
+            var response = { matches: [{keyword: "btopic"}] };
+            expect(rifResponseCore.responseIsEligible(response, [{keyword: "*atopic"}, {keyword: "btopic"}], 'aresponder', world)).toEqual(false);
+        });
     });
     describe("selectResponses", function () {
         var world;

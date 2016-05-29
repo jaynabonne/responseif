@@ -16,9 +16,9 @@ define([], function () {
 
     function extractTopic(topic) { return isRequiredTopic(topic) ? { keyword: topic.keyword.substring(1), weight: topic.weight} : topic; }
 
-    function hasRequiredTopics(response, topics) {
-        for (var i = 0; i < response.matches.length; ++i) {
-            var topic = response.matches[i];
+    function hasRequiredTopics(matches, topics) {
+        for (var i = 0; i < matches.length; ++i) {
+            var topic = matches[i];
             if (isRequiredTopic(topic) && !keywordInTopics(extractTopic(topic).keyword, topics)) {
                 return false;
             }
@@ -26,7 +26,9 @@ define([], function () {
         return true;
     }
 
-    function responseRequiredTopicsAreDefined(response, topics) { return !hasTopics(response) || hasRequiredTopics(response, topics); }
+    function responseRequiredTopicsAreDefined(response, topics) {
+        return (!hasTopics(response) || hasRequiredTopics(response.matches, topics)) && hasRequiredTopics(topics, response.matches);
+    }
 
     function keywordInTopics(keyword, topics) {
         var found = false;
