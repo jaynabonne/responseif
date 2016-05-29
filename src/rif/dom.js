@@ -13,13 +13,27 @@ define([], function() {
         }
     };
 
-    prototype.scrollToEnd = function() {
+    function scrollOutput(div) {
+        var height = div.height();
+        var scroll_height = div[0].scrollHeight;
+        div.stop().animate({scrollTop: scroll_height - height}, 100);
+    }
+
+    function scrollPage() {
         var scrollTo = $(document).height();
         var currentScrollTop = Math.max($("body").scrollTop(), $("html").scrollTop());
         if (scrollTo > currentScrollTop) {
             var maxScrollTop = $(document).height() - $(window).height();
             if (scrollTo > maxScrollTop) scrollTo = maxScrollTop;
-            $("body,html").stop().animate({ scrollTop: scrollTo }, 100);
+            $("body,html").stop().animate({scrollTop: scrollTo}, 100);
+        }
+    }
+
+    prototype.scrollToEnd = function() {
+        if (this.output.css('overflow-y') === 'scroll') {
+            scrollOutput(this.output);
+        } else {
+            scrollPage();
         }
     };
 
