@@ -314,14 +314,6 @@ define([], function () {
         rif.setup.push({ responder: responder, responses: [response]});
     };
 
-    Parser.prototype.parse_set = function() {
-        var expression = this.currentPair().value;
-        this.index++;
-        var rif = this.rif;
-        rif.sets = rif.sets || [];
-        rif.sets.push(this.parseSetExpression(expression));
-    };
-
     Parser.prototype.parse_model = function() {
         var actor = this.currentPair().value || 'standard';
         this.index++;
@@ -370,15 +362,6 @@ define([], function () {
         rif.listeners = rif.listeners || {};
         rif.listeners[listener] = {};
         this.index++;
-    };
-
-    Parser.prototype.parse_move = function() {
-        var move = { target: this.currentPair().value };
-        this.index++;
-        this.parseMoveAttributes(move);
-        var rif = this.rif;
-        rif.moves = rif.moves || [];
-        rif.moves.push(move);
     };
 
     Parser.prototype["parse_click-effect"] = function() {

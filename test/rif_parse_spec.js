@@ -766,16 +766,6 @@ describe("rifParse", function () {
             }
         );
     });
-    it("should parse a variable being set", function () {
-        var rif = rifParse(
-            [
-                token_pair("set", "setexpression1"),
-                token_pair("set", "target"),
-                token_pair("to", "setexpression2")
-            ]
-        );
-        expect(rif.sets).toEqual([{expression: "setexpression1"}, {expression: "target", to: "setexpression2"}]);
-    });
     it("should parse listeners", function () {
         var rif = rifParse(
             [
@@ -784,17 +774,6 @@ describe("rifParse", function () {
             ]
         );
         expect(rif.listeners).toEqual({someresponder: {}, otherresponder: {}});
-    });
-    it("should parse objects being moved", function () {
-        var rif = rifParse(
-            [
-                token_pair("move", "object1"),
-                token_pair("to", "parent1"),
-                token_pair("move", "object2"),
-                token_pair("to", "parent2")
-            ]
-        );
-        expect(rif.moves).toEqual([{target: "object1", to: "parent1"}, {target: "object2", to: "parent2"}]);
     });
     it("should parse response animates", function () {
         var rif = rifParse(
