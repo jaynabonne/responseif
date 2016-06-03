@@ -1,5 +1,6 @@
-.move traffic light .to corner
-.move player .to corner
+.setup
+    .moves traffic light .to corner
+    .moves player .to corner
 
 .actions traffic light
     .response

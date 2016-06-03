@@ -1,8 +1,9 @@
-.set player:race .to Elf
-.set player:health=7
-.set player:max health=10
-.set player:strength=8
-.set player:gold=0
+.setup player
+    .sets race .to Elf
+    .sets health=7
+    .sets max health=10
+    .sets strength=8
+    .sets gold=0
 
 .responses player
     .response START

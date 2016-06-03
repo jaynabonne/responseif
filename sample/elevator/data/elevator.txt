@@ -1,16 +1,16 @@
+.setup
+    .moves first floor hallway .to first floor
 
-.move first floor hallway .to first floor
+    .moves second floor hallway .to second floor
 
-.move second floor hallway .to second floor
+    .moves third floor hallway .to third floor
 
-.move third floor hallway .to third floor
+    .moves elevator .to first floor
+    .moves player .to first floor hallway
 
-.move elevator .to first floor
-.move player .to first floor hallway
-
-.set first floor:indicator .to G
-.set second floor:indicator .to 2
-.set third floor:indicator .to 3
+    .sets first floor:indicator .to G
+    .sets second floor:indicator .to 2
+    .sets third floor:indicator .to 3
 
 .responses player
     .response START

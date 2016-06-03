@@ -1,9 +1,8 @@
-.set break .to <div style='font-size:6pt;'><br></div>
-
-.move player .to room
-.move apple .to room
-.move table .to room
-.move door .to room
+.setup
+    .moves player .to room
+    .moves apple .to room
+    .moves table .to room
+    .moves door .to room
 
 .actions UI
     .response

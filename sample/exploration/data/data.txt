@@ -1,29 +1,32 @@
-.move thingy .to room
-.move player .to room
-.move UI .to everywhere
+.setup
+    .moves thingy .to room
+    .moves player .to room
+    .moves UI .to everywhere
 
 .responses thingy
     .response START
         .does
-            .sets un state
-            .sets target
+            .sets red
+            .sets not yellow
+            .sets not green
 
     .response DISPLAY
-        .does .says {+RED_LIGHT+}{+GREEN_LIGHT+}
+        .does .says {+RED_LIGHT+}{+YELLOW_LIGHT+}{+GREEN_LIGHT+}
 
     .response RED_LIGHT
-        .weights target
+        .weights red
         .does .says <div class="red-light">#</div>
 
-    .response RED_LIGHT
-        .weights un target
-        .does .says <div class="off-light">#</div>
+    .response YELLOW_LIGHT
+        .weights yellow
+        .does .says <div class="yellow-light">#</div>
 
     .response GREEN_LIGHT
-        .weights un target
+        .weights green
         .does .says <div class="green-light">#</div>
-    .response GREEN_LIGHT
-        .weights target
+
+    .response GREEN_LIGHT YELLOW_LIGHT RED_LIGHT
+        .weights 0.1
         .does .says <div class="off-light">#</div>
 .end
 
@@ -31,17 +34,27 @@
     .response
         .weights 0.8
         .does
-            .adjusts state .toward target .stepping 0.6
+            .adjusts red_slide .toward yellow .stepping 0.75
+            .adjusts yellow_slide .toward green .stepping 0.2
+            .adjusts green_slide .toward red .stepping 0.2
     .response
-        .weights state
-        .needs target
-        .does .sets un target
-              .says Let's go down... .autohides
+        .weights red_slide
+        .needs yellow
+        .does .sets not yellow
+              .sets red
+              .says The light turns red... .autohides
     .response
-        .weights un state
-        .needs un target
-        .does .sets target
-              .says Let's go up... .autohides
+        .weights yellow_slide
+        .needs green
+        .does .sets not green
+              .sets yellow
+              .says The light turns yellow... .autohides
+    .response
+        .weights green_slide
+        .needs red
+        .does .sets not red
+              .sets green
+              .says The light turns green... .autohides
 .end
 
 .responses player
@@ -57,5 +70,10 @@
     .response
         .does
             .says {+DISPLAY+} .into #display
-            .says State:{=thingy:state=}, Target:{=thingy:target=} .into #status
+            .says Red:{=thingy:red=}<br>
+                  Yellow:{=thingy:yellow=}<br>
+                  Green:{=thingy:green=}<br>
+                  Red slide:{=thingy:red_slide=}<br>
+                  Yellow slide:{=thingy:yellow_slide=}<br>
+                  Green slide:{=thingy:green_slide=} .into #status
 .end

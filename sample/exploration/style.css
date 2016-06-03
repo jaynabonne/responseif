@@ -38,6 +38,9 @@ span.keyword {color:#f0f020; cursor:pointer;}
 .red-light {
     color: red;
 }
+.yellow-light {
+    color: yellow;
+}
 .green-light {
     color: green;
 }

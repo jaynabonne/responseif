@@ -1,8 +1,9 @@
 .include simple.txt
 .include topical.txt
 
-.move player .to room
-.move UI .to everywhere
+.setup
+    .moves player .to room
+    .moves UI .to everywhere
 
 .responses player
     .response Wait

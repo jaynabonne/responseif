@@ -44,7 +44,7 @@
             .says {+description+} .into #description
 .end
 
-.set UI:strength=4
-.set UI:value .to one
-
-.move UI .to everywhere
+.setup UI
+    .sets strength=4
+    .sets value .to one
+    .moves .to everywhere

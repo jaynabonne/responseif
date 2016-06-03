@@ -1,4 +1,5 @@
-.move topical .to room
+.setup topical
+    .moves .to room
 
 .model topical
     .cluster permanent .weight 0.5

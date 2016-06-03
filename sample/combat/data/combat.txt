@@ -1,12 +1,13 @@
-.move player .to arena
-.move sword .to player
-.set sword:equipped
+.setup
+    .moves player .to arena
+    .moves sword .to player
+    .sets sword:equipped
 
-.set ogre:max hits=10
-.set orc:max hits=15
-.set elf:max hits=8
-.set scorpion:max hits=9
-.set dog:max hits=11
+    .sets ogre:max hits=10
+    .sets orc:max hits=15
+    .sets elf:max hits=8
+    .sets scorpion:max hits=9
+    .sets dog:max hits=11
 
 .actions ui
     .response

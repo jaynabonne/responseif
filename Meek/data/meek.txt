@@ -46,16 +46,17 @@
 .- World set up
 .---------------
 
-.set break: .to <span style='font-size:6pt;'>&nbsp;</span>
+.setup global
+    .sets break: .to <span style='font-size:6pt;'>&nbsp;</span>
 
-.move inner-door .to alcove
-.move outer-door .to hallway
+    .moves inner-door .to alcove
+    .moves outer-door .to hallway
 
-.move player .to titlescreen
-.move mining-bot .to hallway
+    .moves player .to titlescreen
+    .moves mining-bot .to hallway
 
-.move M47-C .to M47-C-Room
-.move L17-C .to L17-C-Room
+    .moves M47-C .to M47-C-Room
+    .moves L17-C .to L17-C-Room
 
 .include titlescreen.txt
 .include door-responses.txt

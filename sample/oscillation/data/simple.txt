@@ -1,4 +1,5 @@
-.move simple .to room
+.setup simple
+    .moves .to room
 
 .responses simple
     .response START

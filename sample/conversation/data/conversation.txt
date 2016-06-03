@@ -1,11 +1,12 @@
-.set break: .to <div style='font-size:6pt;'>&nbsp;</div>
+.setup
+    .sets break: .to <div style='font-size:6pt;'>&nbsp;</div>
 
-.move player .to room
-.move butler .to room
+    .moves player .to room
+    .moves butler .to room
 
-.set butler:name .to Jeeves
+    .sets butler:name .to Jeeves
 
-.move ui .to everywhere
+    .moves ui .to everywhere
 
 .responses player
     .response START
