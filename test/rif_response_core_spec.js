@@ -120,6 +120,11 @@ define(['rif/response_core'], function(rifResponseCore) {
             var response = { needs: ["somestate"] };
             expect(rifResponseCore.responseIsEligible(response, [], "aresponder", world)).toEqual(false);
         });
+        it("returns false if required state is equal to 0.5", function () {
+            world.getState = function(id) { return 0.5; };
+            var response = { needs: ["somestate"] };
+            expect(rifResponseCore.responseIsEligible(response, [], "aresponder", world)).toEqual(false);
+        });
         it("returns false if disallowed state is set", function () {
             world.getState = function(id) { return true; };
             var response = { needs: ["!somestate"] };
