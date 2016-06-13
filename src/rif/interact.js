@@ -1,11 +1,6 @@
 define(['./topic_strategy'], function(RifTopicStrategy) {
     "use strict";
 
-    function resetMenuCallbacks() {
-        this.menu_index = 0;
-        this.menu_callbacks = {};
-    }
-
     function convertTopics(topics) {
         return topics.map(function(value) { return {keyword: value, weight: 1.0} });
     }
@@ -35,7 +30,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             };
         };
         this.links = [];
-        resetMenuCallbacks.call(this);
+        this.resetMenuCallbacks();
     };
 
     function replaceMarkup(text, responder, world) {
@@ -81,26 +76,31 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
     }
 
-    function outputFormattedText(says, formatted) {
-        if (says.into) {
-            var element = this.dom.getElementBySelector(says.into);
-            $(element).html(formatted);
-        } else {
-            if (says.autohides) {
-                this.showAutoHideText(formatted);
-            } else {
-                this.currentDiv.append(formatted);
-                this.currentDiv.append(" ");
-                this.dom.scrollToEnd();
-            }
-            this.showSeparator();
-            this.needsSeparator = true;
-        }
-    }
-
     type.prototype = {
         getNextId: function() {
             return "outputdiv" + this.id++;
+        },
+
+        resetMenuCallbacks: function () {
+            this.menu_index = 0;
+            this.menu_callbacks = {};
+        },
+
+        outputFormattedText: function(says, formatted) {
+            if (says.into) {
+                var element = this.dom.getElementBySelector(says.into);
+                $(element).html(formatted);
+            } else {
+                if (says.autohides) {
+                    this.showAutoHideText(formatted);
+                } else {
+                    this.currentDiv.append(formatted);
+                    this.currentDiv.append(" ");
+                    this.dom.scrollToEnd();
+                }
+                this.showSeparator();
+                this.needsSeparator = true;
+            }
         },
         say: function (says, responder) {
             var self = this;
@@ -116,8 +116,8 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
             });
 
-            outputFormattedText.call(this, says, formatted.node);
-            resetMenuCallbacks.call(this);
+            this.outputFormattedText(says, formatted.node);
+            this.resetMenuCallbacks();
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();

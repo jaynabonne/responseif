@@ -37,12 +37,12 @@ define([], function () {
     }
 
     function createSpan(css_class, text) {
-        var outerspan = $("<span>");
+        var span = $("<span>");
         if (css_class) {
-            outerspan.addClass(css_class);
+            span.addClass(css_class);
         }
-        outerspan.append(text);
-        return outerspan;
+        span.append(text);
+        return span;
     }
 
     type.prototype = {
