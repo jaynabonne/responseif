@@ -52,7 +52,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return text;
     }
 
-    function replaceCallMarkup(text) {
+    function replaceCallMarkup(text, says) {
         var incoming_context = this.says_context;
         var says_context = incoming_context || { output_string: ""};
 
@@ -69,14 +69,16 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             text = text.substring(end_index+2);
         }
         says_context.output_string += text;
-        if (incoming_context === undefined) {
-            text = says_context.output_string;
-        } else {
-            text = null;
-        }
+
+        text = says_context.output_string;
 
         this.says_context = incoming_context;
-        return text;
+
+        if (incoming_context !== undefined) {
+            return null;
+        }
+
+        return this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
     }
 
     function outputFormattedText(says, formatted) {
@@ -104,17 +106,17 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var self = this;
 
             var text = replaceMarkup(says.text, responder, this.world);
-            text = replaceCallMarkup.call(this, text);
-            if (text === null) {
+            var formatted = replaceCallMarkup.call(this, text, says);
+            if (formatted === null) {
                 // recursive call return
                 return;
             }
 
-            var formatted = this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
-            outputFormattedText.call(this, says, formatted.node);
             $.each(formatted.links, function(index, link) {
                 self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
             });
+
+            outputFormattedText.call(this, says, formatted.node);
             resetMenuCallbacks.call(this);
         },
         showAutoHideText: function (formatted) {
