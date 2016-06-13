@@ -47,25 +47,43 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return text;
     }
 
-    function replaceCallMarkup(text, says) {
-        var incoming_context = this.says_context;
-        var says_context = incoming_context || { output_string: ""};
-
+    function expandCallMarkup(text, context) {
         while (text !== "") {
             var index = text.indexOf("{+");
             if (index === -1) {
                 break;
             }
-            var end_index = text.indexOf("+}", index+2);
-            var topics = text.substring(index+2, end_index);
-            says_context.output_string += text.substring(0, index);
-            this.says_context = says_context;
-            this.callTopicString(topics);
-            text = text.substring(end_index+2);
+            var end_index = text.indexOf("+}", index + 2);
+            var topics = text.substring(index + 2, end_index);
+            context.append(text.substring(0, index));
+            context.callTopics(topics);
+            text = text.substring(end_index + 2);
         }
-        says_context.output_string += text;
+        context.append(text);
+    }
 
-        text = says_context.output_string;
+    function createCallContext(interact) {
+        return {
+            output_string: "",
+            append: function(text) {
+                this.output_string += text;
+            },
+            callTopics: function(topics) {
+                interact.callTopicString(topics)
+            },
+            getOutputText: function() {
+                return this.output_string;
+            }
+        };
+    }
+
+    function expandAndFormatOutput(text, says) {
+        var incoming_context = this.says_context;
+        var context = incoming_context || createCallContext(this);
+
+        this.says_context = context;
+
+        expandCallMarkup(text, context);
 
         this.says_context = incoming_context;
 
@@ -73,7 +91,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             return null;
         }
 
-        return this.formatter.formatOutput(text, this.clickFactory, this.menu_callbacks, says.as);
+        return this.formatter.formatOutput(context.getOutputText(), this.clickFactory, this.menu_callbacks, says.as);
     }
 
     type.prototype = {
@@ -103,14 +121,14 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             }
         },
         say: function (says, responder) {
-            var self = this;
-
             var text = replaceMarkup(says.text, responder, this.world);
-            var formatted = replaceCallMarkup.call(this, text, says);
+            var formatted = expandAndFormatOutput.call(this, text, says);
             if (formatted === null) {
                 // recursive call return
                 return;
             }
+
+            var self = this;
 
             $.each(formatted.links, function(index, link) {
                 self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
