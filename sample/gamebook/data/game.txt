@@ -1,0 +1,38 @@
+.include gamebook_helpers.txt
+
+.start-in room1
+
+.responses room1
+    .description You are in a room with two large doors.
+
+    .option Go through the left door .goes-to left room
+    .option Go through the right door .goes-to right room
+.end
+
+.responses left room
+    .description There is a tiger here.
+    .option Pet the tiger .goes-to pets tiger
+    .option Fight tiger .goes-to fights tiger
+.end
+
+.responses right room
+    .description There is a lion here.
+    .option Play with lion .goes-to plays with lion
+    .option Tame lion .goes-to tames lion
+.end
+
+.responses pets tiger
+    .description The tiger rubs up against you and purrs.
+.end
+
+.responses fights tiger
+    .description The tiger chuckles quietly before tearing you apart.
+.end
+
+.responses plays with lion
+    .description The lion rubs up against you and purrs.
+.end
+
+.responses tames lion
+    .description The lion shakes its head "no" and then tears you apart.
+.end

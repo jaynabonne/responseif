@@ -1,0 +1,21 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Gamebook - ResponsIF Sample</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="../../lib/jquery.js"></script>
+    <script src="../../lib/jquery-ui.js"></script>
+</head>
+<body>
+    <div id="holder">
+        <div id="spacer"></div>
+        <div id="output"></div>
+    </div>
+
+    <script src="../../lib/require.js" data-main="../../src/rif"></script>
+    <script type="text/javascript">
+        define('config', { rif_file: 'game.txt', element: $('#output') });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+.define description
+    .response ENTER .does .says .<value>
+.enddef
+
+.define option
+    .response ENTER .prompts .<value> .does
+.enddef
+
+.define goes-to
+    .moves player .to .<value>
+.enddef
+
+.actions player
+    .response
+        .needs parent <> last_parent
+        .does
+            .clears
+            .sets last_parent=parent
+            .calls ENTER
+.end
+
+.define start-in
+    .setup player
+        .moves .to .<value>
+.enddef
