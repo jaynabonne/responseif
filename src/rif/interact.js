@@ -227,6 +227,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         clear: function() {
             this.hideSections();
             this.dom.clear();
+            this._appendNewDiv();
             this.links = [];
         },
         hideSections: function () {
