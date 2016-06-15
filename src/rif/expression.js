@@ -283,6 +283,16 @@ define(['rif/fuzzy'], function(RifFuzzy) {
         var parts = [];
         var part = '';
         var in_string = false;
+        var flushPart = function() {
+            if (part !== '') {
+                if (in_string) {
+                    console.log("Error: unclosed string: " + part);
+                    part += '"';
+                }
+                parts.push(part);
+                part = '';
+            }
+        };
         for (var i = 0; i < expression.length; ++i) {
             var ch = expression[i];
             if (in_string) {
@@ -290,27 +300,16 @@ define(['rif/fuzzy'], function(RifFuzzy) {
                     in_string = false;
                 }
             } else if (ch === '"') {
+                flushPart();
                 in_string = true;
-                if (part !== '') {
-                    parts.push(part);
-                    part = '';
-                }
             } else if (ch === '(' || ch === ')') {
-                parts.push(part);
-                part = '';
+                flushPart();
             } else if (part !== '' && (isSpace(ch) != isSpace(part[0]) || isIdentifier(ch) != isIdentifier(part[0]))) {
-                parts.push(part);
-                part = '';
+                flushPart();
             }
             part += ch;
         }
-        if (part !== '') {
-            if (in_string) {
-                console.log("Error: unclosed string: " + part);
-                part += '"';
-            }
-            parts.push(part);
-        }
+        flushPart();
         //console.log('"'+expression+'" yields ', parts);
         return combineOperands(parts);
     }
