@@ -25,6 +25,10 @@ describe("rifParse", function () {
         return token_pair("into", selector);
     }
 
+    function onto(selector) {
+        return token_pair("onto", selector);
+    }
+
     function as(selector) {
         return token_pair("as", selector);
     }
@@ -293,6 +297,30 @@ describe("rifParse", function () {
                         id: 0,
                         does: {
                             common: [{says: {text: "some text to display for this response", into: "someelement"}}]
+                        }
+                    }
+                ]
+            }
+        );
+    });
+    it("should parse response does says with onto", function () {
+        var rif = rifParse(
+            [
+                responses("anObject"),
+                response(),
+                does(),
+                says("some text to display for this response"),
+                onto("someelement"),
+                end()
+            ]
+        );
+        expect(rif.responses).toEqual(
+            {
+                anObject: [
+                    {
+                        id: 0,
+                        does: {
+                            common: [{says: {text: "some text to display for this response", onto: "someelement"}}]
                         }
                     }
                 ]
