@@ -108,6 +108,9 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);
                 $(element).html(formatted);
+            } else if (says.onto) {
+                var element = this.dom.getElementBySelector(says.onto);
+                $(element).append(formatted);
             } else {
                 if (says.autohides) {
                     this.showAutoHideText(formatted);

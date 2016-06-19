@@ -72,6 +72,10 @@ describe("RifInteract", function () {
             interact.say({ text: "This is some text", into: "someelement" }, 'responder');
             expect(dom.getElementBySelector).toHaveBeenCalledWith("someelement");
         });
+        it("should output the text onto the specified element", function() {
+            interact.say({ text: "This is some text", onto: "someelement" }, 'responder');
+            expect(dom.getElementBySelector).toHaveBeenCalledWith("someelement");
+        });
         it("should scroll to the end of the text", function() {
             dom.scrollToEnd = jasmine.createSpy("scrollToEnd");
             interact.say({ text: "This is some text" }, 'responder');
