@@ -56,7 +56,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var end_index = text.indexOf("+}", index + 2);
             var topics = text.substring(index + 2, end_index);
             context.append(text.substring(0, index));
-            context.callTopics(topics);
+            this.callTopicString(topics);
             text = text.substring(end_index + 2);
         }
         context.append(text);
@@ -68,30 +68,10 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             append: function(text) {
                 this.output_string += text;
             },
-            callTopics: function(topics) {
-                interact.callTopicString(topics)
-            },
             getOutputText: function() {
                 return this.output_string;
             }
         };
-    }
-
-    function expandAndFormatOutput(text, says) {
-        var incoming_context = this.says_context;
-        var context = incoming_context || createCallContext(this);
-
-        this.says_context = context;
-
-        expandCallMarkup(text, context);
-
-        this.says_context = incoming_context;
-
-        if (incoming_context !== undefined) {
-            return null;
-        }
-
-        return this.formatter.formatOutput(context.getOutputText(), this.clickFactory, this.menu_callbacks, says.as);
     }
 
     type.prototype = {
@@ -125,11 +105,19 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         },
         say: function (says, responder) {
             var text = replaceMarkup(says.text, responder, this.world);
-            var formatted = expandAndFormatOutput.call(this, text, says);
-            if (formatted === null) {
-                // recursive call return
+
+            var incoming_context = this.says_context;
+            var context = incoming_context || createCallContext(this);
+            this.says_context = context;
+
+            expandCallMarkup.call(this, text, context);
+            this.says_context = incoming_context;
+
+            if (incoming_context !== undefined) {
                 return;
             }
+
+            var formatted = this.formatter.formatOutput(context.getOutputText(), this.clickFactory, this.menu_callbacks, says.as);
 
             var self = this;
 
