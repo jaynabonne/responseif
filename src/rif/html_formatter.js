@@ -88,11 +88,24 @@ define([], function () {
 
         formatMenu: function(options, menu_index) {
             var s = '<div class="menu">';
-            $.each(options, function(index, value) {
+            $.each(options, function (index, value) {
                 s += '<div class="menuitem">{!' + value + '|menu:' + menu_index + ':' + index + '!}</div>';
             });
             s += '</div>';
             return s;
+
+        },
+
+        createContext: function() {
+            return {
+                text: '',
+                append: function(text) {
+                    this.text += text;
+                },
+                getOutputText: function() {
+                    return this.text;
+                }
+            };
         }
     };
     return type;

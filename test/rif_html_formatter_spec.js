@@ -109,5 +109,22 @@ describe("RifHtmlFormatter", function () {
             expect(text).toBe('<div class="menu"><div class="menuitem">{!A menu entry|menu:17:0!}</div><div class="menuitem">{!Another menu entry|menu:17:1!}</div></div>');
         });
     });
+    describe("getContext", function() {
+        it('returns empty text by default', function() {
+            var context = formatter.createContext();
+            expect(context.getOutputText()).toBe('');
+        });
+        it('returns appended text', function() {
+            var context = formatter.createContext();
+            context.append('some text');
+            expect(context.getOutputText()).toBe('some text');
+        });
+        it('returns multiply appended text', function() {
+            var context = formatter.createContext();
+            context.append('some text');
+            context.append('ual stuff');
+            expect(context.getOutputText()).toBe('some textual stuff');
+        });
+    });
 });
 });
