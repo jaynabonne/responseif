@@ -62,18 +62,6 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         context.append(text);
     }
 
-    function createCallContext(interact) {
-        return {
-            output_string: "",
-            append: function(text) {
-                this.output_string += text;
-            },
-            getOutputText: function() {
-                return this.output_string;
-            }
-        };
-    }
-
     type.prototype = {
         getNextId: function() {
             return "outputdiv" + this.id++;
@@ -107,7 +95,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var text = replaceMarkup(says.text, responder, this.world);
 
             var incoming_context = this.says_context;
-            var context = incoming_context || createCallContext(this);
+            var context = incoming_context || this.formatter.createContext();
             this.says_context = context;
 
             expandCallMarkup.call(this, text, context);
