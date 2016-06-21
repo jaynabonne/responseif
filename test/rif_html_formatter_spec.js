@@ -125,6 +125,11 @@ describe("RifHtmlFormatter", function () {
             context.append('ual stuff');
             expect(context.getOutputText()).toBe('some textual stuff');
         });
+        it('has some empty menu callback variables', function() {
+            var context = formatter.createContext();
+            expect(context.menu_index).toBe(0);
+            expect(context.menu_callbacks).toEqual([]);
+        });
     });
 });
 });

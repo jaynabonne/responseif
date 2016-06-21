@@ -99,11 +99,18 @@ define([], function () {
         createContext: function() {
             return {
                 text: '',
+                menu_index: 0,
+                menu_callbacks: [],
                 append: function(text) {
                     this.text += text;
                 },
                 getOutputText: function() {
                     return this.text;
+                },
+                addMenuCallback: function(callback) {
+                    var menu_index = this.menu_index++;
+                    this.menu_callbacks[menu_index] = callback;
+                    return menu_index;
                 }
             };
         }

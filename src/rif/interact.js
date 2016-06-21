@@ -30,7 +30,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             };
         };
         this.links = [];
-        this.resetMenuCallbacks();
+        this.contexts = [];
     };
 
     function replaceMarkup(text, responder, world) {
@@ -67,11 +67,6 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             return "outputdiv" + this.id++;
         },
 
-        resetMenuCallbacks: function () {
-            this.menu_index = 0;
-            this.menu_callbacks = {};
-        },
-
         outputFormattedText: function(says, formatted) {
             if (says.into) {
                 var element = this.dom.getElementBySelector(says.into);
@@ -91,30 +86,31 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 this.needsSeparator = true;
             }
         },
+        push_context: function() {
+            var context = this.contexts.length === 0 ? this.formatter.createContext() : this.contexts[0];
+            this.contexts.push(context);
+            return context;
+        },
+        pop_context: function(says, responder) {
+            var context = this.contexts.pop();
+            if (this.contexts.length === 0) {
+                var formatted = this.formatter.formatOutput(context.getOutputText(), this.clickFactory, context.menu_callbacks, says.as);
+
+                var self = this;
+
+                $.each(formatted.links, function(index, link) {
+                    self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
+                });
+
+                this.outputFormattedText(says, formatted.node);
+            }
+        },
         say: function (says, responder) {
             var text = replaceMarkup(says.text, responder, this.world);
 
-            var incoming_context = this.says_context;
-            var context = incoming_context || this.formatter.createContext();
-            this.says_context = context;
-
+            var context = this.push_context();
             expandCallMarkup.call(this, text, context);
-            this.says_context = incoming_context;
-
-            if (incoming_context !== undefined) {
-                return;
-            }
-
-            var formatted = this.formatter.formatOutput(context.getOutputText(), this.clickFactory, this.menu_callbacks, says.as);
-
-            var self = this;
-
-            $.each(formatted.links, function(index, link) {
-                self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
-            });
-
-            this.outputFormattedText(says, formatted.node);
-            this.resetMenuCallbacks();
+            this.pop_context(says, responder);
         },
         showAutoHideText: function (formatted) {
             var id = this.getNextId();
@@ -125,15 +121,16 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             this.dom.scrollToEnd();
         },
         choose: function(options, callback) {
+            var context = this.push_context();
             var self = this;
-            var index = this.menu_index++;
-            this.menu_callbacks[index] = function(index) {
+            var menu_index = context.addMenuCallback(function(index) {
                 self.hideSections();
                 callback(index);
                 self.idleProcessing();
-            };
-            var says = { text: this.formatter.formatMenu(options, index), autohides: true};
+            });
+            var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
             this.say(says);
+            this.pop_context(says, '');
         },
         beginSection: function(id) {
             this._appendNewDiv(id);

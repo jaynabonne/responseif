@@ -32,7 +32,7 @@ describe("RifInteract", function () {
             clear: jasmine.createSpy('clear')
         };
         dom.createDiv.andReturn({ append: appendSpy});
-        output_context = jasmine.createSpyObj('output context', ['append', 'getOutputText']);
+        output_context = jasmine.createSpyObj('output context', ['append', 'getOutputText', 'addMenuCallback']);
         formatter = {
             formatOutput: function() { return {node: "formattedText"}; },
             formatMenu: function() { return "formattedText"; },
@@ -71,11 +71,9 @@ describe("RifInteract", function () {
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should format with a class if specified", function() {
-            output_context.getOutputText.andCallFake(function() {
-                return "final output text";
-            });
             interact.say({ text: "This is some text", as: "aclass" }, 'responder');
-            expect(formatter.formatOutput).toHaveBeenCalledWith("final output text", jasmine.any(Function), jasmine.any(Object), "aclass");
+            expect(output_context.append).toHaveBeenCalledWith('This is some text');
+            expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should output the text into the specified element", function() {
             interact.say({ text: "This is some text", into: "someelement" }, 'responder');
@@ -354,6 +352,15 @@ describe("RifInteract", function () {
         });
     });
     describe("choose", function() {
+        it('should build the menu', function() {
+            spyOn(formatter, 'formatMenu').andCallThrough();
+            output_context.addMenuCallback.andCallFake(function() {
+                return 314;
+            });
+            interact.choose(["one", "two", "three"]);
+            expect(output_context.addMenuCallback).toHaveBeenCalled();
+            expect(formatter.formatMenu).toHaveBeenCalledWith(["one", "two", "three"], 314);
+        });
         it("should auto-hide the menu on next command", function() {
             dom.removeElement = jasmine.createSpy("removeElement");
             interact.choose(["one", "two", "three"]);
