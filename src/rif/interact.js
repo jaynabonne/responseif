@@ -27,6 +27,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                     });
                 }
                 self.sendCommand(convertTopics(keywords.split(" ")));
+                return false;
             };
         };
         this.links = [];
@@ -48,6 +49,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
     }
 
     function expandCallMarkup(text, context) {
+        context.begin();
         while (text !== "") {
             var index = text.indexOf("{+");
             if (index === -1) {
@@ -60,6 +62,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             text = text.substring(end_index + 2);
         }
         context.append(text);
+        context.end();
     }
 
     type.prototype = {

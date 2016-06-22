@@ -110,23 +110,27 @@ describe("RifHtmlFormatter", function () {
         });
     });
     describe("getContext", function() {
+        var context;
+        beforeEach(function() {
+            context = formatter.createContext();
+        });
         it('returns empty text by default', function() {
-            var context = formatter.createContext();
             expect(context.getOutputText()).toBe('');
         });
         it('returns appended text', function() {
-            var context = formatter.createContext();
+            context.begin();
             context.append('some text');
+            context.end();
             expect(context.getOutputText()).toBe('some text');
         });
         it('returns multiply appended text', function() {
-            var context = formatter.createContext();
+            context.begin();
             context.append('some text');
             context.append('ual stuff');
+            context.end();
             expect(context.getOutputText()).toBe('some textual stuff');
         });
         it('has some empty menu callback variables', function() {
-            var context = formatter.createContext();
             expect(context.menu_index).toBe(0);
             expect(context.menu_callbacks).toEqual([]);
         });

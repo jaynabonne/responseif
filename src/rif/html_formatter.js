@@ -7,6 +7,7 @@ define([], function () {
     function makeMenuClick(callback, index) {
         return function () {
             callback(index);
+            return false;
         };
     }
 
@@ -101,6 +102,10 @@ define([], function () {
                 text: '',
                 menu_index: 0,
                 menu_callbacks: [],
+                begin: function() {
+                },
+                end: function() {
+                },
                 append: function(text) {
                     this.text += text;
                 },

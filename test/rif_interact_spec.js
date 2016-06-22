@@ -32,7 +32,15 @@ describe("RifInteract", function () {
             clear: jasmine.createSpy('clear')
         };
         dom.createDiv.andReturn({ append: appendSpy});
-        output_context = jasmine.createSpyObj('output context', ['append', 'getOutputText', 'addMenuCallback']);
+        output_context = jasmine.createSpyObj(
+                'output context',
+                [
+                    'begin',
+                    'append',
+                    'end',
+                    'getOutputText',
+                    'addMenuCallback'
+                ]);
         formatter = {
             formatOutput: function() { return {node: "formattedText"}; },
             formatMenu: function() { return "formattedText"; },
@@ -67,7 +75,9 @@ describe("RifInteract", function () {
     describe("say", function () {
         it("should output the text when called", function() {
             interact.say({ text: "This is some text" }, 'responder');
+            expect(output_context.begin).toHaveBeenCalled();
             expect(output_context.append).toHaveBeenCalledWith('This is some text');
+            expect(output_context.end).toHaveBeenCalled();
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should format with a class if specified", function() {
