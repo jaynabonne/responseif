@@ -1,0 +1,20 @@
+.responses player
+    .response START
+        .does
+            .says {!Try again!|NEW_COLOR!}<br>
+            .does .calls NEW_COLOR
+
+    .response NEW_COLOR
+        .does
+            .says The random color is {+COLOR+}.
+
+    .--- color styles are defined in the css file
+    .response COLOR
+        .does
+            .uses random
+                .response .does .says red .as red-style
+                .response .does .says blue .as blue-style
+                .response .does .says green .as green-style
+                .response .does .says orange .as orange-style
+            .end
+.end
