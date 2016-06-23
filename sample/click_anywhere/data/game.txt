@@ -1,0 +1,16 @@
+.responses player
+    .response START
+        .does
+            .says This is a sentence with one highlighted {!topic!}.
+            .invokes
+                    $("#output").click(function (e) {
+                        interact.sendCommand([{keyword:"(Unknown)"}]);
+                    });
+
+    .response topic
+        .does
+            .says You clicked on the magic word!
+
+    .response (Unknown)
+        .does .says There's nothing more to be said about that. .autohides
+.end
