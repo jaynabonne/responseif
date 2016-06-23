@@ -134,6 +134,31 @@ describe("RifHtmlFormatter", function () {
             expect(context.menu_index).toBe(0);
             expect(context.menu_callbacks).toEqual([]);
         });
+        it('applies a class if provided', function() {
+            context.begin('aclass');
+            context.append('some text');
+            context.append('ual stuff');
+            context.end();
+            expect(context.getOutputText()).toBe('<span class="aclass">some textual stuff</span>');
+        });
+        it('supports nested classes', function() {
+            context.begin('aclass');
+            context.append('some text ');
+            context.begin('bclass');
+            context.append('and some nested text');
+            context.end();
+            context.end();
+            expect(context.getOutputText()).toBe('<span class="aclass">some text <span class="bclass">and some nested text</span></span>');
+        });
+        it('supports nested classes', function() {
+            context.begin();
+            context.append('some text ');
+            context.begin('bclass');
+            context.append('and some nested text');
+            context.end();
+            context.end();
+            expect(context.getOutputText()).toBe('some text <span class="bclass">and some nested text</span>');
+        });
     });
 });
 });

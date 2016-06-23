@@ -82,6 +82,7 @@ describe("RifInteract", function () {
         });
         it("should format with a class if specified", function() {
             interact.say({ text: "This is some text", as: "aclass" }, 'responder');
+            expect(output_context.begin).toHaveBeenCalledWith('aclass');
             expect(output_context.append).toHaveBeenCalledWith('This is some text');
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });

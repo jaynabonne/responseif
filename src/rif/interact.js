@@ -48,8 +48,8 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return text;
     }
 
-    function expandCallMarkup(text, context) {
-        context.begin();
+    function expandCallMarkup(text, context, css_class) {
+        context.begin(css_class);
         while (text !== "") {
             var index = text.indexOf("{+");
             if (index === -1) {
@@ -112,7 +112,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var text = replaceMarkup(says.text, responder, this.world);
 
             var context = this.push_context();
-            expandCallMarkup.call(this, text, context);
+            expandCallMarkup.call(this, text, context, says.as);
             this.pop_context(says, responder);
         },
         showAutoHideText: function (formatted) {

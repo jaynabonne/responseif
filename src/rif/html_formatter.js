@@ -102,9 +102,18 @@ define([], function () {
                 text: '',
                 menu_index: 0,
                 menu_callbacks: [],
-                begin: function() {
+                css_classes: [],
+                begin: function(css_class) {
+                    this.css_classes.push(css_class);
+                    if (css_class) {
+                        this.text += '<span class="' + css_class + '">';
+                    }
                 },
                 end: function() {
+                    var css_class = this.css_classes.pop();
+                    if (css_class) {
+                        this.text += '</span>';
+                    }
                 },
                 append: function(text) {
                     this.text += text;
