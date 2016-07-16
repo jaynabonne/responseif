@@ -255,7 +255,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             this.separatorId++;
         },
         showSeparator: function () {
-            if (this.separatorShown && this.world.getState('show_separator')) {
+            if (this.separatorShown && this.world.getState('show_separator:')) {
                 this.dom.showElement(this.separatorShown);
             }
         },

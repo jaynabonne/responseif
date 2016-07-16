@@ -316,7 +316,7 @@ describe("RifInteract", function () {
         });
         it("should show the separator when new text is output if show_separator is set", function() {
             world.getState = function(id) {
-                return id === "show_separator";
+                return id === "show_separator:";
             };
             interact.say({ text: "This is some text" });
             dom.createDiv.reset();

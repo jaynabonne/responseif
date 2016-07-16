@@ -14,11 +14,11 @@
 .enddef
 
 .define hides-separator
-    .sets not show_separator
+    .sets not show_separator:
 .enddef
 
 .define shows-separator
-    .sets show_separator
+    .sets show_separator:
 .enddef
 
 .define hides-bar
