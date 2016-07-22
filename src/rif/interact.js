@@ -28,29 +28,17 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
         this.story_text = new RifStoryText(formatter, clickFactory, dom, world);
     };
 
-    function expandCallMarkup(text, context, css_class) {
-        context.begin(css_class);
-        while (text !== "") {
-            var index = text.indexOf("{+");
-            if (index === -1) {
-                break;
-            }
-            var end_index = text.indexOf("+}", index + 2);
-            var topics = text.substring(index + 2, end_index);
-            context.append(text.substring(0, index));
-            this.callTopicString(topics);
-            text = text.substring(end_index + 2);
-        }
-        context.append(text);
-        context.end();
-    }
-
     type.prototype = {
         say: function (says, responder) {
+            var self = this;
+            var calltopics = function(topics) {
+                self.callTopicString(topics);
+            };
+
             var text = this.story_text.replaceMarkup(says.text, responder, this.world);
 
             var context = this.story_text.push_context();
-            expandCallMarkup.call(this, text, context, says.as);
+            context.expandCallMarkup(text, says.as, calltopics);
             this.story_text.pop_context(says, responder);
         },
         choose: function(options, callback) {

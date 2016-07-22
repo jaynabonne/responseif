@@ -1,6 +1,23 @@
 define([], function() {
     "use strict";
 
+    function expandCallMarkup(text, css_class, calltopics) {
+        this.begin(css_class);
+        while (text !== "") {
+            var index = text.indexOf("{+");
+            if (index === -1) {
+                break;
+            }
+            var end_index = text.indexOf("+}", index + 2);
+            var topics = text.substring(index + 2, end_index);
+            this.append(text.substring(0, index));
+            calltopics(topics);
+            text = text.substring(end_index + 2);
+        }
+        this.append(text);
+        this.end();
+    }
+
     var type = function(formatter, clickFactory, dom, world) {
         this.formatter = formatter;
         this.clickFactory = clickFactory;
@@ -45,12 +62,11 @@ define([], function() {
             return text;
         },
         outputFormattedText: function(says, formatted) {
+            var element;
             if (says.into) {
-                var element = this.dom.getElementBySelector(says.into);
-                $(element).html(formatted);
+                this.dom.setText(says.into, formatted);
             } else if (says.onto) {
-                var element = this.dom.getElementBySelector(says.onto);
-                $(element).append(formatted);
+                this.dom.appendText(says.onto, formatted);
             } else {
                 if (says.autohides) {
                     this.showAutoHideText(formatted);
@@ -65,6 +81,8 @@ define([], function() {
         },
         push_context: function() {
             var context = this.contexts.length === 0 ? this.formatter.createContext() : this.contexts[0];
+            context.expandCallMarkup = expandCallMarkup;
+
             this.contexts.push(context);
             return context;
         },
@@ -146,8 +164,7 @@ define([], function() {
             if (this.separatorShown && this.world.getState('show_separator:')) {
                 this.dom.showElement(this.separatorShown);
             }
-        },
-
+        }
     };
 
     return type;

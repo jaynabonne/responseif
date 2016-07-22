@@ -93,5 +93,15 @@ define([], function() {
         this.output.empty();
     };
 
+    prototype.setText = function(selector, formatted) {
+        var element = this.getElementBySelector(selector);
+        $(element).html(formatted);
+    };
+
+    prototype.appendText = function(selector, formatted) {
+        var element = this.getElementBySelector(selector);
+        $(element).append(formatted);
+    };
+
     return type;
 });
