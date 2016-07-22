@@ -1,4 +1,4 @@
-define(['./topic_strategy'], function(RifTopicStrategy) {
+define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryText) {
     "use strict";
 
     function convertTopics(topics) {
@@ -6,47 +6,27 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
     }
 
     var type = function (dom, formatter, world, response_lib, rif) {
-        this.id = 1;
         this.dom = dom;
         this.formatter = formatter;
-        this._appendNewDiv();
         this.world = world;
         this.response_lib = response_lib;
-        this.sectionsToHide = [];
         this.rif = rif;
-        this.needsSeparator = false;
-        this.separatorId = 0;
-        this.separatorShown = "";
         var self = this;
-        this.clickFactory = function (keywords) {
+
+        var clickFactory = function (keywords) {
             return function (e) {
                 var target = $(e.target);
                 if (rif.clickEffect !== undefined) {
                     $.each(rif.clickEffect.transitions, function(index, transition) {
-                        self.dom.animate(target, transition.to, transition.lasting);
+                        dom.animate(target, transition.to, transition.lasting);
                     });
                 }
                 self.sendCommand(convertTopics(keywords.split(" ")));
                 return false;
             };
         };
-        this.links = [];
-        this.contexts = [];
+        this.story_text = new RifStoryText(formatter, clickFactory, dom, world);
     };
-
-    function replaceMarkup(text, responder, world) {
-        var index;
-        while ((index = text.indexOf("{=")) != -1) {
-            var end_index = text.indexOf("=}", index+2);
-            if (end_index === -1) {
-                break;
-            }
-            var id = text.substring(index+2, end_index);
-            var value = world.getState(id.trim(), responder);
-            text = text.substring(0, index) + value + text.substring(end_index+2);
-        }
-        return text;
-    }
 
     function expandCallMarkup(text, context, css_class) {
         context.begin(css_class);
@@ -66,65 +46,15 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
     }
 
     type.prototype = {
-        getNextId: function() {
-            return "outputdiv" + this.id++;
-        },
-
-        outputFormattedText: function(says, formatted) {
-            if (says.into) {
-                var element = this.dom.getElementBySelector(says.into);
-                $(element).html(formatted);
-            } else if (says.onto) {
-                var element = this.dom.getElementBySelector(says.onto);
-                $(element).append(formatted);
-            } else {
-                if (says.autohides) {
-                    this.showAutoHideText(formatted);
-                } else {
-                    this.currentDiv.append(formatted);
-                    this.currentDiv.append(" ");
-                    this.dom.scrollToEnd();
-                }
-                this.showSeparator();
-                this.needsSeparator = true;
-            }
-        },
-        push_context: function() {
-            var context = this.contexts.length === 0 ? this.formatter.createContext() : this.contexts[0];
-            this.contexts.push(context);
-            return context;
-        },
-        pop_context: function(says, responder) {
-            var context = this.contexts.pop();
-            if (this.contexts.length === 0) {
-                var formatted = this.formatter.formatOutput(context.getOutputText(), this.clickFactory, context.menu_callbacks, says.as);
-
-                var self = this;
-
-                $.each(formatted.links, function(index, link) {
-                    self.links.push({responder: responder, selector: link.selector, keywords: link.keywords});
-                });
-
-                this.outputFormattedText(says, formatted.node);
-            }
-        },
         say: function (says, responder) {
-            var text = replaceMarkup(says.text, responder, this.world);
+            var text = this.story_text.replaceMarkup(says.text, responder, this.world);
 
-            var context = this.push_context();
+            var context = this.story_text.push_context();
             expandCallMarkup.call(this, text, context, says.as);
-            this.pop_context(says, responder);
-        },
-        showAutoHideText: function (formatted) {
-            var id = this.getNextId();
-            this.beginSection(id);
-            this.currentDiv.append(formatted);
-            this.endSection();
-            this.sectionsToHide.push(id);
-            this.dom.scrollToEnd();
+            this.story_text.pop_context(says, responder);
         },
         choose: function(options, callback) {
-            var context = this.push_context();
+            var context = this.story_text.push_context();
             var self = this;
             var menu_index = context.addMenuCallback(function(index) {
                 self.hideSections();
@@ -133,21 +63,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             });
             var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
             this.say(says);
-            this.pop_context(says, '');
-        },
-        beginSection: function(id) {
-            this._appendNewDiv(id);
-        },
-        endSection: function() {
-            this._appendNewDiv();
-        },
-        hideSection: function(id) {
-            this.dom.removeElement('#'+id, 250);
-        },
-        _appendNewDiv: function(id) {
-            var div = this.dom.createDiv(id);
-            this.dom.append(div);
-            this.currentDiv = div;
+            this.story_text.pop_context(says, '');
         },
         callTopicString: function(topics) {
             var index = topics.indexOf('>');
@@ -194,33 +110,18 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             }
         },
         animate: function(animates) {
-            var self = this;
-            $.each(animates.transitions, function(index, transition) {
-                self.dom.animate(animates.selector, transition.to, transition.lasting);
-            });
+            this.story_text.animate(animates);
+        },
+        clear: function() {
+            this.story_text.clear();
         },
         invoke: function(body, responder) {
             var f = new Function('world', 'interact', 'responder', body);
             f(this.world, this, responder);
         },
-        clear: function() {
-            this.hideSections();
-            this.dom.clear();
-            this._appendNewDiv();
-            this.links = [];
-        },
-        hideSections: function () {
-            if (this.sectionsToHide.length != 0) {
-                var self = this;
-                $.each(this.sectionsToHide, function (index, value) {
-                    self.hideSection(value);
-                });
-                this.sectionsToHide = [];
-            }
-        },
         sendCommand: function(topics) {
-            this.hideSections();
-            this.beforeCommand();
+            this.story_text.hideSections();
+            this.story_text.beforeCommand();
             this.call(topics);
             this.idleProcessing();
             this.world.updateModels();
@@ -230,7 +131,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var self = this;
             var responders = this.world.getCurrentResponders(this.world.getPOV());
             var responses = this.getResponses(responders);
-            this.links = this.links.filter(function(link) {
+            this.story_text.filterLinks(function(link) {
                 var candidates = self.response_lib.getCandidateResponses(responses, convertTopics(link.keywords.split(' ')));
                 if (candidates.length === 0) {
                     self.dom.removeClass(link.selector, 'keyword');
@@ -239,33 +140,6 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 }
                 return true;
             });
-        },
-        hideSeparator: function () {
-            if (this.separatorShown) {
-                this.dom.removeElement(this.separatorShown, 1);
-                this.separatorShown = "";
-            }
-        },
-        showNewSeparator: function () {
-            var separator = "separator" + this.separatorId;
-            var div = this.dom.createDiv();
-            div.append("<div class='separatorholder'><div class='separator' style='display:none' id='" + separator + "'></div></div>");
-            this.dom.append(div);
-            this.separatorShown = '#'+separator;
-            this.separatorId++;
-        },
-        showSeparator: function () {
-            if (this.separatorShown && this.world.getState('show_separator:')) {
-                this.dom.showElement(this.separatorShown);
-            }
-        },
-        beforeCommand: function() {
-            if (this.needsSeparator) {
-                this.hideSeparator();
-                this.showNewSeparator();
-                this.needsSeparator = false;
-            }
-            this.beginSection();
         },
         idleProcessing: function() {
             this.callActions(["ACT"]);
