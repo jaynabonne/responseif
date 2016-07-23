@@ -49,7 +49,7 @@ describe("RifInteract", function () {
     describe("callActions", function () {
         it("should call the passed topics", function () {
             rif.actions = {actor: "responses"};
-            interact.callActions(["topicA", "topicB", "topicC"]);
+            interact.callActions("topicA topicB topicC");
             expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}], "actor", interact);
         });
         it("should include the current actor topics", function () {
@@ -57,7 +57,7 @@ describe("RifInteract", function () {
                 return (caller === 'actor') ? [{keyword: 'topicD', weight: 1.0}] : [];
             };
             rif.actions = {actor: "responses"};
-            interact.callActions(["ACT"]);
+            interact.callActions("ACT");
             expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact);
         });
     });

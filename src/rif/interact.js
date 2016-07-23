@@ -1,9 +1,5 @@
-define(['./topic_strategy'], function(RifTopicStrategy) {
+define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifResponseCore) {
     "use strict";
-
-    function convertTopics(topics) {
-        return topics.map(function(value) { return {keyword: value, weight: 1.0} });
-    }
 
     var type = function (world, response_lib, rif, story_text) {
         this.world = world;
@@ -28,9 +24,9 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             if (index >= 0) {
                 var caller = topics.substring(index+1);
                 topics = topics.substring(0, index);
-                this.callTopicsForCaller(this.world.getState(caller), convertTopics(topics.split(" ")));
+                this.callTopicsForCaller(this.world.getState(caller), rifResponseCore.convertTopics(topics));
             } else {
-                this.call(convertTopics(topics.split(" ")));
+                this.call(rifResponseCore.convertTopics(topics));
             }
         },
         callTopicsForCaller: function (caller, topics) {
@@ -67,7 +63,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             this.hideObsoleteLinks();
         },
         sendCommandTopics: function(keywords) {
-            this.sendCommand(convertTopics(keywords.split(" ")));
+            this.sendCommand(rifResponseCore.convertTopics(keywords));
         },
         hideObsoleteLinks: function() {
             var response_lib = this.response_lib;
@@ -75,13 +71,13 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var responses = this.getResponses(responders);
 
             var getCandidates = function(keywords) {
-                return response_lib.getCandidateResponses(responses, convertTopics(keywords.split(' ')));
+                return response_lib.getCandidateResponses(responses, rifResponseCore.convertTopics(keywords));
             };
 
             this.story_text.removeDeadLinks(getCandidates);
         },
         idleProcessing: function() {
-            this.callActions(["ACT"]);
+            this.callActions("ACT");
         },
         addResponseReferences : function(responses, new_responses) {
             if (!responses) {
@@ -102,7 +98,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             return new_responses;
         },
         callActions: function(topics) {
-            topics = convertTopics(topics);
+            topics = rifResponseCore.convertTopics(topics);
             var actions = this.rif.actions;
             for (var actor in actions) {
                 if (actions.hasOwnProperty(actor)) {
