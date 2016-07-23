@@ -140,5 +140,12 @@ define([], function () {
         return candidate_groups;
     };
 
+    core.convertTopics = function(topics) {
+        if (topics === '') {
+            return [];
+        }
+        return topics.split(' ').map(function(value) { return {keyword: value, weight: 1.0} });
+    };
+
     return core;
 });

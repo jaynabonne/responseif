@@ -288,5 +288,20 @@ define(['rif/response_core'], function(rifResponseCore) {
             expect(candidate_groups.prompts).toEqual([candidate2]);
         });
     });
+    describe('convertTopics', function() {
+        it('should return an empty array for an empty string', function() {
+            expect(rifResponseCore.convertTopics('')).toEqual([]);
+        });
+        it('should return an array with a single entry for a single keyword', function() {
+            expect(rifResponseCore.convertTopics('akeyword')).toEqual([{keyword: 'akeyword', weight: 1.0 }]);
+        });
+        it('should return an array with entries for each keyword', function() {
+            expect(rifResponseCore.convertTopics('akeyword bkeyword ckeyword')).toEqual([
+                {keyword: 'akeyword', weight: 1.0 },
+                {keyword: 'bkeyword', weight: 1.0 },
+                {keyword: 'ckeyword', weight: 1.0 }
+            ]);
+        });
+    })
 
 });
