@@ -29,7 +29,9 @@ describe("RifInteract", function () {
             showElement: jasmine.createSpy("showElement"),
             removeClass: jasmine.createSpy('removeClass'),
             removeEvent: jasmine.createSpy('removeEvent'),
-            clear: jasmine.createSpy('clear')
+            clear: jasmine.createSpy('clear'),
+            setText: jasmine.createSpy('setText'),
+            appendText: jasmine.createSpy('appendText')
         };
         dom.createDiv.andReturn({ append: appendSpy});
         output_context = jasmine.createSpyObj(
@@ -88,11 +90,11 @@ describe("RifInteract", function () {
         });
         it("should output the text into the specified element", function() {
             interact.say({ text: "This is some text", into: "someelement" }, 'responder');
-            expect(dom.getElementBySelector).toHaveBeenCalledWith("someelement");
+            expect(dom.setText).toHaveBeenCalledWith("someelement", "formattedText");
         });
         it("should output the text onto the specified element", function() {
             interact.say({ text: "This is some text", onto: "someelement" }, 'responder');
-            expect(dom.getElementBySelector).toHaveBeenCalledWith("someelement");
+            expect(dom.appendText).toHaveBeenCalledWith("someelement", "formattedText");
         });
         it("should scroll to the end of the text", function() {
             dom.scrollToEnd = jasmine.createSpy("scrollToEnd");

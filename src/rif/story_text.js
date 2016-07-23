@@ -18,7 +18,13 @@ define([], function() {
         this.end();
     }
 
-    var type = function(formatter, clickFactory, dom, world) {
+    function appendNewDiv(id) {
+        var div = this.dom.createDiv(id);
+        this.dom.append(div);
+        this.currentDiv = div;
+    }
+
+    var type = function(formatter, clickFactory, dom, world, calltopics) {
         this.formatter = formatter;
         this.clickFactory = clickFactory;
         this.dom = dom;
@@ -29,21 +35,35 @@ define([], function() {
         this.links = [];
         this.contexts = [];
         this.sectionsToHide = [];
+        this.calltopics = calltopics;
         this.id = 1;
 
-        this._appendNewDiv();
+        appendNewDiv.call(this);
     };
 
+    function getNextId() {
+        return "outputdiv" + this.id++;
+    }
+
+    function writeToNewSection(formatted) {
+        var id = getNextId.call(this);
+        this.beginSection(id);
+        this.currentDiv.append(formatted);
+        this.endSection();
+        return id;
+    }
+
     type.prototype = {
-        getNextId: function() {
-            return "outputdiv" + this.id++;
+        say: function(says, responder) {
+            var text = this.replaceMarkup(says.text, responder, this.world);
+
+            var context = this.push_context();
+            context.expandCallMarkup(text, says.as, this.calltopics);
+            this.pop_context(says, responder);
         },
 
         showAutoHideText: function (formatted) {
-            var id = this.getNextId();
-            this.beginSection(id);
-            this.currentDiv.append(formatted);
-            this.endSection();
+            var id = writeToNewSection.call(this, formatted);
             this.sectionsToHide.push(id);
             this.dom.scrollToEnd();
         },
@@ -62,7 +82,6 @@ define([], function() {
             return text;
         },
         outputFormattedText: function(says, formatted) {
-            var element;
             if (says.into) {
                 this.dom.setText(says.into, formatted);
             } else if (says.onto) {
@@ -101,18 +120,13 @@ define([], function() {
             }
         },
         beginSection: function(id) {
-            this._appendNewDiv(id);
+            appendNewDiv.call(this, id);
         },
         endSection: function() {
-            this._appendNewDiv();
+            appendNewDiv.call(this);
         },
         hideSection: function(id) {
             this.dom.removeElement('#'+id, 250);
-        },
-        _appendNewDiv: function(id) {
-            var div = this.dom.createDiv(id);
-            this.dom.append(div);
-            this.currentDiv = div;
         },
         hideSections: function () {
             if (this.sectionsToHide.length != 0) {
@@ -126,7 +140,7 @@ define([], function() {
         clear: function() {
             this.hideSections();
             this.dom.clear();
-            this._appendNewDiv();
+            appendNewDiv.call(this);
             this.links = [];
         },
         animate: function(animates) {

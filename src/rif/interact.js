@@ -25,27 +25,20 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
                 return false;
             };
         };
-        this.story_text = new RifStoryText(formatter, clickFactory, dom, world);
+        this.story_text = new RifStoryText(formatter, clickFactory, dom, world, function(topics) {
+            self.callTopicString(topics);
+        });
     };
 
     type.prototype = {
         say: function (says, responder) {
-            var self = this;
-            var calltopics = function(topics) {
-                self.callTopicString(topics);
-            };
-
-            var text = this.story_text.replaceMarkup(says.text, responder, this.world);
-
-            var context = this.story_text.push_context();
-            context.expandCallMarkup(text, says.as, calltopics);
-            this.story_text.pop_context(says, responder);
+            this.story_text.say(says, responder);
         },
         choose: function(options, callback) {
             var context = this.story_text.push_context();
             var self = this;
             var menu_index = context.addMenuCallback(function(index) {
-                self.hideSections();
+                self.story_text.hideSections();
                 callback(index);
                 self.idleProcessing();
             });

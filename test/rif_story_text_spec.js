@@ -15,6 +15,7 @@ define(['rif/story_text'], function(RifStoryText) {
             }
         };
         var world = {};
-        var story_text = new RifStoryText(formatter, click_factory, dom, world);
+        var calltopics = jasmine.createSpy('calltopics');
+        var story_text = new RifStoryText(formatter, click_factory, dom, world, calltopics);
     });
 });
