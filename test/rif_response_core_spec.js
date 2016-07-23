@@ -302,6 +302,53 @@ define(['rif/response_core'], function(rifResponseCore) {
                 {keyword: 'ckeyword', weight: 1.0 }
             ]);
         });
-    })
+    });
+    describe("expandResponseReferences", function() {
+        it('should return the same responses if no references exist', function() {
+            var rif = {};
 
+            var responses = [
+                {
+                    id: "A"
+                },
+                {
+                    id: "B"
+                }
+            ];
+
+            expect(rifResponseCore.expandResponseReferences(responses)).toEqual(responses, rif);
+        });
+        it('should return reference responses', function() {
+            var rif = {};
+
+            rif.responses = {referred: [{id: "C"}, {id: "D"}]};
+            var responses = [
+                {
+                    id: "A"
+                },
+                {
+                    reference: "referred"
+                },
+                {
+                    id: "B"
+                }
+            ];
+
+            var expected = [
+                {
+                    id: "A"
+                },
+                {
+                    id: "C"
+                },
+                {
+                    id: "D"
+                },
+                {
+                    id: "B"
+                }
+            ];
+            expect(rifResponseCore.expandResponseReferences(responses, rif)).toEqual(expected);
+        });
+    });
 });

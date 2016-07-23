@@ -37,19 +37,12 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
             this.callTopicsForCaller(this.world.getPOV(), topics);
         },
         getResponses: function (responders) {
-            var responses = {};
-            if (!this.rif.responses)
-                return responses;
-            var self = this;
-            $.each(responders, function (index, value) {
-                if (self.rif.responses[value])
-                    responses[value] = self.expandResponseReferences(self.rif.responses[value]);
-            });
-            return responses;
+            return rifResponseCore.getResponsesForResponders(responders, this.rif);
         },
         callTopicsWithResponders: function(topics, responders, caller) {
             var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(caller));
-            this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this);
+            var responses = rifResponseCore.getResponsesForResponders(responders, this.rif);
+            this.response_lib.callTopics(responses, merged_topics, caller, this);
         },
         invoke: function(body, responder) {
             var f = new Function('world', 'interact', 'story_text', 'responder', body);
@@ -68,7 +61,7 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
         hideObsoleteLinks: function() {
             var response_lib = this.response_lib;
             var responders = this.world.getCurrentResponders(this.world.getPOV());
-            var responses = this.getResponses(responders);
+            var responses = rifResponseCore.getResponsesForResponders(responders, this.rif);
 
             var getCandidates = function(keywords) {
                 return response_lib.getCandidateResponses(responses, rifResponseCore.convertTopics(keywords));
@@ -78,24 +71,6 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
         },
         idleProcessing: function() {
             this.callActions("ACT");
-        },
-        addResponseReferences : function(responses, new_responses) {
-            if (!responses) {
-                return;
-            }
-            var self = this;
-            $.each(responses, function(index, value) {
-                if (value.reference) {
-                    self.addResponseReferences(self.rif.responses[value.reference], new_responses);
-                } else {
-                    new_responses.push(value);
-                }
-            });
-        },
-        expandResponseReferences: function(responses) {
-            var new_responses = [];
-            this.addResponseReferences(responses, new_responses);
-            return new_responses;
         },
         callActions: function(topics) {
             topics = rifResponseCore.convertTopics(topics);

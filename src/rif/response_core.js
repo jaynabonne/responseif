@@ -147,5 +147,35 @@ define([], function () {
         return topics.split(' ').map(function(value) { return {keyword: value, weight: 1.0} });
     };
 
+    function addResponseReferences(responses, new_responses, rif) {
+        if (!responses) {
+            return;
+        }
+        $.each(responses, function(index, value) {
+            if (value.reference) {
+                addResponseReferences(rif.responses[value.reference], new_responses, rif);
+            } else {
+                new_responses.push(value);
+            }
+        });
+    }
+
+    core.expandResponseReferences = function(responses, rif) {
+        var new_responses = [];
+        addResponseReferences(responses, new_responses, rif);
+        return new_responses;
+    };
+
+    core.getResponsesForResponders = function(responders, rif) {
+        if (!rif.responses)
+            return {};
+        var responses = {};
+        $.each(responders, function (index, value) {
+            if (rif.responses[value])
+                responses[value] = rifResponseCore.expandResponseReferences(rif.responses[value], rif);
+        });
+        return responses;
+    };
+
     return core;
 });
