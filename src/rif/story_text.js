@@ -62,6 +62,17 @@ define([], function() {
             this.pop_context(says, responder);
         },
 
+        choose: function(options, click_callback) {
+            var context = this.push_context();
+
+            var menu_index = context.addMenuCallback(click_callback);
+
+            var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
+            this.say(says);
+
+            this.pop_context(says, '');
+        },
+
         showAutoHideText: function (formatted) {
             var id = writeToNewSection.call(this, formatted);
             this.sectionsToHide.push(id);

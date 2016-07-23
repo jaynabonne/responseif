@@ -3,21 +3,12 @@ describe("RifInteract", function () {
     var output;
     var interact;
     var appendSpy;
-    var formatter;
     var world;
     var rif;
     var dom;
     var response_lib;
     var story_text;
     var output_context;
-
-    function setupFormatterOutputWithLinks(links) {
-        formatter.formatOutput = jasmine.createSpy("formatOutput").andReturn({node: "formattedText", links: links});
-    }
-
-    function setupFormatterOutput() {
-        setupFormatterOutputWithLinks([]);
-    }
 
     beforeEach(function () {
         appendSpy = jasmine.createSpy("div append");
@@ -44,10 +35,6 @@ describe("RifInteract", function () {
                     'getOutputText',
                     'addMenuCallback'
                 ]);
-        formatter = {
-            formatOutput: function() { return {node: "formattedText"}; },
-            formatMenu: function() { return "formattedText"; }
-        };
         world = {
             getState: jasmine.createSpy("getState"),
             setState: jasmine.createSpy("setState"),
@@ -78,9 +65,8 @@ describe("RifInteract", function () {
             },
             pop_context: jasmine.createSpy('pop_context')
         };
-        interact = new RifInteract(dom, formatter, world, response_lib, rif, story_text);
+        interact = new RifInteract(dom, world, response_lib, rif, story_text);
         appendSpy.reset();
-        setupFormatterOutput();
     });
     describe("call", function () {
         it("should call the passed topics", function () {
@@ -142,17 +128,6 @@ describe("RifInteract", function () {
             expect(story_text.hideSections).toHaveBeenCalled();
         })
     });
-    describe("choose", function() {
-        it('should build the menu', function() {
-            spyOn(formatter, 'formatMenu').andCallThrough();
-            output_context.addMenuCallback.andCallFake(function() {
-                return 314;
-            });
-            interact.choose(["one", "two", "three"]);
-            expect(output_context.addMenuCallback).toHaveBeenCalled();
-            expect(formatter.formatMenu).toHaveBeenCalledWith(["one", "two", "three"], 314);
-        });
-    });
     describe("expandResponseReferences", function() {
         it('should return the same responses if no references exist', function() {
             var responses = [
@@ -203,7 +178,6 @@ describe("RifInteract", function () {
             story_text.filterLinks.andCallFake(function(f) {
                 f(links[0]);
             });
-            setupFormatterOutputWithLinks(links);
             response_lib.getCandidateResponses = function(responders, topics) {
                 return [];
             };
@@ -220,7 +194,6 @@ describe("RifInteract", function () {
                 f(links[0]);
                 f(links[1]);
             });
-            setupFormatterOutputWithLinks(links);
             response_lib.getCandidateResponses = function(responders, topics) {
                 return [];
             };
@@ -232,7 +205,10 @@ describe("RifInteract", function () {
             expect(dom.removeEvent).toHaveBeenCalledWith('.link2', 'click');
         });
         it('should not remove a link if topics still have a response', function() {
-            setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
+            var links = [{selector: '.link1', keywords: 'Keyword1'}];
+            story_text.filterLinks.andCallFake(function(f) {
+                f(links[0]);
+            });
             world.getCurrentResponders = function() {
                 return ['responder'];
             };

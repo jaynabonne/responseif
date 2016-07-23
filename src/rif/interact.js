@@ -5,9 +5,8 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return topics.map(function(value) { return {keyword: value, weight: 1.0} });
     }
 
-    var type = function (dom, formatter, world, response_lib, rif, story_text) {
+    var type = function (dom, world, response_lib, rif, story_text) {
         this.dom = dom;
-        this.formatter = formatter;
         this.world = world;
         this.response_lib = response_lib;
         this.rif = rif;
@@ -16,16 +15,14 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
 
     type.prototype = {
         choose: function(options, callback) {
-            var context = this.story_text.push_context();
             var self = this;
-            var menu_index = context.addMenuCallback(function(index) {
+            var click_callback = function(index) {
                 self.story_text.hideSections();
                 callback(index);
                 self.idleProcessing();
-            });
-            var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
-            this.story_text.say(says);
-            this.story_text.pop_context(says, '');
+            };
+
+            this.story_text.choose(options, click_callback);
         },
         callTopicString: function(topics) {
             var index = topics.indexOf('>');

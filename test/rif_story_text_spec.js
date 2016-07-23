@@ -234,6 +234,18 @@ define(['rif/story_text'], function(RifStoryText) {
             expect(output_context.append).toHaveBeenCalledWith(".");
         });
     });
+    describe("choose", function() {
+        it('should build the menu', function() {
+            spyOn(formatter, 'formatMenu').andCallThrough();
+            output_context.addMenuCallback.andCallFake(function() {
+                return 314;
+            });
+            var click_callback = jasmine.createSpy('click_callback');
+            story_text.choose(["one", "two", "three"], click_callback);
+            expect(output_context.addMenuCallback).toHaveBeenCalled();
+            expect(formatter.formatMenu).toHaveBeenCalledWith(["one", "two", "three"], 314);
+        });
+    });
     describe("separator support", function() {
         it("should add a hidden separator div before the command if text was output previously", function() {
             story_text.say({ text: "This is some text" });
