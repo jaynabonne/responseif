@@ -175,6 +175,7 @@ define([], function() {
         },
 
         beforeCommand: function() {
+            this.hideSections();
             if (this.needsSeparator) {
                 this.hideSeparator();
                 this.showNewSeparator();

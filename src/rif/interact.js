@@ -53,14 +53,13 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         },
         callTopicsWithResponders: function(topics, responders, caller) {
             var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(caller));
-            this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this, this.story_text);
+            this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this);
         },
         invoke: function(body, responder) {
             var f = new Function('world', 'interact', 'story_text', 'responder', body);
             f(this.world, this, this.story_text, responder);
         },
         sendCommand: function(topics) {
-            this.story_text.hideSections();
             this.story_text.beforeCommand();
             this.call(topics);
             this.idleProcessing();
@@ -110,7 +109,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                     var responses = {};
                     responses[actor] = actions[actor];
                     var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(actor));
-                    this.response_lib.callTopics(responses, merged_topics, actor, this, this.story_text);
+                    this.response_lib.callTopics(responses, merged_topics, actor, this);
                 }
             }
         },
@@ -125,7 +124,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 var responders = {};
                 responders[setup.responder] = setup.responses;
 
-                self.response_lib.callTopics( responders, [], '', self, self.story_text );
+                self.response_lib.callTopics( responders, [], '', self );
             });
         }
     };

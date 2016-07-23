@@ -36,21 +36,21 @@ describe("RifInteract", function () {
     describe("call", function () {
         it("should call the passed topics", function () {
             interact.call([{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}], "player", interact, story_text);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}], "player", interact);
         });
         it("should include the current actor topics", function () {
             world.getCurrentTopics = function(caller) {
                 return (caller === 'player') ? [{keyword: 'topicD', weight: 1.0}] : [];
             };
             interact.call([{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}, {keyword:"topicD", weight: 1.0}], "player", interact, story_text);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}, {keyword:"topicD", weight: 1.0}], "player", interact);
         });
     });
     describe("callActions", function () {
         it("should call the passed topics", function () {
             rif.actions = {actor: "responses"};
             interact.callActions(["topicA", "topicB", "topicC"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}], "actor", interact, story_text);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}], "actor", interact);
         });
         it("should include the current actor topics", function () {
             world.getCurrentTopics = function (caller) {
@@ -58,7 +58,7 @@ describe("RifInteract", function () {
             };
             rif.actions = {actor: "responses"};
             interact.callActions(["ACT"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact, story_text);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact);
         });
     });
     describe("invoke", function () {
@@ -88,10 +88,6 @@ describe("RifInteract", function () {
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(world.updateModels).toHaveBeenCalled();
         });
-        it('should hide any auto-hide text', function() {
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(story_text.hideSections).toHaveBeenCalled();
-        })
     });
     describe("expandResponseReferences", function() {
         it('should return the same responses if no references exist', function() {
@@ -152,7 +148,7 @@ describe("RifInteract", function () {
                 }
             ];
             interact.runSetups();
-            expect(response_lib.callTopics).toHaveBeenCalledWith({aresponder: [response]}, [], '', interact, story_text);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({aresponder: [response]}, [], '', interact);
         });
     });
 });

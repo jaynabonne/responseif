@@ -4,6 +4,7 @@ describe("RifResponse", function () {
     var responseLib;
     var interact;
     var world;
+    var story_text;
     beforeEach(function () {
         world = {
             getResponseRuns: function(id) {
@@ -12,17 +13,17 @@ describe("RifResponse", function () {
             setResponseRuns: function(id, runs) {
             }
         };
-        responseLib = new RifResponse(world);
+        story_text = { say: jasmine.createSpy("say") };
+        responseLib = new RifResponse(world, story_text);
     });
 
     describe("callTopics", function () {
         it("invokes responses correctly", function () {
-            var story_text = { say: jasmine.createSpy("say") };
             var response1 = { matches: [{keyword: "atopic"}], does: { common: [ { says: { text: "This is response 1" } } ] } };
             var response2 = { matches: [{keyword: "ctopic"}], does: { common: [ { says: { text: "This is response 2" } } ] } };
             var response3 = { matches: [{keyword: "btopic"}], does: { common: [ { says: { text: "This is response 3" } } ] } };
             var responses = [response1, response2, response3];
-            responseLib.callTopics({responder: responses}, [{keyword: "ctopic"}], "caller", {}, story_text);
+            responseLib.callTopics({responder: responses}, [{keyword: "ctopic"}], "caller", {});
             expect(story_text.say).toHaveBeenCalledWith({ text: "This is response 2" }, 'responder');
         });
     });

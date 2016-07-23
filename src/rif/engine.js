@@ -28,30 +28,32 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
         self.load = params.load || new RifLoad(self.load_file);
 
         self.world = params.world || new RifWorld();
-        self.response = params.response || new RifResponse(self.world);
         self.formatter = params.formatter || new RifHtmlFormatter();
         self.dom = params.dom || new RifDOM(params.element);
+
+        var clickFactory = function (topics) {
+            return function (e) {
+                var target = $(e.target);
+                if (self.rif.clickEffect !== undefined) {
+                    $.each(self.rif.clickEffect.transitions, function(index, transition) {
+                        self.dom.animate(target, transition.to, transition.lasting);
+                    });
+                }
+                self.interact.sendCommandTopics(topics);
+                return false;
+            };
+        };
+        self.story_text = new RifStoryText(self.formatter, clickFactory, self.dom, self.world, function(topics) {
+            self.interact.callTopicString(topics);
+        });
+        self.response = params.response || new RifResponse(self.world, self.story_text);
     }
     var type = function(params, completion) {
         initFromParams.call(this, params);
         var self = this;
 
         loadRif.call(this, function(rif) {
-            var clickFactory = function (topics) {
-                return function (e) {
-                    var target = $(e.target);
-                    if (rif.clickEffect !== undefined) {
-                        $.each(rif.clickEffect.transitions, function(index, transition) {
-                            self.dom.animate(target, transition.to, transition.lasting);
-                        });
-                    }
-                    self.interact.sendCommandTopics(topics);
-                    return false;
-                };
-            };
-            self.story_text = new RifStoryText(self.formatter, clickFactory, self.dom, self.world, function(topics) {
-                    self.interact.callTopicString(topics);
-                });
+            self.rif = rif;
             self.interact =  new RifInteract(self.world, self.response, rif, self.story_text);
             completion();
         });
