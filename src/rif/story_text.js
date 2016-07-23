@@ -160,9 +160,20 @@ define([], function() {
                 self.dom.animate(animates.selector, transition.to, transition.lasting);
             });
         },
-        filterLinks: function(filter_function) {
-            this.links = this.links.filter(filter_function);
+
+        removeDeadLinks: function (getCurrentCandidates) {
+            var self = this;
+            this.links = this.links.filter(function (link) {
+                var candidates = getCurrentCandidates(link.keywords);
+                if (candidates.length === 0) {
+                    self.dom.removeClass(link.selector, 'keyword');
+                    self.dom.removeEvent(link.selector, 'click');
+                    return false;
+                }
+                return true;
+            });
         },
+
         beforeCommand: function() {
             if (this.needsSeparator) {
                 this.hideSeparator();

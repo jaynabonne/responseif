@@ -277,4 +277,46 @@ define(['rif/story_text'], function(RifStoryText) {
             expect(dom.showElement).toHaveBeenCalledWith("#separator0");
         });
     });
+    xdescribe('removing dead links', function() {
+        it('should remove a dead link', function() {
+
+            story_text.say("This is text with a {!link|keyword!}")
+
+            expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
+
+            var getCandidates = function(keywords) {
+                return [];
+            };
+
+            story_text.removeDeadLinks(getCandidates);
+            expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
+        });
+        xit('should remove multiple links after the next command', function() {
+            var links = [{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}];
+
+            var getCandidates = function(keywords) {
+                return [];
+            };
+
+            story_text.removeDeadLinks(getCandidates);
+            expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
+            expect(dom.removeClass).toHaveBeenCalledWith('.link2', 'keyword');
+            expect(dom.removeEvent).toHaveBeenCalledWith('.link2', 'click');
+        });
+        xit('should not remove a link if topics still have a response', function() {
+            var links = [{selector: '.link1', keywords: 'Keyword1'}];
+
+            var getCandidates = function(keywords) {
+                if (keywords === 'keyword')
+                    return [{response: {}, score: '10000', responder: 'responder'}];
+                return [];
+            };
+
+            story_text.removeDeadLinks(getCandidates);
+            expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
+            expect(dom.removeEvent).not.toHaveBeenCalledWith('.link1', 'click');
+        });
+    });
 });

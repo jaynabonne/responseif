@@ -58,12 +58,12 @@ describe("RifInteract", function () {
         story_text = {
             hideSections: jasmine.createSpy('hideSections'),
             beforeCommand: jasmine.createSpy('hideSections'),
-            filterLinks: jasmine.createSpy('filterLinks'),
+            removeDeadLinks: jasmine.createSpy('removeDeadLinks'),
             say: jasmine.createSpy('say'),
             push_context: function() {
                 return output_context;
             },
-            pop_context: jasmine.createSpy('pop_context')
+            pop_context: jasmine.createSpy('pop_context'),
         };
         interact = new RifInteract(dom, world, response_lib, rif, story_text);
         appendSpy.reset();
@@ -170,58 +170,6 @@ describe("RifInteract", function () {
                 }
             ];
             expect(interact.expandResponseReferences(responses)).toEqual(expected);
-        });
-    });
-    describe('hiding obsolete links', function() {
-        it('should remove a link after the next command', function() {
-            var links = [{selector: '.link1', keywords: 'Keyword1'}];
-            story_text.filterLinks.andCallFake(function(f) {
-                f(links[0]);
-            });
-            response_lib.getCandidateResponses = function(responders, topics) {
-                return [];
-            };
-
-            expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
-
-            interact.sendCommand([{keyword: "topicA"}]);
-            expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
-            expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
-        });
-        it('should remove multiple links after the next command', function() {
-            var links = [{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}];
-            story_text.filterLinks.andCallFake(function(f) {
-                f(links[0]);
-                f(links[1]);
-            });
-            response_lib.getCandidateResponses = function(responders, topics) {
-                return [];
-            };
-
-            interact.sendCommand([{keyword: "topicA"}]);
-            expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
-            expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
-            expect(dom.removeClass).toHaveBeenCalledWith('.link2', 'keyword');
-            expect(dom.removeEvent).toHaveBeenCalledWith('.link2', 'click');
-        });
-        it('should not remove a link if topics still have a response', function() {
-            var links = [{selector: '.link1', keywords: 'Keyword1'}];
-            story_text.filterLinks.andCallFake(function(f) {
-                f(links[0]);
-            });
-            world.getCurrentResponders = function() {
-                return ['responder'];
-            };
-
-            response_lib.getCandidateResponses = function(responders, topics) {
-                if (topics[0].keyword === 'Keyword1')
-                    return [{response: {}, score: '10000', responder: 'responder'}];
-                return [];
-            };
-
-            interact.sendCommand([{keyword: "topicA"}]);
-            expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
-            expect(dom.removeEvent).not.toHaveBeenCalledWith('.link1', 'click');
         });
     });
     describe('runSetups', function() {
