@@ -8,6 +8,7 @@ describe("RifInteract", function () {
     var rif;
     var dom;
     var response_lib;
+    var story_text;
     var output_context;
 
     function setupFormatterOutputWithLinks(links) {
@@ -45,10 +46,7 @@ describe("RifInteract", function () {
                 ]);
         formatter = {
             formatOutput: function() { return {node: "formattedText"}; },
-            formatMenu: function() { return "formattedText"; },
-            createContext: function() {
-                return output_context;
-            }
+            formatMenu: function() { return "formattedText"; }
         };
         world = {
             getState: jasmine.createSpy("getState"),
@@ -70,182 +68,38 @@ describe("RifInteract", function () {
             callTopics: jasmine.createSpy('callTopics'),
             getCandidateResponses: jasmine.createSpy('getCandidateResponses')
         };
-        interact = new RifInteract(dom, formatter, world, response_lib, rif);
+        story_text = {
+            hideSections: jasmine.createSpy('hideSections'),
+            beforeCommand: jasmine.createSpy('hideSections'),
+            filterLinks: jasmine.createSpy('filterLinks'),
+            say: jasmine.createSpy('say'),
+            push_context: function() {
+                return output_context;
+            },
+            pop_context: jasmine.createSpy('pop_context')
+        };
+        interact = new RifInteract(dom, formatter, world, response_lib, rif, story_text);
         appendSpy.reset();
         setupFormatterOutput();
-    });
-    describe("say", function () {
-        it("should output the text when called", function() {
-            interact.say({ text: "This is some text" }, 'responder');
-            expect(output_context.begin).toHaveBeenCalled();
-            expect(output_context.append).toHaveBeenCalledWith('This is some text');
-            expect(output_context.end).toHaveBeenCalled();
-            expect(appendSpy).toHaveBeenCalledWith("formattedText");
-        });
-        it("should format with a class if specified", function() {
-            interact.say({ text: "This is some text", as: "aclass" }, 'responder');
-            expect(output_context.begin).toHaveBeenCalledWith('aclass');
-            expect(output_context.append).toHaveBeenCalledWith('This is some text');
-            expect(appendSpy).toHaveBeenCalledWith("formattedText");
-        });
-        it("should output the text into the specified element", function() {
-            interact.say({ text: "This is some text", into: "someelement" }, 'responder');
-            expect(dom.setText).toHaveBeenCalledWith("someelement", "formattedText");
-        });
-        it("should output the text onto the specified element", function() {
-            interact.say({ text: "This is some text", onto: "someelement" }, 'responder');
-            expect(dom.appendText).toHaveBeenCalledWith("someelement", "formattedText");
-        });
-        it("should scroll to the end of the text", function() {
-            dom.scrollToEnd = jasmine.createSpy("scrollToEnd");
-            interact.say({ text: "This is some text" }, 'responder');
-            expect(dom.scrollToEnd).toHaveBeenCalled();
-        });
-        it("should hide autohides text after the next command", function() {
-            dom.removeElement = jasmine.createSpy("removeElement");
-            interact.say({ text: "This is some text", autohides: true }, 'responder');
-            interact.say({ text: "This is some more text", autohides: true }, 'responder');
-            interact.sendCommand([]);
-            expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
-            expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv2", 250);
-        });
-        it("replaces in-line markup with state values", function() {
-            world.getState = function(id, responder) {
-                if (id === "name") {
-                    return "Ishmael";
-                } else if (id === "yourname") {
-                    return "mud";
-                } else if (id === ':state' && responder === 'responder') {
-                    return 'happy';
-                } else {
-                    return false;
-                }
-            };
-            var says = { text: "My name is {=name=}. Your name is {= yourname  =}. Your state is {=:state=}." };
-            interact.say(says, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is Ishmael. Your name is mud. Your state is happy.");
-        });
-        it("replaces in-line markup with state values recursively", function() {
-            world.getState = function(id) {
-                if (id === "firstName") {
-                    return "Ishmael";
-                } else if (id === "name") {
-                    return "{=firstName=}";
-                } else {
-                    return false;
-                }
-            };
-            var says = { text: "My name is {=name=}." };
-            interact.say(says, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is Ishmael.");
-        });
-    });
-    describe("says with 'call' markup", function() {
-        it("should invoke 'call' on the interact for a topic", function() {
-            var says = { text: "My name is {+NAME+}." };
-            interact.say(says, 'responder');
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME", weight: 1.0}], "player", jasmine.any(Object));
-        });
-        it("should invoke 'call' on the interact for a caller-targeted topic", function() {
-            world.getState.andReturn("responder");
-            var says = { text: "My name is {+NAME>\"responder\"+}." };
-            interact.say(says, 'responder');
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"NAME", weight: 1.0}], "responder", jasmine.any(Object));
-        });
-        it("should invoke 'call' on the interact for multiple topic", function() {
-            var says = { text: "My name is {+FIRST NAME+}." };
-            interact.say(says, 'responder');
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"FIRST", weight: 1.0}, {keyword:"NAME", weight: 1.0}], "player", jasmine.any(Object));
-        });
-        function fakeCall(responses, topics) {
-            if (topics[0].keyword == "NAME") {
-                interact.say({ text: "Ishmael"}, 'responder');
-            } else {
-                interact.say({ text: "Nemo"}, 'responder');
-            }
-        }
-        it("should append the individual pieces of text", function() {
-            response_lib.callTopics.andCallFake(fakeCall);
-            interact.say( { text: "My name is {+NAME+}." }, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is ");
-            expect(output_context.append).toHaveBeenCalledWith("Ishmael");
-            expect(output_context.append).toHaveBeenCalledWith(".");
-        });
-        it("should handle multiple 'calls' markups", function() {
-            response_lib.callTopics.andCallFake(fakeCall);
-            interact.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is ");
-            expect(output_context.append).toHaveBeenCalledWith("Ishmael");
-            expect(output_context.append).toHaveBeenCalledWith(", but you're just ");
-            expect(output_context.append).toHaveBeenCalledWith("Nemo");
-            expect(output_context.append).toHaveBeenCalledWith(".");
-        });
-        it("should handle recursive call markup", function() {
-            function fakeCall(responses, topics) {
-                if (topics[0].keyword == "FIRSTNAME") {
-                    interact.say({ text: "Ishmael"});
-                } else if (topics[0].keyword == "NAME") {
-                    interact.say({ text: "{+FIRSTNAME+}"});
-                }
-            }
-            response_lib.callTopics.andCallFake(fakeCall);
-            interact.say( { text: "My name is {+NAME+}." }, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is ");
-            expect(output_context.append).toHaveBeenCalledWith("Ishmael");
-            expect(output_context.append).toHaveBeenCalledWith(".");
-        });
-        it("should handle call markup as a result of state markup", function() {
-            world.getState = function(id) {
-                if (id === "firstName") {
-                    return "{+NAME+}";
-                } else {
-                    return false;
-                }
-            };
-            response_lib.callTopics.andCallFake(fakeCall);
-            interact.say( { text: "My name is {=firstName=}." }, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is ");
-            expect(output_context.append).toHaveBeenCalledWith("Ishmael");
-            expect(output_context.append).toHaveBeenCalledWith(".");
-        });
-        it("should handle state markup as a result of call markup", function() {
-            function fakeCall(responses, topics) {
-                if (topics[0].keyword == "NAME") {
-                    interact.say({ text: "{=firstName=}"});
-                }
-            }
-            world.getState = function(id) {
-                if (id === "firstName") {
-                    return "Ishmael";
-                } else {
-                    return false;
-                }
-            };
-            response_lib.callTopics.andCallFake(fakeCall);
-            interact.say( { text: "My name is {+NAME+}." }, 'responder');
-            expect(output_context.append).toHaveBeenCalledWith("My name is ");
-            expect(output_context.append).toHaveBeenCalledWith("Ishmael");
-            expect(output_context.append).toHaveBeenCalledWith(".");
-        });
     });
     describe("call", function () {
         it("should call the passed topics", function () {
             interact.call([{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}], "player", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}], "player", interact, story_text);
         });
         it("should include the current actor topics", function () {
             world.getCurrentTopics = function(caller) {
                 return (caller === 'player') ? [{keyword: 'topicD', weight: 1.0}] : [];
             };
             interact.call([{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}, {keyword:"topicD", weight: 1.0}], "player", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({}, [{keyword:"topicA", weight: 1.0}, {keyword:"topicB", weight: 1.0}, {keyword:"topicC", weight: 1.0}, {keyword:"topicD", weight: 1.0}], "player", interact, story_text);
         });
     });
     describe("callActions", function () {
         it("should call the passed topics", function () {
             rif.actions = {actor: "responses"};
             interact.callActions(["topicA", "topicB", "topicC"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}], "actor", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "topicA", weight: 1.0}, {keyword: "topicB", weight: 1.0}, {keyword: "topicC", weight: 1.0}], "actor", interact, story_text);
         });
         it("should include the current actor topics", function () {
             world.getCurrentTopics = function (caller) {
@@ -253,7 +107,7 @@ describe("RifInteract", function () {
             };
             rif.actions = {actor: "responses"};
             interact.callActions(["ACT"]);
-            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact, story_text);
         });
     });
     describe("invoke", function () {
@@ -280,74 +134,11 @@ describe("RifInteract", function () {
         it('should update the world models', function() {
             interact.sendCommand(["topicA", "topicB", "topicC"]);
             expect(world.updateModels).toHaveBeenCalled();
+        });
+        it('should hide any auto-hide text', function() {
+            interact.sendCommand(["topicA", "topicB", "topicC"]);
+            expect(story_text.hideSections).toHaveBeenCalled();
         })
-    });
-    describe("sendCommand separator support", function() {
-        it("should add a hidden separator div before the command if text was output previously", function() {
-            interact.say({ text: "This is some text" });
-            dom.createDiv.reset();
-            dom.append = jasmine.createSpy("append");
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).toHaveBeenCalledWith();
-            expect(appendSpy).toHaveBeenCalledWith("<div class='separatorholder'><div class='separator' style='display:none' id='separator0'></div></div>");
-            expect(dom.append).toHaveBeenCalled();
-            expect(dom.showElement).not.toHaveBeenCalled();
-        });
-        it("should not show the separator when new text is output if show_separator is not set", function() {
-            interact.say({ text: "This is some text" });
-            dom.createDiv.reset();
-            dom.append = jasmine.createSpy("append");
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            interact.say({ text: "This is some more text" });
-            expect(dom.showElement).not.toHaveBeenCalled();
-        });
-        it("should show the separator when new text is output if show_separator is set", function() {
-            world.getState = function(id) {
-                return id === "show_separator:";
-            };
-            interact.say({ text: "This is some text" });
-            dom.createDiv.reset();
-            dom.append = jasmine.createSpy("append");
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            interact.say({ text: "This is some more text" });
-            expect(dom.showElement).toHaveBeenCalledWith("#separator0");
-        });
-    });
-    xdescribe("sendCommand separator support", function() {
-        it("should add not create a separator div before the command if text was not output previously", function() {
-            interact.say({ text: "This is some text", into: "someelement" });
-            dom.createDiv.reset();
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).not.toHaveBeenCalled();
-        });
-        it("should add not create a separator div before the command if .into text was output previously", function() {
-            dom.createDiv.reset();
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).not.toHaveBeenCalled();
-        });
-        it("should add not create a separator div until text is output again", function() {
-            interact.say({ text: "This is some text" });
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            dom.createDiv.reset();
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).not.toHaveBeenCalled();
-        });
-        it("should increment the separator number each time", function() {
-            interact.say({text: "This is some text"});
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            interact.say({text: "This is some more text"});
-            dom.createDiv.reset();
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.createDiv).toHaveBeenCalledWith();
-            expect(appendSpy).toHaveBeenCalledWith("<div class='separatorholder'><div class='separator' id='separator1'></div></div>");
-        });
-        it("should hide a previous separator when a new one is created", function(){
-            interact.say({text: "This is some text"});
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            interact.say({text: "This is some more text"});
-            interact.sendCommand(["topicA", "topicB", "topicC"]);
-            expect(dom.removeElement).toHaveBeenCalledWith("#separator0", 1);
-        });
     });
     describe("choose", function() {
         it('should build the menu', function() {
@@ -358,12 +149,6 @@ describe("RifInteract", function () {
             interact.choose(["one", "two", "three"]);
             expect(output_context.addMenuCallback).toHaveBeenCalled();
             expect(formatter.formatMenu).toHaveBeenCalledWith(["one", "two", "three"], 314);
-        });
-        it("should auto-hide the menu on next command", function() {
-            dom.removeElement = jasmine.createSpy("removeElement");
-            interact.choose(["one", "two", "three"]);
-            interact.sendCommand([]);
-            expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
         });
     });
     describe("expandResponseReferences", function() {
@@ -412,7 +197,11 @@ describe("RifInteract", function () {
     });
     describe('hiding obsolete links', function() {
         it('should remove a link after the next command', function() {
-            setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'}]);
+            var links = [{selector: '.link1', keywords: 'Keyword1'}];
+            story_text.filterLinks.andCallFake(function(f) {
+                f(links[0]);
+            });
+            setupFormatterOutputWithLinks(links);
             response_lib.getCandidateResponses = function(responders, topics) {
                 return [];
             };
@@ -425,11 +214,15 @@ describe("RifInteract", function () {
             expect(dom.removeEvent).toHaveBeenCalledWith('.link1', 'click');
         });
         it('should remove multiple links after the next command', function() {
-            setupFormatterOutputWithLinks([{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}]);
+            var links = [{selector: '.link1', keywords: 'Keyword1'},{selector: '.link2', keywords: 'Keyword2'}];
+            story_text.filterLinks.andCallFake(function(f) {
+                f(links[0]);
+                f(links[1]);
+            });
+            setupFormatterOutputWithLinks(links);
             response_lib.getCandidateResponses = function(responders, topics) {
                 return [];
             };
-
 
             interact.say({ text: "This is some text" }, 'responder');
 
@@ -473,7 +266,7 @@ describe("RifInteract", function () {
                 }
             ];
             interact.runSetups();
-            expect(response_lib.callTopics).toHaveBeenCalledWith({aresponder: [response]}, [], '', interact);
+            expect(response_lib.callTopics).toHaveBeenCalledWith({aresponder: [response]}, [], '', interact, story_text);
         });
     });
 });

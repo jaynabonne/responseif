@@ -1,5 +1,5 @@
-define(['./world', './load', './dom', './html_formatter', './expand', './parse', './interact', './response'],
-        function(RifWorld, RifLoad, RifDOM, RifHtmlFormatter, rifExpand, rifParse, RifInteract, RifResponse) {
+define(['./world', './load', './dom', './html_formatter', './expand', './parse', './interact', './response','./story_text'],
+        function(RifWorld, RifLoad, RifDOM, RifHtmlFormatter, rifExpand, rifParse, RifInteract, RifResponse, RifStoryText) {
     function loadRif(completion) {
         var self = this;
         this.load.loadTokens(this.rif_file, function (tokens) {
@@ -37,7 +37,22 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
         var self = this;
 
         loadRif.call(this, function(rif) {
-            self.interact =  new RifInteract(self.dom, self.formatter, self.world, self.response, rif);
+            var clickFactory = function (topics) {
+                return function (e) {
+                    var target = $(e.target);
+                    if (rif.clickEffect !== undefined) {
+                        $.each(rif.clickEffect.transitions, function(index, transition) {
+                            self.dom.animate(target, transition.to, transition.lasting);
+                        });
+                    }
+                    self.interact.sendCommandTopics(topics);
+                    return false;
+                };
+            };
+            self.story_text = new RifStoryText(self.formatter, clickFactory, self.dom, self.world, function(topics) {
+                    self.interact.callTopicString(topics);
+                });
+            self.interact =  new RifInteract(self.dom, self.formatter, self.world, self.response, rif, self.story_text);
             completion();
         });
     };

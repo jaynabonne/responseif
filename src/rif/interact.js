@@ -1,33 +1,18 @@
-define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryText) {
+define(['./topic_strategy'], function(RifTopicStrategy) {
     "use strict";
 
     function convertTopics(topics) {
         return topics.map(function(value) { return {keyword: value, weight: 1.0} });
     }
 
-    var type = function (dom, formatter, world, response_lib, rif) {
+    var type = function (dom, formatter, world, response_lib, rif, story_text) {
         this.dom = dom;
         this.formatter = formatter;
         this.world = world;
         this.response_lib = response_lib;
         this.rif = rif;
+        this.story_text = story_text;
         var self = this;
-
-        var clickFactory = function (keywords) {
-            return function (e) {
-                var target = $(e.target);
-                if (rif.clickEffect !== undefined) {
-                    $.each(rif.clickEffect.transitions, function(index, transition) {
-                        dom.animate(target, transition.to, transition.lasting);
-                    });
-                }
-                self.sendCommand(convertTopics(keywords.split(" ")));
-                return false;
-            };
-        };
-        this.story_text = new RifStoryText(formatter, clickFactory, dom, world, function(topics) {
-            self.callTopicString(topics);
-        });
     };
 
     type.prototype = {
@@ -76,7 +61,7 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
         },
         callTopicsWithResponders: function(topics, responders, caller) {
             var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(caller));
-            this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this);
+            this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this, this.story_text);
         },
         callActions: function(topics) {
             topics = convertTopics(topics);
@@ -86,7 +71,7 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
                     var responses = {};
                     responses[actor] = actions[actor];
                     var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(actor));
-                    this.response_lib.callTopics(responses, merged_topics, actor, this);
+                    this.response_lib.callTopics(responses, merged_topics, actor, this, this.story_text);
                 }
             }
         },
@@ -101,6 +86,9 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
             this.idleProcessing();
             this.world.updateModels();
             this.hideObsoleteLinks();
+        },
+        sendCommandTopics: function(keywords) {
+            this.sendCommand(convertTopics(keywords.split(" ")));
         },
         hideObsoleteLinks: function() {
             var self = this;
@@ -148,7 +136,7 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
                 var responders = {};
                 responders[setup.responder] = setup.responses;
 
-                self.response_lib.callTopics( responders, [], '', self );
+                self.response_lib.callTopics( responders, [], '', self, self.story_text );
             });
         }
     };

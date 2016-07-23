@@ -7,8 +7,8 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
 
     var proto = type.prototype;
 
-    proto.processResponses = function (candidates, caller, topics, interact) {
-        var processor = new RifResponseProcessor(caller, interact, topics, this.world);
+    proto.processResponses = function (candidates, caller, topics, interact, story_text) {
+        var processor = new RifResponseProcessor(caller, interact, topics, this.world, story_text);
         processor.processResponses(candidates, this.types);
     };
 
@@ -28,12 +28,12 @@ define(['./response_core','./response_processor','./priority_response_getter'], 
         return candidates;
     };
 
-    proto.callTopics = function(responders, topics, caller, interact) {
+    proto.callTopics = function(responders, topics, caller, interact, story_text) {
 
         var candidates = this.getCandidateResponses(responders, topics);
         candidates = RifPriorityResponseGetter.getPriorityResponses(candidates);
 
-        this.processResponses(candidates, caller, topics, interact);
+        this.processResponses(candidates, caller, topics, interact, story_text);
     };
 
     return type;
