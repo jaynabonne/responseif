@@ -114,11 +114,13 @@ describe("RifInteract", function () {
         it("should invoke the function", function() {
             world.api = jasmine.createSpy('api');
             interact.other_api = jasmine.createSpy('other_api');
+            story_text.some_api = jasmine.createSpy('other_api');
 
-            interact.invoke('world.api(responder); interact.other_api();', 'aresponder');
+            interact.invoke('world.api(responder); story_text.some_api("param"); interact.other_api();', 'aresponder');
 
             expect(world.api).toHaveBeenCalledWith('aresponder');
             expect(interact.other_api).toHaveBeenCalledWith();
+            expect(story_text.some_api).toHaveBeenCalledWith('param');
         });
     });
     describe("sendCommand", function() {

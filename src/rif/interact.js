@@ -12,7 +12,6 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         this.response_lib = response_lib;
         this.rif = rif;
         this.story_text = story_text;
-        var self = this;
     };
 
     type.prototype = {
@@ -60,21 +59,9 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(caller));
             this.response_lib.callTopics(this.getResponses(responders), merged_topics, caller, this, this.story_text);
         },
-        callActions: function(topics) {
-            topics = convertTopics(topics);
-            var actions = this.rif.actions;
-            for (var actor in actions) {
-                if (actions.hasOwnProperty(actor)) {
-                    var responses = {};
-                    responses[actor] = actions[actor];
-                    var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(actor));
-                    this.response_lib.callTopics(responses, merged_topics, actor, this, this.story_text);
-                }
-            }
-        },
         invoke: function(body, responder) {
-            var f = new Function('world', 'interact', 'responder', body);
-            f(this.world, this, responder);
+            var f = new Function('world', 'interact', 'story_text', 'responder', body);
+            f(this.world, this, this.story_text, responder);
         },
         sendCommand: function(topics) {
             this.story_text.hideSections();
@@ -121,6 +108,18 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
             var new_responses = [];
             this.addResponseReferences(responses, new_responses);
             return new_responses;
+        },
+        callActions: function(topics) {
+            topics = convertTopics(topics);
+            var actions = this.rif.actions;
+            for (var actor in actions) {
+                if (actions.hasOwnProperty(actor)) {
+                    var responses = {};
+                    responses[actor] = actions[actor];
+                    var merged_topics = RifTopicStrategy.mergeCurrentTopics(topics, this.world.getCurrentTopics(actor));
+                    this.response_lib.callTopics(responses, merged_topics, actor, this, this.story_text);
+                }
+            }
         },
         runSetups: function() {
             var setups = this.rif.setup;
