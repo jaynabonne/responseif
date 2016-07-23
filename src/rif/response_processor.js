@@ -28,7 +28,7 @@ define(['./response_core','./priority_response_getter', './fuzzy'], function (Ri
     }
 
     proto.process_says = function (action, responder) {
-        this.interact.say(action.says, responder);
+        this.story_text.say(action.says, responder);
     };
 
     proto.process_sets = function (action, responder) {

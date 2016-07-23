@@ -206,7 +206,6 @@ describe("RifInteract", function () {
                 return [];
             };
 
-            interact.say({ text: "This is some text" }, 'responder');
             expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
 
             interact.sendCommand([{keyword: "topicA"}]);
@@ -223,8 +222,6 @@ describe("RifInteract", function () {
             response_lib.getCandidateResponses = function(responders, topics) {
                 return [];
             };
-
-            interact.say({ text: "This is some text" }, 'responder');
 
             interact.sendCommand([{keyword: "topicA"}]);
             expect(dom.removeClass).toHaveBeenCalledWith('.link1', 'keyword');
@@ -243,8 +240,6 @@ describe("RifInteract", function () {
                     return [{response: {}, score: '10000', responder: 'responder'}];
                 return [];
             };
-
-            interact.say({ text: "This is some text" }, 'responder');
 
             interact.sendCommand([{keyword: "topicA"}]);
             expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');

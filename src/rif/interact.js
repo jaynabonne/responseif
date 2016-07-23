@@ -16,9 +16,6 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
     };
 
     type.prototype = {
-        say: function (says, responder) {
-            this.story_text.say(says, responder);
-        },
         choose: function(options, callback) {
             var context = this.story_text.push_context();
             var self = this;
@@ -28,7 +25,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
                 self.idleProcessing();
             });
             var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
-            this.say(says);
+            this.story_text.say(says);
             this.story_text.pop_context(says, '');
         },
         callTopicString: function(topics) {

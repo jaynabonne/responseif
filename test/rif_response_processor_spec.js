@@ -43,35 +43,35 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("says", function () {
         beforeEach(function() {
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
         });
         it("text for a matching response", function () {
             var response = {
                 does: {common: [{says: {text: "Hello world!"}}]}
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say).toHaveBeenCalledWith({text: "Hello world!"}, "responder");
+            expect(story_text.say).toHaveBeenCalledWith({text: "Hello world!"}, "responder");
         });
         it("no text for no matching responses", function() {
             processor.processResponse([], 'responder');
-            expect(interact.say).not.toHaveBeenCalled();
+            expect(story_text.say).not.toHaveBeenCalled();
         });
         it("text for all matching responses", function() {
             var response1 = { does: { common: [ {says: { text: "Hello world!"} } ] } };
             var response2 = { does: { common: [ {says: { text: "Goodnight moon!"} } ] } };
             processor.processResponse(response1, 'responder');
             processor.processResponse(response2, 'responder');
-            expect(interact.say.callCount).toEqual(2);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Hello world!" }, 'responder']);
-            expect(interact.say.argsForCall[1]).toEqual([{ text: "Goodnight moon!" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(2);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Hello world!" }, 'responder']);
+            expect(story_text.say.argsForCall[1]).toEqual([{ text: "Goodnight moon!" }, 'responder']);
         });
         it("text only for matching responses that have text", function() {
             var response1 = { };
             var response2 = { does: { common: [ {says: { text: "See ya later!"} } ] } };
             processor.processResponse(response1, 'responder');
             processor.processResponse(response2, 'responder');
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "See ya later!" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "See ya later!" }, 'responder']);
         });
         it("text in proper sequence", function() {
             var response = {
@@ -85,7 +85,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             processor.processResponse(response, 'responder');
             processor.processResponse(response, 'responder');
             processor.processResponse(response, 'responder');
-            expect(interact.say.argsForCall).toEqual([
+            expect(story_text.say.argsForCall).toEqual([
                 [{ text: "Hello world!"}, 'responder'],
                 [{ text: "See ya later!"}, 'responder'],
                 [{ text: "I'm going"}, 'responder'],
@@ -110,7 +110,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("uses all", function() {
         it("processes all the eligible child responses", function() {
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             world.getState = function(id) { return  false;};
             var response1 = { does: { common: [ { says: {text: "Text 1"} } ] } };
             var response2 = { needs: "somestate", does: { common: [ { says: {text: "Text 2"} } ] } };
@@ -129,14 +129,14 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(2);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
-            expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(2);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
+            expect(story_text.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
         });
     });
     describe("uses first", function() {
         it("processes up to the first eligible child responses", function() {
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             world.getState = function(id) { return  false;};
             var response1 = { needs: "somestate", does: { common: [ { says: {text: "Text 1"} } ] } };
             var response2 = { does: { common: [ { says: {text: "Text 2"} } ] } };
@@ -155,12 +155,12 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 2" }, 'responder']);
         });
         it('uses topics to determine child eligibility', function() {
-            processor = new RifResponseProcessor('caller', interact, [{keyword: 'bar'}], world);
-            interact.say = jasmine.createSpy("say");
+            processor = new RifResponseProcessor('caller', interact, [{keyword: 'bar'}], world, story_text);
+            story_text.say = jasmine.createSpy("say");
             world.getState = function(id) { return  false;};
             var response1 = { matches: [{keyword:'foo'}], does: { common: [ { says: {text: "Text 1"} } ] } };
             var response2 = { matches: [{keyword: 'bar'}], does: { common: [ { says: {text: "Text 2"} } ] } };
@@ -179,8 +179,8 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 2" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 2" }, 'responder']);
         });
     });
     describe("uses random", function() {
@@ -207,42 +207,42 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
         });
         it("processes a single response", function() {
             var response = getResponseForResponses([ response1 ]);
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
         });
         it("does not process an ineligible response", function() {
             world.getState = function(id) { return false;};
 
             var response = getResponseForResponses([ response1 ]);
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(0);
+            expect(story_text.say.callCount).toEqual(0);
         });
         it("returns a randomly selected response", function() {
             var response = getResponseForResponses([ response1, response2 ]);
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
 
             world.getRandomInRange.andReturn(0);
 
             processor.processResponse(response, 'responder');
             expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
 
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
 
             world.getRandomInRange.andReturn(1);
 
             processor.processResponse(response, 'responder');
             expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
 
-            expect(interact.say.callCount).toEqual(2);
-            expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 2" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(2);
+            expect(story_text.say.argsForCall[1]).toEqual([{ text: "Text 2" }, 'responder']);
         });
         it("randomly chooses only among eligible responses", function() {
             var response = getResponseForResponses([ response1, response2, response3 ]);
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             world.getState = function(id) { return id !== 'cond2';};
 
             world.getRandomInRange.andReturn(0);
@@ -250,22 +250,22 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             processor.processResponse(response, 'responder');
             expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
 
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
 
             world.getRandomInRange.andReturn(1);
 
             processor.processResponse(response, 'responder');
             expect(world.getRandomInRange).toHaveBeenCalledWith(0, 1);
 
-            expect(interact.say.callCount).toEqual(2);
-            expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(2);
+            expect(story_text.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
         });
 
     });
     describe("uses best", function() {
         it("processes the first child response with the best score", function() {
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             world.getState = function(id) { return  parseFloat(id);};
             var response1 = { weights: "0.9", does: { common: [ { says: {text: "Priority"} } ] } };
             var response2 = { weights: "0.4", does: { common: [ { says: {text: "Not priority"} } ] } };
@@ -284,13 +284,13 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(1);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Priority" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(1);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Priority" }, 'responder']);
         });
     });
     describe("uses priority", function() {
         it("processes the child responses with the best scores", function() {
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             world.getState = function(id) { return  parseFloat(id);};
             var response1 = { weights: "0.9", does: { common: [ { says: {text: "Text 1"} } ] } };
             var response2 = { weights: "0.4", does: { common: [ { says: {text: "Text 2"} } ] } };
@@ -309,9 +309,9 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toEqual(2);
-            expect(interact.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
-            expect(interact.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
+            expect(story_text.say.callCount).toEqual(2);
+            expect(story_text.say.argsForCall[0]).toEqual([{ text: "Text 1" }, 'responder']);
+            expect(story_text.say.argsForCall[1]).toEqual([{ text: "Text 3" }, 'responder']);
         });
     });
     describe("calls", function () {
@@ -398,7 +398,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("resets", function () {
         it("should reset the current response", function() {
-            interact.say = jasmine.createSpy("say");
+            story_text.say = jasmine.createSpy("say");
             var response = {
                 id: 314,
                 does: {
@@ -411,13 +411,13 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toBe(1);
+            expect(story_text.say.callCount).toBe(1);
             expect(world.setResponseRuns).not.toHaveBeenCalledWith(314, 0);
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toBe(1);
+            expect(story_text.say.callCount).toBe(1);
             expect(world.setResponseRuns).toHaveBeenCalledWith(314, 0);
             processor.processResponse(response, 'responder');
-            expect(interact.say.callCount).toBe(2);
+            expect(story_text.say.callCount).toBe(2);
         });
     });
     describe("clears", function () {
@@ -482,7 +482,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             });
             it("groups responses by type", function () {
                 var output = "";
-                interact.say = function(says) { output += says.text; };
+                story_text.say = function(says) { output += says.text; };
                 var candidates = [
                     { response: { is:"c", does: { common: [ {says: { text: "C!"} } ] } }, score: 1 },
                     { response: { is:"b", does: { common: [ {says: { text: "B!"} } ] } }, score: 1 },
@@ -494,7 +494,7 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             });
             it("orders responses", function () {
                 var output = "";
-                interact.say = function(says) { output += says.text; };
+                story_text.say = function(says) { output += says.text; };
                 var candidates = [
                     { response: { orders:99, does: { common: [ {says: { text: "C!"} } ] } }, score: 1 },
                     { response: { does: { common: [ {says: { text: "B!"} } ] } }, score: 1 },
@@ -514,12 +514,12 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
                 expect(interact.choose).toHaveBeenCalledWith(["Go north", "Go south"], jasmine.any(Function));
             });
             it("processes a single prompt as a normal response if forcesprompt is false", function () {
-                interact.say = jasmine.createSpy("say");
+                story_text.say = jasmine.createSpy("say");
                 interact.choose = jasmine.createSpy("choose");
                 var candidate1 = { response: { prompts: "Go north", forcesprompt: false, does: { common: [ { says: { text: "something" } } ] } }, score: 1 };
                 processor.processResponses([candidate1]);
                 expect(interact.choose).not.toHaveBeenCalled();
-                expect(interact.say).toHaveBeenCalled();
+                expect(story_text.say).toHaveBeenCalled();
             });
             it("processes a single prompt as a prompt if 'forcesprompt' is not set", function () {
                 interact.choose = jasmine.createSpy("choose");
@@ -529,23 +529,23 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             });
             it("passes a callback function to be invoked when an item is chosen", function () {
                 interact.choose = jasmine.createSpy("choose");
-                interact.say = jasmine.createSpy("say");
+                story_text.say = jasmine.createSpy("say");
                 var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: { text: "North" } } ] } }, score: 1, responder: 'responder' };
                 var candidate2 = { response: { prompts: "Go south", does: { common: [ { says: { text: "South" } } ] }  }, score: 1, responder: 'responder' };
                 processor.processResponses([candidate1, candidate2]);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(1);
-                expect(interact.say).toHaveBeenCalledWith({text: "South"}, 'responder');
+                expect(story_text.say).toHaveBeenCalledWith({text: "South"}, 'responder');
             });
             it("does nothing if the menu callback is called with -1", function () {
                 interact.choose = jasmine.createSpy("choose");
-                interact.say = jasmine.createSpy("say");
+                story_text.say = jasmine.createSpy("say");
                 var candidate1 = { response: { prompts: "Go north", does: { common: [ { says: { text: "North" } } ] } }, score: 1 };
                 var candidate2 = { response: { prompts: "Go south", does: { common: [ { says: { text: "South" } } ] }  }, score: 1 };
                 processor.processResponses([candidate1, candidate2]);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(-1);
-                expect(interact.say).not.toHaveBeenCalled();
+                expect(story_text.say).not.toHaveBeenCalled();
             });
             it ("combines multiple responses with the same prompt under one menu choice", function () {
                 interact.choose = jasmine.createSpy("choose");
@@ -557,16 +557,16 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             });
             it ("executes multiple responses with the same prompt when chosen", function () {
                 interact.choose = jasmine.createSpy("choose");
-                interact.say = jasmine.createSpy("say");
+                story_text.say = jasmine.createSpy("say");
                 var candidate1 = {response: {prompts: "prompt1", does: {common: [ {says: { text: "North" } } ] } }, score: 1, responder: 'responder'};
                 var candidate2 = {response: {prompts: "prompt1", does: {common: [ {says: { text: "North2" } } ] } }, score: 1, responder: 'responder'};
                 var candidate3 = {response: {prompts: "prompt2", does: {common: [ {says: { text: "South" } } ] } }, score: 1, responder: 'responder'};
                 processor.processResponses([candidate1, candidate2, candidate3]);
                 var callback = interact.choose.mostRecentCall.args[1];
                 callback(0);
-                expect(interact.say.callCount).toEqual(2);
-                expect(interact.say.argsForCall[0]).toEqual([{ text: "North" }, 'responder']);
-                expect(interact.say.argsForCall[1]).toEqual([{ text: "North2" }, 'responder']);
+                expect(story_text.say.callCount).toEqual(2);
+                expect(story_text.say.argsForCall[0]).toEqual([{ text: "North" }, 'responder']);
+                expect(story_text.say.argsForCall[1]).toEqual([{ text: "North2" }, 'responder']);
             });
         });
     });
