@@ -1,40 +1,12 @@
 define(['rif/interact'], function(RifInteract) {
 describe("RifInteract", function () {
-    var output;
     var interact;
-    var appendSpy;
     var world;
     var rif;
-    var dom;
     var response_lib;
     var story_text;
-    var output_context;
 
     beforeEach(function () {
-        appendSpy = jasmine.createSpy("div append");
-        dom = {
-            createDiv: jasmine.createSpy("getElementBySelector"),
-            scrollToEnd: function() {},
-            append: function(div) {},
-            getElementBySelector: jasmine.createSpy("getElementBySelector"),
-            removeElement: jasmine.createSpy("removeElement"),
-            showElement: jasmine.createSpy("showElement"),
-            removeClass: jasmine.createSpy('removeClass'),
-            removeEvent: jasmine.createSpy('removeEvent'),
-            clear: jasmine.createSpy('clear'),
-            setText: jasmine.createSpy('setText'),
-            appendText: jasmine.createSpy('appendText')
-        };
-        dom.createDiv.andReturn({ append: appendSpy});
-        output_context = jasmine.createSpyObj(
-                'output context',
-                [
-                    'begin',
-                    'append',
-                    'end',
-                    'getOutputText',
-                    'addMenuCallback'
-                ]);
         world = {
             getState: jasmine.createSpy("getState"),
             setState: jasmine.createSpy("setState"),
@@ -52,21 +24,14 @@ describe("RifInteract", function () {
         };
         rif = {};
         response_lib = {
-            callTopics: jasmine.createSpy('callTopics'),
-            getCandidateResponses: jasmine.createSpy('getCandidateResponses')
+            callTopics: jasmine.createSpy('callTopics')
         };
         story_text = {
             hideSections: jasmine.createSpy('hideSections'),
             beforeCommand: jasmine.createSpy('hideSections'),
-            removeDeadLinks: jasmine.createSpy('removeDeadLinks'),
-            say: jasmine.createSpy('say'),
-            push_context: function() {
-                return output_context;
-            },
-            pop_context: jasmine.createSpy('pop_context'),
+            removeDeadLinks: jasmine.createSpy('removeDeadLinks')
         };
-        interact = new RifInteract(dom, world, response_lib, rif, story_text);
-        appendSpy.reset();
+        interact = new RifInteract(world, response_lib, rif, story_text);
     });
     describe("call", function () {
         it("should call the passed topics", function () {

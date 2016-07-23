@@ -5,8 +5,7 @@ define(['./topic_strategy'], function(RifTopicStrategy) {
         return topics.map(function(value) { return {keyword: value, weight: 1.0} });
     }
 
-    var type = function (dom, world, response_lib, rif, story_text) {
-        this.dom = dom;
+    var type = function (world, response_lib, rif, story_text) {
         this.world = world;
         this.response_lib = response_lib;
         this.rif = rif;

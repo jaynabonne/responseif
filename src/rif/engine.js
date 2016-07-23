@@ -52,7 +52,7 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
             self.story_text = new RifStoryText(self.formatter, clickFactory, self.dom, self.world, function(topics) {
                     self.interact.callTopicString(topics);
                 });
-            self.interact =  new RifInteract(self.dom, self.world, self.response, rif, self.story_text);
+            self.interact =  new RifInteract(self.world, self.response, rif, self.story_text);
             completion();
         });
     };
