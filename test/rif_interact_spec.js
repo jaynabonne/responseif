@@ -256,15 +256,6 @@ describe("RifInteract", function () {
             expect(response_lib.callTopics).toHaveBeenCalledWith({actor: "responses"}, [{keyword: "ACT", weight: 1.0}, {keyword: "topicD", weight: 1.0}], "actor", interact);
         });
     });
-    describe("animate", function () {
-        it("should animate the passed item(s)", function () {
-            dom.animate = jasmine.createSpy("animate");
-            interact.animate( { selector: "aselector", transitions: [ {to: "optionsA", lasting: 1500}, {to: "optionsB", lasting: 1000} ] } );
-            expect(dom.animate.callCount).toBe(2);
-            expect(dom.animate.argsForCall[0]).toEqual(["aselector", "optionsA", 1500]);
-            expect(dom.animate.argsForCall[1]).toEqual(["aselector", "optionsB", 1000]);
-        });
-    });
     describe("invoke", function () {
         it("should invoke the function", function() {
             world.api = jasmine.createSpy('api');
@@ -274,12 +265,6 @@ describe("RifInteract", function () {
 
             expect(world.api).toHaveBeenCalledWith('aresponder');
             expect(interact.other_api).toHaveBeenCalledWith();
-        });
-    });
-    describe("clear", function () {
-        it("should clear the output div", function() {
-            interact.clear({});
-            expect(dom.clear).toHaveBeenCalled();
         });
     });
     describe("sendCommand", function() {

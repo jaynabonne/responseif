@@ -1,10 +1,11 @@
 define(['./response_core','./priority_response_getter', './fuzzy'], function (RifResponseCore, RifPriorityResponseGetter, RifFuzzy) {
     "use strict";
-    var type = function(caller, interact, topics, world) {
+    var type = function(caller, interact, topics, world, story_text) {
         this.caller = caller;
         this.interact = interact;
         this.topics = topics;
         this.world = world;
+        this.story_text = story_text;
     };
 
     var proto = type.prototype;
@@ -79,7 +80,7 @@ define(['./response_core','./priority_response_getter', './fuzzy'], function (Ri
     };
 
     proto.process_animates = function (action) {
-        this.interact.animate(action.animates);
+        this.story_text.animate(action.animates);
     };
 
     proto.process_invokes = function (action, responder) {
@@ -104,7 +105,7 @@ define(['./response_core','./priority_response_getter', './fuzzy'], function (Ri
     };
 
     proto.process_clears = function (action) {
-        this.interact.clear(action.clears);
+        this.story_text.clear(action.clears);
     };
 
     proto.process_adjusts = function (action, responder, response) {

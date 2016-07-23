@@ -1,6 +1,7 @@
 define(['rif/response_processor'], function(RifResponseProcessor) {
     var interact;
     var world;
+    var story_text;
     var processor;
     beforeEach(function() {
         interact  = {};
@@ -11,7 +12,8 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
             setResponseRuns: jasmine.createSpy('setResponseRuns'),
             addTopics: jasmine.createSpy('addTopics')
         };
-        processor = new RifResponseProcessor('caller', interact, [], world);
+        story_text = {};
+        processor = new RifResponseProcessor('caller', interact, [], world, story_text);
     });
     describe('run count management', function() {
         it('loads the run count if not yet set', function() {
@@ -324,12 +326,12 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("animates", function () {
         it("should animate", function() {
-            interact.animate = jasmine.createSpy("animate");
+            story_text.animate = jasmine.createSpy("animate");
             var response = {
                 does: { common: [ { animates: {selector: "aselector", transitions: [{to: "options", lasting: 1000} ] } } ] }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.animate).toHaveBeenCalledWith( {selector: "aselector", transitions: [ {to: "options", lasting: 1000} ] } );
+            expect(story_text.animate).toHaveBeenCalledWith( {selector: "aselector", transitions: [ {to: "options", lasting: 1000} ] } );
         });
     });
     describe("invokes", function () {
@@ -420,12 +422,12 @@ define(['rif/response_processor'], function(RifResponseProcessor) {
     });
     describe("clears", function () {
         it("should clear the screen", function() {
-            interact.clear = jasmine.createSpy("clear");
+            story_text.clear = jasmine.createSpy("clear");
             var response = {
                 does: { common: [ { clears: {} } ] }
             };
             processor.processResponse(response, 'responder');
-            expect(interact.clear).toHaveBeenCalledWith({});
+            expect(story_text.clear).toHaveBeenCalledWith({});
         });
     });
     describe("adjusts", function () {

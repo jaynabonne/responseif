@@ -90,12 +90,6 @@ define(['./topic_strategy','./story_text'], function(RifTopicStrategy, RifStoryT
                 }
             }
         },
-        animate: function(animates) {
-            this.story_text.animate(animates);
-        },
-        clear: function() {
-            this.story_text.clear();
-        },
         invoke: function(body, responder) {
             var f = new Function('world', 'interact', 'responder', body);
             f(this.world, this, responder);
