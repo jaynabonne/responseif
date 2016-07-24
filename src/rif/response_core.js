@@ -172,7 +172,7 @@ define([], function () {
         var responses = {};
         $.each(responders, function (index, value) {
             if (rif.responses[value])
-                responses[value] = rifResponseCore.expandResponseReferences(rif.responses[value], rif);
+                responses[value] = core.expandResponseReferences(rif.responses[value], rif);
         });
         return responses;
     };

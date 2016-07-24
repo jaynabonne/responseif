@@ -6,7 +6,7 @@ define(['rif/story_text'], function(RifStoryText) {
     var appendSpy;
     var world;
     var output_context;
-    var calltopics;
+    var helper;
     var story_text;
 
     function setupFormatterOutputWithLinks(links) {
@@ -62,8 +62,16 @@ define(['rif/story_text'], function(RifStoryText) {
 
         setupFormatterOutput();
 
-        calltopics = jasmine.createSpy('calltopics');
-        story_text = new RifStoryText(formatter, click_factory, dom, world, calltopics);
+        helper = {
+            createClick: function(keywords) {
+                return function(e) {
+                    return false;
+                }
+            },
+            callTopicString: jasmine.createSpy('callTopicString')
+        };
+
+        story_text = new RifStoryText(formatter, helper, dom, world);
     });
     describe("animate", function () {
         it("should animate the passed item(s)", function () {
@@ -151,17 +159,17 @@ define(['rif/story_text'], function(RifStoryText) {
         it("should invoke 'call' on the interact for a topic", function() {
             var says = { text: "My name is {+NAME+}." };
             story_text.say(says, 'responder');
-            expect(calltopics).toHaveBeenCalledWith("NAME");
+            expect(helper.callTopicString).toHaveBeenCalledWith("NAME");
         });
         it("should invoke 'call' on the interact for a caller-targeted topic", function() {
             var says = { text: "My name is {+NAME>\"responder\"+}." };
             story_text.say(says, 'responder');
-            expect(calltopics).toHaveBeenCalledWith('NAME>\"responder\"');
+            expect(helper.callTopicString).toHaveBeenCalledWith('NAME>\"responder\"');
         });
         it("should invoke 'call' on the interact for multiple topic", function() {
             var says = { text: "My name is {+FIRST NAME+}." };
             story_text.say(says, 'responder');
-            expect(calltopics).toHaveBeenCalledWith('FIRST NAME');
+            expect(helper.callTopicString).toHaveBeenCalledWith('FIRST NAME');
         });
         function fakeCall(topics) {
             if (topics == "NAME") {
@@ -171,14 +179,14 @@ define(['rif/story_text'], function(RifStoryText) {
             }
         }
         it("should append the individual pieces of text", function() {
-            calltopics.andCallFake(fakeCall);
+            helper.callTopicString.andCallFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(".");
         });
         it("should handle multiple 'calls' markups", function() {
-            calltopics.andCallFake(fakeCall);
+            helper.callTopicString.andCallFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -194,7 +202,7 @@ define(['rif/story_text'], function(RifStoryText) {
                     story_text.say({ text: "{+FIRSTNAME+}"});
                 }
             }
-            calltopics.andCallFake(fakeCall);
+            helper.callTopicString.andCallFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -208,7 +216,7 @@ define(['rif/story_text'], function(RifStoryText) {
                     return false;
                 }
             };
-            calltopics.andCallFake(fakeCall);
+            helper.callTopicString.andCallFake(fakeCall);
             story_text.say( { text: "My name is {=firstName=}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -227,7 +235,7 @@ define(['rif/story_text'], function(RifStoryText) {
                     return false;
                 }
             };
-            calltopics.andCallFake(fakeCall);
+            helper.callTopicString.andCallFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");

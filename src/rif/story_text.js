@@ -24,15 +24,14 @@ define([], function() {
         this.currentDiv = div;
     }
 
-    var type = function(formatter, clickFactory, dom, world, calltopics) {
+    var type = function(formatter, helper, dom, world) {
         this.formatter = formatter;
-        this.clickFactory = clickFactory;
+        this.helper = helper;
         this.dom = dom;
         this.world = world;
         this.links = [];
         this.contexts = [];
         this.sectionsToHide = [];
-        this.calltopics = calltopics;
         this.id = 1;
 
         appendNewDiv.call(this);
@@ -89,7 +88,7 @@ define([], function() {
     function popContext(says, responder) {
         var context = this.contexts.pop();
         if (this.contexts.length === 0) {
-            var formatted = this.formatter.formatOutput(context.getOutputText(), this.clickFactory, context.menu_callbacks, says.as);
+            var formatted = this.formatter.formatOutput(context.getOutputText(), this.helper.createClick, context.menu_callbacks, says.as);
 
             var self = this;
 
@@ -138,7 +137,7 @@ define([], function() {
             var text = replaceMarkup.call(this, says.text, responder, this.world);
 
             var context = pushContext.call(this);
-            context.expandCallMarkup(text, says.as, this.calltopics);
+            context.expandCallMarkup(text, says.as, this.helper.callTopicString);
             popContext.call(this, says, responder);
         },
 

@@ -60,8 +60,11 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
         },
         hideObsoleteLinks: function() {
             var response_lib = this.response_lib;
-            var responders = this.world.getCurrentResponders(this.world.getPOV());
-            var responses = rifResponseCore.getResponsesForResponders(responders, this.rif);
+            var world = this.world;
+            var rif = this.rif;
+
+            var responders = world.getCurrentResponders(world.getPOV());
+            var responses = rifResponseCore.getResponsesForResponders(responders, rif);
 
             var getCandidates = function(keywords) {
                 return response_lib.getCandidateResponses(responses, rifResponseCore.convertTopics(keywords));

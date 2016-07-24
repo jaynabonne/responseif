@@ -11,6 +11,26 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
         });
     }
 
+    function createStoryTextHelper(engine) {
+        return {
+            createClick: function(topics) {
+                return function (e) {
+                    var target = $(e.target);
+                    if (engine.rif.clickEffect !== undefined) {
+                        $.each(engine.rif.clickEffect.transitions, function(index, transition) {
+                            engine.dom.animate(target, transition.to, transition.lasting);
+                        });
+                    }
+                    engine.interact.sendCommandTopics(topics);
+                    return false;
+                };
+            },
+            callTopicString: function (topics) {
+                engine.interact.callTopicString(topics);
+            }
+        }
+    }
+
     function initFromParams(params) {
         var self = this;
         self.data_root = params.data_root || "data/";
@@ -31,21 +51,7 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
         self.formatter = params.formatter || new RifHtmlFormatter();
         self.dom = params.dom || new RifDOM(params.element);
 
-        var clickFactory = function (topics) {
-            return function (e) {
-                var target = $(e.target);
-                if (self.rif.clickEffect !== undefined) {
-                    $.each(self.rif.clickEffect.transitions, function(index, transition) {
-                        self.dom.animate(target, transition.to, transition.lasting);
-                    });
-                }
-                self.interact.sendCommandTopics(topics);
-                return false;
-            };
-        };
-        self.story_text = new RifStoryText(self.formatter, clickFactory, self.dom, self.world, function(topics) {
-            self.interact.callTopicString(topics);
-        });
+        self.story_text = new RifStoryText(self.formatter, createStoryTextHelper(this), self.dom, self.world);
         self.response = params.response || new RifResponse(self.world, self.story_text);
     }
     var type = function(params, completion) {
