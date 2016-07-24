@@ -191,13 +191,14 @@ define([], function() {
             });
         },
 
-        removeDeadLinks: function (getCurrentCandidates) {
-            var self = this;
+        removeDeadLinks: function () {
+            var dom = this.dom;
+            var checkTopics = this.helper.getTopicChecker();
+
             this.links = this.links.filter(function (link) {
-                var candidates = getCurrentCandidates(link.keywords);
-                if (candidates.length === 0) {
-                    self.dom.removeClass(link.selector, 'keyword');
-                    self.dom.removeEvent(link.selector, 'click');
+                if (!checkTopics(link.keywords)) {
+                    dom.removeClass(link.selector, 'keyword');
+                    dom.removeEvent(link.selector, 'click');
                     return false;
                 }
                 return true;
@@ -207,6 +208,9 @@ define([], function() {
             this.hideSections();
             this.separator.update();
             this.beginSection();
+        },
+        afterCommand: function() {
+            this.removeDeadLinks();
         }
     };
 

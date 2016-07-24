@@ -68,7 +68,12 @@ define(['rif/story_text'], function(RifStoryText) {
                     return false;
                 }
             },
-            callTopicString: jasmine.createSpy('callTopicString')
+            callTopicString: jasmine.createSpy('callTopicString'),
+            getTopicChecker: function() {
+                return function(topics) {
+                    return false;
+                }
+            }
         };
 
         story_text = new RifStoryText(formatter, helper, dom, world);

@@ -50,30 +50,19 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
         },
         sendCommand: function(topics) {
             this.story_text.beforeCommand();
+
             this.call(topics);
+
             this.idleProcessing();
-            this.world.updateModels();
-            this.hideObsoleteLinks();
+
+            this.story_text.afterCommand();
         },
         sendCommandTopics: function(keywords) {
             this.sendCommand(rifResponseCore.convertTopics(keywords));
         },
-        hideObsoleteLinks: function() {
-            var response_lib = this.response_lib;
-            var world = this.world;
-            var rif = this.rif;
-
-            var responders = world.getCurrentResponders(world.getPOV());
-            var responses = rifResponseCore.getResponsesForResponders(responders, rif);
-
-            var getCandidates = function(keywords) {
-                return response_lib.getCandidateResponses(responses, rifResponseCore.convertTopics(keywords));
-            };
-
-            this.story_text.removeDeadLinks(getCandidates);
-        },
         idleProcessing: function() {
             this.callActions("ACT");
+            this.world.updateModels();
         },
         callActions: function(topics) {
             topics = rifResponseCore.convertTopics(topics);

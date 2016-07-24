@@ -1,5 +1,5 @@
-define(['./world', './load', './dom', './html_formatter', './expand', './parse', './interact', './response','./story_text'],
-        function(RifWorld, RifLoad, RifDOM, RifHtmlFormatter, rifExpand, rifParse, RifInteract, RifResponse, RifStoryText) {
+define(['./world', './load', './dom', './html_formatter', './expand', './parse', './interact', './response','./story_text','./response_core'],
+        function(RifWorld, RifLoad, RifDOM, RifHtmlFormatter, rifExpand, rifParse, RifInteract, RifResponse, RifStoryText, rifResponseCore) {
     function loadRif(completion) {
         var self = this;
         this.load.loadTokens(this.rif_file, function (tokens) {
@@ -27,6 +27,17 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
             },
             callTopicString: function (topics) {
                 engine.interact.callTopicString(topics);
+            },
+            getTopicChecker: function() {
+                var response = engine.response;
+                var world = engine.world;
+
+                var responders = world.getCurrentResponders(world.getPOV());
+                var responses = rifResponseCore.getResponsesForResponders(responders, engine.rif);
+
+                return function(keywords) {
+                    return response.getCandidateResponses(responses, rifResponseCore.convertTopics(keywords)).length > 0;
+                };
             }
         }
     }
