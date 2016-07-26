@@ -28,7 +28,8 @@ describe("RifInteract", function () {
         };
         story_text = {
             hideSections: jasmine.createSpy('hideSections'),
-            beforeCommand: jasmine.createSpy('hideSections'),
+            beforeCommand: jasmine.createSpy('beforeCommand'),
+            afterCommand: jasmine.createSpy('afterCommand'),
             removeDeadLinks: jasmine.createSpy('removeDeadLinks')
         };
         interact = new RifInteract(world, response_lib, rif, story_text);
