@@ -1,3 +1,198 @@
+2016-07-30
+
+Objects taking part need:
+- name/alias
+- subjective pronoun ['he', 'she', 'it', 'we', 'they', etc] (can be type-based)
+- objective pronoun ['him', 'her', 'it', 'us', 'them', etc] (can be type-based)
+- possessive pronoun ['his', 'her', 'its', 'our', 'their'] (can be type-based)
+
+2016-07-28, 2016-07-29
+
+f>
+f<
+f^
+
+f+
+f-
+f.
+
+fPs - first person (singular), present, simple
+sPs - second person (singular), present, simple
+fps - first person (singular), past, simple
+sps - second person (singular), past, simple
+Ffs - first person (plural), future, simple
+Sfs - second person ( plural), future, simple
+--------------------------------------------------------
+
+--
+Elf: {{verb:attack}} you with a knife
+Gnome: {{verb:attack}} you with a knife
+
+The elf and gnome attack you with a knife.
+
+--
+Tom: {{verb:walk}}.
+
+Tom walks.
+
+--
+Tom: {{verb:walk}}
+Mary: {{verb:walk}}
+
+Tom and Mary walk.
+
+--
+Jake: {{laugh}}
+
+.story-text laughs .template {^$responder} {laugh}
+
+John: {{run}} away
+
+.story-text runs-away .template {^$responder} {@run} away
+
+Jake laughs, and John runs away.
+
+.response
+    .does
+        .laughs
+
+.response
+    .does
+        .runs-away
+
+
+--
+Amy: {{press}} the elevator button
+.story-text presses-elevator-button .template {=$responder=} {'press} {elevator-button}
+
+Elevator button: {{light}} up
+
+Amy presses the elevator button, and the elevator button lights up.
+Better: Amy presses the elevator button, and it lights up.
+
+How to mark up objects?
+
+Mary hits Billy, and she starts to laugh. -> Mary hits Billy and starts to laugh.
+Mary hits Billy, and he starts to cry.
+
+.responder hits .object , and .responder starts to laugh.
+
+{=$responder=} {@hit} {^object}, and {=$responder=}
+
+
+2016-07-25
+
+.goal run-elevator
+    .goal close-door
+        .wants !door-open
+
+
+    .goal seek-floor(n)
+        .wants button off for floor (n)
+
+
+2016-07-24
+
+Multiple parameters to macros.
+
+.define north-exit
+    .response NAME
+        .does .says .<value>
+
+
+.add 1 ., 2 ., 3
+
+.north-exit .named Room .originally Kitchen .goes-to kitchen
+
+
+2016-07-19
+
+To have autonomous traversal of rooms, we need to be able to create a graph of all the rooms with their exits.
+
+Connections between rooms: currently movement is handled via responses. A choice causes a "moves". How do NPCs
+know what the exits are? They could simply move through each room (virtually) and gather all the current responses.
+However, we need to know what will happen when the response takes place, without actually doing it. (Or do we? Can we
+have "seekers" that move through the graph and work out the path?)
+
+Also, some exits (or traversals between nodes) will require a potential change of world state before traversal can
+occur. For example, to use the elevator as part of getting from point A to point B, the NPC must wait for the elevator
+doors to be open before getting on. This introduces a *goal*. The goal is for the doors to be open, which requires the
+NPC to push the elevator button. And wait. Once in the elevator, the NPC must push the desired floor button and then wait
+again for the doors to open on that floor. (This might seem complicated, but I did it in What Will Be, for Quest.)
+
+Similarly, to enter the rooms where they are staying, the NPCs must use their card keys to trigger the doors
+before entering.
+
+So we need a goal associated with exits along with responses to support the goals.
+
+
+2016-07-12
+
+    .response ROSE-NORTH
+        .prompts Enter building
+        .does
+            .moves player .to Floor 1 Foyer
+
+.define north-exit
+    .response ROSE-NORTH
+        .prompts .<value>
+        .does .moves player
+.enddef
+
+.north-exit Enter building .to Floor 1 Foyer
+
+2016-07-09
+
+From "About Face":
+goals implemented by activities -> tasks -> operations
+
+"activities" composed of "tasks"
+"tasks" composed of "operations"
+"operations"
+
+"goals" are expected or desired end conditions. "activities" and "tasks" are steps towards achieving goals (at
+different levels of organization).
+
+Where do responses fit into this?
+
+One possibility: a response's "actions" could correspond to operations. That would put the current list of actions for
+a response as the response's "task".
+
+Does it make sense to establish "goals" (desired effects or, conversely, what the effect will be), and then create another
+level above the current "response action list", which would be an activity? Then responses could be turned into
+holders of activities, which would be higher level than they are at the moment.
+
+Or do we keep responses the same (effectively as tasks) and add another level of organization above them?
+
+2016-07-05
+
+Switch ".as" to ".formatted":
+
+.says This is some text .formatted hint
+
+Or---
+Use ".is" value as class name always.
+
+Either way, we can free up ".as" to specify the content type.
+
+.says She jumped back in shock. "What are you doing?" .as dialogue
+.says She jumped back in shock. "What are you doing?" .as dialogue-break
+.says She jumped back in shock. "What are you doing?" .containing dialogue
+
+Alternative: come up with additional phrases to go along with ".says", to invoke other StoryText functionality.
+
+
+
+2016-05-29
+
+Todo (short term):
+- Document "uses priority" and "uses best"
+- Document ".setup"
+- Add "required topic" notation to called topics
+- Implement ".setup" (Done 2016-05-29)
+
+---------------------------------------
+
 2016-05-19
 
 .setup player
@@ -440,7 +635,7 @@ Proposed 2:
         shared              -> responder:shared
         :shared             -> responder:shared
         :emotions:sad       -> responder:emotions:sad
-        :thoughts:goals:win -> responder:thoughts:goal:win
+        :thoughts:goals:win -> responder:thoughts:goals:win
 
     - absolute
         responder:attribute
