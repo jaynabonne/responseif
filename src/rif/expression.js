@@ -327,11 +327,10 @@ define(['rif/fuzzy'], function(RifFuzzy) {
     }
 
     return {
-        compile: function(expression, prefix) {
+        compile: function(expression) {
             //console.log("compile", expression);
             var context = {
                 expressions: [],
-                prefix: prefix,
                 current: {
                     operators: [],
                     lastWasOperand: false
