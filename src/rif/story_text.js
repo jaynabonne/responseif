@@ -86,7 +86,7 @@ define(['./verb'], function(rifVerb) {
         return context;
     }
 
-    function expandVerbs(text) {
+    function expandVerbs(text, world, responder) {
         var index;
         while ((index = text.indexOf("{<")) != -1) {
             var end_index = text.indexOf(">}", index + 2);
@@ -96,7 +96,8 @@ define(['./verb'], function(rifVerb) {
 
             var verb = text.substring(index+2, end_index).trim();
 
-            var conjugated = rifVerb.get(verb).conjugate('tPs');        // hard-coded for now
+            var verb_flags = (responder === world.getPOV()) ? 'sPs' : 'tPs';        // hard-coded for now
+            var conjugated = rifVerb.get(verb).conjugate(verb_flags);
 
             text = text.substring(0, index) + conjugated + text.substring(end_index+2);
         }
@@ -126,7 +127,7 @@ define(['./verb'], function(rifVerb) {
     function getResponderValue(world, responder, id) {
         var value = world.getState('alias', responder);
         if (value === undefined) {
-            value = responder;
+            value = (responder === world.getPOV()) ? 'you' : responder;
         }
         if (id === '$Responder') {
             value = capitalize(value);
@@ -152,7 +153,7 @@ define(['./verb'], function(rifVerb) {
             }
             text = text.substring(0, index) + value + text.substring(end_index+2);
         }
-        return expandVerbs(text);
+        return expandVerbs(text, world, responder);
     }
 
     function outputFormattedText(says, formatted) {

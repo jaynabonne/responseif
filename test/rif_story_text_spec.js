@@ -57,6 +57,9 @@ define(['rif/story_text'], function(RifStoryText) {
         world = {
             getState: function() {
                 return undefined;
+            },
+            getPOV: function() {
+                return 'pov';
             }
         };
 
@@ -166,6 +169,17 @@ define(['rif/story_text'], function(RifStoryText) {
             var says = { text: "My name is {=$responder=}." };
             story_text.say(says, 'alice');
             expect(output_context.append).toHaveBeenCalledWith("My name is alice.");
+        });
+        it("replaces in-line '$responder' with 'you' if the responder is the current pov", function() {
+            world.getPOV = function() {
+                return 'alice';
+            };
+            world.getState = function(id, responder) {
+                return undefined;
+            };
+            var says = { text: "Bill gives the ball to {=$responder=}." };
+            story_text.say(says, 'alice');
+            expect(output_context.append).toHaveBeenCalledWith("Bill gives the ball to you.");
         });
         it("replaces in-line '$responder' with the responder alias if one is defined", function() {
             world.getState = function(id, responder) {
@@ -369,9 +383,14 @@ define(['rif/story_text'], function(RifStoryText) {
     });
     describe('verbs', function() {
         it('should process verb markup', function() {
-            story_text.say( { text: "John {<press>} the elevator button." }, 'john');
+            story_text.say( { text: "{=$responder=} {<press>} the elevator button." }, 'John');
 
             expect(output_context.append).toHaveBeenCalledWith("John presses the elevator button.");
+        });
+        it('should use second person for current pov when expanding verb markup', function() {
+            story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov');
+
+            expect(output_context.append).toHaveBeenCalledWith("You press the elevator button.");
         });
     });
 });
