@@ -367,4 +367,11 @@ define(['rif/story_text'], function(RifStoryText) {
             expect(dom.removeEvent).not.toHaveBeenCalledWith('.link1', 'click');
         });
     });
+    describe('verbs', function() {
+        it('should process verb markup', function() {
+            story_text.say( { text: "John {<press>} the elevator button." }, 'john');
+
+            expect(output_context.append).toHaveBeenCalledWith("John presses the elevator button.");
+        });
+    });
 });

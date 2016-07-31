@@ -1,4 +1,4 @@
-define([], function() {
+define(['./verb'], function(rifVerb) {
     "use strict";
 
     function expandCallMarkup(text, css_class, calltopics) {
@@ -86,16 +86,28 @@ define([], function() {
         return context;
     }
 
-    function expandVerbs(outputText) {
-        return outputText;
+    function expandVerbs(text) {
+        var index;
+        while ((index = text.indexOf("{<")) != -1) {
+            var end_index = text.indexOf(">}", index + 2);
+            if (end_index === -1) {
+                break;
+            }
+
+            var verb = text.substring(index+2, end_index).trim();
+
+            var conjugated = rifVerb.get(verb).conjugate('tPs');        // hard-coded for now
+
+            text = text.substring(0, index) + conjugated + text.substring(end_index+2);
+        }
+
+        return text;
     }
 
     function popContext(says, responder) {
         var context = this.contexts.pop();
         if (this.contexts.length === 0) {
-            var outputText = context.getOutputText();
-            outputText = expandVerbs(outputText);
-            var formatted = this.formatter.formatOutput(outputText, this.helper.createClick, context.menu_callbacks, says.as);
+            var formatted = this.formatter.formatOutput(context.getOutputText(), this.helper.createClick, context.menu_callbacks, says.as);
 
             var self = this;
 
@@ -140,7 +152,7 @@ define([], function() {
             }
             text = text.substring(0, index) + value + text.substring(end_index+2);
         }
-        return text;
+        return expandVerbs(text);
     }
 
     function outputFormattedText(says, formatted) {
