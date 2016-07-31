@@ -85,10 +85,17 @@ define([], function() {
         this.contexts.push(context);
         return context;
     }
+
+    function expandVerbs(outputText) {
+        return outputText;
+    }
+
     function popContext(says, responder) {
         var context = this.contexts.pop();
         if (this.contexts.length === 0) {
-            var formatted = this.formatter.formatOutput(context.getOutputText(), this.helper.createClick, context.menu_callbacks, says.as);
+            var outputText = context.getOutputText();
+            outputText = expandVerbs(outputText);
+            var formatted = this.formatter.formatOutput(outputText, this.helper.createClick, context.menu_callbacks, says.as);
 
             var self = this;
 
@@ -99,6 +106,7 @@ define([], function() {
             outputFormattedText.call(this, says, formatted.node);
         }
     }
+
     function capitalize(s) {
         return s[0].toUpperCase() + s.slice(1);
     }
@@ -153,86 +161,84 @@ define([], function() {
         }
     }
 
-    type.prototype = {
-        say: function(says, responder) {
-            var text = replaceMarkup.call(this, says.text, responder, this.world);
+    type.prototype.say = function(says, responder) {
+        var text = replaceMarkup.call(this, says.text, responder, this.world);
 
-            var context = pushContext.call(this);
-            context.expandCallMarkup(text, says.as, this.helper.callTopicString);
-            popContext.call(this, says, responder);
-        },
+        var context = pushContext.call(this);
+        context.expandCallMarkup(text, says.as, this.helper.callTopicString);
+        popContext.call(this, says, responder);
+    };
 
-        choose: function(options, click_callback) {
-            var context = pushContext.call(this);
+    type.prototype.choose = function(options, click_callback) {
+        var context = pushContext.call(this);
 
-            var menu_index = context.addMenuCallback(click_callback);
+        var menu_index = context.addMenuCallback(click_callback);
 
-            var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
-            this.say(says);
+        var says = { text: this.formatter.formatMenu(options, menu_index), autohides: true};
+        this.say(says);
 
-            popContext.call(this, says, '');
-        },
+        popContext.call(this, says, '');
+    };
 
-        showAutoHideText: function (formatted) {
-            var id = writeToNewSection.call(this, formatted);
-            this.sectionsToHide.push(id);
-            this.dom.scrollToEnd();
-        },
+    type.prototype.showAutoHideText = function (formatted) {
+        var id = writeToNewSection.call(this, formatted);
+        this.sectionsToHide.push(id);
+        this.dom.scrollToEnd();
+    };
 
-        beginSection: function(id) {
-            appendNewDiv.call(this, id);
-        },
-        endSection: function() {
-            appendNewDiv.call(this);
-        },
-        hideSection: function(id) {
-            this.dom.removeElement('#'+id, 250);
-        },
-        hideSections: function () {
-            if (this.sectionsToHide.length != 0) {
-                var self = this;
-                $.each(this.sectionsToHide, function (index, value) {
-                    self.hideSection(value);
-                });
-                this.sectionsToHide = [];
-            }
-        },
-
-        clear: function() {
-            this.hideSections();
-            this.dom.clear();
-            appendNewDiv.call(this);
-            this.links = [];
-        },
-
-        animate: function(animates) {
+    type.prototype.beginSection = function(id) {
+        appendNewDiv.call(this, id);
+    };
+    type.prototype.endSection = function() {
+        appendNewDiv.call(this);
+    };
+    type.prototype.hideSection = function(id) {
+        this.dom.removeElement('#'+id, 250);
+    };
+    type.prototype.hideSections = function () {
+        if (this.sectionsToHide.length != 0) {
             var self = this;
-            $.each(animates.transitions, function(index, transition) {
-                self.dom.animate(animates.selector, transition.to, transition.lasting);
+            $.each(this.sectionsToHide, function (index, value) {
+                self.hideSection(value);
             });
-        },
-
-        removeDeadLinks: function () {
-            var dom = this.dom;
-            var checkTopics = this.helper.getTopicChecker();
-
-            this.links = this.links.filter(function (link) {
-                if (!checkTopics(link.keywords)) {
-                    dom.removeClass(link.selector, 'keyword');
-                    dom.removeEvent(link.selector, 'click');
-                    return false;
-                }
-                return true;
-            });
-        },
-        beforeCommand: function() {
-            this.hideSections();
-            this.separator.update();
-            this.beginSection();
-        },
-        afterCommand: function() {
-            this.removeDeadLinks();
+            this.sectionsToHide = [];
         }
+    };
+
+    type.prototype.clear = function() {
+        this.hideSections();
+        this.dom.clear();
+        appendNewDiv.call(this);
+        this.links = [];
+    };
+
+    type.prototype.animate = function(animates) {
+        var self = this;
+        $.each(animates.transitions, function(index, transition) {
+            self.dom.animate(animates.selector, transition.to, transition.lasting);
+        });
+    };
+
+    type.prototype.removeDeadLinks = function () {
+        var dom = this.dom;
+        var checkTopics = this.helper.getTopicChecker();
+
+        this.links = this.links.filter(function (link) {
+            if (!checkTopics(link.keywords)) {
+                dom.removeClass(link.selector, 'keyword');
+                dom.removeEvent(link.selector, 'click');
+                return false;
+            }
+            return true;
+        });
+    };
+    type.prototype.beforeCommand =  function() {
+        this.hideSections();
+        this.separator.update();
+        this.beginSection();
+    };
+    type.prototype.afterCommand = function() {
+        this.removeDeadLinks();
     };
 
     return type;

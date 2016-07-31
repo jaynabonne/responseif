@@ -46,88 +46,86 @@ define([], function () {
         return span;
     }
 
-    type.prototype = {
-        addLink: function (jqSpan, clickfactory, keyword, links) {
-            jqSpan.click(clickfactory(keyword));
-            if (links) {
-                var cls = "link" + this.linkid++;
-                jqSpan.addClass(cls);
-                links.push({selector: '.' + cls, keywords: keyword});
-            }
-        },
-        processLinks: function(outerspan, keyword_class, menu_callbacks, clickfactory, links) {
-            var selector_class = 'pending-' + keyword_class
-            var selector = '.' + selector_class;
-            var clickspans = outerspan.find(selector);
-            var spans = clickspans.length;
-            for (var i = 0; i < spans; ++i) {
-                var span = clickspans[0];
-                var keyword = convertKeyword(span);
-                var jqSpan = $(span);
-                jqSpan.removeClass(selector_class);
-                jqSpan.addClass(keyword_class);
-                if (keyword.indexOf("menu:") === 0) {
-                    addMenuLink(jqSpan, keyword.substring(5), menu_callbacks);
-                } else {
-                    this.addLink(jqSpan, clickfactory, keyword, links);
-                }
-                clickspans = outerspan.find(selector);
-            }
-        },
-
-        formatLinks: function (outerspan, menu_callbacks, clickfactory) {
-            var links = [];
-            this.processLinks(outerspan, 'permanent-keyword', menu_callbacks, clickfactory);
-            this.processLinks(outerspan, 'keyword', menu_callbacks, clickfactory, links);
-            return {node: outerspan, links: links};
-        },
-
-        formatOutput: function(text, clickfactory, menu_callbacks, css_class) {
-            var outerspan = createSpan(css_class, replaceLinks(text));
-            return this.formatLinks(outerspan, menu_callbacks, clickfactory);
-        },
-
-        formatMenu: function(options, menu_index) {
-            var s = '<div class="menu">';
-            $.each(options, function (index, value) {
-                s += '<div class="menuitem">{!' + value + '|menu:' + menu_index + ':' + index + '!}</div>';
-            });
-            s += '</div>';
-            return s;
-
-        },
-
-        createContext: function() {
-            return {
-                text: '',
-                menu_index: 0,
-                menu_callbacks: [],
-                css_classes: [],
-                begin: function(css_class) {
-                    this.css_classes.push(css_class);
-                    if (css_class) {
-                        this.text += '<span class="' + css_class + '">';
-                    }
-                },
-                end: function() {
-                    var css_class = this.css_classes.pop();
-                    if (css_class) {
-                        this.text += '</span>';
-                    }
-                },
-                append: function(text) {
-                    this.text += text;
-                },
-                getOutputText: function() {
-                    return this.text;
-                },
-                addMenuCallback: function(callback) {
-                    var menu_index = this.menu_index++;
-                    this.menu_callbacks[menu_index] = callback;
-                    return menu_index;
-                }
-            };
+    type.prototype.addLink = function (jqSpan, clickfactory, keyword, links) {
+        jqSpan.click(clickfactory(keyword));
+        if (links) {
+            var cls = "link" + this.linkid++;
+            jqSpan.addClass(cls);
+            links.push({selector: '.' + cls, keywords: keyword});
         }
+    };
+    type.prototype.processLinks = function(outerspan, keyword_class, menu_callbacks, clickfactory, links) {
+        var selector_class = 'pending-' + keyword_class
+        var selector = '.' + selector_class;
+        var clickspans = outerspan.find(selector);
+        var spans = clickspans.length;
+        for (var i = 0; i < spans; ++i) {
+            var span = clickspans[0];
+            var keyword = convertKeyword(span);
+            var jqSpan = $(span);
+            jqSpan.removeClass(selector_class);
+            jqSpan.addClass(keyword_class);
+            if (keyword.indexOf("menu:") === 0) {
+                addMenuLink(jqSpan, keyword.substring(5), menu_callbacks);
+            } else {
+                this.addLink(jqSpan, clickfactory, keyword, links);
+            }
+            clickspans = outerspan.find(selector);
+        }
+    };
+
+    type.prototype.formatLinks = function (outerspan, menu_callbacks, clickfactory) {
+        var links = [];
+        this.processLinks(outerspan, 'permanent-keyword', menu_callbacks, clickfactory);
+        this.processLinks(outerspan, 'keyword', menu_callbacks, clickfactory, links);
+        return {node: outerspan, links: links};
+    };
+
+    type.prototype.formatOutput = function(text, clickfactory, menu_callbacks, css_class) {
+        var outerspan = createSpan(css_class, replaceLinks(text));
+        return this.formatLinks(outerspan, menu_callbacks, clickfactory);
+    };
+
+    type.prototype.formatMenu = function(options, menu_index) {
+        var s = '<div class="menu">';
+        $.each(options, function (index, value) {
+            s += '<div class="menuitem">{!' + value + '|menu:' + menu_index + ':' + index + '!}</div>';
+        });
+        s += '</div>';
+        return s;
+
+    };
+
+    type.prototype.createContext = function() {
+        return {
+            text: '',
+            menu_index: 0,
+            menu_callbacks: [],
+            css_classes: [],
+            begin: function(css_class) {
+                this.css_classes.push(css_class);
+                if (css_class) {
+                    this.text += '<span class="' + css_class + '">';
+                }
+            },
+            end: function() {
+                var css_class = this.css_classes.pop();
+                if (css_class) {
+                    this.text += '</span>';
+                }
+            },
+            append: function(text) {
+                this.text += text;
+            },
+            getOutputText: function() {
+                return this.text;
+            },
+            addMenuCallback: function(callback) {
+                var menu_index = this.menu_index++;
+                this.menu_callbacks[menu_index] = callback;
+                return menu_index;
+            }
+        };
     };
     return type;
 });
