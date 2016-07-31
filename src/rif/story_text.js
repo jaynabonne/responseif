@@ -99,6 +99,22 @@ define([], function() {
             outputFormattedText.call(this, says, formatted.node);
         }
     }
+    function capitalize(s) {
+        return s[0].toUpperCase() + s.slice(1);
+    }
+
+    function getResponderValue(world, responder, id) {
+        var value = world.getState('alias', responder);
+        if (value === undefined) {
+            value = responder;
+        }
+        if (id === '$Responder') {
+            value = capitalize(value);
+        } else if (id === '$RESPONDER') {
+            value = value.toUpperCase();
+        }
+        return value;
+    }
 
     function replaceMarkup(text, responder, world) {
         var index;
@@ -107,8 +123,13 @@ define([], function() {
             if (end_index === -1) {
                 break;
             }
-            var id = text.substring(index+2, end_index);
-            var value = world.getState(id.trim(), responder);
+            var id = text.substring(index+2, end_index).trim();
+            var value;
+            if (id.toLowerCase() === '$responder') {
+                value = getResponderValue(world, responder, id);
+            } else {
+                value = world.getState(id, responder);
+            }
             text = text.substring(0, index) + value + text.substring(end_index+2);
         }
         return text;

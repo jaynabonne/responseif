@@ -159,6 +159,41 @@ define(['rif/story_text'], function(RifStoryText) {
             story_text.say(says, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is Ishmael.");
         });
+        it("replaces in-line '$responder' with the responder if there is no alias", function() {
+            world.getState = function(id, responder) {
+                return undefined;
+            };
+            var says = { text: "My name is {=$responder=}." };
+            story_text.say(says, 'alice');
+            expect(output_context.append).toHaveBeenCalledWith("My name is alice.");
+        });
+        it("replaces in-line '$responder' with the responder alias if one is defined", function() {
+            world.getState = function(id, responder) {
+                if (id === 'alias' && responder === 'alice') {
+                    return "Mr. Cooper";
+                }
+                return undefined;
+            };
+            var says = { text: "My name is {=$responder=}." };
+            story_text.say(says, 'alice');
+            expect(output_context.append).toHaveBeenCalledWith("My name is Mr. Cooper.");
+        });
+        it("replaces in-line '$Responder' with the capitalized responder value", function() {
+            world.getState = function(id, responder) {
+                return undefined;
+            };
+            var says = { text: "My name is {=$Responder=}." };
+            story_text.say(says, 'alice');
+            expect(output_context.append).toHaveBeenCalledWith("My name is Alice.");
+        });
+        it("replaces in-line '$RESPONDER' with the capitalized responder value", function() {
+            world.getState = function(id, responder) {
+                return undefined;
+            };
+            var says = { text: "My name is {=$RESPONDER=}." };
+            story_text.say(says, 'alice');
+            expect(output_context.append).toHaveBeenCalledWith("My name is ALICE.");
+        });
     });
     describe("says with 'call' markup", function() {
         it("should invoke 'call' on the interact for a topic", function() {
