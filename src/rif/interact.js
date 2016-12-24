@@ -18,11 +18,13 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
 
         this.story_text.choose(options, click_callback);
     };
-    type.prototype.callTopicString = function(topics) {
+    type.prototype.callTopicString = function(topics, caller) {
         var index = topics.indexOf('>');
         if (index >= 0) {
-            var caller = topics.substring(index+1);
+            caller = topics.substring(index + 1);
             topics = topics.substring(0, index);
+        }
+        if (caller) {
             this.callTopicsForCaller(this.world.getState(caller), rifResponseCore.convertTopics(topics));
         } else {
             this.call(rifResponseCore.convertTopics(topics));

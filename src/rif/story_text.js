@@ -1,7 +1,7 @@
 define(['./verb'], function(rifVerb) {
     "use strict";
 
-    function expandCallMarkup(text, css_class, calltopics) {
+    function expandCallMarkup(text, css_class, calltopics, caller) {
         this.begin(css_class);
         while (text !== "") {
             var index = text.indexOf("{+");
@@ -11,7 +11,7 @@ define(['./verb'], function(rifVerb) {
             var end_index = text.indexOf("+}", index + 2);
             var topics = text.substring(index + 2, end_index);
             this.append(text.substring(0, index));
-            calltopics(topics);
+            calltopics(topics, caller);
             text = text.substring(end_index + 2);
         }
         this.append(text);
@@ -174,11 +174,11 @@ define(['./verb'], function(rifVerb) {
         }
     }
 
-    type.prototype.say = function(says, responder) {
+    type.prototype.say = function(says, responder, caller) {
         var text = replaceMarkup.call(this, says.text, responder, this.world);
 
         var context = pushContext.call(this);
-        context.expandCallMarkup(text, says.as, this.helper.callTopicString);
+        context.expandCallMarkup(text, says.as, this.helper.callTopicString, caller);
         popContext.call(this, says, responder);
     };
 

@@ -99,35 +99,35 @@ define(['rif/story_text'], function(RifStoryText) {
     });
     describe("say", function () {
         it("should output the text when called", function() {
-            story_text.say({ text: "This is some text" }, 'responder');
+            story_text.say({ text: "This is some text" }, 'responder', 'caller');
             expect(output_context.begin).toHaveBeenCalled();
             expect(output_context.append).toHaveBeenCalledWith('This is some text');
             expect(output_context.end).toHaveBeenCalled();
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should format with a class if specified", function() {
-            story_text.say({ text: "This is some text", as: "aclass" }, 'responder');
+            story_text.say({ text: "This is some text", as: "aclass" }, 'responder', 'caller');
             expect(output_context.begin).toHaveBeenCalledWith('aclass');
             expect(output_context.append).toHaveBeenCalledWith('This is some text');
             expect(appendSpy).toHaveBeenCalledWith("formattedText");
         });
         it("should output the text into the specified element", function() {
-            story_text.say({ text: "This is some text", into: "someelement" }, 'responder');
+            story_text.say({ text: "This is some text", into: "someelement" }, 'responder', 'caller');
             expect(dom.setText).toHaveBeenCalledWith("someelement", "formattedText");
         });
         it("should output the text onto the specified element", function() {
-            story_text.say({ text: "This is some text", onto: "someelement" }, 'responder');
+            story_text.say({ text: "This is some text", onto: "someelement" }, 'responder', 'caller');
             expect(dom.appendText).toHaveBeenCalledWith("someelement", "formattedText");
         });
         it("should scroll to the end of the text", function() {
             dom.scrollToEnd = jasmine.createSpy("scrollToEnd");
-            story_text.say({ text: "This is some text" }, 'responder');
+            story_text.say({ text: "This is some text" }, 'responder', 'caller');
             expect(dom.scrollToEnd).toHaveBeenCalled();
         });
         it("should hide autohides text after the next command", function() {
             dom.removeElement = jasmine.createSpy("removeElement");
-            story_text.say({ text: "This is some text", autohides: true }, 'responder');
-            story_text.say({ text: "This is some more text", autohides: true }, 'responder');
+            story_text.say({ text: "This is some text", autohides: true }, 'responder', 'caller');
+            story_text.say({ text: "This is some more text", autohides: true }, 'responder', 'caller');
             story_text.hideSections([]);
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv1", 250);
             expect(dom.removeElement).toHaveBeenCalledWith("#outputdiv2", 250);
@@ -145,7 +145,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 }
             };
             var says = { text: "My name is {=name=}. Your name is {= yourname  =}. Your state is {=:state=}." };
-            story_text.say(says, 'responder');
+            story_text.say(says, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is Ishmael. Your name is mud. Your state is happy.");
         });
         it("replaces in-line markup with state values recursively", function() {
@@ -159,7 +159,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 }
             };
             var says = { text: "My name is {=name=}." };
-            story_text.say(says, 'responder');
+            story_text.say(says, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is Ishmael.");
         });
         it("replaces in-line '$responder' with the responder if there is no alias", function() {
@@ -167,7 +167,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 return undefined;
             };
             var says = { text: "My name is {=$responder=}." };
-            story_text.say(says, 'alice');
+            story_text.say(says, 'alice', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is alice.");
         });
         it("replaces in-line '$responder' with 'you' if the responder is the current pov", function() {
@@ -178,7 +178,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 return undefined;
             };
             var says = { text: "Bill gives the ball to {=$responder=}." };
-            story_text.say(says, 'alice');
+            story_text.say(says, 'alice', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("Bill gives the ball to you.");
         });
         it("replaces in-line '$responder' with the responder alias if one is defined", function() {
@@ -189,7 +189,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 return undefined;
             };
             var says = { text: "My name is {=$responder=}." };
-            story_text.say(says, 'alice');
+            story_text.say(says, 'alice', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is Mr. Cooper.");
         });
         it("replaces in-line '$Responder' with the capitalized responder value", function() {
@@ -197,7 +197,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 return undefined;
             };
             var says = { text: "My name is {=$Responder=}." };
-            story_text.say(says, 'alice');
+            story_text.say(says, 'alice', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is Alice.");
         });
         it("replaces in-line '$RESPONDER' with the capitalized responder value", function() {
@@ -205,43 +205,43 @@ define(['rif/story_text'], function(RifStoryText) {
                 return undefined;
             };
             var says = { text: "My name is {=$RESPONDER=}." };
-            story_text.say(says, 'alice');
+            story_text.say(says, 'alice', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is ALICE.");
         });
     });
     describe("says with 'call' markup", function() {
         it("should invoke 'call' on the interact for a topic", function() {
             var says = { text: "My name is {+NAME+}." };
-            story_text.say(says, 'responder');
-            expect(helper.callTopicString).toHaveBeenCalledWith("NAME");
+            story_text.say(says, 'responder', 'caller');
+            expect(helper.callTopicString).toHaveBeenCalledWith("NAME", 'caller');
         });
         it("should invoke 'call' on the interact for a caller-targeted topic", function() {
             var says = { text: "My name is {+NAME>\"responder\"+}." };
-            story_text.say(says, 'responder');
-            expect(helper.callTopicString).toHaveBeenCalledWith('NAME>\"responder\"');
+            story_text.say(says, 'responder', 'caller');
+            expect(helper.callTopicString).toHaveBeenCalledWith('NAME>\"responder\"', 'caller');
         });
         it("should invoke 'call' on the interact for multiple topic", function() {
             var says = { text: "My name is {+FIRST NAME+}." };
-            story_text.say(says, 'responder');
-            expect(helper.callTopicString).toHaveBeenCalledWith('FIRST NAME');
+            story_text.say(says, 'responder', 'caller');
+            expect(helper.callTopicString).toHaveBeenCalledWith('FIRST NAME', 'caller');
         });
-        function fakeCall(topics) {
+        function fakeCall(topics, caller) {
             if (topics == "NAME") {
-                story_text.say({ text: "Ishmael"}, 'responder');
+                story_text.say({ text: "Ishmael"}, 'responder', caller);
             } else {
-                story_text.say({ text: "Nemo"}, 'responder');
+                story_text.say({ text: "Nemo"}, 'responder', caller);
             }
         }
         it("should append the individual pieces of text", function() {
             helper.callTopicString.and.callFake(fakeCall);
-            story_text.say( { text: "My name is {+NAME+}." }, 'responder');
+            story_text.say( { text: "My name is {+NAME+}." }, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(".");
         });
         it("should handle multiple 'calls' markups", function() {
             helper.callTopicString.and.callFake(fakeCall);
-            story_text.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
+            story_text.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(", but you're just ");
@@ -249,15 +249,15 @@ define(['rif/story_text'], function(RifStoryText) {
             expect(output_context.append).toHaveBeenCalledWith(".");
         });
         it("should handle recursive call markup", function() {
-            function fakeCall(topics) {
+            function fakeCall(topics, caller) {
                 if (topics == "FIRSTNAME") {
-                    story_text.say({ text: "Ishmael"});
+                    story_text.say({ text: "Ishmael"}, 'responder', caller);
                 } else if (topics == "NAME") {
-                    story_text.say({ text: "{+FIRSTNAME+}"});
+                    story_text.say({ text: "{+FIRSTNAME+}"}, 'responder', caller);
                 }
             }
             helper.callTopicString.and.callFake(fakeCall);
-            story_text.say( { text: "My name is {+NAME+}." }, 'responder');
+            story_text.say( { text: "My name is {+NAME+}." }, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(".");
@@ -271,15 +271,15 @@ define(['rif/story_text'], function(RifStoryText) {
                 }
             };
             helper.callTopicString.and.callFake(fakeCall);
-            story_text.say( { text: "My name is {=firstName=}." }, 'responder');
+            story_text.say( { text: "My name is {=firstName=}." }, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(".");
         });
         it("should handle state markup as a result of call markup", function() {
-            function fakeCall(topics) {
+            function fakeCall(topics, caller) {
                 if (topics == "NAME") {
-                    story_text.say({ text: "{=firstName=}"});
+                    story_text.say({ text: "{=firstName=}"}, 'responder', caller);
                 }
             }
             world.getState = function(id) {
@@ -290,7 +290,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 }
             };
             helper.callTopicString.and.callFake(fakeCall);
-            story_text.say( { text: "My name is {+NAME+}." }, 'responder');
+            story_text.say( { text: "My name is {+NAME+}." }, 'responder', 'caller');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(".");
@@ -383,17 +383,17 @@ define(['rif/story_text'], function(RifStoryText) {
     });
     describe('verbs', function() {
         it('should process verb markup', function() {
-            story_text.say( { text: "{=$responder=} {<press>} the elevator button." }, 'John');
+            story_text.say( { text: "{=$responder=} {<press>} the elevator button." }, 'John', 'caller');
 
             expect(output_context.append).toHaveBeenCalledWith("John presses the elevator button.");
         });
         it('should use second person for current pov when expanding verb markup', function() {
-            story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov');
+            story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov', 'caller');
 
             expect(output_context.append).toHaveBeenCalledWith("You press the elevator button.");
         });
         it('should use a defined "person" attribute when expanding verb markup', function() {
-            story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov');
+            story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov', 'caller');
 
             expect(output_context.append).toHaveBeenCalledWith("You press the elevator button.");
         });

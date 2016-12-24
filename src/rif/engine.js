@@ -25,8 +25,8 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
                     return false;
                 };
             },
-            callTopicString: function (topics) {
-                engine.interact.callTopicString(topics);
+            callTopicString: function (topics, caller) {
+                engine.interact.callTopicString(topics, caller);
             },
             getTopicChecker: function() {
                 var response = engine.response;
