@@ -4,7 +4,7 @@ define(['rif/response_core'], function(rifResponseCore) {
         var world;
         beforeEach(function() {
             world =  {
-                getState: jasmine.createSpy('getState').andCallFake(function(id, responder) {
+                getState: jasmine.createSpy('getState').and.callFake(function(id, responder) {
                     return parseFloat(id);
                 })
             };
@@ -80,7 +80,7 @@ define(['rif/response_core'], function(rifResponseCore) {
                 setResponseRuns : function(id, runs) {
                     this.runs[id] = runs;
                 },
-                getState: jasmine.createSpy('getState').andCallFake(function(id, responder) {
+                getState: jasmine.createSpy('getState').and.callFake(function(id, responder) {
                     return parseFloat(id);
                 })
             };

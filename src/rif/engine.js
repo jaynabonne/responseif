@@ -65,7 +65,9 @@ define(['./world', './load', './dom', './html_formatter', './expand', './parse',
         self.story_text = new RifStoryText(self.formatter, createStoryTextHelper(this), self.dom, self.world);
         self.response = params.response || new RifResponse(self.world, self.story_text);
     }
-    var type = function(params, completion) {
+    var type = function() { };
+
+    type.prototype.initialize = function(params, completion) {
         initFromParams.call(this, params);
         var self = this;
 

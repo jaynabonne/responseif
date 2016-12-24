@@ -5,26 +5,23 @@ describe('rif_engine', function() {
     function loadFile(name, completion) {
         completion('');
     }
-    beforeEach(function() {
-        var completed = false;
-        runs(function() {
-            var params = {
-                rif_file: 'somefile',
-                load_file: loadFile,
-                dom: jasmine.createSpyObj('dom', ['append', 'createDiv'])
-            };
-            engine = new RifEngine(params, function() {
-                completed = true;
-            });
-        });
-        waitsFor(function() {
-            return completed;
-        }, "Initialize engine", 3000);
+    beforeEach(function(done) {
+        console.log("done", done);
+        engine = null;
+        var params = {
+            rif_file: 'somefile',
+            load_file: loadFile,
+            dom: jasmine.createSpyObj('dom', ['append', 'createDiv'])
+        };
+        engine = new RifEngine();
+        engine.initialize(params, done);
     });
     it('should create a world', function() {
+        console.log(engine);
         expect(engine.getWorld()).not.toBeNull();
     });
     it('should create an interact', function() {
+        console.log(engine);
         expect(engine.getInteract()).not.toBeNull();
     });
     it('should run rif setups', function() {

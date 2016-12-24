@@ -3,7 +3,7 @@ define(['rif/load'], function (RifLoad) {
         "use strict;"
         var load_file;
         var load;
-        var resulting_tokens
+        var resulting_tokens;
         beforeEach(function () {
             load_file = jasmine.createSpy('load_file');
             load = new RifLoad(load_file);
@@ -16,11 +16,11 @@ define(['rif/load'], function (RifLoad) {
         });
 
         it('should return an empty array for empty data', function () {
-            load_file.mostRecentCall.args[1]("");
+            load_file.calls.mostRecent().args[1]("");
             expect(resulting_tokens).toEqual([]);
         });
         it('should return tokens for simple data', function () {
-            load_file.mostRecentCall.args[1](".token1 value1 .token2 value2");
+            load_file.calls.mostRecent().args[1](".token1 value1 .token2 value2");
             expect(resulting_tokens).toEqual(
                 [
                     {token: "token1", value: "value1"},
@@ -29,9 +29,9 @@ define(['rif/load'], function (RifLoad) {
             );
         });
         it('should load nested files', function () {
-            load_file.mostRecentCall.args[1](".a .include otherfile .c");
+            load_file.calls.mostRecent().args[1](".a .include otherfile .c");
             expect(load_file).toHaveBeenCalledWith('otherfile', jasmine.any(Function));
-            load_file.mostRecentCall.args[1](".b");
+            load_file.calls.mostRecent().args[1](".b");
             expect(resulting_tokens).toEqual(
                 [
                     {token: "a", value: ""},

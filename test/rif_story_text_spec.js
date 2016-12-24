@@ -10,7 +10,7 @@ define(['rif/story_text'], function(RifStoryText) {
     var story_text;
 
     function setupFormatterOutputWithLinks(links) {
-        formatter.formatOutput = jasmine.createSpy("formatOutput").andReturn({node: "formattedText", links: links});
+        formatter.formatOutput = jasmine.createSpy("formatOutput").and.returnValue({node: "formattedText", links: links});
     }
 
     function setupFormatterOutput() {
@@ -37,7 +37,7 @@ define(['rif/story_text'], function(RifStoryText) {
             setText: jasmine.createSpy('setText'),
             appendText: jasmine.createSpy('appendText')
         };
-        dom.createDiv.andReturn({ append: appendSpy});
+        dom.createDiv.and.returnValue({ append: appendSpy});
         output_context = jasmine.createSpyObj(
             'output context',
             [
@@ -85,9 +85,9 @@ define(['rif/story_text'], function(RifStoryText) {
         it("should animate the passed item(s)", function () {
             dom.animate = jasmine.createSpy("animate");
             story_text.animate( { selector: "aselector", transitions: [ {to: "optionsA", lasting: 1500}, {to: "optionsB", lasting: 1000} ] } );
-            expect(dom.animate.callCount).toBe(2);
-            expect(dom.animate.argsForCall[0]).toEqual(["aselector", "optionsA", 1500]);
-            expect(dom.animate.argsForCall[1]).toEqual(["aselector", "optionsB", 1000]);
+            expect(dom.animate.calls.count()).toBe(2);
+            expect(dom.animate.calls.all()[0].args).toEqual(["aselector", "optionsA", 1500]);
+            expect(dom.animate.calls.all()[1].args).toEqual(["aselector", "optionsB", 1000]);
         });
     });
     describe("clear", function () {
@@ -233,14 +233,14 @@ define(['rif/story_text'], function(RifStoryText) {
             }
         }
         it("should append the individual pieces of text", function() {
-            helper.callTopicString.andCallFake(fakeCall);
+            helper.callTopicString.and.callFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
             expect(output_context.append).toHaveBeenCalledWith(".");
         });
         it("should handle multiple 'calls' markups", function() {
-            helper.callTopicString.andCallFake(fakeCall);
+            helper.callTopicString.and.callFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}, but you're just {+FISH+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -256,7 +256,7 @@ define(['rif/story_text'], function(RifStoryText) {
                     story_text.say({ text: "{+FIRSTNAME+}"});
                 }
             }
-            helper.callTopicString.andCallFake(fakeCall);
+            helper.callTopicString.and.callFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -270,7 +270,7 @@ define(['rif/story_text'], function(RifStoryText) {
                     return false;
                 }
             };
-            helper.callTopicString.andCallFake(fakeCall);
+            helper.callTopicString.and.callFake(fakeCall);
             story_text.say( { text: "My name is {=firstName=}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -289,7 +289,7 @@ define(['rif/story_text'], function(RifStoryText) {
                     return false;
                 }
             };
-            helper.callTopicString.andCallFake(fakeCall);
+            helper.callTopicString.and.callFake(fakeCall);
             story_text.say( { text: "My name is {+NAME+}." }, 'responder');
             expect(output_context.append).toHaveBeenCalledWith("My name is ");
             expect(output_context.append).toHaveBeenCalledWith("Ishmael");
@@ -298,8 +298,8 @@ define(['rif/story_text'], function(RifStoryText) {
     });
     describe("choose", function() {
         it('should build the menu', function() {
-            spyOn(formatter, 'formatMenu').andCallThrough();
-            output_context.addMenuCallback.andCallFake(function() {
+            spyOn(formatter, 'formatMenu').and.callThrough();
+            output_context.addMenuCallback.and.callFake(function() {
                 return 314;
             });
             var click_callback = jasmine.createSpy('click_callback');
@@ -311,7 +311,7 @@ define(['rif/story_text'], function(RifStoryText) {
     describe("separator support", function() {
         it("should add a hidden separator div before the command if text was output previously", function() {
             story_text.say({ text: "This is some text" });
-            dom.createDiv.reset();
+            dom.createDiv.calls.reset();
             dom.append = jasmine.createSpy("append");
             story_text.beforeCommand();
             expect(dom.createDiv).toHaveBeenCalledWith();
@@ -321,7 +321,7 @@ define(['rif/story_text'], function(RifStoryText) {
         });
         it("should not show the separator when new text is output if show_separator is not set", function() {
             story_text.say({ text: "This is some text" });
-            dom.createDiv.reset();
+            dom.createDiv.calls.reset();
             dom.append = jasmine.createSpy("append");
             story_text.beforeCommand();
             story_text.say({ text: "This is some more text" });
@@ -332,7 +332,7 @@ define(['rif/story_text'], function(RifStoryText) {
                 return id === "show_separator:";
             };
             story_text.say({ text: "This is some text" });
-            dom.createDiv.reset();
+            dom.createDiv.calls.reset();
             dom.append = jasmine.createSpy("append");
             story_text.beforeCommand();
             story_text.say({ text: "This is some more text" });
@@ -342,7 +342,7 @@ define(['rif/story_text'], function(RifStoryText) {
     xdescribe('removing dead links', function() {
         it('should remove a dead link', function() {
 
-            story_text.say("This is text with a {!link|keyword!}")
+            story_text.say("This is text with a {!link|keyword!}");
 
             expect(dom.removeClass).not.toHaveBeenCalledWith('.link1', 'keyword');
 
@@ -388,6 +388,11 @@ define(['rif/story_text'], function(RifStoryText) {
             expect(output_context.append).toHaveBeenCalledWith("John presses the elevator button.");
         });
         it('should use second person for current pov when expanding verb markup', function() {
+            story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov');
+
+            expect(output_context.append).toHaveBeenCalledWith("You press the elevator button.");
+        });
+        it('should use a defined "person" attribute when expanding verb markup', function() {
             story_text.say( { text: "{=$Responder=} {<press>} the elevator button." }, 'pov');
 
             expect(output_context.append).toHaveBeenCalledWith("You press the elevator button.");

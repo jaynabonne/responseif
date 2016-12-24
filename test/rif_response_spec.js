@@ -24,7 +24,7 @@ describe("RifResponse", function () {
             var response3 = { matches: [{keyword: "btopic"}], does: { common: [ { says: { text: "This is response 3" } } ] } };
             var responses = [response1, response2, response3];
             responseLib.callTopics({responder: responses}, [{keyword: "ctopic"}], "caller", {});
-            expect(story_text.say).toHaveBeenCalledWith({ text: "This is response 2" }, 'responder');
+            expect(story_text.say).toHaveBeenCalledWith({ text: "This is response 2" }, 'responder', 'caller');
         });
     });
 });
