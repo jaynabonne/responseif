@@ -21,11 +21,12 @@ define(['./topic_strategy', './response_core'], function(RifTopicStrategy, rifRe
     type.prototype.callTopicString = function(topics, caller) {
         var index = topics.indexOf('>');
         if (index >= 0) {
-            caller = topics.substring(index + 1);
+            var expr = topics.substring(index + 1);
             topics = topics.substring(0, index);
+            caller = this.world.getState(expr);
         }
         if (caller) {
-            this.callTopicsForCaller(this.world.getState(caller), rifResponseCore.convertTopics(topics));
+            this.callTopicsForCaller(caller, rifResponseCore.convertTopics(topics));
         } else {
             this.call(rifResponseCore.convertTopics(topics));
         }
